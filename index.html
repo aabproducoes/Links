@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Resume</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: nowrap;
+        background:
+          linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) -50px -50px/100px 100px repeat-x,
+          linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) -50px 0/100px 100px repeat-x,
+          linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) -50px 50px/100px 100px repeat-x,
+          linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 0 -50px/100px 100px repeat-x,
+          linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 0 0/100px 100px repeat-x,
+          linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 0 50px/100px 100px repeat-x,
+          linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 50px -50px/100px 100px repeat-x,
+          linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 50px 0/100px 100px repeat-x,
+          linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 50px 50px/100px 100px repeat-x,
+          linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 100px -50px/100px 100px repeat-x,
+          linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 100px 0/100px 100px repeat-x,
+          linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 100px 50px/100px 100px repeat-x;
+      }
+
+      /* Left 1/3 Section */
+      .left-section {
+        flex: 1;
+        /* Takes up 1/3 of the available space */
+        background-color: #000;
+        /* Black background */
+        color: #ffd700;
+        /* Gold text color */
+        padding: 20px;
+      }
+
+      /* Center 1/3 Section */
+      .center-section {
+        flex: 1;
+        /* Takes up 1/3 of the available space */
+        background-color: #000;
+        /* Black background */
+        color: #ffd700;
+        /* Gold text color */
+        padding: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Right 1/3 Section */
+      .right-section {
+        flex: 1;
+        /* Takes up 1/3 of the available space */
+        background-color: #000;
+        /* Black background */
+        color: #ffd700;
+        /* Gold text color */
+        padding: 20px;
+      }
+
+      /* Rectangle for Qualifications and Links */
+      .qualification-rectangle {
+        background-color: #000;
+        /* Black background */
+        color: #ffd700;
+        /* Gold text color */
+        padding: 20px;
+        border-radius: 10px;
+        height: 100%;
+        /* Adjust the height as needed */
+}
+.left-section, .right-section {
+    border: 5px solid transparent;
+    border-image: linear-gradient(-45deg, #ffd700, #648880);
+    border-image-slice: 1;
+    border-image-width: 5px;
+    padding: 20px;
+}
+    }
+
+
+      /* Circular Border for Image */
+      .profile-picture {
+        width: 200px;
+        /* Adjust the width as needed */
+        height: 200px;
+        /* Ensure the height matches the width */
+        border-radius: 50%;
+        /* Makes the image circular */
+        border: 5px solid #ff00ff;
+        /* Gold border around the circular image */
+        margin-bottom: 20px;
+        /* Add some spacing between the image and social links */
+      }
+
+      /* Social Links with Borders */
+      .social-links {
+        list-style: none;
+        padding: 0;
+      }
+
+      .social-links li {
+        margin: 10px 0;
+      }
+
+      .social-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ffd700;
+        /* Gold background */
+        color: #000;
+        /* Black text color */
+        text-decoration: none;
+        border: 2px solid #000;
+        /* Black border around social links */
+        border-radius: 25px;
+        /* Adjust the radius for rounded corners */
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .social-link:hover {
+        background-color: #000;
+        /* Black background on hover */
+        color: #ffd700;
+        /* Gold text color on hover */
+      }
+
+      body {
+        background: #020202;
+        background-size: 100px 5px;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="left-section">
+      <div class="qualification-rectangle">
+        <!-- Add your qualifications and links here -->
+        <h2>Qualifications</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <h2>Links</h2>
+        <ul class="social-links">
+          <li>
+            <a href="#" class="social-link">LinkedIn</a>
+          </li>
+          <li>
+            <a href="#" class="social-link">GitHub</a>
+          </li>
+          <!-- Add more links as needed -->
+        </ul>
+      </div>
+    </div>
+    <div class="center-section">
+      <!-- Add your social links, picture, WhatsApp, and email here -->
+      <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
+      <h2>Social Links</h2>
+      <ul class="social-links">
+        <li>
+          <a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a>
+        </li>
+        <li>
+          <a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a>
+        </li>
+        <li>
+          <a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a>
+        </li>
+        <!-- Add more social links as needed -->
+      </ul>
+      <h2>Contact</h2>
+      <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a>
+      </p>
+      <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a>
+      </p>
+    </div>
+    <div class="right-section">
+      <div class="qualification-rectangle">
+        <!-- Add your qualifications and links here -->
+        <h2>Qualifications</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <h2>Links</h2>
+        <ul class="social-links">
+          <li>
+            <a href="#" class="social-link">LinkedIn</a>
+          </li>
+          <li>
+            <a href="#" class="social-link">GitHub</a>
+          </li>
+          <!-- Add more links as needed -->
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
