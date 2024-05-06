@@ -149,44 +149,45 @@
   </div>
 
   <script>
-    window.addEventListener('DOMContentLoaded', (event) => {
-      changeLanguage();
-    });
+    wwindow.addEventListener('DOMContentLoaded', (event) => {
+  changeLanguage();
+});
 
-    function changeLanguage() {
-      var languageSelect = document.getElementById("language");
-      var selectedLanguage = languageSelect.options[languageSelect.selectedIndex].value;
+function changeLanguage() {
+  var languageSelect = document.getElementById("language");
+  var selectedLanguage = languageSelect.options[languageSelect.selectedIndex].value;
 
-      // Update the file path to point to the correct directory
-      var translationFile = `./translations/translations_${selectedLanguage}.json`;
+  // Update the file path to point to the correct directory
+  var translationFile = `./translations/translations_${selectedLanguage}.json`;
 
-      fetch(translationFile)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
-          }
-          return response.json();
+  fetch(translationFile)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById("qualifications").innerText = data.qualifications;
+      document.getElementById("socialLinks").innerText = data.socialLinks;
+      document.getElementById("contact").innerText = data.contact;
+      document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
+      fetch('./docs/general_knowledge.txt') // Fetch the text file
+        .then(response => response.text())
+        .then(text => {
+          const knowledgeList = document.getElementById('knowledgeList');
+          knowledgeList.innerHTML = ''; // Clear previous content
+          text.split('\n').forEach(line => {
+            const listItem = document.createElement('li');
+            listItem.textContent = line.trim();
+            knowledgeList.appendChild(listItem);
+          });
         })
-        .then(data => {
-          document.getElementById("qualifications").innerText = data.qualifications;
-          document.getElementById("socialLinks").innerText = data.socialLinks;
-          document.getElementById("contact").innerText = data.contact;
-          document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
-          fetch('./docs/general_knowledge.txt') // Fetch the text file
-            .then(response => response.text())
-            .then(text => {
-              const knowledgeList = document.getElementById('knowledgeList');
-              knowledgeList.innerHTML = ''; // Clear previous content
-              text.split('\n').forEach(line => {
-                const listItem = document.createElement('li');
-                listItem.textContent = line.trim();
-                knowledgeList.appendChild(listItem);
-              });
-            })
-            .catch(error => console.error('Error fetching general knowledge file:', error));
-        })
-        .catch(error => console.error('Error fetching translation file:', error));
-    }
+        .catch(error => console.error('Error fetching general knowledge file:', error));
+    })
+    .catch(error => console.error('Error fetching translation file:', error));
+}
+
   </script>
 </body>
 </html>
