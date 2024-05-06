@@ -144,10 +144,15 @@
     <h2 id="contact"></h2>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
-    <h2 id="resume"></h2>
+    <h2 id="generalKnowledge">Conhecimentos Gerais</h2>
+    <ul id="knowledgeList" class="qualification-rectangle"></ul>
   </div>
 
   <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      changeLanguage();
+    });
+
     function changeLanguage() {
       var languageSelect = document.getElementById("language");
       var selectedLanguage = languageSelect.options[languageSelect.selectedIndex].value;
@@ -166,13 +171,22 @@
           document.getElementById("qualifications").innerText = data.qualifications;
           document.getElementById("socialLinks").innerText = data.socialLinks;
           document.getElementById("contact").innerText = data.contact;
-          document.getElementById("resume").innerText = data.resume;
+          document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
+          fetch('./docs/general_knowledge.txt') // Fetch the text file
+            .then(response => response.text())
+            .then(text => {
+              const knowledgeList = document.getElementById('knowledgeList');
+              knowledgeList.innerHTML = ''; // Clear previous content
+              text.split('\n').forEach(line => {
+                const listItem = document.createElement('li');
+                listItem.textContent = line.trim();
+                knowledgeList.appendChild(listItem);
+              });
+            })
+            .catch(error => console.error('Error fetching general knowledge file:', error));
         })
         .catch(error => console.error('Error fetching translation file:', error));
     }
-
-    // Initial language setup
-    changeLanguage();
   </script>
 </body>
 </html>
