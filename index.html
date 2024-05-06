@@ -173,6 +173,7 @@
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
           fetch('./docs/general_knowledge.txt') // Fetch the text file
+          console.log("Fetched text content:", text)
             .then(response => response.text())
             .then(text => {
               const knowledgeList = document.getElementById('knowledgeList');
