@@ -173,25 +173,6 @@
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
           fetch('./docs/general_knowledge.txt') // Fetch the text file
-          
-  fetch('./docs/general_knowledge.txt')
-    .then(response => {
-            if (!response.ok) {
-              throw new Error(`Failed to fetch general knowledge file: ${response.status} ${response.statusText}`);
-            }
-            return response.text();
-          })
-          .then(text => {
-            console.log("Fetched text content:", text); // Log fetched text content to the console
-            return text;
-          }
-    .catch(error => {
-      console.error('Error fetching general knowledge file:', error);
-      return null; // Return null if fetching fails
-    });
-}
-
-          console.log("Fetched text content:", text)
             .then(response => response.text())
             .then(text => {
               const knowledgeList = document.getElementById('knowledgeList');
