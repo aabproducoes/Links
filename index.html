@@ -148,41 +148,40 @@
     <ul id="knowledgeList" class="qualification-rectangle"></ul>
   </div>
 
-  <<script>
- window.addEventListener('DOMContentLoaded', (event) => {
-  changeLanguage();
-});
+  <script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+      changeLanguage();
+    });
 
-function changeLanguage() {
-  var languageSelect = document.getElementById("language");
-  var selectedLanguage = languageSelect.options[languageSelect.selectedIndex].value;
+    function changeLanguage() {
+      var languageSelect = document.getElementById("language");
+      var selectedLanguage = languageSelect.options[languageSelect.selectedIndex].value;
 
-  // Update the file path to point to the correct directory
-  var translationFile = `./translations/translations_${selectedLanguage}.json`;
+      // Update the file path to point to the correct directory
+      var translationFile = `./translations/translations_${selectedLanguage}.json`;
 
-  fetch(translationFile)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
-      }
-      return response.json();
-    })
-    .then(data => {
-      document.getElementById("qualifications").innerText = data.qualifications;
-      document.getElementById("socialLinks").innerText = data.socialLinks;
-      document.getElementById("contact").innerText = data.contact;
-      document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
-      fetch('./docs/general_knowledge.txt') // Fetch the text file
-        .then(response => response.text())
-        .then(text => {
-          document.getElementById('knowledgeList').innerHTML = text; // Directly set the innerHTML
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
         })
-        .catch(error => console.error('Error fetching general knowledge file:', error));
-    })
-    .catch(error => console.error('Error fetching translation file:', error));
-}
-  
-</script>
+        .then(data => {
+          document.getElementById("qualifications").innerText = data.qualifications;
+          document.getElementById("socialLinks").innerText = data.socialLinks;
+          document.getElementById("contact").innerText = data.contact;
+          document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
+          fetch('./docs/general_knowledge.txt') // Fetch the text file
+            .then(response => response.text())
+            .then(text => {
+              document.getElementById('knowledgeList').innerHTML = text; // Directly set the innerHTML
+            })
+            .catch(error => console.error('Error fetching general knowledge file:', error));
+        })
+        .catch(error => console.error('Error fetching translation file:', error));
+    }
+  </script>
 
 </body>
 </html>
