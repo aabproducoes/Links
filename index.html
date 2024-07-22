@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; connect-src 'self'">
   <title>Your Resume</title>
 
   <style>
@@ -181,12 +182,18 @@
           return response.text();
         })
         .then(text => {
-          console.log(text); // Debugging: log fetched text
-          document.getElementById('knowledgeList').innerHTML = text; // Directly set the innerHTML
+          var knowledgeList = document.getElementById("knowledgeList");
+          knowledgeList.innerHTML = '';
+          text.split('\n').forEach(line => {
+            var listItem = document.createElement("li");
+            listItem.innerText = line;
+            knowledgeList.appendChild(listItem);
+          });
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+          console.error(error); // Debugging: log error
+        });
     }
   </script>
-
 </body>
 </html>
