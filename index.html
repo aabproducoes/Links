@@ -92,40 +92,6 @@
       right: 10px;
       z-index: 1000;
     }
-
-    .carousel {
-      width: 80%;
-      overflow: hidden;
-      margin: 20px auto;
-      position: relative;
-    }
-
-    .carousel-images {
-      display: flex;
-      transition: transform 0.5s ease-in-out;
-    }
-
-    .carousel-images img {
-      width: 100%;
-      height: auto;
-    }
-
-    .carousel-controls {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-    }
-
-    .carousel-control {
-      background-color: rgba(0, 0, 0, 0.5);
-      color: #ffd700;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
@@ -162,24 +128,11 @@
     <h2 id="contact"></h2>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
-    
-    <!-- Carousel Section -->
-    <h2>Blender</h2>
-    <div class="carousel">
-      <div class="carousel-images" id="carouselImages">
-        <!-- Images will be inserted here by JavaScript -->
-      </div>
-      <div class="carousel-controls">
-        <button class="carousel-control" id="prevBtn">&lt;</button>
-        <button class="carousel-control" id="nextBtn">&gt;</button>
-      </div>
-    </div>
   </div>
 
   <script>
     window.addEventListener('DOMContentLoaded', (event) => {
       changeLanguage();
-      initCarousel();
     });
 
     function changeLanguage() {
@@ -203,76 +156,6 @@
           console.error('Error fetching translation file:', error);
           alert('Failed to load translations. Please try again later.');
         });
-    }
-
-    function initCarousel() {
-      const carouselImages = document.getElementById('carouselImages');
-
-      const imagePaths = [
-        'MeloStudioHair1.png',
-        'PhysicsWallpaper[1].png',
-        'ProceduralPlanet[4].png',
-        'Rever[1].png',
-        'Rever[2].png',
-        'LandscapeMapNeon[8].png',
-        'LandscapeMap[4].png',
-        'LandscapeMap[7].png',
-        'LandscapeMap[9]edited.png',
-        'LandscapeMap[10].png',
-        'LandscapeMap[11].png',
-        'LandscapeMap[12].png',
-        'LandscapeMap[13].png',
-        'LandscapeMapNeon[4].png',
-        'LandscapeMapNeon[5].png',
-        'ProceduralPlanet[1].png',
-        '278434882_2045592745633108_2300835446034934031_n.jpg',
-        '278434882_2045592745633108_2300835446034934031_n[2].jpg',
-        '278434882_2045592745633108_2300835446034934031_n[3].jpg',
-        '278434882_2045592745633108_2300835446034934031_n-removebg-preview.png',
-        'ABDIamond[14].png',
-        'Abstract[007].png',
-        'Abstract[009].png',
-        'AbstractWallpaper[1].png',
-        'BlackWidow[6].png',
-        'LandscapeMap[1].png',
-        'LandscapeMap[2].png',
-        'LandscapeMap[5].png',
-        'LandscapeMap[9].png',
-        'LandscapeMapNeon[3.png',
-        'LandscapeMapNeon[5]edit.png',
-        'Logo.png',
-        'PhysicsWallpaper[2].png',
-        'ProceduralPlanet[2].png',
-        'ProceduralPlanet[3].png',
-        'LandscapeMap[3].png',
-        'LandscapeMap[6].png',
-        'LandscapeMap[14].png',
-        'LandscapeMap[15].png',
-        'LandscapeMapNeon[1].png',
-        'LandscapeMapNeon[2].png'
-      ];
-
-      imagePaths.forEach(path => {
-        const img = document.createElement('img');
-        img.src = `./ImagesLoading/Blender/${path}`;
-        carouselImages.appendChild(img);
-      });
-
-      let currentIndex = 0;
-
-      document.getElementById('prevBtn').addEventListener('click', () => {
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : carouselImages.children.length - 1;
-        updateCarousel();
-      });
-
-      document.getElementById('nextBtn').addEventListener('click', () => {
-        currentIndex = (currentIndex < carouselImages.children.length - 1) ? currentIndex + 1 : 0;
-        updateCarousel();
-      });
-
-      function updateCarousel() {
-        carouselImages.style.transform = `translateX(-${currentIndex * 100}%)`;
-      }
     }
   </script>
 </body>
