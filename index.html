@@ -162,29 +162,24 @@
 
       fetch(translationFile)
         .then(response => {
-          console.log(response); // Debugging: log response object
           if (!response.ok) {
             throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
           }
           return response.json();
         })
         .then(data => {
-          console.log(data); // Debugging: log fetched data
           document.getElementById("qualifications").innerText = data.qualifications;
           document.getElementById("socialLinks").innerText = data.socialLinks;
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
-          return fetch('./docs/general_knowledge.txt');
+          fetch('./docs/general_knowledge.txt') // Fetch the text file
+            .then(response => response.text())
+            .then(text => {
+              document.getElementById('knowledgeList').innerHTML = text; // Directly set the innerHTML
+            })
+            .catch(error => console.error('Error fetching general knowledge file:', error));
         })
-        .then(response => {
-          console.log(response); // Debugging: log response object
-          return response.text();
-        })
-        .then(text => {
-          console.log(text); // Debugging: log fetched text
-          document.getElementById('knowledgeList').innerHTML = text; // Directly set the innerHTML
-        })
-        .catch(error => console.error('Error:', error));
+        .catch(error => console.error('Error fetching translation file:', error));
     }
   </script>
 
