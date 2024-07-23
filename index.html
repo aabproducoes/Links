@@ -92,6 +92,19 @@
       right: 10px;
       z-index: 1000;
     }
+
+    .knowledge-section {
+      margin-top: 20px;
+    }
+
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .knowledge-list li {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -128,6 +141,10 @@
     <h2 id="contact"></h2>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
+    <div class="knowledge-section">
+      <h2 id="knowledge-title">Knowledge</h2>
+      <ul class="knowledge-list" id="knowledge-list"></ul>
+    </div>
   </div>
 
   <div class="right-section">
@@ -137,6 +154,7 @@
   <script>
     window.addEventListener('DOMContentLoaded', (event) => {
       changeLanguage();
+      populateKnowledge();
     });
 
     function changeLanguage() {
@@ -160,6 +178,28 @@
           console.error('Error fetching translation file:', error);
           alert('Failed to load translations. Please try again later.');
         });
+    }
+
+    function populateKnowledge() {
+      const knowledgeArray = [
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "Python",
+        "Java",
+        "C++",
+        "Machine Learning",
+        "Data Analysis",
+        "Web Development",
+        "Game Development"
+      ];
+      
+      const knowledgeList = document.getElementById("knowledge-list");
+      knowledgeArray.forEach(item => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        knowledgeList.appendChild(listItem);
+      });
     }
   </script>
 </body>
