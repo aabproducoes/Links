@@ -4,26 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
-
   <style>
     body {
       margin: 0;
       padding: 0;
       display: flex;
       flex-wrap: nowrap;
-      background:
-        linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) -50px -50px/100px 100px repeat-x,
-        linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) -50px 0/100px 100px repeat-x,
-        linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) -50px 50px/100px 100px repeat-x,
-        linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 0 -50px/100px 100px repeat-x,
-        linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 0 0/100px 100px repeat-x,
-        linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 0 50px/100px 100px repeat-x,
-        linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 50px -50px/100px 100px repeat-x,
-        linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 50px 0/100px 100px repeat-x,
-        linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 50px 50px/100px 100px repeat-x,
-        linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 100px -50px/100px 100px repeat-x,
-        linear-gradient(30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 100px 0/100px 100px repeat-x,
-        linear-gradient(-30deg, transparent 12.5%, #ffd700 12.5%, #ffd700 87.5%, transparent 87.5%) 100px 50px/100px 100px repeat-x;
+      background-color: #020202;
+      background-size: 100px 5px;
     }
 
     .left-section, .right-section {
@@ -89,11 +77,6 @@
       color: #ffd700;
     }
 
-    body {
-      background: #020202;
-      background-size: 100px 5px;
-    }
-
     .pdf-iframe {
       width: 100%;
       height: calc(100vh - 40px); /* Adjust the height as needed */
@@ -121,9 +104,7 @@
   <div class="left-section">
     <div class="qualification-rectangle">
       <h2 id="qualifications"></h2>
-      <ul class="social-links">
-        <iframe class="pdf-iframe" src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
-      </ul>
+      <iframe class="pdf-iframe" src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
     </div>
   </div>
 
@@ -154,11 +135,9 @@
     });
 
     function changeLanguage() {
-      var languageSelect = document.getElementById("language");
-      var selectedLanguage = languageSelect.options[languageSelect.selectedIndex].value;
-
-      // Update the file path to point to the correct directory
-      var translationFile = `./translations/translations_${selectedLanguage}.json`;
+      const languageSelect = document.getElementById("language");
+      const selectedLanguage = languageSelect.value;
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
 
       fetch(translationFile)
         .then(response => {
@@ -171,17 +150,16 @@
           document.getElementById("qualifications").innerText = data.qualifications;
           document.getElementById("socialLinks").innerText = data.socialLinks;
           document.getElementById("contact").innerText = data.contact;
-          document.getElementById("generalKnowledge").innerText = data.generalKnowledge; // Change text "Resume" to "Conhecimentos Gerais"
-          fetch('./docs/general_knowledge.txt') // Fetch the text file
+          document.getElementById("generalKnowledge").innerText = data.generalKnowledge;
+          fetch('./docs/general_knowledge.txt')
             .then(response => response.text())
             .then(text => {
-              document.getElementById('knowledgeList').innerHTML = text; // Directly set the innerHTML
+              document.getElementById('knowledgeList').innerHTML = text.split('\n').map(line => `<li>${line}</li>`).join('');
             })
             .catch(error => console.error('Error fetching general knowledge file:', error));
         })
         .catch(error => console.error('Error fetching translation file:', error));
     }
   </script>
-
 </body>
 </html>
