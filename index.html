@@ -125,8 +125,6 @@
     <h2 id="contact"></h2>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
-    <h2 id="generalKnowledge">Conhecimentos Gerais</h2>
-    <ul id="knowledgeList" class="qualification-rectangle"></ul>
   </div>
 
   <script>
@@ -150,13 +148,6 @@
           document.getElementById("qualifications").innerText = data.qualifications;
           document.getElementById("socialLinks").innerText = data.socialLinks;
           document.getElementById("contact").innerText = data.contact;
-          document.getElementById("generalKnowledge").innerText = data.generalKnowledge;
-          fetch('./docs/general_knowledge.txt')
-            .then(response => response.text())
-            .then(text => {
-              document.getElementById('knowledgeList').innerHTML = text.split('\n').map(line => `<li>${line}</li>`).join('');
-            })
-            .catch(error => console.error('Error fetching general knowledge file:', error));
         })
         .catch(error => console.error('Error fetching translation file:', error));
     }
