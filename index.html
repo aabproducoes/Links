@@ -207,28 +207,66 @@
 
     function initCarousel() {
       const carouselImages = document.getElementById('carouselImages');
+
       const imagePaths = [
-        './ImagesLoading/Blender/image1.jpg',
-        './ImagesLoading/Blender/image2.jpg',
-        './ImagesLoading/Blender/image3.jpg',
-        // Add more image paths here
+        'MeloStudioHair1.png',
+        'PhysicsWallpaper[1].png',
+        'ProceduralPlanet[4].png',
+        'Rever[1].png',
+        'Rever[2].png',
+        'LandscapeMapNeon[8].png',
+        'LandscapeMap[4].png',
+        'LandscapeMap[7].png',
+        'LandscapeMap[9]edited.png',
+        'LandscapeMap[10].png',
+        'LandscapeMap[11].png',
+        'LandscapeMap[12].png',
+        'LandscapeMap[13].png',
+        'LandscapeMapNeon[4].png',
+        'LandscapeMapNeon[5].png',
+        'ProceduralPlanet[1].png',
+        '278434882_2045592745633108_2300835446034934031_n.jpg',
+        '278434882_2045592745633108_2300835446034934031_n[2].jpg',
+        '278434882_2045592745633108_2300835446034934031_n[3].jpg',
+        '278434882_2045592745633108_2300835446034934031_n-removebg-preview.png',
+        'ABDIamond[14].png',
+        'Abstract[007].png',
+        'Abstract[009].png',
+        'AbstractWallpaper[1].png',
+        'BlackWidow[6].png',
+        'LandscapeMap[1].png',
+        'LandscapeMap[2].png',
+        'LandscapeMap[5].png',
+        'LandscapeMap[9].png',
+        'LandscapeMapNeon[3.png',
+        'LandscapeMapNeon[5]edit.png',
+        'Logo.png',
+        'PhysicsWallpaper[2].png',
+        'ProceduralPlanet[2].png',
+        'ProceduralPlanet[3].png',
+        'LandscapeMap[3].png',
+        'LandscapeMap[6].png',
+        'LandscapeMap[14].png',
+        'LandscapeMap[15].png',
+        'LandscapeMapNeon[1].png',
+        'LandscapeMapNeon[2].png'
       ];
 
       imagePaths.forEach(path => {
         const img = document.createElement('img');
-        img.src = path;
+        img.src = `./ImagesLoading/Blender/${path}`;
         carouselImages.appendChild(img);
       });
 
       let currentIndex = 0;
 
       document.getElementById('prevBtn').addEventListener('click', () => {
-        currentIndex = (currentIndex > 0) ? currentIndex - 1 : imagePaths.length - 1;
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : carouselImages.children.length - 1;
         updateCarousel();
       });
 
       document.getElementById('nextBtn').addEventListener('click', () => {
-        currentIndex = (currentIndex < imagePaths.length - 1) ? currentIndex + 1 : 0;
+        currentIndex = (currentIndex < carouselImages.children.length - 1) ? currentIndex + 1 : 0;
         updateCarousel();
       });
 
