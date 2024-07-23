@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
+  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
+  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
+  <meta name="author" content="Antonio Augusto Barbaro">
   <style>
     body {
       margin: 0;
@@ -89,6 +92,40 @@
       right: 10px;
       z-index: 1000;
     }
+
+    .carousel {
+      width: 80%;
+      overflow: hidden;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    .carousel-images {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-images img {
+      width: 100%;
+      height: auto;
+    }
+
+    .carousel-controls {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+
+    .carousel-control {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #ffd700;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -125,11 +162,24 @@
     <h2 id="contact"></h2>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
+    
+    <!-- Carousel Section -->
+    <h2>Blender</h2>
+    <div class="carousel">
+      <div class="carousel-images" id="carouselImages">
+        <!-- Images will be inserted here by JavaScript -->
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-control" id="prevBtn">&lt;</button>
+        <button class="carousel-control" id="nextBtn">&gt;</button>
+      </div>
+    </div>
   </div>
 
   <script>
     window.addEventListener('DOMContentLoaded', (event) => {
       changeLanguage();
+      initCarousel();
     });
 
     function changeLanguage() {
@@ -149,7 +199,42 @@
           document.getElementById("socialLinks").innerText = data.socialLinks;
           document.getElementById("contact").innerText = data.contact;
         })
-        .catch(error => console.error('Error fetching translation file:', error));
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          alert('Failed to load translations. Please try again later.');
+        });
+    }
+
+    function initCarousel() {
+      const carouselImages = document.getElementById('carouselImages');
+      const imagePaths = [
+        './ImagesLoading/Blender/image1.jpg',
+        './ImagesLoading/Blender/image2.jpg',
+        './ImagesLoading/Blender/image3.jpg',
+        // Add more image paths here
+      ];
+
+      imagePaths.forEach(path => {
+        const img = document.createElement('img');
+        img.src = path;
+        carouselImages.appendChild(img);
+      });
+
+      let currentIndex = 0;
+
+      document.getElementById('prevBtn').addEventListener('click', () => {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : imagePaths.length - 1;
+        updateCarousel();
+      });
+
+      document.getElementById('nextBtn').addEventListener('click', () => {
+        currentIndex = (currentIndex < imagePaths.length - 1) ? currentIndex + 1 : 0;
+        updateCarousel();
+      });
+
+      function updateCarousel() {
+        carouselImages.style.transform = `translateX(-${currentIndex * 100}%)`;
+      }
     }
   </script>
 </body>
