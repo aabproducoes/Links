@@ -115,6 +115,11 @@
       justify-content: center;
     }
 
+    .knowledge-list li .text {
+      position: relative;
+      z-index: 1;
+    }
+
     .knowledge-list li::before {
       content: '';
       position: absolute;
@@ -123,15 +128,16 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(45deg, #0000ff 25%, transparent 25%, transparent 75%, #0000ff 75%);
-      transition: background 1s, opacity 1s;
+      transition: opacity 1s;
       opacity: 0;
+      z-index: 0;
     }
 
     .knowledge-list li:hover::before {
       opacity: 1;
     }
 
-    .knowledge-list li:hover {
+    .knowledge-list li:hover .text {
       color: #000;
     }
   </style>
@@ -230,7 +236,10 @@
       knowledgeList.innerHTML = '';  // Clear existing list items
       knowledgeArray.forEach(item => {
         const listItem = document.createElement("li");
-        listItem.textContent = item;
+        const text = document.createElement("span");
+        text.classList.add("text");
+        text.textContent = item;
+        listItem.appendChild(text);
         knowledgeList.appendChild(listItem);
       });
     }
