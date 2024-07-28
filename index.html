@@ -100,7 +100,6 @@
     .knowledge-list {
       list-style: none;
       padding: 0;
-      position: relative;
     }
 
     .knowledge-list li {
@@ -248,7 +247,8 @@
         const distanceToCenter = Math.abs(y - maxDistance);
         const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
 
-        item.querySelector('::before').style.opacity = transparency;
+        item.style.setProperty('--overlay-opacity', transparency);
+        item.style.setProperty('--mouse-y', `${y}px`);
       });
     });
   </script>
