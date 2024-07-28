@@ -120,8 +120,7 @@
       z-index: 2;
     }
 
-    .knowledge-list li::before {
-      content: '';
+    .knowledge-list li .overlay {
       position: absolute;
       top: 0;
       left: 0;
@@ -131,7 +130,6 @@
       z-index: 1;
       pointer-events: none;
       transition: opacity 0.3s;
-      opacity: 0.2; /* Initial transparency */
     }
   </style>
 </head>
@@ -232,6 +230,11 @@
         const text = document.createElement("span");
         text.classList.add("text");
         text.textContent = item;
+
+        const overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+
+        listItem.appendChild(overlay);
         listItem.appendChild(text);
         knowledgeList.appendChild(listItem);
       });
@@ -248,8 +251,8 @@
         const distanceToCenter = Math.abs(y - maxDistance);
         const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
 
-        item.style.setProperty('--overlay-opacity', transparency);
-        item.querySelector('::before').style.opacity = transparency;
+        const overlay = item.querySelector('.overlay');
+        overlay.style.opacity = transparency;
       });
     });
   </script>
