@@ -131,6 +131,7 @@
       z-index: 1;
       pointer-events: none;
       transition: opacity 0.3s;
+      opacity: 0.2; /* Initial transparency */
     }
   </style>
 </head>
@@ -248,7 +249,7 @@
         const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
 
         item.style.setProperty('--overlay-opacity', transparency);
-        item.style.setProperty('--mouse-y', `${y}px`);
+        item.querySelector('::before').style.opacity = transparency;
       });
     });
   </script>
