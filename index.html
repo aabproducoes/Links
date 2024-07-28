@@ -103,18 +103,6 @@
       position: relative;
     }
 
-    .knowledge-list::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 0, 0, 0.2); /* Red color for better visibility */
-      z-index: 1;
-      pointer-events: none;
-    }
-
     .knowledge-list li {
       margin: 10px 0;
       padding: 10px;
@@ -131,6 +119,19 @@
     .knowledge-list li .text {
       position: relative;
       z-index: 2;
+    }
+
+    .knowledge-list li::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 0, 0, 0.2); /* Red color for better visibility */
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.3s;
     }
   </style>
 </head>
@@ -247,7 +248,7 @@
         const distanceToCenter = Math.abs(y - maxDistance);
         const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
 
-        item.style.setProperty('--overlay-opacity', transparency);
+        item.querySelector('::before').style.opacity = transparency;
       });
     });
   </script>
