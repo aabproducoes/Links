@@ -133,6 +133,10 @@
       pointer-events: none;
     }
 
+    .knowledge-list li:hover::after {
+      opacity: var(--overlay-opacity, 1);
+    }
+
     .knowledge-list li:hover .text {
       color: #000;
     }
@@ -255,7 +259,6 @@
         item.style.setProperty('--mouse-x', `${x}px`);
         item.style.setProperty('--mouse-y', `${y}px`);
         item.style.setProperty('--overlay-opacity', transparency);
-        item.querySelector('::after').style.opacity = transparency;
       });
     });
   </script>
