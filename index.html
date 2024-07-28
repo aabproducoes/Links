@@ -127,14 +127,18 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(45deg, #0000ff 25%, transparent 25%, transparent 75%, #0000ff 75%);
-      transition: opacity 1s;
-      opacity: 0;
+      background: linear-gradient(45deg, rgba(0, 0, 0, 0.3) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.3) 75%);
+      transition: background 1s, opacity 1s;
+      opacity: 1;
       z-index: 0;
     }
 
     .knowledge-list li:hover::before {
-      opacity: 1;
+      background: none;
+    }
+
+    .knowledge-list li:hover {
+      color: #000;
     }
   </style>
 </head>
@@ -239,6 +243,39 @@
         knowledgeList.appendChild(listItem);
       });
     }
+
+    document.addEventListener("mousemove", function(event) {
+      const items = document.querySelectorAll(".knowledge-list li");
+      items.forEach(item => {
+        const rect = item.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const width = rect.width;
+        const height = rect.height;
+        const centerX = width / 2;
+        const centerY = height / 2;
+        const distance = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
+        const maxDistance = Math.sqrt(Math.pow(centerX, 2) + Math.pow(centerY, 2));
+        const opacity = distance / maxDistance;
+        item.style.setProperty('--gradient-opacity', opacity);
+        item.style.setProperty('--mouse-x', x + 'px');
+        item.style.setProperty('--mouse-y', y + 'px');
+      });
+    });
+
+    document.addEventListener("mouseover", function(event) {
+      if (event.target.closest(".knowledge-list li")) {
+        const item = event.target.closest(".knowledge-list li");
+        item.style.setProperty('--gradient-opacity', 0);
+      }
+    });
+
+    document.addEventListener("mouseout", function(event) {
+      if (event.target.closest(".knowledge-list li")) {
+        const item = event.target.closest(".knowledge-list li");
+        item.style.setProperty('--gradient-opacity', 0.3);
+      }
+    });
   </script>
 </body>
 </html>
