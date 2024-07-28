@@ -243,7 +243,7 @@
       });
     }
 
-    document.addEventListener('mousemove', function(e) {
+    document.querySelector('.knowledge-list').addEventListener('mousemove', function(e) {
       clearTimeout(resetTimer);
       const knowledgeItems = document.querySelectorAll('.knowledge-list li');
       knowledgeItems.forEach(item => {
