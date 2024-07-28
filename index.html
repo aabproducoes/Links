@@ -110,7 +110,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(255, 0, 0, 0.2); /* Red color for better visibility */
       z-index: 1;
       pointer-events: none;
     }
@@ -237,16 +237,18 @@
     }
 
     document.addEventListener('mousemove', function(e) {
-      const knowledgeList = document.querySelector('.knowledge-list::before');
-      const rect = knowledgeList.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const height = rect.height;
-      const maxDistance = height / 2;
+      const knowledgeItems = document.querySelectorAll('.knowledge-list li');
+      knowledgeItems.forEach(item => {
+        const rect = item.getBoundingClientRect();
+        const y = e.clientY - rect.top;
+        const height = rect.height;
+        const maxDistance = height / 2;
 
-      const distanceToCenter = Math.abs(y - maxDistance);
-      const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
+        const distanceToCenter = Math.abs(y - maxDistance);
+        const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
 
-      knowledgeList.style.opacity = transparency;
+        item.style.setProperty('--overlay-opacity', transparency);
+      });
     });
   </script>
 </body>
