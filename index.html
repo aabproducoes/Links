@@ -244,11 +244,9 @@
       const knowledgeItems = document.querySelectorAll('.knowledge-list li');
       knowledgeItems.forEach(item => {
         const rect = item.getBoundingClientRect();
-        const y = e.clientY - rect.top;
-        const height = rect.height;
-        const maxDistance = height / 2;
-
-        const distanceToCenter = Math.abs(y - maxDistance);
+        const itemCenterY = rect.top + rect.height / 2;
+        const distanceToCenter = Math.abs(e.clientY - itemCenterY);
+        const maxDistance = window.innerHeight / 2;
         const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
 
         const overlay = item.querySelector('.overlay');
