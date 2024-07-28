@@ -254,6 +254,28 @@
         overlay.style.opacity = transparency;
       });
     });
+
+    document.addEventListener('mouseover', function(e) {
+      if (e.target.closest('.knowledge-list li')) {
+        const item = e.target.closest('.knowledge-list li');
+        const overlay = item.querySelector('.overlay');
+        overlay.style.opacity = 0;
+      }
+    });
+
+    document.addEventListener('mouseout', function(e) {
+      if (e.target.closest('.knowledge-list li')) {
+        const item = e.target.closest('.knowledge-list li');
+        const rect = item.getBoundingClientRect();
+        const itemCenterY = rect.top + rect.height / 2;
+        const distanceToCenter = Math.abs(e.clientY - itemCenterY);
+        const maxDistance = window.innerHeight / 2;
+        const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
+
+        const overlay = item.querySelector('.overlay');
+        overlay.style.opacity = transparency;
+      }
+    });
   </script>
 </body>
 </html>
