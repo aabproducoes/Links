@@ -255,17 +255,16 @@
       });
     });
 
-    document.addEventListener('mouseover', function(e) {
-      if (e.target.closest('.knowledge-list li')) {
-        const item = e.target.closest('.knowledge-list li');
-        const overlay = item.querySelector('.overlay');
+    document.querySelector('.knowledge-list').addEventListener('mouseover', function(e) {
+      const overlays = document.querySelectorAll('.knowledge-list li .overlay');
+      overlays.forEach(overlay => {
         overlay.style.opacity = 0;
-      }
+      });
     });
 
-    document.addEventListener('mouseout', function(e) {
-      if (e.target.closest('.knowledge-list li')) {
-        const item = e.target.closest('.knowledge-list li');
+    document.querySelector('.knowledge-list').addEventListener('mouseout', function(e) {
+      const knowledgeItems = document.querySelectorAll('.knowledge-list li');
+      knowledgeItems.forEach(item => {
         const rect = item.getBoundingClientRect();
         const itemCenterY = rect.top + rect.height / 2;
         const distanceToCenter = Math.abs(e.clientY - itemCenterY);
@@ -274,7 +273,7 @@
 
         const overlay = item.querySelector('.overlay');
         overlay.style.opacity = transparency;
-      }
+      });
     });
   </script>
 </body>
