@@ -127,13 +127,10 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.2);
-      transition: opacity 1s;
-      z-index: 1; /* Ensure the overlay is above the background but below the text */
-    }
-
-    .knowledge-list li:hover::after {
-      background: none;
+      background: linear-gradient(45deg, rgba(0, 0, 255, 0.2) 25%, rgba(0, 0, 0, 0.2) 25%, rgba(0, 0, 0, 0.2) 75%, rgba(0, 0, 255, 0.2) 75%);
+      transition: opacity 1s, background 1s;
+      z-index: 1; /* Ensure the gradient is above the background but below the text */
+      opacity: var(--overlay-opacity, 1); /* Use CSS variable for dynamic opacity */
     }
 
     .knowledge-list li:hover .text {
