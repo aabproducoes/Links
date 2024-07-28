@@ -8,51 +8,57 @@
   <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
   <meta name="author" content="Antonio Augusto Barbaro">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    
     body {
       margin: 0;
       padding: 0;
       display: flex;
       flex-wrap: nowrap;
-      background-color: #020202;
-      background-size: 100px 5px;
+      background-color: #0d0d0d;
+      color: #00ff00;
+      font-family: 'Roboto Mono', monospace;
     }
 
     .left-section, .right-section {
       flex: 1;
-      background-color: #000;
-      color: #ffd700;
+      background-color: #1a1a1a;
       padding: 20px;
       border: 5px solid transparent;
-      border-image: linear-gradient(-45deg, #ffd700, #648880);
+      border-image: linear-gradient(-45deg, #00ff00, #004400);
       border-image-slice: 1;
       border-image-width: 5px;
+      box-shadow: 0 0 10px #00ff00;
     }
 
     .center-section {
       flex: 1;
-      background-color: #000;
-      color: #ffd700;
+      background-color: #1a1a1a;
+      color: #00ff00;
       padding: 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-shadow: 0 0 10px #00ff00;
     }
 
     .qualification-rectangle {
-      background-color: #000;
-      color: #ffd700;
+      background-color: #1a1a1a;
+      color: #00ff00;
       padding: 20px;
       border-radius: 10px;
       height: 100%;
+      border: 1px solid #00ff00;
     }
 
     .profile-picture {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      border: 5px solid #ff00ff;
+      border: 5px solid #00ff00;
       margin-bottom: 20px;
+      box-shadow: 0 0 10px #00ff00;
     }
 
     .social-links {
@@ -67,23 +73,25 @@
     .social-link {
       display: inline-block;
       padding: 10px 20px;
-      background-color: #ffd700;
-      color: #000;
+      background-color: #00ff00;
+      color: #1a1a1a;
       text-decoration: none;
-      border: 2px solid #000;
+      border: 2px solid #00ff00;
       border-radius: 25px;
       transition: background-color 0.3s, color 0.3s;
+      font-weight: bold;
     }
 
     .social-link:hover {
-      background-color: #000;
-      color: #ffd700;
+      background-color: #1a1a1a;
+      color: #00ff00;
     }
 
     .pdf-iframe {
       width: 100%;
       height: calc(100vh - 40px); /* Adjust the height as needed */
       border: none;
+      box-shadow: 0 0 10px #00ff00;
     }
 
     .language-selector {
@@ -91,6 +99,7 @@
       top: 10px;
       right: 10px;
       z-index: 1000;
+      color: #00ff00;
     }
 
     .knowledge-section {
@@ -106,14 +115,14 @@
       margin: 10px 0;
       padding: 10px;
       background-color: transparent;
-      color: #ffd700;
+      color: #00ff00;
       position: relative;
       overflow: hidden;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px inset #0000ff; /* Inset border with blue color */
+      border: 2px inset #00ff00; /* Inset border with blue color */
     }
 
     .knowledge-list li .text {
@@ -127,14 +136,26 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 255, 0.8); /* Blue color for better visibility */
+      background: rgba(0, 255, 0, 0.8); /* Green color for better visibility */
       z-index: 1;
       pointer-events: none;
       transition: opacity 0.3s;
     }
+
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
+      opacity: 0.1;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
+  <div class="tech-bg"></div>
   <!-- Language selector -->
   <div class="language-selector">
     <label for="language">Select Language: </label>
@@ -146,14 +167,14 @@
 
   <div class="left-section">
     <div class="qualification-rectangle">
-      <h2 id="qualifications"></h2>
+      <h2 id="qualifications">Qualifications</h2>
       <iframe class="pdf-iframe" src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
     </div>
   </div>
 
   <div class="center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
-    <h2 id="socialLinks"></h2>
+    <h2 id="socialLinks">Social Links</h2>
     <ul class="social-links">
       <li>
         <a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a>
@@ -165,7 +186,7 @@
         <a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a>
       </li>
     </ul>
-    <h2 id="contact"></h2>
+    <h2 id="contact">Contact</h2>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
   </div>
