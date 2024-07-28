@@ -178,6 +178,8 @@
   </div>
 
   <script>
+    let resetTimer;
+
     window.addEventListener('DOMContentLoaded', (event) => {
       changeLanguage();
     });
@@ -242,6 +244,7 @@
     }
 
     document.addEventListener('mousemove', function(e) {
+      clearTimeout(resetTimer);
       const knowledgeItems = document.querySelectorAll('.knowledge-list li');
       knowledgeItems.forEach(item => {
         const rect = item.getBoundingClientRect();
@@ -253,6 +256,13 @@
         const overlay = item.querySelector('.overlay');
         overlay.style.opacity = transparency;
       });
+
+      resetTimer = setTimeout(() => {
+        knowledgeItems.forEach(item => {
+          const overlay = item.querySelector('.overlay');
+          overlay.style.opacity = 0.2;
+        });
+      }, 3000);
     });
 
     document.querySelector('.knowledge-list').addEventListener('mouseover', function(e) {
@@ -260,20 +270,18 @@
       overlays.forEach(overlay => {
         overlay.style.opacity = 0;
       });
+      clearTimeout(resetTimer);
     });
 
     document.querySelector('.knowledge-list').addEventListener('mouseout', function(e) {
-      const knowledgeItems = document.querySelectorAll('.knowledge-list li');
-      knowledgeItems.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const itemCenterY = rect.top + rect.height / 2;
-        const distanceToCenter = Math.abs(e.clientY - itemCenterY);
-        const maxDistance = window.innerHeight / 2;
-        const transparency = 0.2 + (distanceToCenter / maxDistance) * 0.8;
-
-        const overlay = item.querySelector('.overlay');
-        overlay.style.opacity = transparency;
-      });
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => {
+        const knowledgeItems = document.querySelectorAll('.knowledge-list li');
+        knowledgeItems.forEach(item => {
+          const overlay = item.querySelector('.overlay');
+          overlay.style.opacity = 0.2;
+        });
+      }, 3000);
     });
   </script>
 </body>
