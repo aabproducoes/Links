@@ -1,8 +1,21 @@
 {
   "qualifications": "Qualificações",
-  "socialLinks": "Links Sociais",
+  "socialLinks": "Redes Sociais",
   "contact": "Contato",
-  "resume": "Currículo",
   "knowledge": "Conhecimento",
-  "friendlySites": "Sites Amigos"
+  "friendlySites": "Sites Amigáveis",
+  "knowledgeList": [
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "Python",
+    "Java",
+    "C++",
+    "Aprendizado de Máquina",
+    "Análise de Dados",
+    "Desenvolvimento Web",
+    "Desenvolvimento de Jogos",
+    "Cifra de César",
+    "Hashes"
+  ]
 }
