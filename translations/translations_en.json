@@ -3,5 +3,19 @@
   "socialLinks": "Social Links",
   "contact": "Contact",
   "knowledge": "Knowledge",
-  "friendlySites": "Friendly Sites"
+  "friendlySites": "Friendly Sites",
+  "knowledgeList": [
+    "JavaScript",
+    "HTML",
+    "CSS",
+    "Python",
+    "Java",
+    "C++",
+    "Machine Learning",
+    "Data Analysis",
+    "Web Development",
+    "Game Development",
+    "Caesar Cipher",
+    "Hashes"
+  ]
 }
