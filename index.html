@@ -214,31 +214,34 @@
       changeLanguage();
     });
 
-    function changeLanguage() {
-      const languageSelect = document.getElementById("language");
-      const selectedLanguage = languageSelect.value;
-      const translationFile = `./translations/translations_${selectedLanguage}.json`;
+   function changeLanguage() {
+  const languageSelect = document.getElementById("language");
+  const selectedLanguage = languageSelect.value;
+  const translationFile = `./translations/translations_${selectedLanguage}.json`;
 
-      fetch(translationFile)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          document.getElementById("qualifications").innerText = data.qualifications;
-          document.getElementById("socialLinks").innerText = data.socialLinks;
-          document.getElementById("contact").innerText = data.contact;
-        })
-        .catch(error => {
-          console.error('Error fetching translation file:', error);
-          alert('Failed to load translations. Please try again later.');
-        })
-        .finally(() => {
-          populateKnowledge();
-        });
-    }
+  fetch(translationFile)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      document.getElementById("qualifications").innerText = data.qualifications;
+      document.getElementById("socialLinks").innerText = data.socialLinks;
+      document.getElementById("contact").innerText = data.contact;
+      document.getElementById("knowledge-title").innerText = data.knowledge;
+      document.getElementById("friendlySites").innerText = data.friendlySites;
+    })
+    .catch(error => {
+      console.error('Error fetching translation file:', error);
+      alert('Failed to load translations. Please try again later.');
+    })
+    .finally(() => {
+      populateKnowledge();
+    });
+}
+
 
     function populateKnowledge() {
       const knowledgeArray = [
