@@ -1,66 +1,294 @@
-.knowledge-list li {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #1a1a1a;
-  background-image: url('https://www.transparenttextures.com/patterns/black-twill.png'); /* Added texture */
-  background-size: cover; /* Ensures the texture covers the whole item */
-  color: #00ff00;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px inset #00ff00; /* Reduced border size */
-  transition: background-color 0.3s, border 0.3s; /* Smooth transition for highlight effect */
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Resume</title>
+  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
+  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
+  <meta name="author" content="Antonio Augusto Barbaro">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: nowrap;
+      background-color: #0d0d0d;
+      color: #00ff00;
+      font-family: 'Roboto Mono', monospace;
+    }
 
-.knowledge-list li:hover {
-  background-color: #003300; /* Highlight background color */
-  border: 1px solid #00ff00; /* Change border style on hover */
-}
+    .left-section, .right-section {
+      flex: 1;
+      background-color: #1a1a1a;
+      padding: 20px;
+      border: 5px solid transparent;
+      border-image: linear-gradient(-45deg, #00ff00, #004400);
+      border-image-slice: 1;
+      border-image-width: 2px; /* Reduced width to make the gradient smaller */
+      box-shadow: 0 0 5px #00ff00; /* Reduced the shadow to make it more subtle */
+    }
 
-.knowledge-list li .text {
-  position: relative;
-  z-index: 2;
-}
+    .center-section {
+      flex: 1;
+      background-color: #1a1a1a;
+      color: #00ff00;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 10px #00ff00;
+    }
 
-.knowledge-list li .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 255, 0, 0.4); /* Static overlay color */
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.8; /* Set to a consistent opacity */
-  transition: none; /* No transition effect */
-}
+    .qualification-rectangle {
+      background-color: #1a1a1a;
+      color: #00ff00;
+      padding: 20px;
+      border-radius: 10px;
+      height: 100%;
+      border: 1px solid #00ff00;
+    }
 
-.rotating-square {
-  position: absolute;
-  left: -20px;
-  width: 20px;
-  height: 100%; /* Set to match the height of the knowledge list item */
-  background-color: #00ff00;
-  transform: rotate(0deg);
-  transition: transform 0.3s ease;
-  opacity: 0;
-}
+    .profile-picture {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid #00ff00;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #00ff00;
+    }
 
-.knowledge-list li:hover .rotating-square {
-  transform: rotate(-45deg);
-  opacity: 1;
-}
+    .social-links {
+      list-style: none;
+      padding: 0;
+    }
 
-.tech-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
-  opacity: 0.05; /* Reduced opacity for a more subtle effect */
-  z-index: -1;
-}
+    .social-links li {
+      margin: 10px 0;
+    }
+
+    .social-link {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #00ff00;
+      color: #1a1a1a;
+      text-decoration: none;
+      border: 2px solid #00ff00;
+      border-radius: 25px;
+      transition: background-color 0.3s, color 0.3s;
+      font-weight: bold;
+    }
+
+    .social-link:hover {
+      background-color: #1a1a1a;
+      color: #00ff00;
+    }
+
+    .pdf-iframe {
+      width: 100%;
+      height: calc(100vh - 40px); /* Adjust the height as needed */
+      border: none;
+      box-shadow: 0 0 10px #00ff00;
+    }
+
+    .language-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      color: #00ff00;
+    }
+
+    .knowledge-section {
+      margin-top: 20px;
+    }
+
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .knowledge-list li {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #1a1a1a;
+      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png'); /* Added texture */
+      background-size: cover; /* Ensures the texture covers the whole item */
+      color: #00ff00;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px inset #00ff00; /* Reduced border size */
+      transition: background-color 0.3s, border 0.3s; /* Smooth transition for highlight effect */
+    }
+
+    .knowledge-list li:hover {
+      background-color: #003300; /* Highlight background color */
+      border: 1px solid #00ff00; /* Change border style on hover */
+    }
+
+    .knowledge-list li .text {
+      position: relative;
+      z-index: 2;
+    }
+
+    .knowledge-list li .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 255, 0, 0.4); /* Static overlay color */
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.8; /* Set to a consistent opacity */
+      transition: none; /* No transition effect */
+    }
+
+    .rotating-square {
+      position: absolute;
+      left: -20px;
+      width: 20px;
+      height: 100%; /* Set to match the height of the knowledge list item */
+      background-color: #00ff00;
+      transform: rotate(0deg);
+      transition: transform 0.3s ease;
+      opacity: 0;
+    }
+
+    .knowledge-list li:hover .rotating-square {
+      transform: rotate(-45deg);
+      opacity: 1;
+    }
+
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
+      opacity: 0.05; /* Reduced opacity for a more subtle effect */
+      z-index: -1;
+    }
+  </style>
+</head>
+<body>
+  <div class="tech-bg"></div>
+  <!-- Language selector -->
+  <div class="language-selector">
+    <label for="language">Select Language: </label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+    </select>
+  </div>
+
+  <div class="left-section">
+    <div class="qualification-rectangle">
+      <h2 id="qualifications">Qualifications</h2>
+      <iframe class="pdf-iframe" src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
+    </div>
+  </div>
+
+  <div class="center-section">
+    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Antonio Augusto Barbaro's Profile Picture" class="profile-picture">
+    
+    <h2 id="socialLinks">Social Links</h2>
+    <ul class="social-links">
+      <li>
+        <a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a>
+      </li>
+      <li>
+        <a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a>
+      </li>
+      <li>
+        <a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a>
+      </li>
+    </ul>
+    
+    <h2 id="friendlySites">Friendly Sites</h2>
+    <ul class="social-links">
+      <li>
+        <a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a>
+      </li>
+    </ul>
+
+    <h2 id="contact">Contact</h2>
+    <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
+    <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
+  </div>
+
+  <div class="right-section">
+    <div class="knowledge-section">
+      <h2 id="knowledge-title">Knowledge</h2>
+      <ul class="knowledge-list" id="knowledge-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    let resetTimer;
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+      changeLanguage();
+    });
+
+    function changeLanguage() {
+      const languageSelect = document.getElementById("language");
+      const selectedLanguage = languageSelect.value;
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
+
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById("qualifications").innerText = data.qualifications;
+          document.getElementById("socialLinks").innerText = data.socialLinks;
+          document.getElementById("contact").innerText = data.contact;
+          document.getElementById("knowledge-title").innerText = data.knowledge;
+          document.getElementById("friendlySites").innerText = data.friendlySites;
+          
+          populateKnowledge(data.knowledgeList);
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          alert('Failed to load translations. Please try again later.');
+        });
+    }
+
+    function populateKnowledge(knowledgeArray) {
+      const knowledgeList = document.getElementById("knowledge-list");
+      knowledgeList.innerHTML = '';  // Clear existing list items
+      knowledgeArray.forEach(item => {
+        const listItem = document.createElement("li");
+
+        // Create the rotating square element
+        const rotatingSquare = document.createElement("div");
+        rotatingSquare.classList.add("rotating-square");
+
+        const text = document.createElement("span");
+        text.classList.add("text");
+        text.textContent = item;
+
+        const overlay = document.createElement("div");
+        overlay.classList.add("overlay");
+
+        listItem.appendChild(rotatingSquare); // Add the rotating square
+        listItem.appendChild(overlay);
+        listItem.appendChild(text);
+        knowledgeList.appendChild(listItem);
+      });
+    }
+  </script>
+</body>
+</html>
