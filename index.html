@@ -111,72 +111,74 @@
       padding: 0;
     }
 
-    .knowledge-list li {
-      margin: 10px 0;
-      padding: 10px;
-      background-color: #1a1a1a;
-      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png'); /* Added texture */
-      background-size: cover; /* Ensures the texture covers the whole item */
-      color: #00ff00;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px inset #00ff00; /* Reduced border size */
-      transition: background-color 0.3s, border 0.3s; /* Smooth transition for highlight effect */
-    }
+   .knowledge-list li {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #1a1a1a;
+  background-image: url('https://www.transparenttextures.com/patterns/black-twill.png'); /* Added texture */
+  background-size: cover; /* Ensures the texture covers the whole item */
+  color: #00ff00;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px inset #00ff00; /* Reduced border size */
+  transition: background-color 0.3s, border 0.3s; /* Smooth transition for highlight effect */
+}
 
-    .knowledge-list li:hover {
-      background-color: #003300; /* Highlight background color */
-      border: 1px solid #00ff00; /* Change border style on hover */
-    }
+.knowledge-list li:hover {
+  background-color: #003300; /* Highlight background color */
+  border: 1px solid #00ff00; /* Change border style on hover */
+}
 
-    .knowledge-list li .text {
-      position: relative;
-      z-index: 2;
-    }
+.knowledge-list li .text {
+  position: relative;
+  z-index: 2;
+}
 
-    .knowledge-list li .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 255, 0, 0.4); /* Static overlay color */
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.8; /* Set to a consistent opacity */
-      transition: none; /* No transition effect */
-    }
+.knowledge-list li .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 255, 0, 0.4); /* Static overlay color */
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.8; /* Set to a consistent opacity */
+  transition: none; /* No transition effect */
+}
 
-    .rotating-square {
-      position: absolute;
-      left: -20px;
-      width: 20px;
-      height: 100%; /* Set to match the height of the knowledge list item */
-      background-color: #00ff00;
-      transform: rotate(0deg);
-      transition: transform 0.3s ease;
-      opacity: 0;
-    }
+.rotating-square {
+  position: absolute;
+  top: -20px; /* Move the square to the top of the item */
+  left: 0;
+  width: 60px; /* Triple the original width */
+  height: 20px; /* Set height as desired */
+  background-color: #00ff00;
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+  opacity: 0;
+}
 
-    .knowledge-list li:hover .rotating-square {
-      transform: rotate(-45deg);
-      opacity: 1;
-    }
+.knowledge-list li:hover .rotating-square {
+  transform: rotate(-45deg);
+  opacity: 1;
+}
 
-    .tech-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
-      opacity: 0.05; /* Reduced opacity for a more subtle effect */
-      z-index: -1;
-    }
+.tech-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
+  opacity: 0.05; /* Reduced opacity for a more subtle effect */
+  z-index: -1;
+}
+
   </style>
 </head>
 <body>
