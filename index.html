@@ -27,8 +27,8 @@
       border: 5px solid transparent;
       border-image: linear-gradient(-45deg, #00ff00, #004400);
       border-image-slice: 1;
-      border-image-width: 5px;
-      box-shadow: 0 0 10px #00ff00;
+      border-image-width: 2px; /* Reduced width to make the gradient smaller */
+      box-shadow: 0 0 5px #00ff00; /* Reduced the shadow to make it more subtle */
     }
 
     .center-section {
@@ -111,27 +111,20 @@
       padding: 0;
     }
 
-.knowledge-list li {
-  margin: 10px 0;
-  padding: 10px;
-  background-color: #1a1a1a;
-  background-image: url('https://www.transparenttextures.com/patterns/black-twill.png'); /* Added texture */
-  background-size: cover; /* Ensures the texture covers the whole item */
-  color: #00ff00;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px inset #00ff00; /* Reduced border size */
-}
-
-      ;
+    .knowledge-list li {
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #1a1a1a;
+      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png'); /* Added texture */
+      background-size: cover; /* Ensures the texture covers the whole item */
+      color: #00ff00;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px inset #00ff00;
+      border: 1px inset #00ff00; /* Reduced border size */
     }
 
     .knowledge-list li .text {
@@ -145,10 +138,11 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 255, 0, 0.4);
+      background: rgba(0, 255, 0, 0.4); /* Static overlay color */
       z-index: 1;
       pointer-events: none;
-      transition: opacity 0.3s;
+      opacity: 0.8; /* Set to a consistent opacity */
+      transition: none; /* No transition effect */
     }
 
     .rotating-square {
@@ -174,7 +168,7 @@
       width: 100%;
       height: 100%;
       background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
-      opacity: 0.1;
+      opacity: 0.05; /* Reduced opacity for a more subtle effect */
       z-index: -1;
     }
   </style>
@@ -289,47 +283,6 @@
         knowledgeList.appendChild(listItem);
       });
     }
-
-    document.querySelector('.knowledge-list').addEventListener('mousemove', function(e) {
-      clearTimeout(resetTimer);
-      const knowledgeItems = document.querySelectorAll('.knowledge-list li');
-      knowledgeItems.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        const itemCenterY = rect.top + rect.height / 2;
-        const distanceToCenter = Math.abs(e.clientY - itemCenterY);
-        const maxDistance = window.innerHeight / 2;
-        const transparency = 1 - Math.min(distanceToCenter / maxDistance, 1); // More relative opacity
-
-        const overlay = item.querySelector('.overlay');
-        overlay.style.opacity = transparency;
-      });
-
-      resetTimer = setTimeout(() => {
-        knowledgeItems.forEach(item => {
-          const overlay = item.querySelector('.overlay');
-          overlay.style.opacity = 0.8; // Default opacity
-        });
-      }, 3000);
-    });
-
-    document.querySelector('.knowledge-list').addEventListener('mouseover', function(e) {
-      const overlays = document.querySelectorAll('.knowledge-list li .overlay');
-      overlays.forEach(overlay => {
-        overlay.style.opacity = 0;
-      });
-      clearTimeout(resetTimer);
-    });
-
-    document.querySelector('.knowledge-list').addEventListener('mouseout', function(e) {
-      clearTimeout(resetTimer);
-      resetTimer = setTimeout(() => {
-        const knowledgeItems = document.querySelectorAll('.knowledge-list li');
-        knowledgeItems.forEach(item => {
-          const overlay = item.querySelector('.overlay');
-          overlay.style.opacity = 0.8;
-        });
-      }, 3000);
-    });
   </script>
 </body>
 </html>
