@@ -111,7 +111,7 @@
       padding: 0;
     }
 
-   .knowledge-list li {
+.knowledge-list li {
   margin: 10px 0;
   padding: 10px;
   background-color: #1a1a1a;
@@ -153,10 +153,10 @@
 
 .rotating-square {
   position: absolute;
-  top: -20px; /* Move the square to the top of the item */
-  left: 0;
-  width: 60px; /* Triple the original width */
-  height: 20px; /* Set height as desired */
+  top: -100%; /* Move the square up by its height */
+  left: -10px; /* Offset to the left by half the square's width */
+  width: 20px;
+  height: 300%; /* Triple the height of the knowledge list item */
   background-color: #00ff00;
   transform: rotate(0deg);
   transition: transform 0.3s ease;
@@ -178,6 +178,7 @@
   opacity: 0.05; /* Reduced opacity for a more subtle effect */
   z-index: -1;
 }
+
 
   </style>
 </head>
