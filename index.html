@@ -122,7 +122,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px inset #00ff00; /* Inset border with blue color */
+      border: 2px inset #00ff00;
     }
 
     .knowledge-list li .text {
@@ -136,10 +136,26 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 255, 0, 0.4); /* Green color for better visibility */
+      background: rgba(0, 255, 0, 0.4);
       z-index: 1;
       pointer-events: none;
       transition: opacity 0.3s;
+    }
+
+    .rotating-square {
+      position: absolute;
+      left: -20px;
+      width: 20px;
+      height: 20px;
+      background-color: #00ff00;
+      transform: rotate(0deg);
+      transition: transform 0.3s ease;
+      opacity: 0;
+    }
+
+    .knowledge-list li:hover .rotating-square {
+      transform: rotate(-45deg);
+      opacity: 1;
     }
 
     .tech-bg {
@@ -246,6 +262,11 @@
       knowledgeList.innerHTML = '';  // Clear existing list items
       knowledgeArray.forEach(item => {
         const listItem = document.createElement("li");
+
+        // Create the rotating square element
+        const rotatingSquare = document.createElement("div");
+        rotatingSquare.classList.add("rotating-square");
+
         const text = document.createElement("span");
         text.classList.add("text");
         text.textContent = item;
@@ -253,6 +274,7 @@
         const overlay = document.createElement("div");
         overlay.classList.add("overlay");
 
+        listItem.appendChild(rotatingSquare); // Add the rotating square
         listItem.appendChild(overlay);
         listItem.appendChild(text);
         knowledgeList.appendChild(listItem);
