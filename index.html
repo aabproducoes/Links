@@ -15,50 +15,50 @@
       padding: 0;
       display: flex;
       flex-wrap: nowrap;
-      background-color: #0d0d0d;
-      color: #00ff00;
+      background-color: #0a0f2c;
+      color: #00aaff;
       font-family: 'Roboto Mono', monospace;
     }
 
     .left-section, .right-section {
       flex: 1;
-      background-color: #1a1a1a;
+      background-color: #12193f;
       padding: 20px;
       border: 5px solid transparent;
       border-image: linear-gradient(-45deg, #00ff00, #004400);
       border-image-slice: 1;
       border-image-width: 5px;
-      box-shadow: 0 0 10px #00ff00;
+      box-shadow: 0 0 10px #00aaff;
     }
 
     .center-section {
       flex: 1;
-      background-color: #1a1a1a;
-      color: #00ff00;
+      background-color: #12193f;
+      color: #00aaff;
       padding: 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 0 10px #00ff00;
+      box-shadow: 0 0 10px #00aaff;
     }
 
     .qualification-rectangle {
-      background-color: #1a1a1a;
-      color: #00ff00;
+      background-color: #12193f;
+      color: #00aaff;
       padding: 20px;
       border-radius: 10px;
       height: 100%;
-      border: 1px solid #00ff00;
+      border: 1px solid #00aaff;
     }
 
     .profile-picture {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      border: 5px solid #00ff00;
+      border: 5px solid #00aaff;
       margin-bottom: 20px;
-      box-shadow: 0 0 10px #00ff00;
+      box-shadow: 0 0 10px #00aaff;
     }
 
     .social-links {
@@ -73,25 +73,25 @@
     .social-link {
       display: inline-block;
       padding: 10px 20px;
-      background-color: #00ff00;
-      color: #1a1a1a;
+      background-color: #00aaff;
+      color: #12193f;
       text-decoration: none;
-      border: 2px solid #00ff00;
+      border: 2px solid #00aaff;
       border-radius: 25px;
       transition: background-color 0.3s, color 0.3s;
       font-weight: bold;
     }
 
     .social-link:hover {
-      background-color: #1a1a1a;
-      color: #00ff00;
+      background-color: #12193f;
+      color: #00aaff;
     }
 
     .pdf-iframe {
       width: 100%;
       height: calc(100vh - 40px); /* Adjust the height as needed */
       border: none;
-      box-shadow: 0 0 10px #00ff00;
+      box-shadow: 0 0 10px #00aaff;
     }
 
     .language-selector {
@@ -99,7 +99,7 @@
       top: 10px;
       right: 10px;
       z-index: 1000;
-      color: #00ff00;
+      color: #00aaff;
     }
 
     .knowledge-section {
@@ -115,14 +115,14 @@
       margin: 10px 0;
       padding: 10px;
       background-color: transparent;
-      color: #00ff00;
+      color: #00aaff;
       position: relative;
       overflow: hidden;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px inset #00ff00; /* Inset border with blue color */
+      border: 2px inset #00aaff;
     }
 
     .knowledge-list li .text {
@@ -136,7 +136,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 255, 0, 0.8); /* Green color for better visibility */
+      background: rgba(0, 170, 255, 0.8); /* Blue color for better visibility */
       z-index: 1;
       pointer-events: none;
       transition: opacity 0.3s;
@@ -160,10 +160,10 @@
     }
 
     canvas {
-      background-color: #1a1a1a;
-      border: 1px solid #00ff00;
+      background-color: #12193f;
+      border: 1px solid #00aaff;
       border-radius: 50%;
-      box-shadow: 0 0 10px #00ff00;
+      box-shadow: 0 0 10px #00aaff;
     }
   </style>
 </head>
@@ -293,9 +293,9 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       // Draw clock arcs
-      drawArc(ctx, 100, 100, 90, (hours / 12) * 2 * Math.PI, '#00ff00');
-      drawArc(ctx, 100, 100, 60, (minutes / 60) * 2 * Math.PI, '#00aaff');
-      drawArc(ctx, 100, 100, 30, (seconds / 60) * 2 * Math.PI, '#ff5500');
+      drawArc(ctx, 100, 100, 90, (hours / 12) * 2 * Math.PI, '#00aaff');
+      drawArc(ctx, 100, 100, 60, (minutes / 60) * 2 * Math.PI, '#0055ff');
+      drawArc(ctx, 100, 100, 30, (seconds / 60) * 2 * Math.PI, '#00ffff');
     }
 
     function drawArc(ctx, x, y, radius, endAngle, color) {
