@@ -292,10 +292,10 @@
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw clock arcs in blueish colors
-      drawArc(ctx, 100, 100, 90, (hours / 12) * 2 * Math.PI, '#5f9ea0');  // Cadet Blue for hours
-      drawArc(ctx, 100, 100, 60, (minutes / 60) * 2 * Math.PI, '#4682b4');  // Steel Blue for minutes
-      drawArc(ctx, 100, 100, 30, (seconds / 60) * 2 * Math.PI, '#1e90ff');  // Dodger Blue for seconds
+      // Draw clock arcs
+      drawArc(ctx, 100, 100, 90, (hours / 12) * 2 * Math.PI, '#00ff00');
+      drawArc(ctx, 100, 100, 60, (minutes / 60) * 2 * Math.PI, '#00aaff');
+      drawArc(ctx, 100, 100, 30, (seconds / 60) * 2 * Math.PI, '#ff5500');
     }
 
     function drawArc(ctx, x, y, radius, endAngle, color) {
