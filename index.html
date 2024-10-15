@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
   <style>
-    /* Your existing styles */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     body {
@@ -34,6 +33,22 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .canvas-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    canvas {
+      border-radius: 10px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
     }
 
     .center-section {
@@ -44,41 +59,6 @@
       text-align: center;
     }
 
-    .section:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #00ffff;
-    }
-
-    /* Styles for PDF.js */
-    #pdfCanvas {
-      width: 100%;
-      border: 2px solid #00ffff;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-    }
-
-    .zoom-controls {
-      margin-top: 10px;
-    }
-
-    .zoom-controls button {
-      padding: 10px;
-      margin-right: 5px;
-      background-color: #00ffff;
-      color: #162042;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-
-    .zoom-controls button:hover {
-      background-color: #162042;
-      color: #00ffff;
-    }
-
-    /* Other existing styles */
     .profile-picture {
       width: 200px;
       height: 200px;
@@ -128,24 +108,19 @@
       pointer-events: none;
     }
   </style>
-  <!-- Include PDF.js Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js"></script>
 </head>
 <body>
   <div class="tech-bg"></div>
 
   <div class="section left-section">
     <h2>Qualifications</h2>
-    <canvas id="pdfCanvas"></canvas>
-    <!-- Zoom Controls -->
-    <div class="zoom-controls">
-      <button onclick="zoomOut()">-</button>
-      <button onclick="zoomIn()">+</button>
+    <div class="canvas-container">
+      <canvas id="pdfCanvas"></canvas>
     </div>
   </div>
 
   <div class="section center-section">
-    <img src="./images/your_profile_picture.jpg" alt="Your Profile Picture" class="profile-picture">
+    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
@@ -154,53 +129,30 @@
     </ul>
   </div>
 
-  <!-- PDF.js Script -->
   <script>
     const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf';
 
-    // Load PDF.js
     const pdfjsLib = window['pdfjs-dist/build/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.worker.min.js';
 
-    // Specify the workerSrc property
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.worker.min.js';
+    const canvas = document.getElementById('pdfCanvas');
+    const ctx = canvas.getContext('2d');
 
-    let pdfDoc = null,
-        pageNum = 1,
-        scale = 1.5,
-        canvas = document.getElementById('pdfCanvas'),
-        ctx = canvas.getContext('2d');
-
-    // Fetch the PDF document
-    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-      pdfDoc = pdfDoc_;
-      renderPage(pageNum);
-    });
-
-    function renderPage(num) {
-      pdfDoc.getPage(num).then(function(page) {
-        const viewport = page.getViewport({ scale: scale });
-        canvas.height = viewport.height;
+    pdfjsLib.getDocument(url).promise.then((pdf) => {
+      pdf.getPage(1).then((page) => {
+        const viewport = page.getViewport({ scale: 1.5 });
         canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
         const renderContext = {
           canvasContext: ctx,
-          viewport: viewport
+          viewport: viewport,
         };
         page.render(renderContext);
       });
-    }
-
-    function zoomIn() {
-      scale += 0.5;
-      renderPage(pageNum);
-    }
-
-    function zoomOut() {
-      if (scale > 0.5) {
-        scale -= 0.5;
-        renderPage(pageNum);
-      }
-    }
+    }).catch((error) => {
+      console.error('Error loading PDF:', error);
+    });
   </script>
 </body>
 </html>
