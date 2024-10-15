@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
   <style>
+    /* Your existing styles */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     body {
@@ -24,14 +25,15 @@
       padding: 20px;
       border-radius: 15px;
       backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
-      box-shadow: 0 0 20px #00ffff;
-      overflow: hidden;
     }
 
     .left-section {
       flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .center-section {
@@ -42,55 +44,52 @@
       text-align: center;
     }
 
-    h2 {
-      text-align: center;
-      font-weight: 600;
-      margin-bottom: 15px;
+    .section:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ffff;
     }
 
-    /* Fix PDF rendering by scaling it */
-    .pdf-container {
-      flex-grow: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
+    /* Styles for PDF.js */
+    #pdfCanvas {
+      width: 100%;
+      border: 2px solid #00ffff;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
     }
 
-    object, embed {
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #00ffff;
+    .zoom-controls {
+      margin-top: 10px;
     }
 
-    .pdf-download {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
+    .zoom-controls button {
+      padding: 10px;
+      margin-right: 5px;
       background-color: #00ffff;
       color: #162042;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      transition: background-color 0.3s, transform 0.3s;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
     }
 
-    .pdf-download:hover {
+    .zoom-controls button:hover {
       background-color: #162042;
       color: #00ffff;
-      transform: scale(1.1);
     }
 
+    /* Other existing styles */
     .profile-picture {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      margin-bottom: 20px;
       box-shadow: 0 0 20px #00ffff;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-picture:hover {
+      transform: rotate(10deg) scale(1.1);
     }
 
     .social-links {
@@ -99,7 +98,7 @@
     }
 
     .social-links li {
-      margin: 10px 0;
+      margin: 15px 0;
     }
 
     .social-link {
@@ -109,7 +108,7 @@
       color: #162042;
       text-decoration: none;
       border-radius: 30px;
-      transition: transform 0.3s, background-color 0.3s;
+      transition: background-color 0.3s, transform 0.3s;
     }
 
     .social-link:hover {
@@ -129,26 +128,24 @@
       pointer-events: none;
     }
   </style>
+  <!-- Include PDF.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.min.js"></script>
 </head>
 <body>
   <div class="tech-bg"></div>
 
   <div class="section left-section">
     <h2>Qualifications</h2>
-    <div class="pdf-container">
-      <object 
-        data="./docs/AntonioAugustoBarbaro-Curricullum.pdf" 
-        type="application/pdf">
-        <embed src="./docs/AntonioAugustoBarbaro-Curricullum.pdf" type="application/pdf" />
-      </object>
-      <a href="./docs/AntonioAugustoBarbaro-Curricullum.pdf" download class="pdf-download">
-        Download PDF
-      </a>
+    <canvas id="pdfCanvas"></canvas>
+    <!-- Zoom Controls -->
+    <div class="zoom-controls">
+      <button onclick="zoomOut()">-</button>
+      <button onclick="zoomIn()">+</button>
     </div>
   </div>
 
   <div class="section center-section">
-    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
+    <img src="./images/your_profile_picture.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
@@ -156,5 +153,54 @@
       <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
     </ul>
   </div>
+
+  <!-- PDF.js Script -->
+  <script>
+    const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf';
+
+    // Load PDF.js
+    const pdfjsLib = window['pdfjs-dist/build/pdf'];
+
+    // Specify the workerSrc property
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.13.216/pdf.worker.min.js';
+
+    let pdfDoc = null,
+        pageNum = 1,
+        scale = 1.5,
+        canvas = document.getElementById('pdfCanvas'),
+        ctx = canvas.getContext('2d');
+
+    // Fetch the PDF document
+    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+      pdfDoc = pdfDoc_;
+      renderPage(pageNum);
+    });
+
+    function renderPage(num) {
+      pdfDoc.getPage(num).then(function(page) {
+        const viewport = page.getViewport({ scale: scale });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+        page.render(renderContext);
+      });
+    }
+
+    function zoomIn() {
+      scale += 0.5;
+      renderPage(pageNum);
+    }
+
+    function zoomOut() {
+      if (scale > 0.5) {
+        scale -= 0.5;
+        renderPage(pageNum);
+      }
+    }
+  </script>
 </body>
 </html>
