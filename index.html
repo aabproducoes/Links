@@ -51,9 +51,18 @@
     iframe {
       flex-grow: 1;
       width: 100%;
+      height: 100%; /* Ensures iframe takes full height */
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
+      transform-origin: top left; /* Prevents shift when zooming */
+    }
+
+    /* Anti-aliasing for smoother text */
+    iframe {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      image-rendering: crisp-edges;
     }
 
     .profile-picture {
@@ -111,7 +120,7 @@
 
   <div class="section left-section">
     <h2>Qualifications</h2>
-    <iframe src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
+    <iframe src="./docs/AntonioAugustoBarbaro-Curricullum.pdf" scrolling="no"></iframe>
   </div>
 
   <div class="section center-section">
