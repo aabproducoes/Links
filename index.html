@@ -5,43 +5,57 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     body {
       margin: 0;
       padding: 0;
       display: flex;
-      background-color: #0a0f2e;
-      color: #00aaff;
-      font-family: 'Roboto Mono', monospace;
+      background: linear-gradient(135deg, #0a0f2e, #162042);
+      color: #00ffff;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      height: 100vh;
     }
 
-    .left-section, .right-section {
+    .section {
       flex: 1;
-      background-color: #162042;
+      margin: 10px;
+      background-color: rgba(22, 32, 66, 0.8);
       padding: 20px;
-      border: 5px solid transparent;
-      border-image: linear-gradient(-45deg, #00ff00, #004400);
-      border-image-slice: 1;
-      box-shadow: 0 0 10px #00aaff;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ffff;
     }
 
     .center-section {
-      flex: 1;
-      background-color: #162042;
-      padding: 20px;
       text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      box-shadow: 0 0 10px #00aaff;
     }
 
     .profile-picture {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      margin-bottom: 20px;
+      box-shadow: 0 0 20px #00ffff;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-picture:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #00ffff;
     }
 
     .social-links {
@@ -50,21 +64,23 @@
     }
 
     .social-links li {
-      margin: 10px 0;
+      margin: 15px 0;
     }
 
     .social-link {
-      padding: 10px 20px;
-      background-color: #00aaff;
+      display: inline-block;
+      padding: 12px 25px;
+      background-color: #00ffff;
       color: #162042;
       text-decoration: none;
-      border-radius: 25px;
+      border-radius: 30px;
+      transition: background-color 0.3s, transform 0.3s;
     }
 
-    .pdf-iframe {
-      width: 100%;
-      height: calc(100vh - 40px);
-      border: none;
+    .social-link:hover {
+      background-color: #162042;
+      color: #00ffff;
+      transform: scale(1.1);
     }
 
     .tech-bg {
@@ -73,21 +89,21 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('https://www.transparenttextures.com/patterns/black-twill.png');
-      opacity: 0.1;
-      z-index: -1;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.3;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
   <div class="tech-bg"></div>
 
-  <div class="left-section">
+  <div class="section">
     <h2>Qualifications</h2>
     <iframe class="pdf-iframe" src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
   </div>
 
-  <div class="center-section">
+  <div class="center-section section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
     <ul class="social-links">
