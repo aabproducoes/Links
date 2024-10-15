@@ -2,14 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-
-    * {
-      box-sizing: border-box;
-    }
 
     body {
       margin: 0;
@@ -20,23 +16,10 @@
       font-family: 'Poppins', sans-serif;
       height: 100vh;
       overflow: hidden;
-      position: relative;
-    }
-
-    .tech-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
-      opacity: 0.3;
-      pointer-events: none;
-      z-index: -1;
     }
 
     .section {
-      margin: 20px;
+      margin: 10px;
       background-color: rgba(22, 32, 66, 0.8);
       padding: 20px;
       border-radius: 15px;
@@ -44,15 +27,12 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
 
     .left-section {
       flex: 1;
       display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      transform: translate(0, 0); /* Initial position */
+      flex-direction: column;
     }
 
     .center-section {
@@ -63,19 +43,17 @@
       text-align: center;
     }
 
-    .left-section:hover {
-      transform: translate(10%, -10%);
-      box-shadow: 0 0 25px #00ffff;
-      z-index: 1; /* Bring to front when hovered */
+    .section:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #00ffff;
     }
 
     canvas {
+      flex-grow: 1;
       width: 100%;
-      height: auto;
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
-      max-height: 80vh;
     }
 
     .profile-picture {
@@ -88,23 +66,16 @@
     }
 
     .profile-picture:hover {
-      transform: rotate(10deg) scale(1.05);
-    }
-
-    h2 {
-      margin-bottom: 15px;
-      font-weight: 600;
-      color: #00ffff;
+      transform: rotate(10deg) scale(1.1);
     }
 
     .social-links {
       list-style: none;
       padding: 0;
-      margin: 0;
     }
 
     .social-links li {
-      margin: 10px 0;
+      margin: 15px 0;
     }
 
     .social-link {
@@ -115,7 +86,6 @@
       text-decoration: none;
       border-radius: 30px;
       transition: background-color 0.3s, transform 0.3s;
-      font-weight: bold;
     }
 
     .social-link:hover {
@@ -124,21 +94,15 @@
       transform: scale(1.1);
     }
 
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-        height: auto;
-        overflow: visible;
-      }
-
-      .section {
-        margin: 10px;
-        width: calc(100% - 20px);
-      }
-
-      .left-section:hover {
-        transform: translate(0, 0); /* Disable movement on smaller screens */
-      }
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.3;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -157,46 +121,30 @@
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
       <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
       <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
-      <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
-      <li><a href="https://wa.me/54984181968" class="social-link">WhatsApp</a></li>
-      <li><a href="mailto:aaugusto444@gmail.com" class="social-link">Email</a></li>
     </ul>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <script>
-    const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; 
+    const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
 
-    const renderPDF = async (url) => {
-      try {
-        const pdf = await pdfjsLib.getDocument(url).promise;
-        const page = await pdf.getPage(1);
-        const scale = 2;
-        const viewport = page.getViewport({ scale });
+    // Load PDF
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+      pdf.getPage(1).then(page => {
+        const scale = 1.5; // Adjust scale for better resolution
+        const viewport = page.getViewport({ scale: scale });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
 
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = viewport.width * dpr;
-        canvas.height = viewport.height * dpr;
-        canvas.style.width = `${viewport.width}px`;
-        canvas.style.height = `${viewport.height}px`;
-        context.setTransform(dpr, 0, 0, dpr, 0, 0);
-
+        // Render PDF page into canvas context
         const renderContext = {
           canvasContext: context,
-          viewport,
+          viewport: viewport
         };
-
-        await page.render(renderContext).promise;
-      } catch (error) {
-        console.error('Error rendering PDF:', error);
-        document.querySelector('.left-section').innerHTML = '<p>Failed to load PDF.</p>';
-      }
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      renderPDF(url);
+        page.render(renderContext);
+      });
     });
   </script>
 </body>
