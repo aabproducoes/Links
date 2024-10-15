@@ -7,7 +7,6 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-    /* Reset some default styles */
     * {
       box-sizing: border-box;
     }
@@ -24,7 +23,6 @@
       position: relative;
     }
 
-    /* Background overlay */
     .tech-bg {
       position: absolute;
       top: 0;
@@ -37,7 +35,6 @@
       z-index: -1;
     }
 
-    /* Common section styles */
     .section {
       margin: 20px;
       background-color: rgba(22, 32, 66, 0.8);
@@ -50,18 +47,14 @@
       position: relative;
     }
 
-    /* Left section specific styles */
     .left-section {
       flex: 1;
       display: flex;
-      flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      /* Initial position */
-      transform: translate(0, 0);
+      transform: translate(0, 0); /* Initial position */
     }
 
-    /* Center section styles */
     .center-section {
       flex: 1;
       display: flex;
@@ -70,24 +63,21 @@
       text-align: center;
     }
 
-    /* Hover effect for left section without scaling */
     .left-section:hover {
       transform: translate(10%, -10%);
       box-shadow: 0 0 25px #00ffff;
       z-index: 1; /* Bring to front when hovered */
     }
 
-    /* PDF Canvas Styles */
     canvas {
       width: 100%;
       height: auto;
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
-      max-height: 80vh; /* Ensure it doesn't exceed viewport height */
+      max-height: 80vh;
     }
 
-    /* Profile picture styles */
     .profile-picture {
       width: 200px;
       height: 200px;
@@ -101,14 +91,12 @@
       transform: rotate(10deg) scale(1.05);
     }
 
-    /* Headings */
     h2 {
       margin-bottom: 15px;
       font-weight: 600;
       color: #00ffff;
     }
 
-    /* Social Links */
     .social-links {
       list-style: none;
       padding: 0;
@@ -136,7 +124,6 @@
       transform: scale(1.1);
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
       body {
         flex-direction: column;
@@ -150,7 +137,7 @@
       }
 
       .left-section:hover {
-        transform: translate(0, 0);
+        transform: translate(0, 0); /* Disable movement on smaller screens */
       }
     }
   </style>
@@ -158,13 +145,11 @@
 <body>
   <div class="tech-bg"></div>
 
-  <!-- Left Section: Qualifications PDF -->
   <div class="section left-section">
     <h2>Qualifications</h2>
     <canvas id="pdf-canvas"></canvas>
   </div>
 
-  <!-- Center Section: Profile and Social Links -->
   <div class="section center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
@@ -178,7 +163,6 @@
     </ul>
   </div>
 
-  <!-- PDF.js Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <script>
     const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; 
@@ -189,10 +173,9 @@
       try {
         const pdf = await pdfjsLib.getDocument(url).promise;
         const page = await pdf.getPage(1);
-        const scale = 2; // Higher scale for better resolution
-        const viewport = page.getViewport({ scale: scale });
+        const scale = 2;
+        const viewport = page.getViewport({ scale });
 
-        // Handle device pixel ratio for sharpness
         const dpr = window.devicePixelRatio || 1;
         canvas.width = viewport.width * dpr;
         canvas.height = viewport.height * dpr;
@@ -202,18 +185,16 @@
 
         const renderContext = {
           canvasContext: context,
-          viewport: viewport,
+          viewport,
         };
 
         await page.render(renderContext).promise;
       } catch (error) {
         console.error('Error rendering PDF:', error);
-        const section = document.querySelector('.left-section');
-        section.innerHTML = '<p>Failed to load PDF.</p>';
+        document.querySelector('.left-section').innerHTML = '<p>Failed to load PDF.</p>';
       }
     };
 
-    // Render the PDF once the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
       renderPDF(url);
     });
