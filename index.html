@@ -14,18 +14,33 @@
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
-      overflow: hidden;
       height: 100vh;
+      overflow: hidden;
     }
 
     .section {
-      flex: 1;
       margin: 10px;
       background-color: rgba(22, 32, 66, 0.8);
       padding: 20px;
       border-radius: 15px;
       backdrop-filter: blur(10px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .left-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .center-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
     }
 
     .section:hover {
@@ -33,11 +48,12 @@
       box-shadow: 0 0 20px #00ffff;
     }
 
-    .center-section {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    iframe {
+      flex-grow: 1;
+      width: 100%;
+      border-radius: 10px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
     }
 
     .profile-picture {
@@ -45,17 +61,12 @@
       height: 200px;
       border-radius: 50%;
       box-shadow: 0 0 20px #00ffff;
+      margin-bottom: 20px;
       transition: transform 0.3s ease;
     }
 
     .profile-picture:hover {
       transform: rotate(10deg) scale(1.1);
-    }
-
-    h2 {
-      margin-bottom: 15px;
-      font-weight: 600;
-      color: #00ffff;
     }
 
     .social-links {
@@ -98,12 +109,12 @@
 <body>
   <div class="tech-bg"></div>
 
-  <div class="section">
+  <div class="section left-section">
     <h2>Qualifications</h2>
-    <iframe class="pdf-iframe" src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
+    <iframe src="./docs/AntonioAugustoBarbaro-Curricullum.pdf"></iframe>
   </div>
 
-  <div class="center-section section">
+  <div class="section center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
     <ul class="social-links">
