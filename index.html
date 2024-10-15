@@ -7,7 +7,7 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-    /* Reset some default styles */
+    /* Reset styles */
     * {
       box-sizing: border-box;
     }
@@ -37,7 +37,7 @@
       z-index: -1;
     }
 
-    /* Common section styles */
+    /* Section styles */
     .section {
       margin: 20px;
       background-color: rgba(22, 32, 66, 0.8);
@@ -47,7 +47,6 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
-      position: relative;
     }
 
     /* Left section specific styles */
@@ -57,11 +56,17 @@
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      /* Initial position */
-      transform: translate(0, 0) scale(1);
+      transform: translate(0, 0); /* No scaling */
     }
 
-    /* Center section styles */
+    /* Hover effect: Move slightly towards the center */
+    .left-section:hover {
+      transform: translate(10%, -5%);
+      box-shadow: 0 0 25px #00ffff;
+      z-index: 1; /* Bring to front on hover */
+    }
+
+    /* Center section */
     .center-section {
       flex: 1;
       display: flex;
@@ -70,24 +75,17 @@
       text-align: center;
     }
 
-    /* Hover effect for left section */
-    .left-section:hover {
-      transform: translate(10%, -10%) scale(0.95);
-      box-shadow: 0 0 25px #00ffff;
-      z-index: 1; /* Bring to front when hovered */
-    }
-
-    /* PDF Canvas Styles */
+    /* PDF canvas */
     canvas {
       width: 100%;
       height: auto;
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
-      max-height: 80vh; /* Ensure it doesn't exceed viewport height */
+      max-height: 80vh;
     }
 
-    /* Profile picture styles */
+    /* Profile picture */
     .profile-picture {
       width: 200px;
       height: 200px;
@@ -98,14 +96,7 @@
     }
 
     .profile-picture:hover {
-      transform: rotate(10deg) scale(1.05);
-    }
-
-    /* Headings */
-    h2 {
-      margin-bottom: 15px;
-      font-weight: 600;
-      color: #00ffff;
+      transform: rotate(10deg);
     }
 
     /* Social Links */
@@ -150,7 +141,7 @@
       }
 
       .left-section:hover {
-        transform: translate(0, 0) scale(1);
+        transform: translate(0, 0); /* No movement on smaller screens */
       }
     }
   </style>
@@ -158,13 +149,13 @@
 <body>
   <div class="tech-bg"></div>
 
-  <!-- Left Section: Qualifications PDF -->
+  <!-- Left Section: PDF Display -->
   <div class="section left-section">
     <h2>Qualifications</h2>
     <canvas id="pdf-canvas"></canvas>
   </div>
 
-  <!-- Center Section: Profile and Social Links -->
+  <!-- Center Section: Profile & Social Links -->
   <div class="section center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
@@ -189,10 +180,9 @@
       try {
         const pdf = await pdfjsLib.getDocument(url).promise;
         const page = await pdf.getPage(1);
-        const scale = 2; // Higher scale for better resolution
-        const viewport = page.getViewport({ scale: scale });
+        const scale = 2;
+        const viewport = page.getViewport({ scale });
 
-        // Handle device pixel ratio for sharpness
         const dpr = window.devicePixelRatio || 1;
         canvas.width = viewport.width * dpr;
         canvas.height = viewport.height * dpr;
@@ -200,20 +190,14 @@
         canvas.style.height = `${viewport.height}px`;
         context.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport,
-        };
-
+        const renderContext = { canvasContext: context, viewport };
         await page.render(renderContext).promise;
       } catch (error) {
         console.error('Error rendering PDF:', error);
-        const section = document.querySelector('.left-section');
-        section.innerHTML = '<p>Failed to load PDF.</p>';
+        document.querySelector('.left-section').innerHTML = '<p>Failed to load PDF.</p>';
       }
     };
 
-    // Render the PDF once the DOM is fully loaded
     document.addEventListener('DOMContentLoaded', () => {
       renderPDF(url);
     });
