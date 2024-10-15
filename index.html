@@ -126,26 +126,22 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <script>
-    const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
+    const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; 
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
 
-    // Load PDF
-    pdfjsLib.getDocument(url).promise.then(pdf => {
-      pdf.getPage(1).then(page => {
-        const scale = 1.5; // Adjust scale for better resolution
-        const viewport = page.getViewport({ scale: scale });
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+    const renderPDF = async (url) => {
+      const pdf = await pdfjsLib.getDocument(url).promise;
+      const page = await pdf.getPage(1);
+      const viewport = page.getViewport({ scale: 2 });
 
-        // Render PDF page into canvas context
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-        page.render(renderContext);
-      });
-    });
-  </script>
-</body>
-</html>
+      // Adjust for device pixel ratio (DPR)
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = viewport.width * dpr;
+      canvas.height = viewport.height * dpr;
+
+      context.scale(dpr, dpr);
+
+      const renderContext = {
+        canvasContext: context,
+        viewport: viewport
