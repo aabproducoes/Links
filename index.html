@@ -24,15 +24,14 @@
       padding: 20px;
       border-radius: 15px;
       backdrop-filter: blur(10px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
+      box-shadow: 0 0 20px #00ffff;
+      overflow: hidden;
     }
 
     .left-section {
       flex: 1;
-      display: flex;
-      flex-direction: column;
     }
 
     .center-section {
@@ -43,39 +42,55 @@
       text-align: center;
     }
 
-    .section:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #00ffff;
+    h2 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 15px;
     }
 
-    iframe {
+    /* Fix PDF rendering by scaling it */
+    .pdf-container {
       flex-grow: 1;
-      width: 100%;
-      height: 100%; /* Ensures iframe takes full height */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
       border-radius: 10px;
-      border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
-      transform-origin: top left; /* Prevents shift when zooming */
     }
 
-    /* Anti-aliasing for smoother text */
-    iframe {
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      image-rendering: crisp-edges;
+    object, embed {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    .pdf-download {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background-color: #00ffff;
+      color: #162042;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .pdf-download:hover {
+      background-color: #162042;
+      color: #00ffff;
+      transform: scale(1.1);
     }
 
     .profile-picture {
       width: 200px;
       height: 200px;
       border-radius: 50%;
-      box-shadow: 0 0 20px #00ffff;
       margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .profile-picture:hover {
-      transform: rotate(10deg) scale(1.1);
+      box-shadow: 0 0 20px #00ffff;
     }
 
     .social-links {
@@ -84,7 +99,7 @@
     }
 
     .social-links li {
-      margin: 15px 0;
+      margin: 10px 0;
     }
 
     .social-link {
@@ -94,7 +109,7 @@
       color: #162042;
       text-decoration: none;
       border-radius: 30px;
-      transition: background-color 0.3s, transform 0.3s;
+      transition: transform 0.3s, background-color 0.3s;
     }
 
     .social-link:hover {
@@ -120,7 +135,16 @@
 
   <div class="section left-section">
     <h2>Qualifications</h2>
-    <iframe src="./docs/AntonioAugustoBarbaro-Curricullum.pdf" scrolling="no"></iframe>
+    <div class="pdf-container">
+      <object 
+        data="./docs/AntonioAugustoBarbaro-Curricullum.pdf" 
+        type="application/pdf">
+        <embed src="./docs/AntonioAugustoBarbaro-Curricullum.pdf" type="application/pdf" />
+      </object>
+      <a href="./docs/AntonioAugustoBarbaro-Curricullum.pdf" download class="pdf-download">
+        Download PDF
+      </a>
+    </div>
   </div>
 
   <div class="section center-section">
