@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Resume - Antonio Augusto Barbaro</title>
-  <meta name="description" content="Antonio Augusto Barbaro's personal page featuring qualifications, social links, and portfolio.">
-  <meta name="keywords" content="Antonio Augusto Barbaro, Resume, Portfolio, Social Links, Blender Projects">
+  <title>Your Resume</title>
+  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
+  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
   <meta name="author" content="Antonio Augusto Barbaro">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
-
+    
     body {
       margin: 0;
       padding: 0;
@@ -20,17 +20,15 @@
       font-family: 'Roboto Mono', monospace;
     }
 
-    .header {
+    .left-section, .right-section {
+      flex: 1;
       background-color: #162042;
       padding: 20px;
-      text-align: center;
+      border: 5px solid transparent;
+      border-image: linear-gradient(-45deg, #00ff00, #004400);
+      border-image-slice: 1;
+      border-image-width: 5px;
       box-shadow: 0 0 10px #00aaff;
-    }
-
-    h1 {
-      margin: 0;
-      color: #00e6ff;
-      font-size: 2.5rem;
     }
 
     .center-section {
@@ -45,15 +43,6 @@
       box-shadow: 0 0 10px #00aaff;
     }
 
-    .social-links {
-      list-style: none;
-      padding: 0;
-    }
-
-    .social-links li {
-      margin: 10px 0;
-    }
-
     .social-link {
       display: inline-block;
       padding: 10px 20px;
@@ -64,67 +53,23 @@
       border-radius: 25px;
       transition: background-color 0.3s, color 0.3s;
       font-weight: bold;
+      margin-bottom: 10px;
     }
 
     .social-link:hover {
       background-color: #162042;
       color: #00aaff;
     }
-
-    .footer {
-      text-align: center;
-      padding: 20px;
-      background-color: #162042;
-      color: #00aaff;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      box-shadow: 0 -2px 10px #00aaff;
-    }
-
-    .footer a {
-      color: #00e6ff;
-      text-decoration: none;
-      margin: 0 10px;
-    }
-
-    .footer a:hover {
-      text-decoration: underline;
-    }
   </style>
 </head>
 <body>
-
-  <div class="header">
-    <h1>Antonio Augusto Barbaro</h1>
-    <p>Explore my qualifications, portfolio, and projects.</p>
-  </div>
-
   <div class="center-section">
-    <h2>Social Links</h2>
-    <ul class="social-links">
-      <li>
-        <a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a>
-      </li>
-      <li>
-        <a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a>
-      </li>
-      <li>
-        <a href="blender-projects.html" class="social-link">Blender Projects</a>
-      </li>
-    </ul>
-  </div>
+    <h2>Contact</h2>
+    <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
+    <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
 
-  <div class="footer">
-    <p>Explore more on: 
-      <a href="https://www.instagram.com/aabproducoes/" target="_blank">Instagram</a> |
-      <a href="https://twitter.com/aabproducoes" target="_blank">Twitter</a> |
-      <a href="https://www.facebook.com/antonio.augusto.barbaro" target="_blank">Facebook</a>
-    </p>
+    <!-- Blender Projects Link -->
+    <a href="blender-projects.html" class="social-link">Blender Projects</a>
   </div>
-
 </body>
 </html>
