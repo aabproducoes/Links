@@ -129,32 +129,18 @@
     const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
-
 pdfjsLib.getDocument(url).promise.then(pdf => {
   pdf.getPage(1).then(page => {
-    const scale = 1.5; // Adjust the scale for better resolution
-    const viewport = page.getViewport({ scale: scale });
-
-    // Set the canvas to render at a higher resolution
-    const outputScale = window.devicePixelRatio || 1; // Get device pixel ratio for HiDPI displays
-    canvas.width = Math.floor(viewport.width * outputScale); // Higher resolution
-    canvas.height = Math.floor(viewport.height * outputScale); // Higher resolution
-
-    canvas.style.width = Math.floor(viewport.width) + 'px'; // Keep visible size the same
-    canvas.style.height = Math.floor(viewport.height) + 'px'; // Keep visible size the same
-
-    const context = canvas.getContext('2d');
-
-    context.scale(outputScale, outputScale); // Scale the canvas to match the higher resolution
-
-    // Render the PDF page into canvas context
-    const renderContext = {
-      canvasContext: context,
-      viewport: viewport
-    };
-    page.render(renderContext);
+    page.getOperatorList().then((operatorList) => {
+      const svgGfx = new pdfjsLib.SVGGraphics(page.commonObjs, page.objs);
+      svgGfx.getSVG(operatorList, page.getViewport({ scale: 1.5 })).then(svg => {
+        const container = document.getElementById('pdf-container'); // A div to hold the SVG
+        container.appendChild(svg); // Add the SVG element to your page
+      });
+    });
   });
 });
+
 
 
   </script>
