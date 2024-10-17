@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
   <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
   <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
@@ -20,7 +20,6 @@
       font-family: 'Poppins', sans-serif;
       height: 100vh;
       overflow: hidden;
-      position: relative;
     }
 
     .left-section, .right-section {
@@ -47,7 +46,6 @@
       border-radius: 15px;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 10px #00ffff;
-      margin: 10px;
     }
 
     .profile-picture {
@@ -67,7 +65,6 @@
     .social-links {
       list-style: none;
       padding: 0;
-      width: 100%;
     }
 
     .social-links li {
@@ -75,7 +72,6 @@
     }
 
     .social-link {
-      position: relative;
       display: inline-block;
       padding: 12px 25px;
       background-color: #00ffff;
@@ -83,36 +79,27 @@
       text-decoration: none;
       border-radius: 30px;
       transition: background-color 0.3s, transform 0.3s;
-      border: 3px solid transparent;
-      overflow: hidden;
+      position: relative;
       font-weight: bold;
+      border: 3px solid transparent; /* Initially transparent */
+      background-clip: padding-box;
     }
 
-    .social-link::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(from 0deg, #162042 0deg, #ffd700 0deg);
-      border-radius: 50%;
-      transition: all 0.5s ease;
-      z-index: -1;
-      opacity: 0;
+    .social-link:hover {
+      background-color: #162042;
+      color: #00ffff;
+      transform: scale(1.1);
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1; /* Radial gradient for gold effect */
+      animation: border-fill 2s forwards; /* Trigger animation on hover */
     }
 
-    .social-link:hover::before {
-      animation: border-fill 2s forwards;
-      opacity: 1;
-    }
-
+    /* Keyframe animation to simulate a clock-like effect for the border */
     @keyframes border-fill {
       0% {
-        background: conic-gradient(from 0deg, #162042 0deg, #ffd700 0deg);
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
       }
       100% {
-        background: conic-gradient(from 0deg, #162042 360deg, #ffd700 360deg);
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       }
     }
 
@@ -140,7 +127,6 @@
       background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
       opacity: 0.3;
       pointer-events: none;
-      z-index: -2;
     }
 
     .language-selector {
@@ -149,78 +135,6 @@
       right: 10px;
       z-index: 1000;
       color: #00ffff;
-      background-color: rgba(22, 32, 66, 0.8);
-      padding: 10px;
-      border-radius: 10px;
-      backdrop-filter: blur(5px);
-      box-shadow: 0 0 10px #00ffff;
-    }
-
-    .language-selector label {
-      margin-right: 10px;
-      font-weight: bold;
-    }
-
-    #contact {
-      margin-top: 20px;
-      font-size: 1.1em;
-    }
-
-    #knowledge-list {
-      list-style: none;
-      padding: 0;
-      text-align: left;
-    }
-
-    #knowledge-list li {
-      margin: 10px 0;
-      padding: 10px;
-      background-color: transparent;
-      color: #00ffff;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px inset #00ffff; /* Inset border with cyan color */
-      border-radius: 10px;
-    }
-
-    #knowledge-list li .text {
-      position: relative;
-      z-index: 2;
-    }
-
-    #knowledge-list li .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 255, 255, 0.2); /* Cyan overlay for better visibility */
-      z-index: 1;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-
-    .polar-clock-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 1200px) {
-      body {
-        flex-direction: column;
-        height: auto;
-        overflow: visible;
-      }
-
-      .left-section, .right-section, .center-section {
-        margin: 10px 0;
-      }
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
@@ -230,7 +144,7 @@
 
   <!-- Language selector -->
   <div class="language-selector">
-    <label for="language">Select Language:</label>
+    <label for="language">Select Language: </label>
     <select id="language" onchange="changeLanguage()">
       <option value="en">English</option>
       <option value="pt">Português</option>
@@ -257,12 +171,7 @@
 
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
-    <ul class="social-links" id="knowledge-list">
-      <!-- Dynamically populated -->
-    </ul>
-    <div class="polar-clock-container">
-      <canvas id="polarClockCanvas" width="200" height="200"></canvas>
-    </div>
+    <ul class="social-links" id="knowledge-list"></ul>
   </div>
 
   <script>
@@ -275,14 +184,10 @@
       "Game Development"
     ];
 
-    let resetTimer;
-
     window.addEventListener('DOMContentLoaded', (event) => {
       changeLanguage();
       populateKnowledge();
       loadPDF();
-      drawPolarClock();
-      setInterval(drawPolarClock, 1000);
     });
 
     function changeLanguage() {
@@ -314,15 +219,7 @@
       knowledgeList.innerHTML = '';  // Clear existing list items
       knowledgeArray.forEach(item => {
         const listItem = document.createElement("li");
-        const textSpan = document.createElement("span");
-        textSpan.classList.add("text");
-        textSpan.textContent = item;
-
-        const overlayDiv = document.createElement("div");
-        overlayDiv.classList.add("overlay");
-
-        listItem.appendChild(overlayDiv);
-        listItem.appendChild(textSpan);
+        listItem.textContent = item;
         knowledgeList.appendChild(listItem);
       });
     }
@@ -347,30 +244,6 @@
           page.render(renderContext);
         });
       });
-    }
-
-    function drawPolarClock() {
-      const canvas = document.getElementById('polarClockCanvas');
-      const ctx = canvas.getContext('2d');
-      const now = new Date();
-      const seconds = now.getSeconds();
-      const minutes = now.getMinutes();
-      const hours = now.getHours() % 12;
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw clock arcs
-      drawArc(ctx, 100, 100, 90, (hours / 12) * 2 * Math.PI, '#00ff00');
-      drawArc(ctx, 100, 100, 60, (minutes / 60) * 2 * Math.PI, '#00aaff');
-      drawArc(ctx, 100, 100, 30, (seconds / 60) * 2 * Math.PI, '#ff5500');
-    }
-
-    function drawArc(ctx, x, y, radius, endAngle, color) {
-      ctx.beginPath();
-      ctx.arc(x, y, radius, 0, endAngle);
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 10;
-      ctx.stroke();
     }
   </script>
 </body>
