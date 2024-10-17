@@ -112,58 +112,125 @@
       opacity: 0.3;
       pointer-events: none;
     }
+
+    .language-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      color: #00ffff;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <div class="tech-bg"></div>
 
+  <!-- Language selector -->
+  <div class="language-selector">
+    <label for="language">Select Language: </label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+    </select>
+  </div>
+
   <div class="left-section">
-    <h2>Qualifications</h2>
+    <h2 id="qualifications">Qualifications</h2>
     <canvas id="pdf-canvas"></canvas>
   </div>
 
   <div class="center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
-    <h2>Social Links & Projects</h2>
+    <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
       <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
       <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
     </ul>
+    <p id="contact">Contact</p>
     <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
     <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
   </div>
 
   <div class="right-section">
-    <h2>Knowledge</h2>
-    <ul class="social-links">
-      <li>JavaScript</li>
-      <li>Python</li>
-      <li>Machine Learning</li>
-      <li>Data Analysis</li>
-    </ul>
+    <h2 id="knowledge-title">Knowledge</h2>
+    <ul class="social-links" id="knowledge-list"></ul>
   </div>
 
   <script>
-    const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
-    const canvas = document.getElementById('pdf-canvas');
-    const context = canvas.getContext('2d');
+    const knowledgeArray = [
+      "JavaScript",
+      "Python",
+      "Machine Learning",
+      "Data Analysis",
+      "Web Development",
+      "Game Development"
+    ];
 
-    pdfjsLib.getDocument(url).promise.then(pdf => {
-      pdf.getPage(1).then(page => {
-        const scale = 2; // Adjust scale for better resolution
-        const viewport = page.getViewport({ scale: scale });
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+    let resetTimer;
 
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-        page.render(renderContext);
-      });
+    window.addEventListener('DOMContentLoaded', (event) => {
+      changeLanguage();
+      populateKnowledge();
+      loadPDF();
     });
+
+    function changeLanguage() {
+      const languageSelect = document.getElementById("language");
+      const selectedLanguage = languageSelect.value;
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
+
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById("qualifications").innerText = data.qualifications;
+          document.getElementById("socialLinks").innerText = data.socialLinks;
+          document.getElementById("contact").innerText = data.contact;
+          document.getElementById("knowledge-title").innerText = data.knowledge;
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          alert('Failed to load translations. Please try again later.');
+        });
+    }
+
+    function populateKnowledge() {
+      const knowledgeList = document.getElementById("knowledge-list");
+      knowledgeList.innerHTML = '';  // Clear existing list items
+      knowledgeArray.forEach(item => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        knowledgeList.appendChild(listItem);
+      });
+    }
+
+    function loadPDF() {
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
+      const canvas = document.getElementById('pdf-canvas');
+      const context = canvas.getContext('2d');
+
+      pdfjsLib.getDocument(url).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 2; // Adjust scale for better resolution
+          const viewport = page.getViewport({ scale: scale });
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          // Render PDF page into canvas context
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+        });
+      });
+    }
   </script>
 </body>
 </html>
