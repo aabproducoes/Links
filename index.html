@@ -4,13 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Resume</title>
+  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
+  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
+  <meta name="author" content="Antonio Augusto Barbaro">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap');
 
     body {
       margin: 0;
       padding: 0;
       display: flex;
+      flex-wrap: nowrap;
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
@@ -18,8 +22,8 @@
       overflow: hidden;
     }
 
-    .section {
-      margin: 10px;
+    .left-section, .right-section {
+      flex: 1;
       background-color: rgba(22, 32, 66, 0.8);
       padding: 20px;
       border-radius: 15px;
@@ -27,25 +31,20 @@
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
+      margin: 10px;
     }
 
-    /* Container that will be scaled */
-    .scaled-container {
-      transform: scale(1.2); /* Scale the container */
-      transform-origin: top left; /* Set origin to top-left corner */
-      transition: transform 0.3s ease; /* Smooth scaling animation */
-    }
-
-    /* On hover, scale the container, not the content */
-    .section:hover .scaled-container {
-      transform: scale(1.1); /* Hover effect */
-    }
-
-    canvas {
-      width: 100%; /* Keep canvas width 100%, no scaling applied */
-      height: auto;
-      border-radius: 10px;
-      border: 2px solid #00ffff;
+    .center-section {
+      flex: 1;
+      background-color: rgba(22, 32, 66, 0.8);
+      color: #00ffff;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
       box-shadow: 0 0 10px #00ffff;
     }
 
@@ -53,6 +52,7 @@
       width: 200px;
       height: 200px;
       border-radius: 50%;
+      border: 5px solid #00ffff;
       box-shadow: 0 0 20px #00ffff;
       margin-bottom: 20px;
       transition: transform 0.3s ease;
@@ -87,6 +87,21 @@
       transform: scale(1.1);
     }
 
+    canvas {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    .pdf-iframe {
+      width: 100%;
+      height: calc(100vh - 40px);
+      border: none;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
     .tech-bg {
       position: absolute;
       top: 0;
@@ -103,22 +118,30 @@
 <body>
   <div class="tech-bg"></div>
 
-  <!-- Section with scaled container -->
-  <div class="section">
-    <div class="scaled-container">
-      <h2>Qualifications</h2>
-      <canvas id="pdf-canvas"></canvas>
-    </div>
+  <div class="left-section">
+    <h2>Qualifications</h2>
+    <canvas id="pdf-canvas"></canvas>
   </div>
 
-  <!-- Center section with profile and links -->
-  <div class="section center-section">
+  <div class="center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
       <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
       <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
+    </ul>
+    <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
+    <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
+  </div>
+
+  <div class="right-section">
+    <h2>Knowledge</h2>
+    <ul class="social-links">
+      <li>JavaScript</li>
+      <li>Python</li>
+      <li>Machine Learning</li>
+      <li>Data Analysis</li>
     </ul>
   </div>
 
@@ -127,7 +150,6 @@
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
 
-    // Load PDF
     pdfjsLib.getDocument(url).promise.then(pdf => {
       pdf.getPage(1).then(page => {
         const scale = 2; // Adjust scale for better resolution
@@ -135,7 +157,6 @@
         canvas.width = viewport.width;
         canvas.height = viewport.height;
 
-        // Render PDF page into canvas context
         const renderContext = {
           canvasContext: context,
           viewport: viewport
