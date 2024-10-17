@@ -103,6 +103,31 @@
       }
     }
 
+    /* Knowledge List Styling */
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .knowledge-list li {
+      margin: 10px 0;
+      padding: 12px 25px;
+      background-color: transparent;
+      color: #00ffff;
+      position: relative;
+      border-radius: 15px;
+      text-align: center;
+      border: 3px solid transparent; /* Initially transparent */
+      transition: transform 0.3s, border-image 2s;
+      background-clip: padding-box;
+    }
+
+    .knowledge-list li:hover {
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1; /* Radial gradient with gold effect */
+      animation: border-fill 2s forwards; /* Trigger clock-like animation */
+      transform: scale(1.05);
+    }
+
     canvas {
       width: 100%;
       height: auto;
@@ -171,7 +196,7 @@
 
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
-    <ul class="social-links" id="knowledge-list"></ul>
+    <ul class="knowledge-list" id="knowledge-list"></ul>
   </div>
 
   <script>
