@@ -130,31 +130,32 @@
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
 
-    // Load PDF
-    pdf.getPage(1).then(page => {
-      const scale = 1.5; // Adjust the scale for better resolution
-      const viewport = page.getViewport({ scale: scale });
-  
-      // Set the canvas to render at a higher resolution
-      const outputScale = window.devicePixelRatio || 1; // Get device pixel ratio for HiDPI displays
-      canvas.width = Math.floor(viewport.width * outputScale); // Higher resolution
-      canvas.height = Math.floor(viewport.height * outputScale); // Higher resolution
-  
-      canvas.style.width = Math.floor(viewport.width) + 'px'; // Keep visible size the same
-      canvas.style.height = Math.floor(viewport.height) + 'px'; // Keep visible size the same
-  
-      const context = canvas.getContext('2d');
-  
-      context.scale(outputScale, outputScale); // Scale the canvas to match the higher resolution
-  
-      // Render the PDF page into canvas context
-      const renderContext = {
-        canvasContext: context,
-        viewport: viewport
-      };
-      page.render(renderContext);
-    });
+pdfjsLib.getDocument(url).promise.then(pdf => {
+  pdf.getPage(1).then(page => {
+    const scale = 1.5; // Adjust the scale for better resolution
+    const viewport = page.getViewport({ scale: scale });
+
+    // Set the canvas to render at a higher resolution
+    const outputScale = window.devicePixelRatio || 1; // Get device pixel ratio for HiDPI displays
+    canvas.width = Math.floor(viewport.width * outputScale); // Higher resolution
+    canvas.height = Math.floor(viewport.height * outputScale); // Higher resolution
+
+    canvas.style.width = Math.floor(viewport.width) + 'px'; // Keep visible size the same
+    canvas.style.height = Math.floor(viewport.height) + 'px'; // Keep visible size the same
+
+    const context = canvas.getContext('2d');
+
+    context.scale(outputScale, outputScale); // Scale the canvas to match the higher resolution
+
+    // Render the PDF page into canvas context
+    const renderContext = {
+      canvasContext: context,
+      viewport: viewport
+    };
+    page.render(renderContext);
   });
+});
+
 
   </script>
 </body>
