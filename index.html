@@ -20,7 +20,6 @@
       font-family: 'Poppins', sans-serif;
       height: 100vh;
       overflow: hidden;
-      position: relative;
     }
 
     .left-section, .right-section {
@@ -64,16 +63,13 @@
       transform: rotate(10deg) scale(1.1);
     }
 
-    .social-links, .knowledge-list {
+    .social-links {
       list-style: none;
       padding: 0;
-      margin: 0;
     }
 
-    .social-links li, .knowledge-list li {
+    .social-links li {
       margin: 15px 0;
-      position: relative;
-      display: inline-block;
     }
 
     .social-link {
@@ -83,15 +79,13 @@
       color: #162042;
       text-decoration: none;
       border-radius: 30px;
-      transition: transform 0.3s;
+      transition: background-color 0.3s, transform 0.3s, border 0.3s;
       position: relative;
       font-weight: bold;
-      border: 3px solid transparent; /* Initially transparent */
+      border: 3px solid #00ffff; /* Initial border color */
       overflow: hidden;
-      z-index: 1;
     }
 
-    /* Hover Effect */
     .social-link::before {
       content: '';
       position: absolute;
@@ -99,32 +93,33 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, #162042 50%, #ffd700 100%);
+      background: conic-gradient(#ffd700 0deg, #ffd700 0deg, transparent 0deg, transparent 360deg);
       transform: rotate(0deg);
-      transition: transform 2s linear;
+      transition: transform 2s;
       z-index: -1;
-      border-radius: 30px;
-    }
-
-    .social-link:hover::before {
-      transform: rotate(360deg);
     }
 
     .social-link:hover {
       background-color: #162042;
       color: #00ffff;
       transform: scale(1.1);
+      border-color: transparent; /* Hide original border */
     }
 
-    /* Knowledge List Styling */
-    .knowledge-list li {
-      background-color: rgba(22, 32, 66, 0.6);
-      padding: 10px 20px;
-      border-radius: 20px;
-      margin: 5px 0;
-      display: inline-block;
-      color: #00ffff;
-      font-weight: 600;
+    .social-link:hover::before {
+      transform: rotate(360deg);
+    }
+
+    .social-link:hover::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 30px;
+      border: 3px solid transparent;
+      border-image: conic-gradient(#ffd700 0deg, #ffd700 360deg) 1;
     }
 
     canvas {
@@ -159,11 +154,6 @@
       right: 10px;
       z-index: 1000;
       color: #00ffff;
-      font-weight: bold;
-    }
-
-    .language-selector label {
-      margin-right: 10px;
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
@@ -173,7 +163,7 @@
 
   <!-- Language selector -->
   <div class="language-selector">
-    <label for="language">Select Language:</label>
+    <label for="language">Select Language: </label>
     <select id="language" onchange="changeLanguage()">
       <option value="en">English</option>
       <option value="pt">Português</option>
@@ -200,7 +190,7 @@
 
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
-    <ul class="knowledge-list" id="knowledge-list"></ul>
+    <ul class="social-links" id="knowledge-list"></ul>
   </div>
 
   <script>
