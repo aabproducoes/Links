@@ -29,28 +29,21 @@
       flex-direction: column;
     }
 
-    .left-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+    /* Container that will be scaled */
+    .scaled-container {
+      transform: scale(1.2); /* Scale the container */
+      transform-origin: top left; /* Set origin to top-left corner */
+      transition: transform 0.3s ease; /* Smooth scaling animation */
     }
 
-    .center-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .section:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #00ffff;
+    /* On hover, scale the container, not the content */
+    .section:hover .scaled-container {
+      transform: scale(1.1); /* Hover effect */
     }
 
     canvas {
-      flex-grow: 1;
-      width: 100%;
+      width: 100%; /* Keep canvas width 100%, no scaling applied */
+      height: auto;
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
@@ -105,15 +98,20 @@
       pointer-events: none;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <div class="tech-bg"></div>
 
-  <div class="section left-section">
-    <h2>Qualifications</h2>
-    <canvas id="pdf-canvas"></canvas>
+  <!-- Section with scaled container -->
+  <div class="section">
+    <div class="scaled-container">
+      <h2>Qualifications</h2>
+      <canvas id="pdf-canvas"></canvas>
+    </div>
   </div>
 
+  <!-- Center section with profile and links -->
   <div class="section center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2>Social Links & Projects</h2>
@@ -124,25 +122,27 @@
     </ul>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <script>
     const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
     const canvas = document.getElementById('pdf-canvas');
     const context = canvas.getContext('2d');
-pdfjsLib.getDocument(url).promise.then(pdf => {
-  pdf.getPage(1).then(page => {
-    page.getOperatorList().then((operatorList) => {
-      const svgGfx = new pdfjsLib.SVGGraphics(page.commonObjs, page.objs);
-      svgGfx.getSVG(operatorList, page.getViewport({ scale: 1.5 })).then(svg => {
-        const container = document.getElementById('pdf-container'); // A div to hold the SVG
-        container.appendChild(svg); // Add the SVG element to your page
+
+    // Load PDF
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+      pdf.getPage(1).then(page => {
+        const scale = 1.5; // Adjust scale for better resolution
+        const viewport = page.getViewport({ scale: scale });
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        // Render PDF page into canvas context
+        const renderContext = {
+          canvasContext: context,
+          viewport: viewport
+        };
+        page.render(renderContext);
       });
     });
-  });
-});
-
-
-
   </script>
 </body>
 </html>
