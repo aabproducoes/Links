@@ -130,7 +130,7 @@
     // Load PDF
     pdfjsLib.getDocument(url).promise.then(pdf => {
       pdf.getPage(1).then(page => {
-        const scale = 1.5; // Adjust scale for better resolution
+        const scale = 1; // Adjust scale for better resolution
         const viewport = page.getViewport({ scale: scale });
         canvas.width = viewport.width;
         canvas.height = viewport.height;
