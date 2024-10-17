@@ -1,0 +1,16 @@
+JavaScript || JavaScript
+Python || Python
+HTML / CSS || HTML / CSS
+Machine Leaning || Machine Leaning 
+Chat GPT || Chat GPT 
+Data Analysis || Análise de Data
+Web Development || Desenvolvimento de Web
+Game Development || Desenvolvimento de Jogos
+HASH and Encryption || Hash e Cripftografia
+Vídeo Editing || Edição de Vídeo
+Image generation || Geração de Imagens
+Photo Enhance and Edit || Aprimoramento e Edição de Fotos
+Backup and Restore Files || Backup e Restauração de Arquivos
+Operational System Rescue || Resgate de Sistema Operacional
+Linux and Windows || Linux e Windows
+PC Sowftware and Hardware || PC software e hardware
