@@ -129,69 +129,7 @@
     </div>
   </section>
 
-  <!-- Landscape Map Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[14].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[15].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[1].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[2].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[3].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[5].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[6].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map">
-    </div>
-    <div class="carousel-title">Landscape Map</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <!-- Procedural Planet Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[1].png" alt="Procedural Planet" class="active">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[2].png" alt="Procedural Planet">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[3].png" alt="Procedural Planet">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[4].png" alt="Procedural Planet">
-    </div>
-    <div class="carousel-title">Procedural Planet</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <!-- Physics Wallpaper Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/PhysicsWallpaper[1].png" alt="Physics Wallpaper" class="active">
-      <img src="ImagesLoading/Blender/PhysicsWallpaper[2].png" alt="Physics Wallpaper">
-    </div>
-    <div class="carousel-title">Physics Wallpaper</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
+  <!-- Other carousels go here... -->
 
   <!-- Image Grid Section -->
   <section class="image-grid">
@@ -210,12 +148,12 @@
       const nextBtn = section.querySelector('.nextBtn');
       const prevBtn = section.querySelector('.prevBtn');
       const loadingBarFill = section.querySelector('.loading-bar-fill');
+      let autoSlideInterval;
 
       function showImage(index) {
         images.forEach(img => img.classList.remove('active'));
         images[index].classList.add('active');
-        loadingBarFill.style.width = '0%'; // Reset loading bar
-        setTimeout(() => loadingBarFill.style.width = '100%', 10); // Start loading bar fill
+        resetLoadingBar(); // Reset and animate the loading bar
       }
 
       function nextImage() {
@@ -228,15 +166,43 @@
         showImage(currentIndex);
       }
 
-      nextBtn.addEventListener('click', nextImage);
-      prevBtn.addEventListener('click', prevImage);
+      function resetLoadingBar() {
+        loadingBarFill.style.transition = 'none';
+        loadingBarFill.style.width = '0%'; // Reset loading bar
+
+        // Delay to ensure the reset takes effect before starting the new animation
+        setTimeout(() => {
+          loadingBarFill.style.transition = 'width 4s linear';
+          loadingBarFill.style.width = '100%'; // Start loading bar fill
+        }, 10);
+      }
 
       // Automatic transition every 4 seconds
-      setInterval(nextImage, 4000);
+      function startAutoSlide() {
+        autoSlideInterval = setInterval(nextImage, 4000);
+      }
 
-      showImage(currentIndex); // Initialize with the first image
+      function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+      }
+
+      nextBtn.addEventListener('click', () => {
+        nextImage();
+        stopAutoSlide(); // Stop auto slide on manual control
+        startAutoSlide(); // Restart auto slide
+      });
+
+      prevBtn.addEventListener('click', () => {
+        prevImage();
+        stopAutoSlide(); // Stop auto slide on manual control
+        startAutoSlide(); // Restart auto slide
+      });
+
+      // Initialize with the first image and loading bar
+      showImage(currentIndex);
+      resetLoadingBar();
+      startAutoSlide();
     });
   </script>
 </body>
 </html>
-
