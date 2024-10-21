@@ -26,7 +26,7 @@
     .carousel {
       width: 100%;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 30px auto;
       position: relative;
       overflow: hidden;
       border-radius: 10px;
@@ -35,12 +35,12 @@
 
     .carousel img {
       width: 100%;
-      display: none; /* Hide all images initially */
+      display: none;
       border-radius: 10px;
     }
 
     .carousel img.active {
-      display: block; /* Show only the active image */
+      display: block;
     }
 
     .carousel-title {
@@ -85,6 +85,19 @@
       width: 0;
       transition: width 4s linear;
     }
+
+    /* New Grid Section */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 50px;
+    }
+
+    .image-grid img {
+      width: 100%;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -93,123 +106,16 @@
     <a href="index.html" class="social-link">Back to Resume</a>
   </header>
 
-  <!-- First Carousel (Landscape Map Neon) -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
-    </div>
-    <div class="carousel-title">Landscape Map Neon</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
+  <!-- Other carousels are here... -->
+
+  <!-- Grid Section -->
+  <section class="image-grid">
+    <img src="ImagesLoading/Blender/ABDIamond[14].png" alt="ABDIamond">
+    <img src="ImagesLoading/Blender/AbstractWallpaper[1].png" alt="Abstract Wallpaper">
+    <img src="ImagesLoading/Blender/Abstract[007].png" alt="Abstract 007">
+    <img src="ImagesLoading/Blender/Abstract[009].png" alt="Abstract 009">
+    <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
   </section>
 
-  <!-- Second Carousel (Landscape Map) -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map">
-    </div>
-    <div class="carousel-title">Landscape Map</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <script>
-    const carousels = [
-      {
-        images: [
-          { src: 'ImagesLoading/Blender/LandscapeMapNeon[6].png', title: 'Landscape Map Neon' },
-          { src: 'ImagesLoading/Blender/LandscapeMapNeon[7].png', title: 'Landscape Map Neon' },
-          { src: 'ImagesLoading/Blender/LandscapeMapNeon[8].png', title: 'Landscape Map Neon' }
-        ],
-        section: document.querySelectorAll('.carousel-section')[0],
-      },
-      {
-        images: [
-          { src: 'ImagesLoading/Blender/LandscapeMap[10].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[11].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[12].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[13].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[4].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[7].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[8].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[9]edited.png', title: 'Landscape Map' }
-        ],
-        section: document.querySelectorAll('.carousel-section')[1],
-      }
-    ];
-
-    carousels.forEach(({ images, section }) => {
-      let currentImageIndex = 0;
-      const carouselImages = section.querySelectorAll('.carousel img');
-      const carouselTitle = section.querySelector('.carousel-title');
-      const loadingBarFill = section.querySelector('.loading-bar-fill');
-      const prevBtn = section.querySelector('.prevBtn');
-      const nextBtn = section.querySelector('.nextBtn');
-
-      function showImage(index, direction = 'next') {
-        carouselImages.forEach((img) => {
-          img.classList.remove('active');
-        });
-        const nextImage = carouselImages[index];
-        nextImage.classList.add('active');
-        carouselTitle.textContent = images[index].title;
-        currentImageIndex = index;
-      }
-
-      function nextImage() {
-        const nextIndex = (currentImageIndex + 1) % images.length;
-        showImage(nextIndex);
-        resetAutoSlide();
-      }
-
-      function prevImage() {
-        const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-        showImage(prevIndex);
-        resetAutoSlide();
-      }
-
-      function startLoadingBar() {
-        loadingBarFill.style.width = '0%';
-        setTimeout(() => {
-          loadingBarFill.style.transition = 'width 4s linear';
-          loadingBarFill.style.width = '100%';
-        }, 10);
-      }
-
-      let autoSlideInterval = setInterval(nextImage, 4000);
-
-      function resetAutoSlide() {
-        clearInterval(autoSlideInterval);
-        autoSlideInterval = setInterval(nextImage, 4000);
-        startLoadingBar();
-      }
-
-      prevBtn.addEventListener('click', prevImage);
-      nextBtn.addEventListener('click', nextImage);
-
-      // Initialize carousel with first image and loading bar
-      showImage(currentImageIndex);
-      startLoadingBar();
-    });
-  </script>
 </body>
 </html>
