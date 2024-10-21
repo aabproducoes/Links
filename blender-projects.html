@@ -3,10 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Test</title>
+  <title>Blender Projects</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #0a0f2e, #162042);
+      color: #00ffff;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .carousel {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      background-color: #000;
+    }
+
+    .carousel img {
+      width: 100%;
+      display: none; /* Hide all images initially */
+      border-radius: 10px;
+    }
+
+    .carousel img.active {
+      display: block; /* Show only the active image */
+    }
+
+    .carousel-title {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+
+    .carousel-controls {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .carousel-controls button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      background-color: #00ffff;
+      border: none;
+      color: #162042;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .carousel-controls button:hover {
+      background-color: #162042;
+      color: #00ffff;
+      transform: scale(1.1);
+    }
+
+    .loading-bar {
+      height: 5px;
+      width: 100%;
+      background-color: #162042;
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .loading-bar-fill {
+      height: 100%;
+      background-color: #00ffff;
+      width: 0;
+      transition: width 4s linear;
+    }
+  </style>
 </head>
 <body>
-  <h1>Test Image</h1>
-  <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Test Image">
+  <header>
+    <h1>Blender Projects</h1>
+    <a href="index.html" class="social-link">Back to Resume</a>
+  </header>
+
+  <!-- First Carousel (Landscape Map Neon) -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" class="active">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
+    </div>
+    <div class="carousel-title">Landscape Map Neon</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
+
+  <!-- Second Carousel (Landscape Map) -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" class="active">
+      <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map">
+    </div>
+    <div class="carousel-title">Landscape Map</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
+
+  <script>
+    const carousels = [
+      {
+        images: [
+          { src: 'ImagesLoading/Blender/LandscapeMapNeon[6].png', title: 'Landscape Map Neon' },
+          { src: 'ImagesLoading/Blender/LandscapeMapNeon[7].png', title: 'Landscape Map Neon' },
+          { src: 'ImagesLoading/Blender/LandscapeMapNeon[8].png', title: 'Landscape Map Neon' }
+        ],
+        section: document.querySelectorAll('.carousel-section')[0],
+      },
+      {
+        images: [
+          { src: 'ImagesLoading/Blender/LandscapeMap[10].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[11].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[12].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[13].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[4].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[7].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[8].png', title: 'Landscape Map' },
+          { src: 'ImagesLoading/Blender/LandscapeMap[9]edited.png', title: 'Landscape Map' }
+        ],
+        section: document.querySelectorAll('.carousel-section')[1],
+      }
+    ];
+
+    carousels.forEach(({ images, section }) => {
+      let currentImageIndex = 0;
+      const carouselImages = section.querySelectorAll('.carousel img');
+      const carouselTitle = section.querySelector('.carousel-title');
+      const loadingBarFill = section.querySelector('.loading-bar-fill');
+      const prevBtn = section.querySelector('.prevBtn');
+      const nextBtn = section.querySelector('.nextBtn');
+
+      function showImage(index, direction = 'next') {
+        carouselImages.forEach((img) => {
+          img.classList.remove('active');
+        });
+        const nextImage = carouselImages[index];
+        nextImage.classList.add('active');
+        carouselTitle.textContent = images[index].title;
+        currentImageIndex = index;
+      }
+
+      function nextImage() {
+        const nextIndex = (currentImageIndex + 1) % images.length;
+        showImage(nextIndex);
+        resetAutoSlide();
+      }
+
+      function prevImage() {
+        const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+        showImage(prevIndex);
+        resetAutoSlide();
+      }
+
+      function startLoadingBar() {
+        loadingBarFill.style.width = '0%';
+        setTimeout(() => {
+          loadingBarFill.style.transition = 'width 4s linear';
+          loadingBarFill.style.width = '100%';
+        }, 10);
+      }
+
+      let autoSlideInterval = setInterval(nextImage, 4000);
+
+      function resetAutoSlide() {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(nextImage, 4000);
+        startLoadingBar();
+      }
+
+      prevBtn.addEventListener('click', prevImage);
+      nextBtn.addEventListener('click', nextImage);
+
+      // Initialize carousel with first image and loading bar
+      showImage(currentImageIndex);
+      startLoadingBar();
+    });
+  </script>
 </body>
 </html>
