@@ -23,18 +23,47 @@
       margin-bottom: 15px;
     }
 
-    .social-link {
-      display: inline-block;
-      padding: 15px 30px;
-      margin: 10px;
+    .carousel {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel img {
+      width: 100%;
+      display: none;
+      border-radius: 10px;
+    }
+
+    .carousel img.active {
+      display: block;
+    }
+
+    .carousel-title {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-top: 10px;
+    }
+
+    .carousel-controls {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .carousel-controls button {
+      padding: 10px 20px;
+      margin: 0 10px;
       background-color: #00ffff;
+      border: none;
       color: #162042;
-      text-decoration: none;
       border-radius: 30px;
+      cursor: pointer;
       transition: background-color 0.3s, transform 0.3s;
     }
 
-    .social-link:hover {
+    .carousel-controls button:hover {
       background-color: #162042;
       color: #00ffff;
       transform: scale(1.1);
@@ -47,11 +76,49 @@
     <a href="index.html" class="social-link">Back to Resume</a>
   </header>
 
-  <section id="projects">
-    <ul class="social-links">
-      <li><a href="./projects/project1.html" class="social-link">3D Character Model</a></li>
-      <li><a href="./projects/project2.html" class="social-link">Architectural Scene</a></li>
-    </ul>
+  <section id="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" class="active">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
+    </div>
+    <div class="carousel-title">Landscape Map Neon</div>
+
+    <div class="carousel-controls">
+      <button id="prevBtn">Previous</button>
+      <button id="nextBtn">Next</button>
+    </div>
   </section>
+
+  <script>
+    const images = [
+      { src: 'ImagesLoading/Blender/LandscapeMapNeon[6].png', title: 'Landscape Map Neon' },
+      { src: 'ImagesLoading/Blender/LandscapeMapNeon[7].png', title: 'Landscape Map Neon' },
+      { src: 'ImagesLoading/Blender/LandscapeMapNeon[8].png', title: 'Landscape Map Neon' }
+    ];
+
+    let currentImageIndex = 0;
+    const carouselImages = document.querySelectorAll('.carousel img');
+    const carouselTitle = document.querySelector('.carousel-title');
+
+    function showImage(index) {
+      carouselImages.forEach((img, i) => {
+        img.classList.toggle('active', i === index);
+      });
+      carouselTitle.textContent = images[index].title;
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
+      showImage(currentImageIndex);
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      currentImageIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
+      showImage(currentImageIndex);
+    });
+
+    showImage(currentImageIndex);  // Initial display
+  </script>
 </body>
 </html>
