@@ -202,5 +202,31 @@
     <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
   </section>
 
+  <script>
+    const carousels = document.querySelectorAll('.carousel-section');
+    carousels.forEach(section => {
+      let currentIndex = 0;
+      const images = section.querySelectorAll('.carousel img');
+      const nextBtn = section.querySelector('.nextBtn');
+      const prevBtn = section.querySelector('.prevBtn');
+      
+      function showImage(index) {
+        images.forEach(img => img.classList.remove('active'));
+        images[index].classList.add('active');
+      }
+
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+      });
+
+      prevBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+      });
+
+      showImage(currentIndex); // Initialize with the first image
+    });
+  </script>
 </body>
 </html>
