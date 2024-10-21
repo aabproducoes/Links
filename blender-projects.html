@@ -33,12 +33,21 @@
 
     .carousel img {
       width: 100%;
-      display: none;
+      position: absolute;
+      top: 0;
+      left: 100%; /* Start off-screen */
+      opacity: 0;
+      transition: left 1s ease-in-out, opacity 1s ease-in-out;
       border-radius: 10px;
     }
 
     .carousel img.active {
-      display: block;
+      left: 0; /* Move to visible position */
+      opacity: 1;
+    }
+
+    .carousel img.prev-active {
+      left: -100%; /* Slide out to the left */
     }
 
     .carousel-title {
@@ -68,6 +77,20 @@
       color: #00ffff;
       transform: scale(1.1);
     }
+
+    .carousel-selector {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .carousel-selector select {
+      padding: 10px;
+      border-radius: 30px;
+      background-color: #00ffff;
+      color: #162042;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+    }
   </style>
 </head>
 <body>
@@ -76,11 +99,28 @@
     <a href="index.html" class="social-link">Back to Resume</a>
   </header>
 
+  <div class="carousel-selector">
+    <label for="carouselType">Select a type: </label>
+    <select id="carouselType">
+      <option value="landscapeNeon">Landscape Map Neon</option>
+      <option value="landscapeMap">Landscape Map</option>
+    </select>
+  </div>
+
   <section id="carousel-section">
     <div class="carousel">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" class="active">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
+      
+      <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map" style="display: none;">
+      <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map" style="display: none;">
     </div>
     <div class="carousel-title">Landscape Map Neon</div>
 
@@ -91,34 +131,65 @@
   </section>
 
   <script>
-    const images = [
+    const neonImages = [
       { src: 'ImagesLoading/Blender/LandscapeMapNeon[6].png', title: 'Landscape Map Neon' },
       { src: 'ImagesLoading/Blender/LandscapeMapNeon[7].png', title: 'Landscape Map Neon' },
       { src: 'ImagesLoading/Blender/LandscapeMapNeon[8].png', title: 'Landscape Map Neon' }
     ];
 
+    const mapImages = [
+      { src: 'ImagesLoading/Blender/LandscapeMap[10].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[11].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[12].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[13].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[4].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[7].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[8].png', title: 'Landscape Map' },
+      { src: 'ImagesLoading/Blender/LandscapeMap[9]edited.png', title: 'Landscape Map' }
+    ];
+
     let currentImageIndex = 0;
+    let currentImages = neonImages;
     const carouselImages = document.querySelectorAll('.carousel img');
     const carouselTitle = document.querySelector('.carousel-title');
 
-    function showImage(index) {
+    function showImage(index, direction) {
       carouselImages.forEach((img, i) => {
-        img.classList.toggle('active', i === index);
+        img.classList.remove('prev-active', 'active');
       });
-      carouselTitle.textContent = images[index].title;
+
+      const prevIndex = currentImageIndex;
+      currentImageIndex = index;
+
+      carouselImages[prevIndex].classList.add(direction === 'prev' ? 'prev-active' : 'active');
+      setTimeout(() => {
+        carouselImages[currentImageIndex].classList.add('active');
+      }, 0);
+      carouselTitle.textContent = currentImages[index].title;
     }
 
-    document.getElementById('prevBtn').addEventListener('click', () => {
-      currentImageIndex = (currentImageIndex === 0) ? images.length - 1 : currentImageIndex - 1;
-      showImage(currentImageIndex);
+    function nextImage() {
+      const nextIndex = (currentImageIndex === currentImages.length - 1) ? 0 : currentImageIndex + 1;
+      showImage(nextIndex, 'next');
+    }
+
+    function prevImage() {
+      const prevIndex = (currentImageIndex === 0) ? currentImages.length - 1 : currentImageIndex - 1;
+      showImage(prevIndex, 'prev');
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', prevImage);
+    document.getElementById('nextBtn').addEventListener('click', nextImage);
+
+    document.getElementById('carouselType').addEventListener('change', (e) => {
+      currentImages = e.target.value === 'landscapeNeon' ? neonImages : mapImages;
+      currentImageIndex = 0; // Reset to first image of selected type
+      showImage(currentImageIndex, 'next');
     });
 
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      currentImageIndex = (currentImageIndex === images.length - 1) ? 0 : currentImageIndex + 1;
-      showImage(currentImageIndex);
-    });
+    setInterval(nextImage, 4000); // Automatically change image every 4 seconds
 
-    showImage(currentImageIndex);  // Initial display
+    showImage(currentImageIndex, 'next');  // Initial display
   </script>
 </body>
 </html>
