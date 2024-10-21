@@ -26,49 +26,21 @@
     .carousel {
       width: 100%;
       max-width: 600px;
-      margin: 30px auto;
+      margin: 0 auto;
       position: relative;
       overflow: hidden;
       border-radius: 10px;
-      background-color: #000; /* Fallback background */
+      background-color: #000;
     }
 
     .carousel img {
       width: 100%;
-      position: absolute;
-      top: 0;
-      left: 100%;
-      opacity: 0;
-      transition: transform 0.5s ease, opacity 0.5s ease;
+      display: none; /* Hide all images initially */
+      border-radius: 10px;
     }
 
     .carousel img.active {
-      left: 0;
-      transform: translateX(0);
-      opacity: 1;
-      z-index: 2;
-    }
-
-    .carousel img.slide-in-left {
-      transform: translateX(-100%);
-      opacity: 1;
-    }
-
-    .carousel img.slide-in-right {
-      transform: translateX(100%);
-      opacity: 1;
-    }
-
-    .carousel img.slide-out-left {
-      transform: translateX(-100%);
-      opacity: 0;
-      z-index: 1;
-    }
-
-    .carousel img.slide-out-right {
-      transform: translateX(100%);
-      opacity: 0;
-      z-index: 1;
+      display: block; /* Show only the active image */
     }
 
     .carousel-title {
@@ -124,8 +96,7 @@
   <!-- First Carousel (Landscape Map Neon) -->
   <section class="carousel-section">
     <div class="carousel">
-     <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" onerror="this.style.display='none'; console.error('Failed to load image');" class="active">
-
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" class="active">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
     </div>
@@ -186,43 +157,33 @@
       }
     ];
 
-    carousels.forEach(({ images, section }, carouselIndex) => {
+    carousels.forEach(({ images, section }) => {
       let currentImageIndex = 0;
       const carouselImages = section.querySelectorAll('.carousel img');
       const carouselTitle = section.querySelector('.carousel-title');
       const loadingBarFill = section.querySelector('.loading-bar-fill');
       const prevBtn = section.querySelector('.prevBtn');
       const nextBtn = section.querySelector('.nextBtn');
-      
+
       function showImage(index, direction = 'next') {
-        carouselImages.forEach((img, i) => {
-          img.classList.remove('active', 'slide-in-left', 'slide-in-right', 'slide-out-left', 'slide-out-right');
+        carouselImages.forEach((img) => {
+          img.classList.remove('active');
         });
-
-        const currentImage = carouselImages[currentImageIndex];
         const nextImage = carouselImages[index];
-
-        if (direction === 'next') {
-          currentImage.classList.add('slide-out-left');
-          nextImage.classList.add('slide-in-right', 'active');
-        } else if (direction === 'prev') {
-          currentImage.classList.add('slide-out-right');
-          nextImage.classList.add('slide-in-left', 'active');
-        }
-
+        nextImage.classList.add('active');
         carouselTitle.textContent = images[index].title;
         currentImageIndex = index;
       }
 
       function nextImage() {
         const nextIndex = (currentImageIndex + 1) % images.length;
-        showImage(nextIndex, 'next');
+        showImage(nextIndex);
         resetAutoSlide();
       }
 
       function prevImage() {
         const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-        showImage(prevIndex, 'prev');
+        showImage(prevIndex);
         resetAutoSlide();
       }
 
@@ -245,7 +206,7 @@
       prevBtn.addEventListener('click', prevImage);
       nextBtn.addEventListener('click', nextImage);
 
-      // Start with the first image and loading bar
+      // Initialize carousel with first image and loading bar
       showImage(currentImageIndex);
       startLoadingBar();
     });
