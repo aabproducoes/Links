@@ -63,13 +63,14 @@
       transform: rotate(10deg) scale(1.1);
     }
 
-    .social-links, .friendly-sites {
+    .social-links, .friendly-sites, .project-links {
       list-style: none;
       padding: 0;
     }
 
-    .social-links li, .friendly-sites li {
+    .social-links li, .friendly-sites li, .project-links li {
       margin: 15px 0;
+      position: relative;
     }
 
     .social-link {
@@ -126,6 +127,17 @@
       border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       animation: border-fill 2s forwards;
       transform: scale(1.05);
+    }
+
+    /* Nested Project Links */
+    .project-links {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .project-links li {
+      margin: 10px 0;
     }
 
     canvas {
@@ -188,7 +200,12 @@
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
       <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
       <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
-      <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
+      <li>
+        <a href="./blender-projects.html" class="social-link">Blender Projects</a>
+        <ul class="project-links">
+          <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
+        </ul>
+      </li>
     </ul>
 
     <!-- Friendly Sites Section -->
@@ -238,6 +255,15 @@
           document.getElementById("friendlySites").innerText = data.friendlySites;
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("knowledge-title").innerText = data.knowledge;
+
+          // Update project links if necessary
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(' ', '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
         })
         .catch(error => {
           console.error('Error fetching translation file:', error);
