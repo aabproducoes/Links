@@ -117,6 +117,7 @@
       <img src="ImagesLoading/Blender/LandscapeMapNeon[5]edit.png" alt="Landscape Map Neon">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
     </div>
     <div class="carousel-title">Landscape Map Neon</div>
     <div class="loading-bar">
@@ -200,41 +201,49 @@
     <img src="ImagesLoading/Blender/Abstract[009].png" alt="Abstract 009">
     <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
   </section>
+ <script>
+  const carousels = document.querySelectorAll('.carousel-section');
 
-  <script>
-    const carousels = document.querySelectorAll('.carousel-section');
-    carousels.forEach(section => {
-      let currentIndex = 0;
-      const images = section.querySelectorAll('.carousel img');
-      const nextBtn = section.querySelector('.nextBtn');
-      const prevBtn = section.querySelector('.prevBtn');
-      const loadingBarFill = section.querySelector('.loading-bar-fill');
+  carousels.forEach(section => {
+    let currentIndex = 0;
+    const images = section.querySelectorAll('.carousel img');
+    const nextBtn = section.querySelector('.nextBtn');
+    const prevBtn = section.querySelector('.prevBtn');
+    const loadingBarFill = section.querySelector('.loading-bar-fill');
 
-      function showImage(index) {
-        images.forEach(img => img.classList.remove('active'));
-        images[index].classList.add('active');
-        loadingBarFill.style.width = '0%'; // Reset loading bar
-        setTimeout(() => loadingBarFill.style.width = '100%', 10); // Start loading bar fill
-      }
+    function showImage(index) {
+      images.forEach(img => img.classList.remove('active'));
+      images[index].classList.add('active');
+      loadingBarFill.style.width = '0%'; // Reset loading bar
+      setTimeout(() => loadingBarFill.style.width = '100%', 10); // Start loading bar fill
+    }
 
-      function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-      }
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    }
 
-      function prevImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-      }
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage(currentIndex);
+    }
 
-      nextBtn.addEventListener('click', nextImage);
-      prevBtn.addEventListener('click', prevImage);
-
-      // Automatic transition every 4 seconds
-      setInterval(nextImage, 4000);
-
-      showImage(currentIndex); // Initialize with the first image
+    // Error handling for images
+    images.forEach(img => {
+      img.addEventListener('error', () => {
+        console.error(`Failed to load image: ${img.src}`);
+      });
     });
-  </script>
+
+    nextBtn.addEventListener('click', nextImage);
+    prevBtn.addEventListener('click', prevImage);
+
+    // Automatic transition every 4 seconds
+    setInterval(nextImage, 4000);
+
+    showImage(currentIndex); // Initialize with the first image
+  });
+</script>
+
 </body>
 </html>
