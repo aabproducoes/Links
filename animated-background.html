@@ -13,21 +13,26 @@
     h2 {
       color: lightblue;
     }
-    #file-list {
-      padding: 5px;
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .load-button {
+      padding: 10px 20px;
       background-color: #333;
       color: white;
       border: 1px solid lightblue;
-      margin-bottom: 20px;
+      cursor: pointer;
     }
-    #grid-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+    .load-button:hover {
+      background-color: lightblue;
+      color: black;
     }
-    .grid-item {
+    iframe {
       width: 100%;
-      height: 150px;
+      height: 500px;
       border: 3px solid lightblue;
       background-color: white;
     }
@@ -35,37 +40,26 @@
 </head>
 <body>
 
-  <h2>Select an HTML file to display:</h2>
-  <select id="file-list">
-    <option value="AnimatedPatterns/AnimatedBG1.html">AnimatedBG1</option>
-    <option value="AnimatedPatterns/AnimatedBG2.html">AnimatedBG2</option>
-    <option value="AnimatedPatterns/AnimatedBG3.html">AnimatedBG3</option>
-    <option value="AnimatedPatterns/AnimatedBG4.html">AnimatedBG4</option>
-    <option value="AnimatedPatterns/AnimatedBG5.html">AnimatedBG5</option>
-    <option value="AnimatedPatterns/AnimatedBG6.html">AnimatedBG6</option>
-    <option value="AnimatedPatterns/AnimatedBG7.html">AnimatedBG7</option>
-    <option value="AnimatedPatterns/AnimatedBG8.html">AnimatedBG8</option>
-    <option value="AnimatedPatterns/AnimatedBG9.html">AnimatedBG9</option>
-  </select>
-
-  <div id="grid-container">
-    <iframe id="grid-item1" class="grid-item" src="AnimatedPatterns/AnimatedBG1.html"></iframe>
-    <iframe id="grid-item2" class="grid-item" src="AnimatedPatterns/AnimatedBG2.html"></iframe>
-    <iframe id="grid-item3" class="grid-item" src="AnimatedPatterns/AnimatedBG3.html"></iframe>
-    <iframe id="grid-item4" class="grid-item" src="AnimatedPatterns/AnimatedBG4.html"></iframe>
-    <iframe id="grid-item5" class="grid-item" src="AnimatedPatterns/AnimatedBG5.html"></iframe>
-    <iframe id="grid-item6" class="grid-item" src="AnimatedPatterns/AnimatedBG6.html"></iframe>
-    <iframe id="grid-item7" class="grid-item" src="AnimatedPatterns/AnimatedBG7.html"></iframe>
-    <iframe id="grid-item8" class="grid-item" src="AnimatedPatterns/AnimatedBG8.html"></iframe>
-    <iframe id="grid-item9" class="grid-item" src="AnimatedPatterns/AnimatedBG9.html"></iframe>
+  <h2>Load an HTML file:</h2>
+  <div class="button-container">
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG1.html')">Load AnimatedBG1</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG2.html')">Load AnimatedBG2</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG3.html')">Load AnimatedBG3</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG4.html')">Load AnimatedBG4</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG5.html')">Load AnimatedBG5</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG6.html')">Load AnimatedBG6</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG7.html')">Load AnimatedBG7</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG8.html')">Load AnimatedBG8</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG9.html')">Load AnimatedBG9</button>
   </div>
 
+  <iframe id="content-frame" src="AnimatedPatterns/AnimatedBG1.html"></iframe> <!-- Default src to the first file -->
+
   <script>
-    // Event listener for the dropdown to load the selected file in the first iframe
-    document.getElementById('file-list').addEventListener('change', event => {
-      const fileName = event.target.value;
-      document.getElementById('grid-item1').src = fileName;
-    });
+    // Function to load the selected file in the iframe
+    function loadFile(fileName) {
+      document.getElementById('content-frame').src = fileName;
+    }
   </script>
 
 </body>
