@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controlled Expanding Waves with Auto Click</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #0A0A0A;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="circleCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('circleCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      circles = []; // Clear circles on resize
+    });
+
+    let lastTenPositions = []; // Track positions of last 10 circles
+    let autoClickInterval; // Interval for auto-clicking
+    let lastClickTime = Date.now(); // Track last click time
+
+    window.addEventListener('click', (e) => {
+      const newSpawnPoint = { x: e.clientX, y: e.clientY };
+      lastClickTime = Date.now(); // Update last click time
+      
+      if (!isNearRecentCircles(newSpawnPoint)) {
+        const color = getRandomDarkColor(); // New base color for each click
+        spawnInitialCircle(newSpawnPoint, color);
+        lastTenPositions.push(newSpawnPoint); // Add new position to lastTenPositions
+
+        // Maintain only the last 10 positions
+        if (lastTenPositions.length > 10) {
+          lastTenPositions.shift();
+        }
+      }
+    });
+
+    function isNearRecentCircles(newPosition) {
+      const proximityThreshold = 200; // Minimum distance from recent circles
+      return lastTenPositions.some(pos => {
+        const distance = Math.sqrt((pos.x - newPosition.x) ** 2 + (pos.y - newPosition.y) ** 2);
+        return distance < proximityThreshold;
+      });
+    }
+
+    class ExpandingCircle {
+      constructor(x, y, color, spawnRadius, alpha = 0.8, level = 0) {
+        this.x = x;
+        this.y = y;
+        this.radius = 0;
+        this.maxRadius = spawnRadius;
+        this.growthRate = 1 + Math.random() * 0.8; // Slight variation in growth rate
+        this.color = { ...color }; // Clone color object to modify independently
+        this.alpha = alpha;
+        this.spawnedChildren = false;
+        this.childCircles = []; // Track children for transparency adjustments
+        this.level = level; // Track expansion level
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = `rgba(${this.color.r}, ${this.color.g}, ${this.color.b}, ${this.alpha})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      update() {
+        this.radius += this.growthRate;
+
+        // Check if this circle should spawn children and is within expansion limit
+        if (this.radius >= this.maxRadius && !this.spawnedChildren && this.level < 3) {
+          this.spawnChildren();
+          this.spawnedChildren = true;
+        }
+
+        // Gradually increase transparency if too many children
+        if (this.childCircles.length > 5) {
+          this.childCircles.forEach((child, index) => {
+            child.alpha = Math.max(0, child.alpha - 0.02 * (index + 1)); // Incremental transparency
+          });
+        }
+
+        this.draw();
+      }
+
+      spawnChildren() {
+        const childCount = Math.floor(Math.random() * 4) + 3; // Spawn 3-6 circles on border
+        const angleStep = (2 * Math.PI) / childCount;
+
+        for (let i = 0; i < childCount; i++) {
+          const angle = angleStep * i;
+          const x = this.x + Math.cos(angle) * this.radius;
+          const y = this.y + Math.sin(angle) * this.radius;
+
+          // Darken the color slightly for each generation
+          const darkenedColor = {
+            r: Math.max(0, this.color.r - 10),
+            g: Math.max(0, this.color.g - 10),
+            b: Math.max(0, this.color.b - 10),
+          };
+
+          const newCircle = new ExpandingCircle(x, y, darkenedColor, this.radius + 20, this.alpha, this.level + 1);
+          circles.push(newCircle);
+          this.childCircles.push(newCircle); // Track children for transparency adjustments
+        }
+      }
+    }
+
+    let circles = [];
+
+    function getRandomDarkColor() {
+      const r = Math.floor(Math.random() * 100 + 100); // Random darkish color range
+      const g = Math.floor(Math.random() * 100 + 100);
+      const b = Math.floor(Math.random() * 100 + 100);
+      return { r, g, b };
+    }
+
+    function spawnInitialCircle(position, color) {
+      const initialCircle = new ExpandingCircle(position.x, position.y, color, 100);
+      circles.push(initialCircle);
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      circles.forEach(circle => circle.update());
+      requestAnimationFrame(animate);
+    }
+
+    // Auto-click if no user click occurs
+    function autoClick() {
+      const currentTime = Date.now();
+      if (currentTime - lastClickTime >= 7000) { // Check if 7 seconds have passed
+        const autoClickPosition = { x: width / 2, y: height / 2 }; // Center of the canvas
+        const color = getRandomDarkColor(); // New color for auto-click
+        spawnInitialCircle(autoClickPosition, color);
+        lastClickTime = currentTime; // Update last click time
+      }
+    }
+
+    setInterval(autoClick, 1000); // Check every second for auto-clicking
+
+    // Clear mouse positions and circles on page load
+    window.onload = () => {
+      lastTenPositions = []; // Reset mouse click positions
+      setTimeout(() => {
+        const initialPosition = { x: width / 2, y: height / 2 }; // Center of the canvas
+        const color = getRandomDarkColor(); // New color for initial circle
+        spawnInitialCircle(initialPosition, color);
+      }, 100); // Delay for visual effect
+    };
+
+    animate();
+  </script>
+</body>
+</html>
