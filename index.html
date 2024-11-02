@@ -3,267 +3,248 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blender Projects</title>
+  <title>Your Resume</title>
+  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
+  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
+  <meta name="author" content="Antonio Augusto Barbaro">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap');
+
     body {
       margin: 0;
-      padding: 20px;
+      padding: 0;
+      display: flex;
+      flex-wrap: nowrap;
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    header h1 {
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-
-    .carousel {
-      width: 100%;
-      max-width: 600px;
-      margin: 30px auto;
-      position: relative;
+      height: 100vh;
       overflow: hidden;
-      border-radius: 10px;
-      background-color: #000;
     }
 
-    .carousel img {
-      width: 100%;
-      display: none;
-      border-radius: 10px;
+    .left-section, .right-section {
+      flex: 1;
+      background-color: rgba(22, 32, 66, 0.8);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
     }
 
-    .carousel img.active {
-      display: block;
-    }
-
-    .carousel-title {
+    .center-section {
+      flex: 1;
+      background-color: rgba(22, 32, 66, 0.8);
+      color: #00ffff;
+      padding: 20px;
       text-align: center;
-      font-size: 1.5rem;
-      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px #00ffff;
     }
 
-    .carousel-controls {
-      text-align: center;
-      margin-top: 15px;
+    .profile-picture {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
     }
 
-    .carousel-controls button {
-      padding: 10px 20px;
-      margin: 0 10px;
+    .profile-picture:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .social-links {
+      list-style: none;
+      padding: 0;
+    }
+
+    .social-links li {
+      margin: 15px 0;
+    }
+
+    .social-link {
+      display: inline-block;
+      padding: 12px 25px;
       background-color: #00ffff;
-      border: none;
       color: #162042;
+      text-decoration: none;
       border-radius: 30px;
-      cursor: pointer;
       transition: background-color 0.3s, transform 0.3s;
+      position: relative;
+      font-weight: bold;
+      border: 3px solid transparent; /* Initially transparent */
+      background-clip: padding-box;
     }
 
-    .carousel-controls button:hover {
+    .social-link:hover {
       background-color: #162042;
       color: #00ffff;
-      transform: scale(1.1);
+      transform: scale(1.);
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1; /* Radial gradient for gold effect */
+      animation: border-fill 2s forwards; /* Trigger animation on hover */
     }
 
-    .loading-bar {
-      height: 5px;
+    /* Keyframe animation to simulate a clock-like effect for the border */
+    @keyframes border-fill {
+      0% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
+      }
+      100% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      }
+    }
+
+    canvas {
       width: 100%;
-      background-color: #162042;
-      position: relative;
-      margin-top: 10px;
-    }
-
-    .loading-bar-fill {
-      height: 100%;
-      background-color: #00ffff;
-      width: 0;
-      transition: width 4s linear;
-    }
-
-    /* Grid Section */
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 50px;
-    }
-
-    .image-grid img {
-      width: 100%;
+      height: auto;
       border-radius: 10px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    .pdf-iframe {
+      width: 100%;
+      height: calc(100vh - 40px);
+      border: none;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .language-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      color: #00ffff;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>Blender Projects</h1>
-    <a href="index.html" class="social-link">Back to Resume</a>
-  </header>
+  <div class="tech-bg"></div>
 
-  <!-- Landscape Map Neon Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[1].png" alt="Landscape Map Neon" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[2].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[3].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[4].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[5].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[5]edit.png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
-    </div>
-    <div class="carousel-title">Landscape Map Neon</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
+  <!-- Language selector -->
+  <div class="language-selector">
+    <label for="language">Select Language: </label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+    </select>
+  </div>
 
-  <!-- Landscape Map Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[14].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[15].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[1].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[2].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[3].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[5].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[6].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map">
-    </div>
-    <div class="carousel-title">Landscape Map</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
+  <div class="left-section">
+    <h2 id="qualifications">Qualifications</h2>
+    <canvas id="pdf-canvas"></canvas>
+  </div>
 
-  <!-- Procedural Planet Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[1].png" alt="Procedural Planet" class="active">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[2].png" alt="Procedural Planet">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[3].png" alt="Procedural Planet">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[4].png" alt="Procedural Planet">
-    </div>
-    <div class="carousel-title">Procedural Planet</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
+  <div class="center-section">
+    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
+    <h2 id="socialLinks">Social Links & Projects</h2>
+    <ul class="social-links">
+      <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
+      <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
+      <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
+    </ul>
+    <p id="contact">Contact</p>
+    <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
+    <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
+  </div>
 
-  <!-- Physics Wallpaper Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/PhysicsWallpaper[1].png" alt="Physics Wallpaper" class="active">
-      <img src="ImagesLoading/Blender/PhysicsWallpaper[2].png" alt="Physics Wallpaper">
-    </div>
-    <div class="carousel-title">Physics Wallpaper</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <!-- Image Grid Section -->
-  <section class="image-grid">
-    <img src="ImagesLoading/Blender/ABDIamond[14].png" alt="ABDIamond">
-    <img src="ImagesLoading/Blender/AbstractWallpaper[1].png" alt="Abstract Wallpaper">
-    <img src="ImagesLoading/Blender/Abstract[007].png" alt="Abstract 007">
-    <img src="ImagesLoading/Blender/Abstract[009].png" alt="Abstract 009">
-    <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
-  </section>
+  <div class="right-section">
+    <h2 id="knowledge-title">Knowledge</h2>
+    <ul class="social-links" id="knowledge-list"></ul>
+  </div>
 
   <script>
-    const carousels = document.querySelectorAll('.carousel-section');
+    const knowledgeArray = [
+      "JavaScript",
+      "Python",
+      "Machine Learning",
+      "Data Analysis",
+      "Web Development",
+      "Game Development"
+    ];
 
-    carousels.forEach(section => {
-      let currentIndex = 0;
-      const images = section.querySelectorAll('.carousel img');
-      const nextBtn = section.querySelector('.nextBtn');
-      const prevBtn = section.querySelector('.prevBtn');
-      const loadingBarFill = section.querySelector('.loading-bar-fill');
-      let autoSlideInterval;
+    window.addEventListener('DOMContentLoaded', (event) => {
+      changeLanguage();
+      populateKnowledge();
+      loadPDF();
+    });
 
-      function resetLoadingBar() {
-        loadingBarFill.style.transition = 'none';
-        loadingBarFill.style.width = '0%';
+    function changeLanguage() {
+      const languageSelect = document.getElementById("language");
+      const selectedLanguage = languageSelect.value;
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
 
-        setTimeout(() => {
-          loadingBarFill.style.transition = 'width 4s linear';
-          loadingBarFill.style.width = '100%';
-        }, 10);
-      }
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          document.getElementById("qualifications").innerText = data.qualifications;
+          document.getElementById("socialLinks").innerText = data.socialLinks;
+          document.getElementById("contact").innerText = data.contact;
+          document.getElementById("knowledge-title").innerText = data.knowledge;
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          alert('Failed to load translations. Please try again later.');
+        });
+    }
 
-      function showImage(index) {
-        images.forEach(img => img.classList.remove('active'));
-        images[index].classList.add('active');
-        resetLoadingBar();
-      }
+    function populateKnowledge() {
+      const knowledgeList = document.getElementById("knowledge-list");
+      knowledgeList.innerHTML = '';  // Clear existing list items
+      knowledgeArray.forEach(item => {
+        const listItem = document.createElement("li");
+        listItem.textContent = item;
+        knowledgeList.appendChild(listItem);
+      });
+    }
 
-      function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-      }
+    function loadPDF() {
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
+      const canvas = document.getElementById('pdf-canvas');
+      const context = canvas.getContext('2d');
 
-      function prevImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-      }
+      pdfjsLib.getDocument(url).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 2; // Adjust scale for better resolution
+          const viewport = page.getViewport({ scale: scale });
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
 
-      images.forEach(img => {
-        img.addEventListener('error', () => {
-          console.error(`Failed to load image: ${img.src}`);
+          // Render PDF page into canvas context
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
         });
       });
-
-      nextBtn.addEventListener('click', () => {
-        nextImage();
-        clearInterval(autoSlideInterval);
-        startAutoSlide();
-      });
-
-      prevBtn.addEventListener('click', () => {
-        prevImage();
-        clearInterval(autoSlideInterval);
-        startAutoSlide();
-      });
-
-      function startAutoSlide() {
-        autoSlideInterval = setInterval(nextImage, 4000);
-      }
-
-      showImage(currentIndex);
-      startAutoSlide();
-    });
+    }
   </script>
 </body>
 </html>
