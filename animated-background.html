@@ -53,13 +53,20 @@
     <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG9.html')">Load AnimatedBG9</button>
   </div>
 
-  <iframe id="content-frame" src="AnimatedPatterns/AnimatedBG1.html"></iframe> <!-- Default src to the first file -->
+  <iframe id="content-frame"></iframe>
 
   <script>
     // Function to load the selected file in the iframe
     function loadFile(fileName) {
       document.getElementById('content-frame').src = fileName;
     }
+
+    // Automatically load a random file on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const randomFileNumber = Math.floor(Math.random() * 9) + 1;
+      const randomFile = `AnimatedPatterns/AnimatedBG${randomFileNumber}.html`;
+      loadFile(randomFile);
+    });
   </script>
 
 </body>
