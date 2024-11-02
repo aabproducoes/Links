@@ -20,7 +20,7 @@
       font-family: 'Poppins', sans-serif;
       height: 100vh;
       overflow: hidden;
-      position: relative; /* Added to contain absolutely positioned elements */
+      position: relative;
     }
 
     .left-section, .right-section {
@@ -33,6 +33,8 @@
       display: flex;
       flex-direction: column;
       margin: 10px;
+      position: relative;
+      z-index: 2;
     }
 
     .center-section {
@@ -48,6 +50,14 @@
       backdrop-filter: blur(10px);
       box-shadow: 0 0 10px #00ffff;
       overflow-y: auto;
+      position: relative;
+      z-index: 2;
+      transition: opacity 0.3s ease; /* Add smooth transition for opacity */
+    }
+
+    /* Set center section to 50% opacity when "Animated Background" link is hovered */
+    #friendlySitesLink:hover ~ .center-section {
+      opacity: 0.5;
     }
 
     .profile-picture {
@@ -86,6 +96,7 @@
       font-weight: bold;
       border: 3px solid transparent;
       background-clip: padding-box;
+      z-index: 3;
     }
 
     .social-link:hover {
@@ -122,6 +133,7 @@
       border: 3px solid transparent;
       transition: transform 0.3s, border-image 2s;
       background-clip: padding-box;
+      z-index: 3;
     }
 
     .knowledge-list li:hover {
@@ -130,24 +142,15 @@
       transform: scale(1.05);
     }
 
-    /* Nested Project Links */
-    .project-links {
-      list-style: none;
-      padding-left: 20px;
-      margin-top: 10px;
-    }
-
-    .project-links li {
-      margin: 10px 0;
-    }
-
-    canvas {
-      /* Existing canvas styles remain unchanged */
+    /* PDF Canvas */
+    #pdf-canvas {
       width: 100%;
       height: auto;
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
+      position: relative;
+      z-index: 2;
     }
 
     .pdf-iframe {
@@ -166,6 +169,7 @@
       background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
       opacity: 0.3;
       pointer-events: none;
+      z-index: 1;
     }
 
     .language-selector {
@@ -176,24 +180,21 @@
       color: #00ffff;
     }
 
-    /* Added Styles for Lightning Canvas */
+    /* Updated Styles for Lightning Canvas */
     #lightningCanvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none; /* Ensure canvas doesn't interfere with interactions */
-      z-index: 1001; /* Positioned above other elements */
+      pointer-events: none;
+      z-index: 0;
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <div class="tech-bg"></div>
-
-  <!-- Lightning Canvas -->
-  <canvas id="lightningCanvas"></canvas>
 
   <!-- Language selector -->
   <div class="language-selector">
@@ -228,7 +229,7 @@
     <h2 id="friendlySites">Friendly Sites</h2>
     <ul class="friendly-sites">
       <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
-      <!-- Added "Friendly Sites" Link with Lightning Effect -->
+      <!-- Updated link text to "Animated Background" -->
       <li><a href="animated-background.html" class="social-link" id="friendlySitesLink">Animated Background</a></li>
     </ul>
 
@@ -242,6 +243,9 @@
     <ul class="knowledge-list" id="knowledge-list"></ul>
   </div>
 
+  <!-- Lightning Canvas -->
+  <canvas id="lightningCanvas"></canvas>
+
   <!-- Lightning Effect Script -->
   <script>
     // Lightning Effect Code
@@ -253,7 +257,7 @@
     let animationActive = false;
     let currentColor = getRandomLightColor();
     let fillColor = getDarkerFillColor(currentColor);
-    let fillOpacity = 0.03; // Darker, gradual fill for each frame
+    let fillOpacity = 0.03;
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -262,30 +266,26 @@
 
     function getRandomLightColor() {
       const hue = Math.random() * 360;
-      return `hsl(${hue}, 100%, 80%)`; // Random light color with high lightness
+      return `hsl(${hue}, 100%, 80%)`;
     }
 
     function getDarkerFillColor(color) {
-      // Extract HSL values and make fill color darker by reducing lightness
       let [hue, saturation, lightness] = color.match(/\d+/g).map(Number);
-      lightness = Math.max(lightness - 20, 10); // Ensure lightness doesn't go below 10%
-      return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // Darker shade
+      lightness = Math.max(lightness - 20, 10);
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
     }
 
     function drawLightning() {
       if (!animationActive) return;
 
-      // Dark fill to create a fading effect
       ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Set lightning path color
       ctx.strokeStyle = currentColor;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(canvas.width / 2, 0);
 
-      // Generate lightning path if it hasn't reached the bottom
       if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < canvas.height) {
         let lastX = canvas.width / 2;
         let lastY = 0;
@@ -294,8 +294,8 @@
           ({ x: lastX, y: lastY } = lightningPath[lightningPath.length - 1]);
         }
 
-        const xOffset = (Math.random() - 0.5) * 20; // Smaller deviation for tighter lightning
-        const newY = lastY + 10; // Slower descent
+        const xOffset = (Math.random() - 0.5) * 20;
+        const newY = lastY + 10;
         lightningPath.push({ x: lastX + xOffset, y: newY });
       }
 
@@ -304,13 +304,11 @@
       });
       ctx.stroke();
 
-      // Start filling once lightning reaches the bottom
       if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= canvas.height) {
         fillingLeft = true;
         fillingRight = true;
       }
 
-      // Fill left and right with the darker color
       if (fillingLeft) {
         ctx.fillStyle = fillColor;
         ctx.fillRect(0, 0, canvas.width / 2, canvas.height);
@@ -321,9 +319,7 @@
         ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
       }
 
-      // If filling is complete, reset for looping
       if (fillingLeft && fillingRight) {
-        // Reset for the next loop
         fillingLeft = false;
         fillingRight = false;
         lightningPath = [];
@@ -331,7 +327,6 @@
         fillColor = getDarkerFillColor(currentColor);
       }
 
-      // Continue the animation loop
       requestAnimationFrame(drawLightning);
     }
 
@@ -345,25 +340,23 @@
     function stopAnimation() {
       animationActive = false;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      lightningPath = []; // Reset path
+      lightningPath = [];
     }
 
-    // Event Listeners for the "Friendly Sites" Link
     const friendlySitesLink = document.getElementById('friendlySitesLink');
     friendlySitesLink.addEventListener('mouseenter', startAnimation);
     friendlySitesLink.addEventListener('mouseleave', stopAnimation);
 
-    // Initialize Canvas Size
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
   </script>
 
   <script>
-    let selectedLanguage = 'en'; // Default language
+    let selectedLanguage = 'en';
 
     window.addEventListener('DOMContentLoaded', (event) => {
-      changeLanguage(); // Initialize language
-      loadPDF();        // Load PDF
+      changeLanguage();
+      loadPDF();
     });
 
     function changeLanguage() {
@@ -390,7 +383,6 @@
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("knowledge-title").innerText = data.knowledge;
 
-          // Update project links if necessary
           const projectLinks = document.querySelectorAll('.project-links a');
           projectLinks.forEach(link => {
             const key = link.textContent.replace(' ', '').toLowerCase();
@@ -399,7 +391,6 @@
             }
           });
 
-          // Update friendly sites links if necessary
           const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
           friendlySitesLinks.forEach(link => {
             const key = link.textContent.replace(' ', '').toLowerCase();
@@ -419,11 +410,11 @@
         .then(response => response.text())
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
-          knowledgeList.innerHTML = ''; // Clear the current list
+          knowledgeList.innerHTML = '';
 
           const lines = data.split('\n');
           lines.forEach(line => {
-            const [enText, ptText] = line.split('||'); // Split the text by "||"
+            const [enText, ptText] = line.split('||');
             const listItem = document.createElement('li');
             listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
             knowledgeList.appendChild(listItem);
@@ -433,18 +424,17 @@
     }
 
     function loadPDF() {
-      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf';
       const canvas = document.getElementById('pdf-canvas');
       const context = canvas.getContext('2d');
 
       pdfjsLib.getDocument(url).promise.then(pdf => {
         pdf.getPage(1).then(page => {
-          const scale = 2; // Adjust scale for better resolution
+          const scale = 2;
           const viewport = page.getViewport({ scale: scale });
           canvas.width = viewport.width;
           canvas.height = viewport.height;
 
-          // Render PDF page into canvas context
           const renderContext = {
             canvasContext: context,
             viewport: viewport
