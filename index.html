@@ -49,6 +49,36 @@
       overflow-y: auto;
     }
 
+    .pdf-viewer-section {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .pdf-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .pdf-list li {
+      margin: 10px 0;
+      cursor: pointer;
+      color: #00ffff;
+      text-decoration: underline;
+      transition: color 0.3s;
+    }
+
+    .pdf-list li:hover {
+      color: #ffd700;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 400px;
+      border: none;
+      box-shadow: 0 0 10px #00ffff;
+      margin-top: 20px;
+    }
+
     .profile-picture {
       width: 200px;
       height: 200px;
@@ -57,10 +87,6 @@
       box-shadow: 0 0 20px #00ffff;
       margin-bottom: 20px;
       transition: transform 0.3s ease;
-    }
-
-    .profile-picture:hover {
-      transform: rotate(10deg) scale(1.1);
     }
 
     .social-links, .friendly-sites, .project-links {
@@ -104,68 +130,6 @@
       }
     }
 
-    /* Knowledge List Styling */
-    .knowledge-list {
-      list-style: none;
-      padding: 0;
-    }
-
-    .knowledge-list li {
-      margin: 10px 0;
-      padding: 12px 25px;
-      background-color: transparent;
-      color: #00ffff;
-      position: relative;
-      border-radius: 15px;
-      text-align: center;
-      border: 3px solid transparent;
-      transition: transform 0.3s, border-image 2s;
-      background-clip: padding-box;
-    }
-
-    .knowledge-list li:hover {
-      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      animation: border-fill 2s forwards;
-      transform: scale(1.05);
-    }
-
-    /* Nested Project Links */
-    .project-links {
-      list-style: none;
-      padding-left: 20px;
-      margin-top: 10px;
-    }
-
-    .project-links li {
-      margin: 10px 0;
-    }
-
-    canvas {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      border: 2px solid #00ffff;
-      box-shadow: 0 0 10px #00ffff;
-    }
-
-    .pdf-iframe {
-      width: 100%;
-      height: calc(100vh - 40px);
-      border: none;
-      box-shadow: 0 0 10px #00ffff;
-    }
-
-    .tech-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
-      opacity: 0.3;
-      pointer-events: none;
-    }
-
     .language-selector {
       position: absolute;
       top: 10px;
@@ -195,17 +159,21 @@
 
   <div class="center-section">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
+
+    <!-- PDF Viewer Section -->
+    <div class="pdf-viewer-section">
+      <h2>Certificados</h2>
+      <ul class="pdf-list" id="pdf-list"></ul>
+      <h3 id="pdf-title"></h3>
+      <iframe class="pdf-viewer" id="pdf-viewer" src=""></iframe>
+    </div>
+
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
       <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
       <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
-      <li>
-        <a href="./blender-projects.html" class="social-link">Blender Projects</a>
-        <ul class="project-links">
-          <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
-        </ul>
-      </li>
+      <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
     </ul>
 
     <!-- Friendly Sites Section -->
@@ -213,10 +181,6 @@
     <ul class="friendly-sites">
       <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
     </ul>
-
-    <h2 id="contact">Contact</h2>
-    <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
-    <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
   </div>
 
   <div class="right-section">
@@ -225,90 +189,42 @@
   </div>
 
   <script>
-    let selectedLanguage = 'en'; // Default language
-
     window.addEventListener('DOMContentLoaded', (event) => {
-      changeLanguage(); // Initialize language
-      loadPDF();        // Load PDF
+      fetchCertificadosList(); // Load PDF list
+      changeLanguage();
     });
 
-    function changeLanguage() {
-      const languageSelect = document.getElementById("language");
-      selectedLanguage = languageSelect.value;
-      fetchTranslations();
-      fetchKnowledgeList();
-    }
-
-    function fetchTranslations() {
-      const translationFile = `./translations/translations_${selectedLanguage}.json`;
-
-      fetch(translationFile)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch ${translationFile}: ${response.status} ${response.statusText}`);
-          }
-          return response.json();
-        })
-        .then(data => {
-          document.getElementById("qualifications").innerText = data.qualifications;
-          document.getElementById("socialLinks").innerText = data.socialLinks;
-          document.getElementById("friendlySites").innerText = data.friendlySites;
-          document.getElementById("contact").innerText = data.contact;
-          document.getElementById("knowledge-title").innerText = data.knowledge;
-
-          // Update project links if necessary
-          const projectLinks = document.querySelectorAll('.project-links a');
-          projectLinks.forEach(link => {
-            const key = link.textContent.replace(' ', '').toLowerCase();
-            if (data[key]) {
-              link.textContent = data[key];
-            }
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching translation file:', error);
-          alert('Failed to load translations. Please try again later.');
-        });
-    }
-
-    function fetchKnowledgeList() {
-      fetch('./KnowledgeList/KnowledgeList.txt')
+    function fetchCertificadosList() {
+      fetch('./Certificados/CertificadosList.txt')
         .then(response => response.text())
         .then(data => {
-          const knowledgeList = document.getElementById("knowledge-list");
-          knowledgeList.innerHTML = ''; // Clear the current list
+          const pdfList = document.getElementById('pdf-list');
+          pdfList.innerHTML = ''; // Clear current list
 
           const lines = data.split('\n');
           lines.forEach(line => {
-            const [enText, ptText] = line.split('||'); // Split the text by "||"
-            const listItem = document.createElement('li');
-            listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
-            knowledgeList.appendChild(listItem);
+            const [file, title] = line.split(' : '); // Split by ' : '
+            if (file && title) {
+              const listItem = document.createElement('li');
+              listItem.textContent = title.replace(/"/g, '');
+              listItem.dataset.file = file.replace(/"/g, '').trim();
+              listItem.addEventListener('click', () => loadPdf(listItem.dataset.file, listItem.textContent));
+              pdfList.appendChild(listItem);
+            }
           });
         })
-        .catch(error => console.error('Error loading knowledge list:', error));
+        .catch(error => console.error('Error loading certificados list:', error));
     }
 
-    function loadPDF() {
-      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
-      const canvas = document.getElementById('pdf-canvas');
-      const context = canvas.getContext('2d');
+    function loadPdf(file, title) {
+      const pdfViewer = document.getElementById('pdf-viewer');
+      const pdfTitle = document.getElementById('pdf-title');
+      pdfTitle.textContent = title;
+      pdfViewer.src = `./Certificados/${file}`;
+    }
 
-      pdfjsLib.getDocument(url).promise.then(pdf => {
-        pdf.getPage(1).then(page => {
-          const scale = 2; // Adjust scale for better resolution
-          const viewport = page.getViewport({ scale: scale });
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          // Render PDF page into canvas context
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          page.render(renderContext);
-        });
-      });
+    function changeLanguage() {
+      // Implement your language translation logic here, similar to previous translations
     }
   </script>
 </body>
