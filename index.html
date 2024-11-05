@@ -8,67 +8,227 @@
   <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
   <meta name="author" content="Antonio Augusto Barbaro">
   <style>
-    /* ... (existing styles) ... */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap');
 
-    /* PDF Viewer Styles */
-    .pdf-viewer {
-      margin-top: 20px;
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: nowrap;
+      background: linear-gradient(135deg, #0a0f2e, #162042);
+      color: #00ffff;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      overflow: hidden;
     }
 
-    .pdf-list {
+    .left-section, .right-section, .certifications-section {
+      flex: 1;
+      background-color: rgba(22, 32, 66, 0.8);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      overflow-y: auto;
+    }
+
+    .center-section {
+      flex: 2;
+      background-color: rgba(22, 32, 66, 0.8);
+      color: #00ffff;
+      padding: 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px #00ffff;
+      overflow-y: auto;
+    }
+
+    .profile-picture {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-picture:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .social-links, .friendly-sites, .project-links, .certifications-list {
       list-style: none;
       padding: 0;
     }
 
-    .pdf-list li {
-      margin: 10px 0;
+    .social-links li, .friendly-sites li, .project-links li, .certifications-list li {
+      margin: 15px 0;
+      position: relative;
     }
 
-    .pdf-link {
+    .social-link {
       display: inline-block;
-      padding: 10px 20px;
+      padding: 12px 25px;
       background-color: #00ffff;
       color: #162042;
       text-decoration: none;
       border-radius: 30px;
       transition: background-color 0.3s, transform 0.3s;
+      position: relative;
       font-weight: bold;
       border: 3px solid transparent;
       background-clip: padding-box;
     }
 
-    .pdf-link:hover {
+    .social-link:hover {
       background-color: #162042;
       color: #00ffff;
-      transform: scale(1.05);
+      transform: scale(1.1);
       border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       animation: border-fill 2s forwards;
     }
 
-    .pdf-title {
-      margin-top: 20px;
-      font-size: 1.5em;
-      color: #ffd700;
+    @keyframes border-fill {
+      0% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
+      }
+      100% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      }
     }
 
-    .pdf-canvas {
+    /* Knowledge List Styling */
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .knowledge-list li {
+      margin: 10px 0;
+      padding: 12px 25px;
+      background-color: transparent;
+      color: #00ffff;
+      position: relative;
+      border-radius: 15px;
+      text-align: center;
+      border: 3px solid transparent;
+      transition: transform 0.3s, border-image 2s;
+      background-clip: padding-box;
+    }
+
+    .knowledge-list li:hover {
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      animation: border-fill 2s forwards;
+      transform: scale(1.05);
+    }
+
+    /* Nested Project Links */
+    .project-links {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .project-links li {
+      margin: 10px 0;
+    }
+
+    /* Certifications List Styling */
+    .certifications-section {
+      flex: 1;
+    }
+
+    .certifications-list li {
+      margin: 20px 0;
+      padding: 15px;
+      background-color: rgba(22, 32, 66, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .certifications-list li:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px #ffd700;
+    }
+
+    .cert-title {
+      margin-bottom: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 400px;
+      border: 2px solid #00ffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    canvas {
       width: 100%;
       height: auto;
       border-radius: 10px;
       border: 2px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
-      margin-top: 10px;
+    }
+
+    .pdf-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .language-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      color: #00ffff;
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
-  <!-- ... (existing content) ... -->
+  <div class="tech-bg"></div>
+
+  <!-- Language selector -->
+  <div class="language-selector">
+    <label for="language">Select Language: </label>
+    <select id="language" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="pt">Português</option>
+    </select>
+  </div>
+
+  <div class="left-section">
+    <h2 id="qualifications">Qualifications</h2>
+    <canvas id="pdf-canvas"></canvas>
+  </div>
 
   <div class="center-section">
-    <!-- ... (existing content) ... -->
-
-    <!-- Social Links & Projects -->
+    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
@@ -82,35 +242,35 @@
       </li>
     </ul>
 
-    <!-- New PDF Viewer Section -->
-    <div class="pdf-viewer">
-      <h2 id="certificates">Certificates</h2>
-      <ul class="pdf-list" id="pdf-list"></ul>
-      <div id="pdf-display">
-        <h3 id="pdf-title" class="pdf-title"></h3>
-        <canvas id="pdf-viewer-canvas" class="pdf-canvas"></canvas>
-      </div>
-    </div>
-
-    <!-- Friendly Sites -->
+    <!-- Friendly Sites Section -->
     <h2 id="friendlySites">Friendly Sites</h2>
     <ul class="friendly-sites">
       <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
     </ul>
 
-    <!-- ... (Contact section) ... -->
+    <!-- Certifications Section -->
+    <h2 id="certifications">Certifications</h2>
+    <ul class="certifications-list" id="certifications-list">
+      <!-- Dynamic content will be loaded here -->
+    </ul>
+
+    <h2 id="contact">Contact</h2>
+    <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
+    <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
   </div>
 
-  <!-- ... (existing scripts) ... -->
+  <div class="right-section">
+    <h2 id="knowledge-title">Knowledge</h2>
+    <ul class="knowledge-list" id="knowledge-list"></ul>
+  </div>
 
   <script>
     let selectedLanguage = 'en'; // Default language
-    let pdfFiles = []; // Array to hold PDF file info
 
     window.addEventListener('DOMContentLoaded', (event) => {
       changeLanguage(); // Initialize language
-      loadPDF();        // Load qualifications PDF
-      fetchCertificatesList(); // Load certificates list
+      loadPDF();        // Load Qualifications PDF
+      loadCertifications(); // Load Certifications PDFs
     });
 
     function changeLanguage() {
@@ -118,7 +278,7 @@
       selectedLanguage = languageSelect.value;
       fetchTranslations();
       fetchKnowledgeList();
-      fetchCertificatesList(); // Reload certificates list for language change
+      fetchCertificationsList();
     }
 
     function fetchTranslations() {
@@ -135,14 +295,14 @@
           document.getElementById("qualifications").innerText = data.qualifications;
           document.getElementById("socialLinks").innerText = data.socialLinks;
           document.getElementById("friendlySites").innerText = data.friendlySites;
+          document.getElementById("certifications").innerText = data.certifications;
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("knowledge-title").innerText = data.knowledge;
-          document.getElementById("certificates").innerText = data.certificates;
 
           // Update project links
           const projectLinks = document.querySelectorAll('.project-links a');
           projectLinks.forEach(link => {
-            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            const key = link.textContent.replace(' ', '').toLowerCase();
             if (data[key]) {
               link.textContent = data[key];
             }
@@ -151,9 +311,18 @@
           // Update main project links if necessary
           const mainProjectLinks = document.querySelectorAll('.social-links > li > a');
           mainProjectLinks.forEach(link => {
-            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            const key = link.textContent.replace(' ', '').toLowerCase();
             if (data[key]) {
               link.textContent = data[key];
+            }
+          });
+
+          // Update certifications titles if needed
+          const certificationTitles = document.querySelectorAll('.cert-title');
+          certificationTitles.forEach(title => {
+            const key = title.getAttribute('data-key');
+            if (data[key]) {
+              title.textContent = data[key];
             }
           });
         })
@@ -172,7 +341,6 @@
 
           const lines = data.split('\n');
           lines.forEach(line => {
-            if (line.trim() === '') return; // Skip empty lines
             const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
             listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
@@ -204,69 +372,47 @@
       });
     }
 
-    function fetchCertificatesList() {
+    function loadCertifications() {
+      fetchCertificationsList();
+    }
+
+    function fetchCertificationsList() {
       fetch('./Certificados/CertificadosList.txt')
         .then(response => response.text())
         .then(data => {
-          const pdfListElement = document.getElementById('pdf-list');
-          pdfListElement.innerHTML = ''; // Clear existing list
-          pdfFiles = []; // Reset pdfFiles array
+          const certificationsList = document.getElementById("certifications-list");
+          certificationsList.innerHTML = ''; // Clear the current list
 
           const lines = data.split('\n');
           lines.forEach(line => {
-            if (line.trim() === '') return; // Skip empty lines
+            // Expected format: "file.pdf" : "Title of the pdf to show over the view of the pdf" || "Título em Português"
+            // Example: "certificate1.pdf" : "HTML5 Certification || Certificação HTML5"
             const [filePart, titlePart] = line.split(':');
-            const file = filePart.trim().replace(/"/g, '').trim();
-            const title = titlePart.trim().replace(/"/g, '').trim();
+            if (filePart && titlePart) {
+              const file = filePart.trim().replace(/["']/g, ''); // Remove quotes
+              const titles = titlePart.split('||');
+              const enTitle = titles[0] ? titles[0].trim().replace(/["']/g, '') : '';
+              const ptTitle = titles[1] ? titles[1].trim().replace(/["']/g, '') : '';
 
-            // Store PDF info
-            pdfFiles.push({ file, title });
+              const listItem = document.createElement('li');
 
-            // Create list item
-            const listItem = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = '#';
-            link.className = 'pdf-link';
-            link.textContent = title;
-            link.dataset.file = file;
-            link.dataset.title = title;
-            link.addEventListener('click', (e) => {
-              e.preventDefault();
-              displayPDF(file, title);
-            });
-            listItem.appendChild(link);
-            pdfListElement.appendChild(listItem);
+              const titleElement = document.createElement('div');
+              titleElement.classList.add('cert-title');
+              titleElement.setAttribute('data-key', file.replace('.pdf', '').toLowerCase() + 'Title');
+              titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+              const pdfViewer = document.createElement('iframe');
+              pdfViewer.src = `./Certificados/${file}`;
+              pdfViewer.classList.add('pdf-viewer', 'pdf-iframe');
+              pdfViewer.title = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+              listItem.appendChild(titleElement);
+              listItem.appendChild(pdfViewer);
+              certificationsList.appendChild(listItem);
+            }
           });
         })
-        .catch(error => console.error('Error loading certificates list:', error));
-    }
-
-    function displayPDF(file, title) {
-      const pdfTitleElement = document.getElementById('pdf-title');
-      const canvas = document.getElementById('pdf-viewer-canvas');
-      const context = canvas.getContext('2d');
-
-      pdfTitleElement.textContent = title;
-
-      const url = `./Certificados/${file}`;
-
-      pdfjsLib.getDocument(url).promise.then(pdf => {
-        pdf.getPage(1).then(page => {
-          const scale = 1.5; // Adjust scale as needed
-          const viewport = page.getViewport({ scale: scale });
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          page.render(renderContext);
-        });
-      }).catch(error => {
-        console.error('Error loading PDF:', error);
-        alert('Failed to load PDF. Please try again later.');
-      });
+        .catch(error => console.error('Error loading certifications list:', error));
     }
   </script>
 </body>
