@@ -46,6 +46,7 @@
       border-radius: 15px;
       backdrop-filter: blur(10px);
       box-shadow: 0 0 10px #00ffff;
+      overflow-y: auto;
     }
 
     .profile-picture {
@@ -62,13 +63,14 @@
       transform: rotate(10deg) scale(1.1);
     }
 
-    .social-links {
+    .social-links, .friendly-sites, .project-links {
       list-style: none;
       padding: 0;
     }
 
-    .social-links li {
+    .social-links li, .friendly-sites li, .project-links li {
       margin: 15px 0;
+      position: relative;
     }
 
     .social-link {
@@ -81,7 +83,7 @@
       transition: background-color 0.3s, transform 0.3s;
       position: relative;
       font-weight: bold;
-      border: 3px solid transparent; /* Initially transparent */
+      border: 3px solid transparent;
       background-clip: padding-box;
     }
 
@@ -89,11 +91,10 @@
       background-color: #162042;
       color: #00ffff;
       transform: scale(1.1);
-      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1; /* Radial gradient for gold effect */
-      animation: border-fill 2s forwards; /* Trigger animation on hover */
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      animation: border-fill 2s forwards;
     }
 
-    /* Keyframe animation to simulate a clock-like effect for the border */
     @keyframes border-fill {
       0% {
         border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
@@ -101,6 +102,42 @@
       100% {
         border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       }
+    }
+
+    /* Knowledge List Styling */
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .knowledge-list li {
+      margin: 10px 0;
+      padding: 12px 25px;
+      background-color: transparent;
+      color: #00ffff;
+      position: relative;
+      border-radius: 15px;
+      text-align: center;
+      border: 3px solid transparent;
+      transition: transform 0.3s, border-image 2s;
+      background-clip: padding-box;
+    }
+
+    .knowledge-list li:hover {
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      animation: border-fill 2s forwards;
+      transform: scale(1.05);
+    }
+
+    /* Nested Project Links */
+    .project-links {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .project-links li {
+      margin: 10px 0;
     }
 
     canvas {
@@ -162,37 +199,47 @@
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
       <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
-      <li><a href="./blender-projects.html" class="social-link">Blender Projects</a></li>
+      <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
+      <li>
+        <a href="./blender-projects.html" class="social-link">Blender Projects</a>
+        <ul class="project-links">
+          <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
+        </ul>
+      </li>
     </ul>
-    <p id="contact">Contact</p>
-    <p>WhatsApp: <a href="https://wa.me/54984181968" class="social-link">54984181968</a></p>
-    <p>Email: <a href="mailto:aaugusto444@gmail.com" class="social-link">aaugusto444@gmail.com</a></p>
+
+    <!-- Friendly Sites Section -->
+    <h2 id="friendlySites">Friendly Sites</h2>
+    <ul class="friendly-sites">
+      <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
+    </ul>
+
+    <h2 id="contact">Contact</h2>
+    <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
+    <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
   </div>
 
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
-    <ul class="social-links" id="knowledge-list"></ul>
+    <ul class="knowledge-list" id="knowledge-list"></ul>
   </div>
 
   <script>
-    const knowledgeArray = [
-      "JavaScript",
-      "Python",
-      "Machine Learning",
-      "Data Analysis",
-      "Web Development",
-      "Game Development"
-    ];
+    let selectedLanguage = 'en'; // Default language
 
     window.addEventListener('DOMContentLoaded', (event) => {
-      changeLanguage();
-      populateKnowledge();
-      loadPDF();
+      changeLanguage(); // Initialize language
+      loadPDF();        // Load PDF
     });
 
     function changeLanguage() {
       const languageSelect = document.getElementById("language");
-      const selectedLanguage = languageSelect.value;
+      selectedLanguage = languageSelect.value;
+      fetchTranslations();
+      fetchKnowledgeList();
+    }
+
+    function fetchTranslations() {
       const translationFile = `./translations/translations_${selectedLanguage}.json`;
 
       fetch(translationFile)
@@ -205,8 +252,18 @@
         .then(data => {
           document.getElementById("qualifications").innerText = data.qualifications;
           document.getElementById("socialLinks").innerText = data.socialLinks;
+          document.getElementById("friendlySites").innerText = data.friendlySites;
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("knowledge-title").innerText = data.knowledge;
+
+          // Update project links if necessary
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(' ', '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
         })
         .catch(error => {
           console.error('Error fetching translation file:', error);
@@ -214,14 +271,22 @@
         });
     }
 
-    function populateKnowledge() {
-      const knowledgeList = document.getElementById("knowledge-list");
-      knowledgeList.innerHTML = '';  // Clear existing list items
-      knowledgeArray.forEach(item => {
-        const listItem = document.createElement("li");
-        listItem.textContent = item;
-        knowledgeList.appendChild(listItem);
-      });
+    function fetchKnowledgeList() {
+      fetch('./KnowledgeList/KnowledgeList.txt')
+        .then(response => response.text())
+        .then(data => {
+          const knowledgeList = document.getElementById("knowledge-list");
+          knowledgeList.innerHTML = ''; // Clear the current list
+
+          const lines = data.split('\n');
+          lines.forEach(line => {
+            const [enText, ptText] = line.split('||'); // Split the text by "||"
+            const listItem = document.createElement('li');
+            listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
+            knowledgeList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error('Error loading knowledge list:', error));
     }
 
     function loadPDF() {
