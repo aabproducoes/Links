@@ -1,6 +1,6 @@
 {
-	"Certificado-9933-10494022.pdf" : "Curso de Webdesigner";
-	"Certificado-21048-10494022.pdf":"Curso de Informática Avançada";
-	"Certificado-9946-10494022.pdf":"Curso de HTML Básico"
-	"Declaração - Inglês - Básico.pdf":"Curso de Inglês - Básico"
+	"Certificado-9933-10494022.pdf" : "Curso de Webdesigner"⭐
+	"Certificado-21048-10494022.pdf":"Curso de Informática Avançada"⭐
+	"Certificado-9946-10494022.pdf":"Curso de HTML Básico"⭐
+	"Declaração - Inglês - Básico.pdf":"Curso de Inglês - Básico"⭐
 }
