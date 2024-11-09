@@ -490,7 +490,7 @@
           lines.forEach(line => {
             const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
-            listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
+            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
             knowledgeList.appendChild(listItem);
           });
         })
@@ -519,40 +519,49 @@
       });
     }
 
-    function fetchCertificationsList() {
-      fetch('./Certificados/CertificadosList.txt')
-        .then(response => response.text())
-        .then(data => {
-          const certificationsList = document.getElementById("certifications-list");
-          certificationsList.innerHTML = ''; // Clear existing list
+    async function fetchCertificationsList() {
+      try {
+        const response = await fetch('./Certificados/CertificadosList.txt');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
+        }
 
-          const lines = data.split('\n');
-          lines.forEach(line => {
-            const [filePart, titlePart] = line.split(':');
-            if (filePart && titlePart) {
-              const file = filePart.trim().replace(/["']/g, ''); // Remove quotes
-              const titles = titlePart.split('||');
-              const enTitle = titles[0] ? titles[0].trim().replace(/["']/g, '') : 'Untitled Certification';
-              const ptTitle = titles[1] ? titles[1].trim().replace(/["']/g, '') : 'Certificação Sem Título';
+        const data = await response.text();
+        const certificationsList = document.getElementById("certifications-list");
+        certificationsList.innerHTML = ''; // Clear existing list
 
-              const listItem = document.createElement('li');
-              const titleElement = document.createElement('div');
-              titleElement.classList.add('cert-title');
-              titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+        const lines = data.split('\n').filter(line => line.trim() !== '');
+        lines.forEach(line => {
+          const [filePart, titlePart] = line.split(':');
+          if (filePart && titlePart) {
+            const file = filePart.trim().replace(/["']/g, ''); // Remove quotes from file name
+            const titles = titlePart.split('||');
 
-              const pdfCanvas = document.createElement('canvas');
-              pdfCanvas.classList.add('pdf-canvas');
-              pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
+            // Trim titles and set default titles only if both are missing
+            const enTitle = titles[0] && titles[0].trim().replace(/["']/g, '') || "Untitled Certification";
+            const ptTitle = titles[1] && titles[1].trim().replace(/["']/g, '') || "Certificação Sem Título";
 
-              listItem.appendChild(titleElement);
-              listItem.appendChild(pdfCanvas);
-              certificationsList.appendChild(listItem);
+            const listItem = document.createElement('li');
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('cert-title');
+            titleElement.setAttribute('data-key', file.replace('.pdf', '').toLowerCase() + '_title');
+            titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
 
-              renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
-            }
-          });
-        })
-        .catch(error => console.error('Error loading certifications list:', error));
+            const pdfCanvas = document.createElement('canvas');
+            pdfCanvas.classList.add('pdf-canvas');
+            pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
+
+            listItem.appendChild(titleElement);
+            listItem.appendChild(pdfCanvas);
+            certificationsList.appendChild(listItem);
+
+            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+          }
+        });
+      } catch (error) {
+        console.error('Error loading certifications list:', error);
+        alert('An error occurred while loading the certifications list. Please try again later.');
+      }
     }
 
     function renderFirstPage(pdfUrl, canvasId) {
@@ -573,6 +582,8 @@
           };
           page.render(renderContext);
         });
+      }).catch(error => {
+        console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
       });
     }
   </script>
