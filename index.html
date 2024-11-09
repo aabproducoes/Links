@@ -7,9 +7,12 @@
   <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
   <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
   <meta name="author" content="Antonio Augusto Barbaro">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap');
+  
+  <!-- Import Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
+  <style>
+    /* General Styles */
     body {
       margin: 0;
       padding: 0;
@@ -23,6 +26,7 @@
       position: relative;
     }
 
+    /* Sections Styling */
     .left-section, .right-section {
       flex: 1;
       background-color: rgba(22, 32, 66, 0.8);
@@ -56,6 +60,7 @@
       transition: opacity 0.3s ease;
     }
 
+    /* Profile Picture */
     .profile-picture {
       width: 200px;
       height: 200px;
@@ -70,16 +75,18 @@
       transform: rotate(10deg) scale(1.1);
     }
 
-    .social-links, .friendly-sites, .project-links, .certifications-list {
+    /* Lists Styling */
+    .social-links, .friendly-sites, .project-links, .certifications-list, .knowledge-list {
       list-style: none;
       padding: 0;
     }
 
-    .social-links li, .friendly-sites li, .project-links li, .certifications-list li {
+    .social-links li, .friendly-sites li, .project-links li, .certifications-list li, .knowledge-list li {
       margin: 15px 0;
       position: relative;
     }
 
+    /* Social Links Styling */
     .social-link {
       display: inline-block;
       padding: 12px 25px;
@@ -113,11 +120,6 @@
     }
 
     /* Knowledge List Styling */
-    .knowledge-list {
-      list-style: none;
-      padding: 0;
-    }
-
     .knowledge-list li {
       margin: 10px 0;
       padding: 12px 25px;
@@ -181,7 +183,7 @@
       box-shadow: 0 0 10px #00ffff;
     }
 
-    /* PDF Canvas */
+    /* PDF Canvas for Qualifications */
     #pdf-canvas {
       width: 100%;
       height: auto;
@@ -192,13 +194,7 @@
       z-index: 2;
     }
 
-    .pdf-iframe {
-      width: 100%;
-      height: calc(100vh - 40px);
-      border: none;
-      box-shadow: 0 0 10px #00ffff;
-    }
-
+    /* Tech Background */
     .tech-bg {
       position: absolute;
       top: 0;
@@ -211,6 +207,7 @@
       z-index: 1;
     }
 
+    /* Language Selector */
     .language-selector {
       position: absolute;
       top: 10px;
@@ -230,13 +227,14 @@
       z-index: 0;
     }
   </style>
+  <!-- Include pdf.js library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <!-- Tech Background -->
   <div class="tech-bg"></div>
 
-  <!-- Language selector -->
+  <!-- Language Selector -->
   <div class="language-selector">
     <label for="language">Select Language: </label>
     <select id="language" onchange="changeLanguage()">
@@ -245,15 +243,16 @@
     </select>
   </div>
 
-  <!-- Left Section -->
+  <!-- Left Section: Qualifications -->
   <div class="left-section">
     <h2 id="qualifications">Qualifications</h2>
     <canvas id="pdf-canvas"></canvas>
   </div>
 
-  <!-- Center Section -->
+  <!-- Center Section: Profile, Social Links, Friendly Sites, Certifications, Contact -->
   <div class="center-section" id="centerSection">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
+    
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
       <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
@@ -280,12 +279,13 @@
       <!-- Dynamic content will be loaded here -->
     </ul>
 
+    <!-- Contact Section -->
     <h2 id="contact">Contact</h2>
     <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
     <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
   </div>
 
-  <!-- Right Section -->
+  <!-- Right Section: Knowledge -->
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
     <ul class="knowledge-list" id="knowledge-list"></ul>
@@ -297,8 +297,8 @@
   <!-- Lightning Effect Script -->
   <script>
     // Lightning Effect Code
-    const canvas = document.getElementById('lightningCanvas');
-    const ctx = canvas.getContext('2d');
+    const lightningCanvas = document.getElementById('lightningCanvas');
+    const ctx = lightningCanvas.getContext('2d');
     let lightningPath = [];
     let fillingLeft = false;
     let fillingRight = false;
@@ -310,8 +310,8 @@
     const centerSection = document.getElementById('centerSection');
 
     function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      lightningCanvas.width = window.innerWidth;
+      lightningCanvas.height = window.innerHeight;
     }
 
     function getRandomLightColor() {
@@ -331,17 +331,17 @@
 
       // Dark fill to create a fading effect
       ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
 
       // Set lightning path color
       ctx.strokeStyle = currentColor;
       ctx.lineWidth = 2;
       ctx.beginPath();
-      ctx.moveTo(canvas.width / 2, 0);
+      ctx.moveTo(lightningCanvas.width / 2, 0);
 
       // Generate lightning path if it hasn't reached the bottom
-      if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < canvas.height) {
-        let lastX = canvas.width / 2;
+      if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < lightningCanvas.height) {
+        let lastX = lightningCanvas.width / 2;
         let lastY = 0;
 
         if (lightningPath.length > 0) {
@@ -359,7 +359,7 @@
       ctx.stroke();
 
       // Start filling once lightning reaches the bottom
-      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= canvas.height) {
+      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= lightningCanvas.height) {
         fillingLeft = true;
         fillingRight = true;
       }
@@ -367,12 +367,12 @@
       // Fill left and right with the darker color
       if (fillingLeft) {
         ctx.fillStyle = fillColor;
-        ctx.fillRect(0, 0, canvas.width / 2, canvas.height);
+        ctx.fillRect(0, 0, lightningCanvas.width / 2, lightningCanvas.height);
       }
 
       if (fillingRight) {
         ctx.fillStyle = fillColor;
-        ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+        ctx.fillRect(lightningCanvas.width / 2, 0, lightningCanvas.width / 2, lightningCanvas.height);
       }
 
       // If filling is complete, reset for looping
@@ -399,7 +399,7 @@
 
     function stopAnimation() {
       animationActive = false;
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
       lightningPath = [];
       centerSection.style.opacity = '1'; // Reset center section opacity to 100%
     }
@@ -418,11 +418,11 @@
   <script>
     let selectedLanguage = 'en'; // Default language
 
-    window.addEventListener('DOMContentLoaded', (event) => {
+    window.addEventListener('DOMContentLoaded', () => {
       changeLanguage(); // Initialize language
-      loadPDF();        // Load Qualifications PDF
-      fetchKnowledgeList();
-      fetchCertificationsList();
+      loadQualificationsPDF(); // Load Qualifications PDF
+      fetchKnowledgeList(); // Load Knowledge List
+      fetchCertificationsList(); // Load Certifications List
     });
 
     function changeLanguage() {
@@ -437,14 +437,20 @@
       const translationFile = `./translations/translations_${selectedLanguage}.json`;
 
       fetch(translationFile)
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch translations: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
         .then(data => {
-          document.getElementById("qualifications").innerText = data.qualifications;
-          document.getElementById("socialLinks").innerText = data.socialLinks;
-          document.getElementById("friendlySites").innerText = data.friendlySites;
-          document.getElementById("certifications").innerText = data.certifications;
-          document.getElementById("contact").innerText = data.contact;
-          document.getElementById("knowledge-title").innerText = data.knowledge;
+          // Update section titles
+          document.getElementById("qualifications").innerText = data.qualifications || "Qualifications";
+          document.getElementById("socialLinks").innerText = data.socialLinks || "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = data.friendlySites || "Friendly Sites";
+          document.getElementById("certifications").innerText = data.certificate || "Certifications";
+          document.getElementById("contact").innerText = data.contact || "Contact";
+          document.getElementById("knowledge-title").innerText = data.knowledge || "Knowledge";
 
           // Update project links
           const projectLinks = document.querySelectorAll('.project-links a');
@@ -464,18 +470,25 @@
             }
           });
 
-          // Update certifications titles
-          const certificationTitles = document.querySelectorAll('.cert-title');
-          certificationTitles.forEach(title => {
-            const key = title.getAttribute('data-key');
-            if (data[key]) {
-              title.textContent = data[key];
+          // Update Contact links
+          const contactLinks = document.querySelectorAll('.center-section p a');
+          contactLinks.forEach(link => {
+            if (link.href.startsWith("https://wa.me/")) {
+              link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
+            } else if (link.href.startsWith("mailto:")) {
+              link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
             }
           });
         })
         .catch(error => {
           console.error('Error fetching translation file:', error);
-          alert('Failed to load translations. Please try again later.');
+          // Fallback to default titles if there's an error
+          document.getElementById("qualifications").innerText = "Qualifications";
+          document.getElementById("socialLinks").innerText = "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = "Friendly Sites";
+          document.getElementById("certifications").innerText = "Certifications";
+          document.getElementById("contact").innerText = "Contact";
+          document.getElementById("knowledge-title").innerText = "Knowledge";
         });
     }
 
@@ -486,7 +499,7 @@
           const knowledgeList = document.getElementById("knowledge-list");
           knowledgeList.innerHTML = ''; // Clear the current list
 
-          const lines = data.split('\n');
+          const lines = data.split('\n').filter(line => line.trim() !== '');
           lines.forEach(line => {
             const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
@@ -497,7 +510,7 @@
         .catch(error => console.error('Error loading knowledge list:', error));
     }
 
-    function loadPDF() {
+    function loadQualificationsPDF() {
       const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
       const canvas = document.getElementById('pdf-canvas');
       const context = canvas.getContext('2d');
@@ -516,6 +529,9 @@
           };
           page.render(renderContext);
         });
+      }).catch(error => {
+        console.error(`Error loading Qualifications PDF:`, error);
+        alert('Failed to load Qualifications PDF.');
       });
     }
 
@@ -530,21 +546,21 @@
         const certificationsList = document.getElementById("certifications-list");
         certificationsList.innerHTML = ''; // Clear existing list
 
-        const lines = data.split('\n').filter(line => line.trim() !== '');
+        const lines = data.split('\n').filter(line => line.trim() !== ''); // Remove empty lines
         lines.forEach(line => {
+          // Ensure the line has both a file part and title part
           const [filePart, titlePart] = line.split(':');
           if (filePart && titlePart) {
             const file = filePart.trim().replace(/["']/g, ''); // Remove quotes from file name
             const titles = titlePart.split('||');
 
-            // Trim titles and set default titles only if both are missing
-            const enTitle = titles[0] && titles[0].trim().replace(/["']/g, '') || "Untitled Certification";
-            const ptTitle = titles[1] && titles[1].trim().replace(/["']/g, '') || "Certificação Sem Título";
+            // Trim titles and set default titles only if missing
+            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
+            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
 
             const listItem = document.createElement('li');
             const titleElement = document.createElement('div');
             titleElement.classList.add('cert-title');
-            titleElement.setAttribute('data-key', file.replace('.pdf', '').toLowerCase() + '_title');
             titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
 
             const pdfCanvas = document.createElement('canvas');
