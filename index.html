@@ -35,6 +35,7 @@
       margin: 10px;
       position: relative;
       z-index: 2;
+      overflow-y: auto;
     }
 
     .center-section {
@@ -102,24 +103,71 @@
       animation: border-fill 2s forwards;
     }
 
-    /* Certifications List Styling */
-    .certifications-section {
-      flex: 1;
-      padding: 20px;
+    @keyframes border-fill {
+      0% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
+      }
+      100% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      }
     }
 
+    /* Knowledge List Styling */
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .knowledge-list li {
+      margin: 10px 0;
+      padding: 12px 25px;
+      background-color: transparent;
+      color: #00ffff;
+      position: relative;
+      border-radius: 15px;
+      text-align: center;
+      border: 3px solid transparent;
+      transition: transform 0.3s, border-image 2s;
+      background-clip: padding-box;
+      z-index: 3;
+    }
+
+    .knowledge-list li:hover {
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      animation: border-fill 2s forwards;
+      transform: scale(1.05);
+    }
+
+    /* Nested Project Links */
+    .project-links {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .project-links li {
+      margin: 10px 0;
+    }
+
+    /* Certifications List Styling */
     .certifications-list li {
       margin: 20px 0;
       padding: 15px;
       background-color: rgba(22, 32, 66, 0.9);
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .certifications-list li:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px #ffd700;
     }
 
     .cert-title {
+      margin-bottom: 10px;
       font-size: 1.2em;
       font-weight: bold;
-      margin-bottom: 10px;
     }
 
     .pdf-viewer {
@@ -128,6 +176,44 @@
       border: 2px solid #00ffff;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
+    }
+
+    /* PDF Canvas */
+    #pdf-canvas {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pdf-iframe {
+      width: 100%;
+      height: calc(100vh - 40px);
+      border: none;
+      box-shadow: 0 0 10px #00ffff;
+    }
+
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .language-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      color: #00ffff;
     }
 
     /* Lightning Canvas */
@@ -144,8 +230,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
+  <!-- Tech Background -->
   <div class="tech-bg"></div>
 
+  <!-- Language selector -->
   <div class="language-selector">
     <label for="language">Select Language: </label>
     <select id="language" onchange="changeLanguage()">
@@ -154,11 +242,13 @@
     </select>
   </div>
 
+  <!-- Left Section -->
   <div class="left-section">
     <h2 id="qualifications">Qualifications</h2>
     <canvas id="pdf-canvas"></canvas>
   </div>
 
+  <!-- Center Section -->
   <div class="center-section" id="centerSection">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     <h2 id="socialLinks">Social Links & Projects</h2>
@@ -174,6 +264,7 @@
       </li>
     </ul>
 
+    <!-- Friendly Sites Section -->
     <h2 id="friendlySites">Friendly Sites</h2>
     <ul class="friendly-sites">
       <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
@@ -191,6 +282,7 @@
     <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
   </div>
 
+  <!-- Right Section -->
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
     <ul class="knowledge-list" id="knowledge-list"></ul>
@@ -199,12 +291,19 @@
   <!-- Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
 
+  <!-- Lightning Effect Script -->
   <script>
-    // Lightning effect JavaScript code
+    // Lightning Effect Code
     const canvas = document.getElementById('lightningCanvas');
     const ctx = canvas.getContext('2d');
     let lightningPath = [];
+    let fillingLeft = false;
+    let fillingRight = false;
     let animationActive = false;
+    let currentColor = getRandomLightColor();
+    let fillColor = getDarkerFillColor(currentColor);
+    const fillOpacity = 0.03; // Darker, gradual fill for each frame
+
     const centerSection = document.getElementById('centerSection');
 
     function resizeCanvas() {
@@ -214,20 +313,30 @@
 
     function getRandomLightColor() {
       const hue = Math.random() * 360;
-      return `hsl(${hue}, 100%, 80%)`;
+      return `hsl(${hue}, 100%, 80%)`; // Random light color with high lightness
+    }
+
+    function getDarkerFillColor(color) {
+      // Extract HSL values and make fill color darker by reducing lightness
+      let [hue, saturation, lightness] = color.match(/\d+/g).map(Number);
+      lightness = Math.max(lightness - 20, 10); // Ensure lightness doesn't go below 10%
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // Darker shade
     }
 
     function drawLightning() {
       if (!animationActive) return;
 
-      ctx.fillStyle = `rgba(0, 0, 0, 0.03)`;
+      // Dark fill to create a fading effect
+      ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = getRandomLightColor();
+      // Set lightning path color
+      ctx.strokeStyle = currentColor;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(canvas.width / 2, 0);
 
+      // Generate lightning path if it hasn't reached the bottom
       if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < canvas.height) {
         let lastX = canvas.width / 2;
         let lastY = 0;
@@ -236,8 +345,8 @@
           ({ x: lastX, y: lastY } = lightningPath[lightningPath.length - 1]);
         }
 
-        const xOffset = (Math.random() - 0.5) * 20;
-        const newY = lastY + 10;
+        const xOffset = (Math.random() - 0.5) * 20; // Smaller deviation for tighter lightning
+        const newY = lastY + 10; // Slower descent
         lightningPath.push({ x: lastX + xOffset, y: newY });
       }
 
@@ -246,67 +355,70 @@
       });
       ctx.stroke();
 
+      // Start filling once lightning reaches the bottom
+      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= canvas.height) {
+        fillingLeft = true;
+        fillingRight = true;
+      }
+
+      // Fill left and right with the darker color
+      if (fillingLeft) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, canvas.width / 2, canvas.height);
+      }
+
+      if (fillingRight) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(canvas.width / 2, 0, canvas.width / 2, canvas.height);
+      }
+
+      // If filling is complete, reset for looping
+      if (fillingLeft && fillingRight) {
+        // Reset for the next loop
+        fillingLeft = false;
+        fillingRight = false;
+        lightningPath = [];
+        currentColor = getRandomLightColor();
+        fillColor = getDarkerFillColor(currentColor);
+      }
+
+      // Continue the animation loop
       requestAnimationFrame(drawLightning);
     }
 
     function startAnimation() {
-      animationActive = true;
-      drawLightning();
-      centerSection.style.opacity = '0.5';
+      if (!animationActive) {
+        animationActive = true;
+        drawLightning();
+        centerSection.style.opacity = '0.5'; // Make center section 50% transparent
+      }
     }
 
     function stopAnimation() {
       animationActive = false;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       lightningPath = [];
-      centerSection.style.opacity = '1';
+      centerSection.style.opacity = '1'; // Reset center section opacity to 100%
     }
 
+    // Event Listeners for the "Animated Background" Link
     const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
     animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
     animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
 
+    // Initialize Canvas Size
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
+  </script>
 
-    // Fetch and display Certifications
-    function loadCertifications() {
-      fetch('./Certificados/CertificadosList.txt')
-        .then(response => response.text())
-        .then(data => {
-          const certificationsList = document.getElementById("certifications-list");
-          certificationsList.innerHTML = ''; 
-
-          data.split('\n').forEach(line => {
-            const [filePart, titlePart] = line.split(':');
-            if (filePart && titlePart) {
-              const file = filePart.trim().replace(/["']/g, ''); 
-              const [enTitle, ptTitle] = titlePart.split('||').map(text => text.trim());
-              const listItem = document.createElement('li');
-
-              const titleElement = document.createElement('div');
-              titleElement.classList.add('cert-title');
-              titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-              const pdfViewer = document.createElement('iframe');
-              pdfViewer.src = `./Certificados/${file}`;
-              pdfViewer.classList.add('pdf-viewer');
-
-              listItem.appendChild(titleElement);
-              listItem.appendChild(pdfViewer);
-              certificationsList.appendChild(listItem);
-            }
-          });
-        });
-    }
-
-    // Existing Language and PDF Handling Scripts
-    let selectedLanguage = 'en';
+  <!-- Language, Knowledge List, PDF, and Certifications Scripts -->
+  <script>
+    let selectedLanguage = 'en'; // Default language
 
     window.addEventListener('DOMContentLoaded', (event) => {
-      changeLanguage();
-      loadPDF();
-      loadCertifications();
+      changeLanguage(); // Initialize language
+      loadPDF();        // Load Qualifications PDF
+      loadCertifications(); // Load Certifications PDFs
     });
 
     function changeLanguage() {
@@ -314,7 +426,7 @@
       selectedLanguage = languageSelect.value;
       fetchTranslations();
       fetchKnowledgeList();
-      loadCertifications();
+      fetchCertificationsList();
     }
 
     function fetchTranslations() {
@@ -329,6 +441,37 @@
           document.getElementById("certifications").innerText = data.certifications;
           document.getElementById("contact").innerText = data.contact;
           document.getElementById("knowledge-title").innerText = data.knowledge;
+
+          // Update project links
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update friendly sites links
+          const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
+          friendlySitesLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update certifications titles
+          const certificationTitles = document.querySelectorAll('.cert-title');
+          certificationTitles.forEach(title => {
+            const key = title.getAttribute('data-key');
+            if (data[key]) {
+              title.textContent = data[key];
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          alert('Failed to load translations. Please try again later.');
         });
     }
 
@@ -337,35 +480,81 @@
         .then(response => response.text())
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
-          knowledgeList.innerHTML = '';
-          data.split('\n').forEach(line => {
-            const [enText, ptText] = line.split('||');
+          knowledgeList.innerHTML = ''; // Clear the current list
+
+          const lines = data.split('\n');
+          lines.forEach(line => {
+            const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
             listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
             knowledgeList.appendChild(listItem);
           });
-        });
+        })
+        .catch(error => console.error('Error loading knowledge list:', error));
     }
 
     function loadPDF() {
-      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf';
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
       const canvas = document.getElementById('pdf-canvas');
       const context = canvas.getContext('2d');
 
       pdfjsLib.getDocument(url).promise.then(pdf => {
         pdf.getPage(1).then(page => {
-          const scale = 2;
-          const viewport = page.getViewport({ scale });
+          const scale = 2; // Adjust scale for better resolution
+          const viewport = page.getViewport({ scale: scale });
           canvas.width = viewport.width;
           canvas.height = viewport.height;
 
+          // Render PDF page into canvas context
           const renderContext = {
             canvasContext: context,
-            viewport
+            viewport: viewport
           };
           page.render(renderContext);
         });
       });
+    }
+
+    function loadCertifications() {
+      fetchCertificationsList();
+    }
+
+    function fetchCertificationsList() {
+      fetch('./Certificados/CertificadosList.txt')
+        .then(response => response.text())
+        .then(data => {
+          const certificationsList = document.getElementById("certifications-list");
+          certificationsList.innerHTML = ''; // Clear the current list
+
+          const lines = data.split('\n');
+          lines.forEach(line => {
+            // Expected format: "file.pdf" : "Title of the pdf to show over the view of the pdf" || "Título em Português"
+            const [filePart, titlePart] = line.split(':');
+            if (filePart && titlePart) {
+              const file = filePart.trim().replace(/["']/g, ''); // Remove quotes
+              const titles = titlePart.split('||');
+              const enTitle = titles[0] ? titles[0].trim().replace(/["']/g, '') : '';
+              const ptTitle = titles[1] ? titles[1].trim().replace(/["']/g, '') : '';
+
+              const listItem = document.createElement('li');
+
+              const titleElement = document.createElement('div');
+              titleElement.classList.add('cert-title');
+              titleElement.setAttribute('data-key', file.replace('.pdf', '').toLowerCase() + '_title');
+              titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+              const pdfViewer = document.createElement('iframe');
+              pdfViewer.src = `./Certificados/${file}`;
+              pdfViewer.classList.add('pdf-viewer', 'pdf-iframe');
+              pdfViewer.title = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+              listItem.appendChild(titleElement);
+              listItem.appendChild(pdfViewer);
+              certificationsList.appendChild(listItem);
+            }
+          });
+        })
+        .catch(error => console.error('Error loading certifications list:', error));
     }
   </script>
 </body>
