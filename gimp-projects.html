@@ -90,6 +90,19 @@
       width: 0;
       transition: width 4s linear;
     }
+
+    /* Grid Section */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 50px;
+    }
+
+    .image-grid img {
+      width: 100%;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -113,6 +126,45 @@
       <button class="prevBtn">Previous</button>
       <button class="nextBtn">Next</button>
     </div>
+  </section>
+
+  <!-- Fibraz Connection Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Gimp_low/FibrazConnection[1].png" data-src="ImagesLoading/Gimp/FibrazConnection[1].png" alt="Fibraz Connection" class="active blurred">
+      <img src="ImagesLoading/Gimp_low/FibrazConnection[2].png" data-src="ImagesLoading/Gimp/FibrazConnection[2].png" alt="Fibraz Connection" class="blurred">
+      <img src="ImagesLoading/Gimp_low/FibrazConnection[3].png" data-src="ImagesLoading/Gimp/FibrazConnection[3].png" alt="Fibraz Connection" class="blurred">
+    </div>
+    <div class="carousel-title">Fibraz Connection</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
+
+  <!-- Playing Cards Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Gimp_low/PlayingCards[1].png" data-src="ImagesLoading/Gimp/PlayingCards[1].png" alt="Playing Cards" class="active blurred">
+      <img src="ImagesLoading/Gimp_low/PlayingCards[2].png" data-src="ImagesLoading/Gimp/PlayingCards[2].png" alt="Playing Cards" class="blurred">
+      <img src="ImagesLoading/Gimp_low/PlayingCards[3].png" data-src="ImagesLoading/Gimp/PlayingCards[3].png" alt="Playing Cards" class="blurred">
+    </div>
+    <div class="carousel-title">Playing Cards</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
+
+  <!-- Image Grid Section -->
+  <section class="image-grid">
+    <img src="ImagesLoading/Gimp/MeloStudioHair1.png" alt="MeloStudioHair1">
   </section>
 
   <script>
