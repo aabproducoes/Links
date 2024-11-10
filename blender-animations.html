@@ -68,6 +68,19 @@
             font-size: 14px;
             color: #fff;
         }
+        .volume-bar {
+            width: 100px;
+            margin-right: 10px;
+        }
+        .control-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 0 0 8px 8px;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +93,10 @@
         <div class="controls">
             <button class="play-pause" onclick="togglePlayPause('video1')">►</button>
             <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video1', this.value)">
-            <span class="time" id="time1">0:00</span>
+        </div>
+        <div class="control-bar">
+            <input type="range" class="volume-bar" id="volume1" min="0" max="1" step="0.01" value="1" oninput="adjustVolume('video1', this.value)">
+            <span class="time" id="time1">0:00 / 0:00</span>
         </div>
     </div>
 
@@ -90,7 +106,10 @@
         <div class="controls">
             <button class="play-pause" onclick="togglePlayPause('video2')">►</button>
             <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video2', this.value)">
-            <span class="time" id="time2">0:00</span>
+        </div>
+        <div class="control-bar">
+            <input type="range" class="volume-bar" id="volume2" min="0" max="1" step="0.01" value="1" oninput="adjustVolume('video2', this.value)">
+            <span class="time" id="time2">0:00 / 0:00</span>
         </div>
     </div>
 
@@ -100,7 +119,10 @@
         <div class="controls">
             <button class="play-pause" onclick="togglePlayPause('video3')">►</button>
             <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video3', this.value)">
-            <span class="time" id="time3">0:00</span>
+        </div>
+        <div class="control-bar">
+            <input type="range" class="volume-bar" id="volume3" min="0" max="1" step="0.01" value="1" oninput="adjustVolume('video3', this.value)">
+            <span class="time" id="time3">0:00 / 0:00</span>
         </div>
     </div>
 
@@ -124,7 +146,7 @@
             video.currentTime = (value / 100) * video.duration;
         }
 
-        // Update progress bar and time dynamically
+        // Update progress bar, time, and duration dynamically
         function updateProgress(videoId, timeId) {
             const video = document.getElementById(videoId);
             const progress = video.parentElement.querySelector(".progress");
@@ -134,8 +156,14 @@
                 const current = video.currentTime;
                 const duration = video.duration;
                 progress.value = (current / duration) * 100;
-                timeDisplay.textContent = formatTime(current);
+                timeDisplay.textContent = `${formatTime(current)} / ${formatTime(duration)}`;
             });
+        }
+
+        // Adjust volume
+        function adjustVolume(videoId, value) {
+            const video = document.getElementById(videoId);
+            video.volume = value;
         }
 
         // Format time in mm:ss
@@ -145,7 +173,7 @@
             return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
         }
 
-        // Initialize progress tracking
+        // Initialize progress and duration display
         document.addEventListener("DOMContentLoaded", () => {
             updateProgress('video1', 'time1');
             updateProgress('video2', 'time2');
