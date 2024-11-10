@@ -37,10 +37,15 @@
       width: 100%;
       display: none;
       border-radius: 10px;
+      transition: opacity 0.5s;
     }
 
     .carousel img.active {
       display: block;
+    }
+
+    .carousel img.blurred {
+      filter: blur(5px);
     }
 
     .carousel-title {
@@ -109,15 +114,10 @@
   <!-- Landscape Map Neon Carousel -->
   <section class="carousel-section">
     <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[1].png" alt="Landscape Map Neon" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[2].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[3].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[4].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[5].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[5]edit.png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender_low/LandscapeMapNeon[1].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[1].png" alt="Landscape Map Neon" class="active blurred">
+      <img src="ImagesLoading/Blender_low/LandscapeMapNeon[2].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[2].png" alt="Landscape Map Neon" class="blurred">
+      <img src="ImagesLoading/Blender_low/LandscapeMapNeon[3].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[3].png" alt="Landscape Map Neon" class="blurred">
+      <!-- Add more images with low- and high-quality paths as needed -->
     </div>
     <div class="carousel-title">Landscape Map Neon</div>
     <div class="loading-bar">
@@ -129,69 +129,7 @@
     </div>
   </section>
 
-  <!-- Landscape Map Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" class="active">
-      <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[14].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[15].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[1].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[2].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[3].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[5].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[6].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9].png" alt="Landscape Map">
-      <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map">
-    </div>
-    <div class="carousel-title">Landscape Map</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <!-- Procedural Planet Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[1].png" alt="Procedural Planet" class="active">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[2].png" alt="Procedural Planet">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[3].png" alt="Procedural Planet">
-      <img src="ImagesLoading/Blender/ProceduralPlanet[4].png" alt="Procedural Planet">
-    </div>
-    <div class="carousel-title">Procedural Planet</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <!-- Physics Wallpaper Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender/PhysicsWallpaper[1].png" alt="Physics Wallpaper" class="active">
-      <img src="ImagesLoading/Blender/PhysicsWallpaper[2].png" alt="Physics Wallpaper">
-    </div>
-    <div class="carousel-title">Physics Wallpaper</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
+  <!-- Add other carousels here... -->
 
   <!-- Image Grid Section -->
   <section class="image-grid">
@@ -201,49 +139,84 @@
     <img src="ImagesLoading/Blender/Abstract[009].png" alt="Abstract 009">
     <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
   </section>
- <script>
-  const carousels = document.querySelectorAll('.carousel-section');
 
-  carousels.forEach(section => {
-    let currentIndex = 0;
-    const images = section.querySelectorAll('.carousel img');
-    const nextBtn = section.querySelector('.nextBtn');
-    const prevBtn = section.querySelector('.prevBtn');
-    const loadingBarFill = section.querySelector('.loading-bar-fill');
+  <script>
+    const carousels = document.querySelectorAll('.carousel-section');
 
-    function showImage(index) {
-      images.forEach(img => img.classList.remove('active'));
-      images[index].classList.add('active');
-      loadingBarFill.style.width = '0%'; // Reset loading bar
-      setTimeout(() => loadingBarFill.style.width = '100%', 10); // Start loading bar fill
-    }
+    carousels.forEach(section => {
+      let currentIndex = 0;
+      const images = section.querySelectorAll('.carousel img');
+      const nextBtn = section.querySelector('.nextBtn');
+      const prevBtn = section.querySelector('.prevBtn');
+      const loadingBarFill = section.querySelector('.loading-bar-fill');
+      let autoSlideInterval;
 
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      showImage(currentIndex);
-    }
+      function resetLoadingBar() {
+        loadingBarFill.style.transition = 'none';
+        loadingBarFill.style.width = '0%';
 
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      showImage(currentIndex);
-    }
+        setTimeout(() => {
+          loadingBarFill.style.transition = 'width 4s linear';
+          loadingBarFill.style.width = '100%';
+        }, 10);
+      }
 
-    // Error handling for images
-    images.forEach(img => {
-      img.addEventListener('error', () => {
-        console.error(`Failed to load image: ${img.src}`);
+      function showImage(index) {
+        images.forEach(img => img.classList.remove('active'));
+        images[index].classList.add('active');
+        loadHighResImage(images[index]);
+        resetLoadingBar();
+      }
+
+      function loadHighResImage(img) {
+        const highResSrc = img.getAttribute('data-src');
+        const tempImg = new Image();
+        tempImg.src = highResSrc;
+        tempImg.onload = () => {
+          img.src = highResSrc; // Set to high-resolution image once it loads
+          img.classList.remove('blurred'); // Remove blur effect
+        };
+        tempImg.onerror = () => {
+          console.error(`Failed to load high-res image: ${highResSrc}`);
+        };
+      }
+
+      function nextImage() {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+      }
+
+      function prevImage() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+      }
+
+      images.forEach(img => {
+        img.addEventListener('error', () => {
+          console.error(`Failed to load image: ${img.src}`);
+        });
+        loadHighResImage(img); // Load high-res image initially
       });
+
+      nextBtn.addEventListener('click', () => {
+        nextImage();
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+      });
+
+      prevBtn.addEventListener('click', () => {
+        prevImage();
+        clearInterval(autoSlideInterval);
+        startAutoSlide();
+      });
+
+      function startAutoSlide() {
+        autoSlideInterval = setInterval(nextImage, 4000);
+      }
+
+      showImage(currentIndex);
+      startAutoSlide();
     });
-
-    nextBtn.addEventListener('click', nextImage);
-    prevBtn.addEventListener('click', prevImage);
-
-    // Automatic transition every 4 seconds
-    setInterval(nextImage, 4000);
-
-    showImage(currentIndex); // Initialize with the first image
-  });
-</script>
-
+  </script>
 </body>
 </html>
