@@ -152,26 +152,32 @@
     }
 
     /* Certifications List Styling */
+    .certifications-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
     .certifications-list li {
-      margin: 20px 0;
+      margin: 20px;
       padding: 15px;
       background-color: rgba(22, 32, 66, 0.9);
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
-      transition: transform 0.3s, box-shadow 0.3s;
       display: flex;
       flex-direction: column;
       align-items: center;
       overflow: hidden;
       position: relative;
+      width: calc(50% - 40px); /* Adjust width for two columns */
     }
 
     /* Certification Title Styling */
     .cert-title {
       position: absolute;
-      top: -50px; /* Start behind the certificate */
+      bottom: -50px; /* Start from behind the certificate */
       left: 50%;
-      transform: translateX(-50%) translateY(0);
+      transform: translateX(-50%);
       background-color: rgba(22, 32, 66, 0.8);
       padding: 5px 10px;
       border-radius: 5px;
@@ -181,18 +187,41 @@
       transition: transform 0.5s ease, opacity 0.5s ease;
       pointer-events: none;
       white-space: nowrap;
+      z-index: 2;
     }
 
     /* Show and animate the title on hover */
     .certifications-list li:hover .cert-title {
       opacity: 1;
-      transform: translateX(-50%) translateY(30px); /* Move to the top and slightly into the front */
+      transform: translateX(-50%) translateY(-120%);
+    }
+
+    /* After the initial upward movement, make it fall slightly */
+    .certifications-list li:hover .cert-title {
+      animation: titleSlide 0.8s forwards;
+    }
+
+    @keyframes titleSlide {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(0%);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-120%);
+      }
+      70% {
+        transform: translateX(-50%) translateY(-100%);
+      }
+      100% {
+        transform: translateX(-50%) translateY(-110%);
+      }
     }
 
     /* PDF Canvas */
     .pdf-canvas {
       width: 100%;
-      max-width: 600px;
+      max-width: 300px;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
       margin-top: 10px;
@@ -231,6 +260,12 @@
       right: 10px;
       z-index: 1000;
       color: #00ffff;
+    }
+
+    @media (max-width: 768px) {
+      .certifications-list li {
+        width: 100%;
+      }
     }
   </style>
   <!-- Include pdf.js library -->
