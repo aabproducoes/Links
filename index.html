@@ -169,7 +169,7 @@
     /* Certification Title Styling */
     .cert-title {
       position: absolute;
-      top: -40px; /* Position above the certificate */
+      top: -50px; /* Start behind the certificate */
       left: 50%;
       transform: translateX(-50%) translateY(0);
       background-color: rgba(22, 32, 66, 0.8);
@@ -181,13 +181,12 @@
       transition: transform 0.5s ease, opacity 0.5s ease;
       pointer-events: none;
       white-space: nowrap;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
 
-    /* Animate the title on hover */
+    /* Show and animate the title on hover */
     .certifications-list li:hover .cert-title {
       opacity: 1;
-      transform: translateX(-50%) translateY(20px); /* Move down into the certificate */
+      transform: translateX(-50%) translateY(30px); /* Move to the top and slightly into the front */
     }
 
     /* PDF Canvas */
@@ -196,7 +195,7 @@
       max-width: 600px;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
-      margin-top: 20px;
+      margin-top: 10px;
       position: relative;
       z-index: 1;
     }
