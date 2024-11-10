@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Embed AnimatedBG HTML Files</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: black;
+      color: white;
+    }
+    h2 {
+      color: lightblue;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .load-button {
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border: 1px solid lightblue;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    .load-button:hover {
+      background-color: lightblue;
+      color: black;
+    }
+    .active-button {
+      background-color: lightblue;
+      color: black;
+      font-weight: bold;
+    }
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: 3px solid lightblue;
+      background-color: white;
+      box-shadow: 0 0 10px rgba(173, 216, 230, 0.7); /* Light blue shadow */
+      margin-top: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Load an HTML file:</h2>
+  <div class="button-container">
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG1.html', this)">Load AnimatedBG1</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG2.html', this)">Load AnimatedBG2</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG3.html', this)">Load AnimatedBG3</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG4.html', this)">Load AnimatedBG4</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG5.html', this)">Load AnimatedBG5</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG6.html', this)">Load AnimatedBG6</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG7.html', this)">Load AnimatedBG7</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG8.html', this)">Load AnimatedBG8</button>
+    <button class="load-button" onclick="loadFile('AnimatedPatterns/AnimatedBG9.html', this)">Load AnimatedBG9</button>
+  </div>
+
+  <iframe id="content-frame"></iframe>
+
+  <script>
+    // Function to load the selected file in the iframe and highlight the active button
+    function loadFile(fileName, button) {
+      document.getElementById('content-frame').src = fileName;
+
+      // Remove 'active-button' class from all buttons
+      const buttons = document.querySelectorAll('.load-button');
+      buttons.forEach(btn => btn.classList.remove('active-button'));
+
+      // Add 'active-button' class to the clicked button
+      button.classList.add('active-button');
+    }
+
+    // Automatically load a random file on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      const randomFileNumber = Math.floor(Math.random() * 9) + 1;
+      const randomFile = `AnimatedPatterns/AnimatedBG${randomFileNumber}.html`;
+
+      // Select the corresponding button and load the random file
+      const button = document.querySelector(`.load-button:nth-child(${randomFileNumber})`);
+      loadFile(randomFile, button);
+    });
+  </script>
+
+</body>
+</html>

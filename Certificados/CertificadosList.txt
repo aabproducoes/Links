@@ -1,0 +1,8 @@
+{
+	"Certificado-9933-10494022.pdf" : ⭐"Curso de Webdesigner"⭐
+	"Certificado-21048-10494022.pdf":⭐"Curso de Informática Avançada"⭐
+	"Certificado-9946-10494022.pdf":⭐"Curso de HTML Básico"⭐
+	"Certificado-10047-10494022.pdf":⭐"Curso de Inglês - Básico"⭐
+	"Certificado-21053-10494022.pdf" : ⭐"Curso de ChatGPT"⭐
+	"Certificado-10344-10494022.pdf" : ⭐"Curso de Pacote Office"⭐
+}

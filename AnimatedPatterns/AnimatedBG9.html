@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slower Animated Background with Fading Lines by Column</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            background-color: #000;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<canvas id="bgCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Resize canvas to full window size
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const cols = 30; // Number of columns in the grid
+    const rows = 50; // Number of rows in the grid
+    const gridWidth = canvas.width / cols;
+    const gridHeight = canvas.height / rows;
+    const lineLength = Math.min(gridWidth, gridHeight) / 2; // Set line length based on grid size
+    const maxDepth = 5; // Number of recursive layers
+
+    // Utility function to get a random angle
+    function getRandomAngle() {
+        return Math.random() * 2 * Math.PI;
+    }
+
+    // Define a set of colors for columns
+    const colors = ['#FF5733', '#33FF57', '#3357FF', '#F3FF33', '#FF33F6'];
+
+    // Get color for each column based on its index
+    function getColumnColor(colIndex) {
+        return colors[colIndex % colors.length];
+    }
+
+    // Line class to represent each line segment
+    class Line {
+        constructor(x, y, length, angle, color, depth, opacity = 1) {
+            this.x = x;
+            this.y = y;
+            this.length = length;
+            this.angle = angle;
+            this.color = color;
+            this.depth = depth;
+            this.opacity = opacity;
+        }
+
+        draw(ctx) {
+            ctx.strokeStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(this.x, this.y);
+            const endX = this.x + this.length * Math.cos(this.angle);
+            const endY = this.y + this.length * Math.sin(this.angle);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+            ctx.globalAlpha = 1; // Reset alpha after drawing
+            return {endX, endY};
+        }
+
+        // Generate child lines based on the current line
+        generateChildren() {
+            if (this.depth <= 0) return [];
+
+            const children = [];
+            const newLength = this.length / 2; // Scale down the length
+            const angles = [this.angle + Math.PI / 2, this.angle - Math.PI / 2]; // 90 degrees left and right
+
+            angles.forEach((ang) => {
+                children.push(new Line(this.endX, this.endY, newLength, ang, this.color, this.depth - 1, this.opacity));
+            });
+
+            return children;
+        }
+    }
+
+    // Initialize and create grid lines with consistent column colors
+    const lines = [];
+
+    function initGrid() {
+        for (let i = 0; i < cols; i++) {
+            const colColor = getColumnColor(i); // Get color for the current column
+            for (let j = 0; j < rows; j++) {
+                const startX = i * gridWidth + gridWidth / 2;
+                const startY = j * gridHeight + gridHeight / 2;
+                const angle = getRandomAngle();
+                lines.push(new Line(startX, startY, lineLength, angle, colColor, maxDepth, 1));
+            }
+        }
+    }
+
+    // Animation loop with slower speed
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas each frame
+
+        const newLines = [];
+        lines.forEach(line => {
+            if (line.opacity > 0) { // Only draw lines that are still visible
+                const endPoint = line.draw(ctx);
+                line.endX = endPoint.endX;
+                line.endY = endPoint.endY;
+                const children = line.generateChildren();
+                newLines.push(...children);
+
+                // Decrease opacity more slowly for a slower fade-out effect
+                line.opacity -= 0.0005; // Slower fading
+            }
+        });
+
+        lines.length = 0;
+        lines.push(...newLines);
+
+        // Add new starting points at intervals
+        if (newLines.length === 0) initGrid();
+
+        setTimeout(() => requestAnimationFrame(animate), 520); // Add delay between frames
+    }
+
+    // Initialize the grid and start animation
+    initGrid();
+    animate();
+</script>
+</body>
+</html>

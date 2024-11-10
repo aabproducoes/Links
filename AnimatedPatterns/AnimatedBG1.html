@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Polygon Background with Blue Light</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #000;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    .controls {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .controls label {
+      margin-right: 10px;
+    }
+    .controls input {
+      width: 50px;
+      padding: 5px;
+      border: none;
+      border-radius: 4px;
+      text-align: center;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <label for="sides">Number of Sides:</label>
+    <input type="number" id="sides" min="3" max="12" value="6">
+  </div>
+  <canvas id="polygonCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('polygonCanvas');
+    const ctx = canvas.getContext('2d');
+    const sidesInput = document.getElementById('sides');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let mouse = { x: width / 2, y: height / 2 };
+    const lightRange = 200;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initPolygons(parseInt(sidesInput.value));
+    });
+
+    class Polygon {
+      constructor(x, y, radius, sides, rotationSpeed) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
+        this.sides = sides;
+        this.rotation = 0;
+        this.rotationSpeed = rotationSpeed;
+      }
+
+      draw() {
+        const distanceToMouse = Math.sqrt(
+          Math.pow(mouse.x - this.x, 2) + Math.pow(mouse.y - this.y, 2)
+        );
+        const brightness = Math.max(0, (lightRange - distanceToMouse) / lightRange);
+
+        ctx.beginPath();
+        const angle = (2 * Math.PI) / this.sides;
+        ctx.moveTo(
+          this.x + this.radius * Math.cos(this.rotation),
+          this.y + this.radius * Math.sin(this.rotation)
+        );
+        for (let i = 1; i < this.sides; i++) {
+          ctx.lineTo(
+            this.x + this.radius * Math.cos(this.rotation + angle * i),
+            this.y + this.radius * Math.sin(this.rotation + angle * i)
+          );
+        }
+        ctx.closePath();
+        ctx.fillStyle = '#000';
+        ctx.fill();
+
+        // Blue border based on proximity to the mouse
+        ctx.strokeStyle = `rgba(0, 150, 255, ${brightness})`;
+        ctx.lineWidth = 1 + brightness * 3;
+        ctx.stroke();
+      }
+
+      update() {
+        this.rotation += this.rotationSpeed;
+        this.draw();
+      }
+    }
+
+    let polygons = [];
+    const gridSpacing = 60;
+
+    function initPolygons(sides) {
+      polygons = [];
+      const radius = 40;
+      for (let y = 0; y < height + gridSpacing; y += gridSpacing) {
+        for (let x = 0; x < width + gridSpacing; x += gridSpacing) {
+          if (Math.floor(Math.random() * 3) + 1 === 2) {
+            const rotationSpeed = (Math.random() - 0.5) * 0.01;
+            polygons.push(new Polygon(x, y, radius, sides, rotationSpeed));
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw the light range circle around the mouse
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, lightRange, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'rgba(0, 150, 255, 0.2)';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      polygons.forEach(polygon => polygon.update());
+      requestAnimationFrame(animate);
+    }
+
+    sidesInput.addEventListener('change', (e) => {
+      let sides = parseInt(e.target.value);
+      if (isNaN(sides) || sides < 3) {
+        sides = 3;
+        sidesInput.value = 3;
+      } else if (sides > 12) {
+        sides = 12;
+        sidesInput.value = 12;
+      }
+      initPolygons(sides);
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+
+    initPolygons(parseInt(sidesInput.value));
+    animate();
+  </script>
+</body>
+</html>

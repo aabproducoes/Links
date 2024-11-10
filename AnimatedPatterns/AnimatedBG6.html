@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enhanced Hover Effect - Triangular Mesh</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #111;
+  }
+  canvas {
+    display: block;
+  }
+</style>
+</head>
+<body>
+<canvas id="triangularMeshCanvas"></canvas>
+<script>
+  const canvas = document.getElementById('triangularMeshCanvas');
+  const ctx = canvas.getContext('2d');
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const points = [];
+  const numPoints = 100;  // Increase the number of points for a denser mesh
+  const mouse = { x: null, y: null };
+
+  // Generate random points with a slight animation property
+  function generatePoints() {
+    for (let i = 0; i < numPoints; i++) {
+      points.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        baseX: Math.random() * canvas.width,
+        baseY: Math.random() * canvas.height,
+        size: 1 + Math.random() * 2,
+      });
+    }
+  }
+
+  function updatePoints() {
+    points.forEach(point => {
+      const dx = mouse.x - point.x;
+      const dy = mouse.y - point.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      const maxDist = 150;
+      if (dist < maxDist) {
+        const angle = Math.atan2(dy, dx);
+        const force = (maxDist - dist) / maxDist;
+        point.x += Math.cos(angle) * force * 5;
+        point.y += Math.sin(angle) * force * 5;
+      } else {
+        point.x += (point.baseX - point.x) * 0.05;
+        point.y += (point.baseY - point.y) * 0.05;
+      }
+    });
+  }
+
+  // Draw triangles connecting nearby points with blue highlight effect on hover
+  function drawTriangles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < points.length; i++) {
+      for (let j = i + 1; j < points.length; j++) {
+        const dx = points[i].x - points[j].x;
+        const dy = points[i].y - points[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(points[i].x, points[i].y);
+          ctx.lineTo(points[j].x, points[j].y);
+          ctx.strokeStyle = mouse.x && dist < 100 ? 
+            `rgba(0, 183, 255, ${1 - dist / 150})` : // Blue highlight effect for closer triangles
+            `rgba(173, 216, 230, ${0.5 - dist / 300})`;
+          ctx.lineWidth = mouse.x && dist < 100 ? 1.5 : 1; // Increase line width near hover
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    updatePoints();
+    drawTriangles();
+    requestAnimationFrame(animate);
+  }
+
+  canvas.addEventListener('mousemove', (event) => {
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+  });
+
+  canvas.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  generatePoints();
+  animate();
+</script>
+</body>
+</html>

@@ -26,7 +26,7 @@
     .carousel {
       width: 100%;
       max-width: 600px;
-      margin: 0 auto;
+      margin: 30px auto;
       position: relative;
       overflow: hidden;
       border-radius: 10px;
@@ -35,12 +35,12 @@
 
     .carousel img {
       width: 100%;
-      display: none; /* Hide all images initially */
+      display: none;
       border-radius: 10px;
     }
 
     .carousel img.active {
-      display: block; /* Show only the active image */
+      display: block;
     }
 
     .carousel-title {
@@ -85,6 +85,19 @@
       width: 0;
       transition: width 4s linear;
     }
+
+    /* Grid Section */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 50px;
+    }
+
+    .image-grid img {
+      width: 100%;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
@@ -93,10 +106,16 @@
     <a href="index.html" class="social-link">Back to Resume</a>
   </header>
 
-  <!-- First Carousel (Landscape Map Neon) -->
+  <!-- Landscape Map Neon Carousel -->
   <section class="carousel-section">
     <div class="carousel">
-      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon" class="active">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[1].png" alt="Landscape Map Neon" class="active">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[2].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[3].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[4].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[5].png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[5]edit.png" alt="Landscape Map Neon">
+      <img src="ImagesLoading/Blender/LandscapeMapNeon[6].png" alt="Landscape Map Neon">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[7].png" alt="Landscape Map Neon">
       <img src="ImagesLoading/Blender/LandscapeMapNeon[8].png" alt="Landscape Map Neon">
     </div>
@@ -110,16 +129,24 @@
     </div>
   </section>
 
-  <!-- Second Carousel (Landscape Map) -->
+  <!-- Landscape Map Carousel -->
   <section class="carousel-section">
     <div class="carousel">
       <img src="ImagesLoading/Blender/LandscapeMap[10].png" alt="Landscape Map" class="active">
       <img src="ImagesLoading/Blender/LandscapeMap[11].png" alt="Landscape Map">
       <img src="ImagesLoading/Blender/LandscapeMap[12].png" alt="Landscape Map">
       <img src="ImagesLoading/Blender/LandscapeMap[13].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[14].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[15].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[1].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[2].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[3].png" alt="Landscape Map">
       <img src="ImagesLoading/Blender/LandscapeMap[4].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[5].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[6].png" alt="Landscape Map">
       <img src="ImagesLoading/Blender/LandscapeMap[7].png" alt="Landscape Map">
       <img src="ImagesLoading/Blender/LandscapeMap[8].png" alt="Landscape Map">
+      <img src="ImagesLoading/Blender/LandscapeMap[9].png" alt="Landscape Map">
       <img src="ImagesLoading/Blender/LandscapeMap[9]edited.png" alt="Landscape Map">
     </div>
     <div class="carousel-title">Landscape Map</div>
@@ -132,84 +159,91 @@
     </div>
   </section>
 
-  <script>
-    const carousels = [
-      {
-        images: [
-          { src: 'ImagesLoading/Blender/LandscapeMapNeon[6].png', title: 'Landscape Map Neon' },
-          { src: 'ImagesLoading/Blender/LandscapeMapNeon[7].png', title: 'Landscape Map Neon' },
-          { src: 'ImagesLoading/Blender/LandscapeMapNeon[8].png', title: 'Landscape Map Neon' }
-        ],
-        section: document.querySelectorAll('.carousel-section')[0],
-      },
-      {
-        images: [
-          { src: 'ImagesLoading/Blender/LandscapeMap[10].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[11].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[12].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[13].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[4].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[7].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[8].png', title: 'Landscape Map' },
-          { src: 'ImagesLoading/Blender/LandscapeMap[9]edited.png', title: 'Landscape Map' }
-        ],
-        section: document.querySelectorAll('.carousel-section')[1],
-      }
-    ];
+  <!-- Procedural Planet Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender/ProceduralPlanet[1].png" alt="Procedural Planet" class="active">
+      <img src="ImagesLoading/Blender/ProceduralPlanet[2].png" alt="Procedural Planet">
+      <img src="ImagesLoading/Blender/ProceduralPlanet[3].png" alt="Procedural Planet">
+      <img src="ImagesLoading/Blender/ProceduralPlanet[4].png" alt="Procedural Planet">
+    </div>
+    <div class="carousel-title">Procedural Planet</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
 
-    carousels.forEach(({ images, section }) => {
-      let currentImageIndex = 0;
-      const carouselImages = section.querySelectorAll('.carousel img');
-      const carouselTitle = section.querySelector('.carousel-title');
-      const loadingBarFill = section.querySelector('.loading-bar-fill');
-      const prevBtn = section.querySelector('.prevBtn');
-      const nextBtn = section.querySelector('.nextBtn');
+  <!-- Physics Wallpaper Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender/PhysicsWallpaper[1].png" alt="Physics Wallpaper" class="active">
+      <img src="ImagesLoading/Blender/PhysicsWallpaper[2].png" alt="Physics Wallpaper">
+    </div>
+    <div class="carousel-title">Physics Wallpaper</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
 
-      function showImage(index, direction = 'next') {
-        carouselImages.forEach((img) => {
-          img.classList.remove('active');
-        });
-        const nextImage = carouselImages[index];
-        nextImage.classList.add('active');
-        carouselTitle.textContent = images[index].title;
-        currentImageIndex = index;
-      }
+  <!-- Image Grid Section -->
+  <section class="image-grid">
+    <img src="ImagesLoading/Blender/ABDIamond[14].png" alt="ABDIamond">
+    <img src="ImagesLoading/Blender/AbstractWallpaper[1].png" alt="Abstract Wallpaper">
+    <img src="ImagesLoading/Blender/Abstract[007].png" alt="Abstract 007">
+    <img src="ImagesLoading/Blender/Abstract[009].png" alt="Abstract 009">
+    <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
+  </section>
+ <script>
+  const carousels = document.querySelectorAll('.carousel-section');
 
-      function nextImage() {
-        const nextIndex = (currentImageIndex + 1) % images.length;
-        showImage(nextIndex);
-        resetAutoSlide();
-      }
+  carousels.forEach(section => {
+    let currentIndex = 0;
+    const images = section.querySelectorAll('.carousel img');
+    const nextBtn = section.querySelector('.nextBtn');
+    const prevBtn = section.querySelector('.prevBtn');
+    const loadingBarFill = section.querySelector('.loading-bar-fill');
 
-      function prevImage() {
-        const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
-        showImage(prevIndex);
-        resetAutoSlide();
-      }
+    function showImage(index) {
+      images.forEach(img => img.classList.remove('active'));
+      images[index].classList.add('active');
+      loadingBarFill.style.width = '0%'; // Reset loading bar
+      setTimeout(() => loadingBarFill.style.width = '100%', 10); // Start loading bar fill
+    }
 
-      function startLoadingBar() {
-        loadingBarFill.style.width = '0%';
-        setTimeout(() => {
-          loadingBarFill.style.transition = 'width 4s linear';
-          loadingBarFill.style.width = '100%';
-        }, 10);
-      }
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % images.length;
+      showImage(currentIndex);
+    }
 
-      let autoSlideInterval = setInterval(nextImage, 4000);
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      showImage(currentIndex);
+    }
 
-      function resetAutoSlide() {
-        clearInterval(autoSlideInterval);
-        autoSlideInterval = setInterval(nextImage, 4000);
-        startLoadingBar();
-      }
-
-      prevBtn.addEventListener('click', prevImage);
-      nextBtn.addEventListener('click', nextImage);
-
-      // Initialize carousel with first image and loading bar
-      showImage(currentImageIndex);
-      startLoadingBar();
+    // Error handling for images
+    images.forEach(img => {
+      img.addEventListener('error', () => {
+        console.error(`Failed to load image: ${img.src}`);
+      });
     });
-  </script>
+
+    nextBtn.addEventListener('click', nextImage);
+    prevBtn.addEventListener('click', prevImage);
+
+    // Automatic transition every 4 seconds
+    setInterval(nextImage, 4000);
+
+    showImage(currentIndex); // Initialize with the first image
+  });
+</script>
+
 </body>
 </html>

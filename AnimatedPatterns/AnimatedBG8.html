@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fast Autoplay Tic-Tac-Toe with Red Line for Each Win</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+    }
+    canvas {
+      display: block;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <canvas id="ticTacToeCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('ticTacToeCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Configuration
+    const cellSize = 40; // Size of each cell in pixels
+    let gridRows, gridCols;
+    let grid = [];
+    let autoplayInterval;
+
+    // Resize canvas to fill the screen
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      gridRows = Math.floor(canvas.height / cellSize);
+      gridCols = Math.floor(canvas.width / cellSize);
+      initializeGrid();
+      drawGrid();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    // Initialize the grid with null values
+    function initializeGrid() {
+      grid = [];
+      for (let r = 0; r < gridRows; r++) {
+        const row = [];
+        for (let c = 0; c < gridCols; c++) {
+          row.push(null);
+        }
+        grid.push(row);
+      }
+    }
+
+    // Draw the grid lines
+    function drawGrid() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.lineWidth = 1;
+
+      for (let r = 0; r <= gridRows; r++) {
+        ctx.beginPath();
+        ctx.moveTo(0, r * cellSize);
+        ctx.lineTo(canvas.width, r * cellSize);
+        ctx.stroke();
+      }
+
+      for (let c = 0; c <= gridCols; c++) {
+        ctx.beginPath();
+        ctx.moveTo(c * cellSize, 0);
+        ctx.lineTo(c * cellSize, canvas.height);
+        ctx.stroke();
+      }
+    }
+
+    // Draw X or O in a cell
+    function drawMove(r, c, player) {
+      const padding = cellSize * 0.2;
+      const x = c * cellSize;
+      const y = r * cellSize;
+
+      ctx.lineWidth = 2;
+      if (player === 'X') {
+        ctx.strokeStyle = '#00BFFF'; // Deep Sky Blue
+        ctx.beginPath();
+        ctx.moveTo(x + padding, y + padding);
+        ctx.lineTo(x + cellSize - padding, y + cellSize - padding);
+        ctx.moveTo(x + cellSize - padding, y + padding);
+        ctx.lineTo(x + padding, y + cellSize - padding);
+        ctx.stroke();
+      } else if (player === 'O') {
+        ctx.strokeStyle = '#1E90FF'; // Dodger Blue
+        ctx.beginPath();
+        ctx.arc(x + cellSize / 2, y + cellSize / 2, (cellSize / 2) - padding, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    // Draw a red line over a sequence of three same symbols
+    function drawWinningLine(cells) {
+      if (cells.length < 3) return;
+      ctx.strokeStyle = 'red';
+      ctx.lineWidth = 4;
+
+      const startCell = cells[0];
+      const endCell = cells[2];
+
+      const startX = startCell.c * cellSize + cellSize / 2;
+      const startY = startCell.r * cellSize + cellSize / 2;
+      const endX = endCell.c * cellSize + cellSize / 2;
+      const endY = endCell.r * cellSize + cellSize / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+    }
+
+    // Check for a winning sequence of three consecutive marks
+    function checkForThreeInRow(r, c) {
+      const directions = [
+        { dr: 0, dc: 1 },   // Horizontal
+        { dr: 1, dc: 0 },   // Vertical
+        { dr: 1, dc: 1 },   // Diagonal down-right
+        { dr: 1, dc: -1 }   // Diagonal down-left
+      ];
+
+      const player = grid[r][c];
+      for (let dir of directions) {
+        let cells = [{ r, c }];
+
+        // Check in the positive direction
+        let nr = r + dir.dr;
+        let nc = c + dir.dc;
+        while (nr >= 0 && nr < gridRows && nc >= 0 && nc < gridCols && grid[nr][nc] === player && cells.length < 3) {
+          cells.push({ r: nr, c: nc });
+          nr += dir.dr;
+          nc += dir.dc;
+        }
+
+        // Draw line if exactly three in a row
+        if (cells.length === 3) {
+          drawWinningLine(cells);
+        }
+      }
+    }
+
+    // Play two moves at once to speed up
+    function playTwoMoves() {
+      // Ensure the game doesn't stop until the grid is full
+      if (getEmptyCells().length < 2) {
+        highlightAllCells(); // Red highlight when grid is full
+        clearInterval(autoplayInterval); // Stop autoplay
+        return;
+      }
+
+      // First move for "X"
+      playRandomMove("X");
+      // Second move for "O"
+      playRandomMove("O");
+    }
+
+    // Play a random move for a specified player
+    function playRandomMove(player) {
+      const emptyCells = getEmptyCells();
+      if (emptyCells.length === 0) return;
+
+      const randomIndex = Math.floor(Math.random() * emptyCells.length);
+      const { r, c } = emptyCells[randomIndex];
+      grid[r][c] = player;
+      drawMove(r, c, player);
+      checkForThreeInRow(r, c);
+    }
+
+    // Get all empty cells
+    function getEmptyCells() {
+      const emptyCells = [];
+      for (let r = 0; r < gridRows; r++) {
+        for (let c = 0; c < gridCols; c++) {
+          if (!grid[r][c]) emptyCells.push({ r, c });
+        }
+      }
+      return emptyCells;
+    }
+
+    // Highlight all cells in red when the game ends
+    function highlightAllCells() {
+      for (let r = 0; r < gridRows; r++) {
+        for (let c = 0; c < gridCols; c++) {
+          ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+          ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    // Initialize the game
+    function init() {
+      resizeCanvas();
+      autoplayInterval = setInterval(playTwoMoves, 50); // Faster autoplay interval by playing two moves
+    }
+
+    // Start the game
+    init();
+  </script>
+</body>
+</html>

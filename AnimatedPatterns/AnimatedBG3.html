@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distance-Based Rotation in Flowing Waves</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background-color: #0A0A0A;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Arial, sans-serif;
+      color: #fff;
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="waveCanvas"></canvas>
+
+  <script>
+    const canvas = document.getElementById('waveCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let mouse = { x: width / 2, y: height / 2 }; // Initial center for highlight
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      initPolygons();
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      mouse = { x: e.clientX, y: e.clientY }; // Update mouse position
+    });
+
+    function getRandomDarkColor() {
+      const r = Math.floor(Math.random() * 50); // Dark red shade
+      const g = Math.floor(Math.random() * 50); // Dark green shade
+      const b = Math.floor(Math.random() * 50); // Dark blue shade
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    class PolygonWave {
+      constructor(y, sides, size, waveSpeed) {
+        this.y = y;
+        this.sides = sides;
+        this.size = size;
+        this.waveSpeed = waveSpeed;
+        this.offset = Math.random() * 2 * Math.PI; // Random phase shift for each row
+        this.color = getRandomDarkColor(); // Assign a random dark color to each polygon row
+        this.rotation = 0; // Initial rotation
+      }
+
+      draw(x, brightness, rotationIntensity) {
+        ctx.save();
+        ctx.translate(x, this.y); // Move context to polygon center
+        ctx.rotate(this.rotation * rotationIntensity); // Apply conditional rotation
+
+        ctx.beginPath();
+        const angleStep = (2 * Math.PI) / this.sides;
+        ctx.moveTo(
+          this.size * Math.cos(this.offset),
+          this.size * Math.sin(this.offset)
+        );
+        for (let i = 1; i < this.sides; i++) {
+          ctx.lineTo(
+            this.size * Math.cos(this.offset + angleStep * i),
+            this.size * Math.sin(this.offset + angleStep * i)
+          );
+        }
+        ctx.closePath();
+        ctx.fillStyle = this.color;
+        ctx.fill();
+
+        // Set stroke color and thickness based on brightness
+        ctx.strokeStyle = `rgba(0, 102, 255, ${brightness})`; // Bright blue outline with varying opacity
+        ctx.lineWidth = 1 + brightness * 2; // Thicker line closer to center of highlight
+        ctx.stroke();
+
+        ctx.restore(); // Restore original context for next polygon
+      }
+
+      update(frame) {
+        const highlightRadius = 150; // Radius of the visible highlight circle
+        const baseRotationSpeed = 0.005; // Base rotation speed for polygons near the edge of the circle
+
+        // Draw multiple polygons along the x-axis with slight offsets for a smooth wave effect
+        for (let x = -this.size * 2; x < width + this.size; x += this.size * 1.5) {
+          this.x = x + Math.sin(frame * this.waveSpeed + this.offset) * 20; // Update x position based on wave speed
+          
+          // Calculate distance from the mouse position and determine brightness and rotation based on proximity
+          const distanceToMouse = Math.sqrt((mouse.x - this.x) ** 2 + (mouse.y - this.y) ** 2);
+          const brightness = Math.max(0, (highlightRadius - distanceToMouse) / highlightRadius);
+          const rotationIntensity = Math.max(0.1, brightness); // Gradual rotation speed with distance
+
+          // Only apply rotation to polygons within the highlight circle
+          if (brightness > 0) {
+            this.rotation += baseRotationSpeed * rotationIntensity; // Rotate more as it gets closer to the center
+          }
+
+          this.draw(this.x, brightness, rotationIntensity);
+        }
+      }
+    }
+
+    let polygons = [];
+    const waveSpacing = 60; // Vertical distance between wave rows
+
+    function initPolygons() {
+      polygons = [];
+      for (let y = waveSpacing / 2; y < height + waveSpacing; y += waveSpacing) {
+        const sides = 6; // All polygons will have the same number of sides
+        const size = 40; // Standard size for uniform look
+        const waveSpeed = Math.random() * 0.03 + 0.01; // Different speeds for wave movement
+        polygons.push(new PolygonWave(y, sides, size, waveSpeed));
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      const frame = Date.now() * 0.001; // Use time-based frame for smooth animation
+
+      // Draw the highlight circle around the mouse
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 150, 0, 2 * Math.PI);
+      ctx.strokeStyle = 'rgba(0, 102, 255, 0.2)'; // Subtle blue circle
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      polygons.forEach(polygon => polygon.update(frame));
+      requestAnimationFrame(animate);
+    }
+
+    initPolygons();
+    animate();
+  </script>
+</body>
+</html>
