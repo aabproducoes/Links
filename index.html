@@ -1,157 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hover to Show Video Controls</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            background-color: #222;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-        }
-        .video-container {
-            width: 80%;
-            max-width: 800px;
-            background-color: #000;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            position: relative;
-        }
-        video {
-            width: 100%;
-            display: block;
-            border-radius: 8px;
-        }
-        .video-title {
-            text-align: center;
-            font-size: 18px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .controls {
-            display: none; /* Initially hide controls */
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        /* Show controls on hover */
-        .video-container:hover .controls {
-            display: flex;
-            align-items: center;
-        }
-        .play-pause {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        .progress {
-            width: 200px;
-            margin-right: 10px;
-        }
-        .time {
-            font-size: 14px;
-            color: #fff;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Resume</title>
+  
+  <!-- Import Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* General Styling */
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0f2e, #162042);
+      color: #00ffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .certifications-section {
+      padding: 20px;
+    }
+
+    .certifications-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    /* Certification Item Styling */
+    .certifications-list li {
+      margin: 20px 0;
+      background-color: rgba(22, 32, 66, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .certifications-list li:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #ffd700;
+    }
+
+    /* Certification Title Styling */
+    .cert-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #00ffff;
+      transition: opacity 0.3s ease;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      text-align: center;
+    }
+
+    /* PDF Canvas Styling */
+    .pdf-canvas {
+      width: 100%;
+      max-width: 600px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Show Canvas on Hover */
+    .certifications-list li:hover .pdf-canvas {
+      opacity: 1;
+    }
+
+    /* Hide Title on Hover */
+    .certifications-list li:hover .cert-title {
+      opacity: 0;
+    }
+  </style>
+  
+  <!-- PDF.js library for rendering PDF files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
+  <!-- Certifications Section -->
+  <div class="certifications-section">
+    <h2 id="certifications">Certifications</h2>
+    <ul class="certifications-list" id="certifications-list">
+      <!-- Certification items will be dynamically added here -->
+    </ul>
+  </div>
 
-    <h1>Hover to Show Video Controls</h1>
-
-    <div class="video-container">
-        <div class="video-title">JustACube</div>
-        <video id="video1" src="ImagesLoading/BlenderAnimations/JustACube.mp4"></video>
-        <div class="controls">
-            <button class="play-pause" onclick="togglePlayPause('video1')">►</button>
-            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video1', this.value)">
-            <span class="time" id="time1">0:00</span>
-        </div>
-    </div>
-
-    <div class="video-container">
-        <div class="video-title">JustACube2</div>
-        <video id="video2" src="ImagesLoading/BlenderAnimations/JustACube2.mp4"></video>
-        <div class="controls">
-            <button class="play-pause" onclick="togglePlayPause('video2')">►</button>
-            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video2', this.value)">
-            <span class="time" id="time2">0:00</span>
-        </div>
-    </div>
-
-    <div class="video-container">
-        <div class="video-title">JustACube3</div>
-        <video id="video3" src="ImagesLoading/BlenderAnimations/JustACube3.mp4"></video>
-        <div class="controls">
-            <button class="play-pause" onclick="togglePlayPause('video3')">►</button>
-            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video3', this.value)">
-            <span class="time" id="time3">0:00</span>
-        </div>
-    </div>
-
-    <script>
-        // Toggle play/pause functionality
-        function togglePlayPause(videoId) {
-            const video = document.getElementById(videoId);
-            const button = video.parentElement.querySelector(".play-pause");
-            if (video.paused) {
-                video.play();
-                button.textContent = '❚❚'; // Pause icon
-            } else {
-                video.pause();
-                button.textContent = '►'; // Play icon
-            }
+  <script>
+    let selectedLanguage = 'en'; // Default language
+    
+    // Fetch Certifications List and Render Items
+    async function fetchCertificationsList() {
+      try {
+        const response = await fetch('./Certificados/CertificadosList.txt');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
         }
 
-        // Update video progress and time display
-        function seekVideo(videoId, value) {
-            const video = document.getElementById(videoId);
-            video.currentTime = (value / 100) * video.duration;
-        }
+        const data = await response.text();
+        const certificationsList = document.getElementById("certifications-list");
+        certificationsList.innerHTML = ''; // Clear existing list
 
-        // Update progress bar and time dynamically
-        function updateProgress(videoId, timeId) {
-            const video = document.getElementById(videoId);
-            const progress = video.parentElement.querySelector(".progress");
-            const timeDisplay = document.getElementById(timeId);
+        const lines = data.split('\n').filter(line => line.trim() !== ''); // Remove empty lines
+        lines.forEach(line => {
+          // Extract the file name and title for each certification
+          const [filePart, titlePart] = line.split(':');
+          if (filePart && titlePart) {
+            const file = filePart.trim().replace(/["']/g, ''); // Remove quotes from file name
+            const titles = titlePart.split('||');
 
-            video.addEventListener('timeupdate', () => {
-                const current = video.currentTime;
-                const duration = video.duration;
-                progress.value = (current / duration) * 100;
-                timeDisplay.textContent = formatTime(current);
-            });
-        }
+            // Set default titles if missing
+            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
+            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
 
-        // Format time in mm:ss
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
-        }
+            const listItem = document.createElement('li');
+            const titleElement = document.createElement('div');
+            titleElement.classList.add('cert-title');
+            titleElement.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
 
-        // Initialize progress tracking
-        document.addEventListener("DOMContentLoaded", () => {
-            updateProgress('video1', 'time1');
-            updateProgress('video2', 'time2');
-            updateProgress('video3', 'time3');
+            const pdfCanvas = document.createElement('canvas');
+            pdfCanvas.classList.add('pdf-canvas');
+            pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
+
+            listItem.appendChild(titleElement);
+            listItem.appendChild(pdfCanvas);
+            certificationsList.appendChild(listItem);
+
+            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+          }
         });
-    </script>
+      } catch (error) {
+        console.error('Error loading certifications list:', error);
+        alert('An error occurred while loading the certifications list. Please try again later.');
+      }
+    }
 
+    // Render the First Page of Each PDF on Canvas
+    function renderFirstPage(pdfUrl, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      const context = canvas.getContext('2d');
+
+      pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+        });
+      }).catch(error => {
+        console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
+      });
+    }
+
+    // Initialize the page by loading the certifications list
+    document.addEventListener('DOMContentLoaded', fetchCertificationsList);
+  </script>
 </body>
 </html>
