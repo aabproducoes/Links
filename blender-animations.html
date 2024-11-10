@@ -3,43 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Custom Video Player</title>
+    <title>Hover to Show Video Controls</title>
     <style>
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            min-height: 100vh;
             background-color: #222;
             color: #fff;
             margin: 0;
+            padding: 20px;
             font-family: Arial, sans-serif;
         }
         .video-container {
-            position: relative;
             width: 80%;
             max-width: 800px;
             background-color: #000;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            position: relative;
         }
         video {
             width: 100%;
             display: block;
+            border-radius: 8px;
+        }
+        .video-title {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         .controls {
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            background-color: #333;
+            display: none; /* Initially hide controls */
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
         }
-        .controls-row {
+        /* Show controls on hover */
+        .video-container:hover .controls {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin: 5px 0;
         }
         .play-pause {
             background: none;
@@ -47,141 +58,98 @@
             color: #fff;
             font-size: 20px;
             cursor: pointer;
-        }
-        .progress-container {
-            flex: 1;
-            margin: 0 10px;
+            margin-right: 10px;
         }
         .progress {
-            width: 100%;
+            width: 200px;
+            margin-right: 10px;
         }
         .time {
-            width: 50px;
-            text-align: center;
             font-size: 14px;
-        }
-        .volume-container {
-            display: flex;
-            align-items: center;
-        }
-        .volume {
-            width: 100px;
-        }
-        /* Responsive adjustments */
-        @media (max-width: 600px) {
-            .controls {
-                padding: 8px;
-            }
-            .volume {
-                width: 80px;
-            }
-            .time {
-                width: 40px;
-                font-size: 12px;
-            }
+            color: #fff;
         }
     </style>
 </head>
 <body>
 
+    <h1>Hover to Show Video Controls</h1>
+
     <div class="video-container">
-        <video id="videoPlayer">
-            <source src="ImagesLoading/BlenderAnimations/JustACube.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <div class="video-title">JustACube</div>
+        <video id="video1" src="ImagesLoading/BlenderAnimations/JustACube.mp4"></video>
         <div class="controls">
-            <div class="controls-row">
-                <button id="playPause" class="play-pause">►</button>
-                <div class="progress-container">
-                    <input type="range" id="progress" class="progress" value="0" min="0" max="100">
-                </div>
-                <div class="time">
-                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
-                </div>
-            </div>
-            <div class="controls-row">
-                <div class="volume-container">
-                    <label for="volume">🔊</label>
-                    <input type="range" id="volume" class="volume" min="0" max="1" step="0.01" value="1">
-                </div>
-            </div>
+            <button class="play-pause" onclick="togglePlayPause('video1')">►</button>
+            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video1', this.value)">
+            <span class="time" id="time1">0:00</span>
         </div>
     </div>
 
-    <!-- Video Selector (Optional) -->
-    <div class="video-selector" style="margin-top: 20px;">
-        <label for="videoSelect">Select a video:</label>
-        <select id="videoSelect">
-            <option value="ImagesLoading/BlenderAnimations/JustACube.mp4">JustACube</option>
-            <option value="ImagesLoading/BlenderAnimations/JustACube2.mp4">JustACube2</option>
-            <option value="ImagesLoading/BlenderAnimations/JustACube3.mp4">JustACube3</option>
-        </select>
+    <div class="video-container">
+        <div class="video-title">JustACube2</div>
+        <video id="video2" src="ImagesLoading/BlenderAnimations/JustACube2.mp4"></video>
+        <div class="controls">
+            <button class="play-pause" onclick="togglePlayPause('video2')">►</button>
+            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video2', this.value)">
+            <span class="time" id="time2">0:00</span>
+        </div>
+    </div>
+
+    <div class="video-container">
+        <div class="video-title">JustACube3</div>
+        <video id="video3" src="ImagesLoading/BlenderAnimations/JustACube3.mp4"></video>
+        <div class="controls">
+            <button class="play-pause" onclick="togglePlayPause('video3')">►</button>
+            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video3', this.value)">
+            <span class="time" id="time3">0:00</span>
+        </div>
     </div>
 
     <script>
-        const video = document.getElementById('videoPlayer');
-        const playPauseBtn = document.getElementById('playPause');
-        const progress = document.getElementById('progress');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationEl = document.getElementById('duration');
-        const volumeSlider = document.getElementById('volume');
-        const videoSelect = document.getElementById('videoSelect');
-
-        // Play/Pause functionality
-        playPauseBtn.addEventListener('click', () => {
-            if (video.paused || video.ended) {
+        // Toggle play/pause functionality
+        function togglePlayPause(videoId) {
+            const video = document.getElementById(videoId);
+            const button = video.parentElement.querySelector(".play-pause");
+            if (video.paused) {
                 video.play();
-                playPauseBtn.textContent = '❚❚';
+                button.textContent = '❚❚'; // Pause icon
             } else {
                 video.pause();
-                playPauseBtn.textContent = '►';
+                button.textContent = '►'; // Play icon
             }
-        });
-
-        // Update progress bar and time
-        video.addEventListener('timeupdate', () => {
-            const current = video.currentTime;
-            const duration = video.duration;
-            progress.value = (current / duration) * 100;
-            currentTimeEl.textContent = formatTime(current);
-            durationEl.textContent = formatTime(duration);
-        });
-
-        // Seek video
-        progress.addEventListener('input', () => {
-            const seekTime = (progress.value / 100) * video.duration;
-            video.currentTime = seekTime;
-        });
-
-        // Volume control
-        volumeSlider.addEventListener('input', () => {
-            video.volume = volumeSlider.value;
-        });
-
-        // Format time in mm:ss
-        function formatTime(time) {
-            if (isNaN(time)) return '0:00';
-            const minutes = Math.floor(time / 60);
-            const seconds = Math.floor(time % 60);
-            return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
         }
 
-        // Update play button on video end
-        video.addEventListener('ended', () => {
-            playPauseBtn.textContent = '►';
-        });
+        // Update video progress and time display
+        function seekVideo(videoId, value) {
+            const video = document.getElementById(videoId);
+            video.currentTime = (value / 100) * video.duration;
+        }
 
-        // Video selection
-        videoSelect.addEventListener('change', () => {
-            video.src = videoSelect.value;
-            video.load();
-            video.play();
-            playPauseBtn.textContent = '❚❚';
-        });
+        // Update progress bar and time dynamically
+        function updateProgress(videoId, timeId) {
+            const video = document.getElementById(videoId);
+            const progress = video.parentElement.querySelector(".progress");
+            const timeDisplay = document.getElementById(timeId);
 
-        // Initialize duration
-        video.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(video.duration);
+            video.addEventListener('timeupdate', () => {
+                const current = video.currentTime;
+                const duration = video.duration;
+                progress.value = (current / duration) * 100;
+                timeDisplay.textContent = formatTime(current);
+            });
+        }
+
+        // Format time in mm:ss
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
+        }
+
+        // Initialize progress tracking
+        document.addEventListener("DOMContentLoaded", () => {
+            updateProgress('video1', 'time1');
+            updateProgress('video2', 'time2');
+            updateProgress('video3', 'time3');
         });
     </script>
 
