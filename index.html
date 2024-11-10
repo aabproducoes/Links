@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stacked Video List</title>
+    <title>Hover to Show Video Controls</title>
     <style>
         body {
             display: flex;
@@ -24,6 +24,7 @@
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             margin-bottom: 20px;
+            position: relative;
         }
         video {
             width: 100%;
@@ -36,35 +37,121 @@
             margin-top: 10px;
             margin-bottom: 10px;
         }
+        .controls {
+            display: none; /* Initially hide controls */
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        /* Show controls on hover */
+        .video-container:hover .controls {
+            display: flex;
+            align-items: center;
+        }
+        .play-pause {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .progress {
+            width: 200px;
+            margin-right: 10px;
+        }
+        .time {
+            font-size: 14px;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Video List</h1>
+    <h1>Hover to Show Video Controls</h1>
 
     <div class="video-container">
         <div class="video-title">JustACube</div>
-        <video controls>
-            <source src="ImagesLoading/BlenderAnimations/JustACube.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <video id="video1" src="ImagesLoading/BlenderAnimations/JustACube.mp4"></video>
+        <div class="controls">
+            <button class="play-pause" onclick="togglePlayPause('video1')">►</button>
+            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video1', this.value)">
+            <span class="time" id="time1">0:00</span>
+        </div>
     </div>
 
     <div class="video-container">
         <div class="video-title">JustACube2</div>
-        <video controls>
-            <source src="ImagesLoading/BlenderAnimations/JustACube2.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <video id="video2" src="ImagesLoading/BlenderAnimations/JustACube2.mp4"></video>
+        <div class="controls">
+            <button class="play-pause" onclick="togglePlayPause('video2')">►</button>
+            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video2', this.value)">
+            <span class="time" id="time2">0:00</span>
+        </div>
     </div>
 
     <div class="video-container">
         <div class="video-title">JustACube3</div>
-        <video controls>
-            <source src="ImagesLoading/BlenderAnimations/JustACube3.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <video id="video3" src="ImagesLoading/BlenderAnimations/JustACube3.mp4"></video>
+        <div class="controls">
+            <button class="play-pause" onclick="togglePlayPause('video3')">►</button>
+            <input type="range" class="progress" value="0" min="0" max="100" oninput="seekVideo('video3', this.value)">
+            <span class="time" id="time3">0:00</span>
+        </div>
     </div>
+
+    <script>
+        // Toggle play/pause functionality
+        function togglePlayPause(videoId) {
+            const video = document.getElementById(videoId);
+            const button = video.parentElement.querySelector(".play-pause");
+            if (video.paused) {
+                video.play();
+                button.textContent = '❚❚'; // Pause icon
+            } else {
+                video.pause();
+                button.textContent = '►'; // Play icon
+            }
+        }
+
+        // Update video progress and time display
+        function seekVideo(videoId, value) {
+            const video = document.getElementById(videoId);
+            video.currentTime = (value / 100) * video.duration;
+        }
+
+        // Update progress bar and time dynamically
+        function updateProgress(videoId, timeId) {
+            const video = document.getElementById(videoId);
+            const progress = video.parentElement.querySelector(".progress");
+            const timeDisplay = document.getElementById(timeId);
+
+            video.addEventListener('timeupdate', () => {
+                const current = video.currentTime;
+                const duration = video.duration;
+                progress.value = (current / duration) * 100;
+                timeDisplay.textContent = formatTime(current);
+            });
+        }
+
+        // Format time in mm:ss
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs < 10 ? '0' + secs : secs}`;
+        }
+
+        // Initialize progress tracking
+        document.addEventListener("DOMContentLoaded", () => {
+            updateProgress('video1', 'time1');
+            updateProgress('video2', 'time2');
+            updateProgress('video3', 'time3');
+        });
+    </script>
 
 </body>
 </html>
