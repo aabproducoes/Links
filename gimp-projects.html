@@ -91,16 +91,16 @@
       transition: width 4s linear;
     }
 
-    /* Grid Section */
+    /* Centered Image Grid Section */
     .image-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-top: 50px;
     }
 
     .image-grid img {
-      width: 100%;
+      max-width: 300px; /* Optional: Set maximum width for the image */
       border-radius: 10px;
     }
   </style>
@@ -162,7 +162,7 @@
     </div>
   </section>
 
-  <!-- Image Grid Section -->
+  <!-- Centered Image Grid Section -->
   <section class="image-grid">
     <img src="ImagesLoading/Gimp/MeloStudioHair1.png" alt="MeloStudioHair1">
   </section>
