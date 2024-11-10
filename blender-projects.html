@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Blender Projects</title>
   <style>
     body {
       margin: 0;
       padding: 20px;
-      background: linear-gradient(135deg, #0a0f2e, #162042);
-      color: #00ffff;
-      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2e3b4e, #1c2541);
+      color: #ffdd57;
+      font-family: 'Arial', sans-serif;
     }
 
     header {
@@ -19,8 +19,9 @@
     }
 
     header h1 {
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 15px;
+      color: #ffdd57;
     }
 
     .carousel {
@@ -52,6 +53,7 @@
       text-align: center;
       font-size: 1.5rem;
       margin-top: 10px;
+      color: #ffdd57;
     }
 
     .carousel-controls {
@@ -62,45 +64,45 @@
     .carousel-controls button {
       padding: 10px 20px;
       margin: 0 10px;
-      background-color: #00ffff;
+      background-color: #ffdd57;
       border: none;
-      color: #162042;
+      color: #1c2541;
       border-radius: 30px;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s;
     }
 
     .carousel-controls button:hover {
-      background-color: #162042;
-      color: #00ffff;
+      background-color: #1c2541;
+      color: #ffdd57;
       transform: scale(1.1);
     }
 
     .loading-bar {
       height: 5px;
       width: 100%;
-      background-color: #162042;
+      background-color: #1c2541;
       position: relative;
       margin-top: 10px;
     }
 
     .loading-bar-fill {
       height: 100%;
-      background-color: #00ffff;
+      background-color: #ffdd57;
       width: 0;
       transition: width 4s linear;
     }
 
-    /* Grid Section */
+    /* Centered Image Grid Section */
     .image-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-top: 50px;
     }
 
     .image-grid img {
-      width: 100%;
+      max-width: 300px; /* Optional: Set maximum width for the image */
       border-radius: 10px;
     }
   </style>
@@ -117,7 +119,7 @@
       <img src="ImagesLoading/Blender_low/LandscapeMapNeon[1].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[1].png" alt="Landscape Map Neon" class="active blurred">
       <img src="ImagesLoading/Blender_low/LandscapeMapNeon[2].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[2].png" alt="Landscape Map Neon" class="blurred">
       <img src="ImagesLoading/Blender_low/LandscapeMapNeon[3].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[3].png" alt="Landscape Map Neon" class="blurred">
-      <!-- Add more images with low- and high-quality paths as needed -->
+      <!-- Add more images as needed -->
     </div>
     <div class="carousel-title">Landscape Map Neon</div>
     <div class="loading-bar">
@@ -129,15 +131,42 @@
     </div>
   </section>
 
-  <!-- Add other carousels here... -->
+  <!-- uGrow Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender_low/uGrow[1].png" data-src="ImagesLoading/Blender/uGrow[1].png" alt="uGrow" class="active blurred">
+      <img src="ImagesLoading/Blender_low/uGrow[2].png" data-src="ImagesLoading/Blender/uGrow[2].png" alt="uGrow" class="blurred">
+      <img src="ImagesLoading/Blender_low/uGrow[3].png" data-src="ImagesLoading/Blender/uGrow[3].png" alt="uGrow" class="blurred">
+    </div>
+    <div class="carousel-title">uGrow</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
 
-  <!-- Image Grid Section -->
+  <!-- Physics Wallpaper Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Blender_low/PhysicsWallpaper[1].png" data-src="ImagesLoading/Blender/PhysicsWallpaper[1].png" alt="Physics Wallpaper" class="active blurred">
+      <img src="ImagesLoading/Blender_low/PhysicsWallpaper[2].png" data-src="ImagesLoading/Blender/PhysicsWallpaper[2].png" alt="Physics Wallpaper" class="blurred">
+    </div>
+    <div class="carousel-title">Physics Wallpaper</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
+
+  <!-- Centered Image Grid Section with Energy Glow -->
   <section class="image-grid">
-    <img src="ImagesLoading/Blender/ABDIamond[14].png" alt="ABDIamond">
-    <img src="ImagesLoading/Blender/AbstractWallpaper[1].png" alt="Abstract Wallpaper">
-    <img src="ImagesLoading/Blender/Abstract[007].png" alt="Abstract 007">
-    <img src="ImagesLoading/Blender/Abstract[009].png" alt="Abstract 009">
-    <img src="ImagesLoading/Blender/BlackWidow[6].png" alt="Black Widow">
+    <img src="ImagesLoading/Blender/EnergyGlow[1].png" alt="EnergyGlow">
   </section>
 
   <script>
