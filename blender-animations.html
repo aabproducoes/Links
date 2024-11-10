@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .video-container {
+            width: 80%;
+            max-width: 720px;
+            background-color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .video-selector {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="video-container">
+        <video id="videoPlayer" controls>
+            <source id="videoSource" src="ImagesLoading/BlenderAnimations/JustACube.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <div class="video-selector">
+        <label for="videoSelect">Select a video:</label>
+        <select id="videoSelect">
+            <option value="ImagesLoading/BlenderAnimations/JustACube.mp4">JustACube</option>
+            <option value="ImagesLoading/BlenderAnimations/JustACube2.mp4">JustACube2</option>
+            <option value="ImagesLoading/BlenderAnimations/JustACube3.mp4">JustACube3</option>
+        </select>
+    </div>
+
+    <script>
+        const videoPlayer = document.getElementById('videoPlayer');
+        const videoSource = document.getElementById('videoSource');
+        const videoSelect = document.getElementById('videoSelect');
+
+        // Change video source based on selected option
+        videoSelect.addEventListener('change', function() {
+            videoSource.src = this.value;
+            videoPlayer.load(); // Reload the video with the new source
+            videoPlayer.play(); // Automatically play the selected video
+        });
+    </script>
+
+</body>
+</html>
