@@ -1,251 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Blender Projects</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 20px;
-      background: linear-gradient(135deg, #2e3b4e, #1c2541);
-      color: #ffdd57;
-      font-family: 'Arial', sans-serif;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    header h1 {
-      font-weight: 700;
-      margin-bottom: 15px;
-      color: #ffdd57;
-    }
-
-    .carousel {
-      width: 100%;
-      max-width: 600px;
-      margin: 30px auto;
-      position: relative;
-      overflow: hidden;
-      border-radius: 10px;
-      background-color: #000;
-    }
-
-    .carousel img {
-      width: 100%;
-      display: none;
-      border-radius: 10px;
-      transition: opacity 0.5s;
-    }
-
-    .carousel img.active {
-      display: block;
-    }
-
-    .carousel img.blurred {
-      filter: blur(5px);
-    }
-
-    .carousel-title {
-      text-align: center;
-      font-size: 1.5rem;
-      margin-top: 10px;
-      color: #ffdd57;
-    }
-
-    .carousel-controls {
-      text-align: center;
-      margin-top: 15px;
-    }
-
-    .carousel-controls button {
-      padding: 10px 20px;
-      margin: 0 10px;
-      background-color: #ffdd57;
-      border: none;
-      color: #1c2541;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.3s;
-    }
-
-    .carousel-controls button:hover {
-      background-color: #1c2541;
-      color: #ffdd57;
-      transform: scale(1.1);
-    }
-
-    .loading-bar {
-      height: 5px;
-      width: 100%;
-      background-color: #1c2541;
-      position: relative;
-      margin-top: 10px;
-    }
-
-    .loading-bar-fill {
-      height: 100%;
-      background-color: #ffdd57;
-      width: 0;
-      transition: width 4s linear;
-    }
-
-    /* Centered Image Grid Section */
-    .image-grid {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 50px;
-    }
-
-    .image-grid img {
-      max-width: 300px; /* Optional: Set maximum width for the image */
-      border-radius: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Video Player</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            background-color: #222;
+            color: #fff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .video-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+        video {
+            width: 100%;
+            display: block;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #333;
+        }
+        .controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 5px 0;
+        }
+        .play-pause {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .progress-container {
+            flex: 1;
+            margin: 0 10px;
+        }
+        .progress {
+            width: 100%;
+        }
+        .time {
+            width: 50px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .volume-container {
+            display: flex;
+            align-items: center;
+        }
+        .volume {
+            width: 100px;
+        }
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .controls {
+                padding: 8px;
+            }
+            .volume {
+                width: 80px;
+            }
+            .time {
+                width: 40px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Blender Projects</h1>
-    <a href="index.html" class="social-link">Back to Resume</a>
-  </header>
 
-  <!-- Landscape Map Neon Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender_low/LandscapeMapNeon[1].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[1].png" alt="Landscape Map Neon" class="active blurred">
-      <img src="ImagesLoading/Blender_low/LandscapeMapNeon[2].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[2].png" alt="Landscape Map Neon" class="blurred">
-      <img src="ImagesLoading/Blender_low/LandscapeMapNeon[3].png" data-src="ImagesLoading/Blender/LandscapeMapNeon[3].png" alt="Landscape Map Neon" class="blurred">
-      <!-- Add more images as needed -->
+    <div class="video-container">
+        <video id="videoPlayer">
+            <source src="ImagesLoading/BlenderAnimations/JustACube.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="controls">
+            <div class="controls-row">
+                <button id="playPause" class="play-pause">►</button>
+                <div class="progress-container">
+                    <input type="range" id="progress" class="progress" value="0" min="0" max="100">
+                </div>
+                <div class="time">
+                    <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                </div>
+            </div>
+            <div class="controls-row">
+                <div class="volume-container">
+                    <label for="volume">🔊</label>
+                    <input type="range" id="volume" class="volume" min="0" max="1" step="0.01" value="1">
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="carousel-title">Landscape Map Neon</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
+
+    <!-- Video Selector (Optional) -->
+    <div class="video-selector" style="margin-top: 20px;">
+        <label for="videoSelect">Select a video:</label>
+        <select id="videoSelect">
+            <option value="ImagesLoading/BlenderAnimations/JustACube.mp4">JustACube</option>
+            <option value="ImagesLoading/BlenderAnimations/JustACube2.mp4">JustACube2</option>
+            <option value="ImagesLoading/BlenderAnimations/JustACube3.mp4">JustACube3</option>
+        </select>
     </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
 
-  <!-- uGrow Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender_low/uGrow[1].png" data-src="ImagesLoading/Blender/uGrow[1].png" alt="uGrow" class="active blurred">
-      <img src="ImagesLoading/Blender_low/uGrow[2].png" data-src="ImagesLoading/Blender/uGrow[2].png" alt="uGrow" class="blurred">
-      <img src="ImagesLoading/Blender_low/uGrow[3].png" data-src="ImagesLoading/Blender/uGrow[3].png" alt="uGrow" class="blurred">
-    </div>
-    <div class="carousel-title">uGrow</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const playPauseBtn = document.getElementById('playPause');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const volumeSlider = document.getElementById('volume');
+        const videoSelect = document.getElementById('videoSelect');
 
-  <!-- Physics Wallpaper Carousel -->
-  <section class="carousel-section">
-    <div class="carousel">
-      <img src="ImagesLoading/Blender_low/PhysicsWallpaper[1].png" data-src="ImagesLoading/Blender/PhysicsWallpaper[1].png" alt="Physics Wallpaper" class="active blurred">
-      <img src="ImagesLoading/Blender_low/PhysicsWallpaper[2].png" data-src="ImagesLoading/Blender/PhysicsWallpaper[2].png" alt="Physics Wallpaper" class="blurred">
-    </div>
-    <div class="carousel-title">Physics Wallpaper</div>
-    <div class="loading-bar">
-      <div class="loading-bar-fill"></div>
-    </div>
-    <div class="carousel-controls">
-      <button class="prevBtn">Previous</button>
-      <button class="nextBtn">Next</button>
-    </div>
-  </section>
-
-  <!-- Centered Image Grid Section with Energy Glow -->
-  <section class="image-grid">
-    <img src="ImagesLoading/Blender/EnergyGlow[1].png" alt="EnergyGlow">
-  </section>
-
-  <script>
-    const carousels = document.querySelectorAll('.carousel-section');
-
-    carousels.forEach(section => {
-      let currentIndex = 0;
-      const images = section.querySelectorAll('.carousel img');
-      const nextBtn = section.querySelector('.nextBtn');
-      const prevBtn = section.querySelector('.prevBtn');
-      const loadingBarFill = section.querySelector('.loading-bar-fill');
-      let autoSlideInterval;
-
-      function resetLoadingBar() {
-        loadingBarFill.style.transition = 'none';
-        loadingBarFill.style.width = '0%';
-
-        setTimeout(() => {
-          loadingBarFill.style.transition = 'width 4s linear';
-          loadingBarFill.style.width = '100%';
-        }, 10);
-      }
-
-      function showImage(index) {
-        images.forEach(img => img.classList.remove('active'));
-        images[index].classList.add('active');
-        loadHighResImage(images[index]);
-        resetLoadingBar();
-      }
-
-      function loadHighResImage(img) {
-        const highResSrc = img.getAttribute('data-src');
-        const tempImg = new Image();
-        tempImg.src = highResSrc;
-        tempImg.onload = () => {
-          img.src = highResSrc; // Set to high-resolution image once it loads
-          img.classList.remove('blurred'); // Remove blur effect
-        };
-        tempImg.onerror = () => {
-          console.error(`Failed to load high-res image: ${highResSrc}`);
-        };
-      }
-
-      function nextImage() {
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage(currentIndex);
-      }
-
-      function prevImage() {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage(currentIndex);
-      }
-
-      images.forEach(img => {
-        img.addEventListener('error', () => {
-          console.error(`Failed to load image: ${img.src}`);
+        // Play/Pause functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused || video.ended) {
+                video.play();
+                playPauseBtn.textContent = '❚❚';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = '►';
+            }
         });
-        loadHighResImage(img); // Load high-res image initially
-      });
 
-      nextBtn.addEventListener('click', () => {
-        nextImage();
-        clearInterval(autoSlideInterval);
-        startAutoSlide();
-      });
+        // Update progress bar and time
+        video.addEventListener('timeupdate', () => {
+            const current = video.currentTime;
+            const duration = video.duration;
+            progress.value = (current / duration) * 100;
+            currentTimeEl.textContent = formatTime(current);
+            durationEl.textContent = formatTime(duration);
+        });
 
-      prevBtn.addEventListener('click', () => {
-        prevImage();
-        clearInterval(autoSlideInterval);
-        startAutoSlide();
-      });
+        // Seek video
+        progress.addEventListener('input', () => {
+            const seekTime = (progress.value / 100) * video.duration;
+            video.currentTime = seekTime;
+        });
 
-      function startAutoSlide() {
-        autoSlideInterval = setInterval(nextImage, 4000);
-      }
+        // Volume control
+        volumeSlider.addEventListener('input', () => {
+            video.volume = volumeSlider.value;
+        });
 
-      showImage(currentIndex);
-      startAutoSlide();
-    });
-  </script>
+        // Format time in mm:ss
+        function formatTime(time) {
+            if (isNaN(time)) return '0:00';
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            return `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+        }
+
+        // Update play button on video end
+        video.addEventListener('ended', () => {
+            playPauseBtn.textContent = '►';
+        });
+
+        // Video selection
+        videoSelect.addEventListener('change', () => {
+            video.src = videoSelect.value;
+            video.load();
+            video.play();
+            playPauseBtn.textContent = '❚❚';
+        });
+
+        // Initialize duration
+        video.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(video.duration);
+        });
+    </script>
+
 </body>
 </html>
