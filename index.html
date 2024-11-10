@@ -10,10 +10,7 @@
   
   <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  
-  <!-- Include pdf.js library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-  
+
   <style>
     /* General Styles */
     body {
@@ -158,62 +155,36 @@
     .certifications-list li {
       margin: 20px 0;
       padding: 15px;
-      position: relative;
-      width: 80%;
-      max-width: 600px;
+      background-color: rgba(22, 32, 66, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      transition: transform 0.3s, box-shadow 0.3s;
       display: flex;
       flex-direction: column;
       align-items: center;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
       overflow: hidden;
-      transition: box-shadow 0.3s ease;
-      will-change: box-shadow, transform;
+      position: relative;
     }
 
-    /* Certification Title Split Container */
+    /* Updated Certification Title Styling */
     .cert-title-container {
       width: 100%;
-      display: flex;
-      justify-content: center;
-      position: relative;
-      cursor: pointer;
-      transition: height 0.3s;
-    }
-
-    /* Certification Title Halves */
-    .cert-title-half {
-      width: 100%;
+      max-width: 600px;
       height: 40px;
       background-color: #00ffff;
       color: #162042;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: absolute;
-      left: 0;
-      font-weight: bold;
-      transition: transform 0.5s ease, height 0.3s ease;
-      will-change: transform;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+      border-radius: 10px;
     }
 
-    .cert-title-half.top {
-      top: -45px; /* Position above the certification content */
-      border-bottom: 2px solid #fff;
-    }
-
-    .cert-title-half.bottom {
-      bottom: -45px; /* Position below the certification content */
-      border-top: 2px solid #fff;
-    }
-
-    /* Hover Effect: Move the halves further apart to reveal PDF */
-    .certifications-list li:hover .cert-title-half.top {
-      transform: translateY(-80%);
-    }
-
-    .certifications-list li:hover .cert-title-half.bottom {
-      transform: translateY(80%);
+    /* Hover Effect Without Split */
+    .cert-title-container:hover {
+      background-color: #ffd700;
+      transform: scale(1.05);
     }
 
     /* PDF Canvas */
@@ -225,11 +196,24 @@
       margin-top: 10px;
       opacity: 0;
       transition: opacity 0.5s ease;
+      z-index: 1;
     }
 
-    /* Display PDF when certification is open */
+    /* Show the PDF canvas when the certification is open */
     .open .pdf-canvas {
       opacity: 1;
+      display: block;
+    }
+
+    /* Hide the PDF canvas when not open */
+    .pdf-canvas.hidden {
+      display: none;
+    }
+
+    /* Ensure that only the open certification displays its PDF */
+    .certifications-list li:not(.open) .pdf-canvas {
+      display: none;
+      opacity: 0;
     }
 
     /* Lightning Canvas */
@@ -265,6 +249,8 @@
       color: #00ffff;
     }
   </style>
+  <!-- Include pdf.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <!-- Tech Background -->
@@ -333,7 +319,124 @@
 
   <!-- Lightning Effect Script -->
   <script>
-    // [Lightning Effect Code remains the same]
+    // Lightning Effect Code
+    const lightningCanvas = document.getElementById('lightningCanvas');
+    const ctx = lightningCanvas.getContext('2d');
+    let lightningPath = [];
+    let fillingLeft = false;
+    let fillingRight = false;
+    let animationActive = false;
+    let currentColor = getRandomLightColor();
+    let fillColor = getDarkerFillColor(currentColor);
+    const fillOpacity = 0.03; // Darker, gradual fill for each frame
+
+    const centerSection = document.getElementById('centerSection');
+
+    function resizeCanvas() {
+      lightningCanvas.width = window.innerWidth;
+      lightningCanvas.height = window.innerHeight;
+    }
+
+    function getRandomLightColor() {
+      const hue = Math.random() * 360;
+      return `hsl(${hue}, 100%, 80%)`; // Random light color with high lightness
+    }
+
+    function getDarkerFillColor(color) {
+      // Extract HSL values and make fill color darker by reducing lightness
+      let [hue, saturation, lightness] = color.match(/\d+/g).map(Number);
+      lightness = Math.max(lightness - 20, 10); // Ensure lightness doesn't go below 10%
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // Darker shade
+    }
+
+    function drawLightning() {
+      if (!animationActive) return;
+
+      // Dark fill to create a fading effect
+      ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
+      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // Set lightning path color
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(lightningCanvas.width / 2, 0);
+
+      // Generate lightning path if it hasn't reached the bottom
+      if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < lightningCanvas.height) {
+        let lastX = lightningCanvas.width / 2;
+        let lastY = 0;
+
+        if (lightningPath.length > 0) {
+          ({ x: lastX, y: lastY } = lightningPath[lightningPath.length - 1]);
+        }
+
+        const xOffset = (Math.random() - 0.5) * 20; // Smaller deviation for tighter lightning
+        const newY = lastY + 10; // Slower descent
+        lightningPath.push({ x: lastX + xOffset, y: newY });
+      }
+
+      lightningPath.forEach(point => {
+        ctx.lineTo(point.x, point.y);
+      });
+      ctx.stroke();
+
+      // Start filling once lightning reaches the bottom
+      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= lightningCanvas.height) {
+        fillingLeft = true;
+        fillingRight = true;
+      }
+
+      // Fill left and right with the darker color
+      if (fillingLeft) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      if (fillingRight) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(lightningCanvas.width / 2, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      // If filling is complete, reset for looping
+      if (fillingLeft && fillingRight) {
+        // Reset for the next loop
+        fillingLeft = false;
+        fillingRight = false;
+        lightningPath = [];
+        currentColor = getRandomLightColor();
+        fillColor = getDarkerFillColor(currentColor);
+      }
+
+      // Continue the animation loop
+      requestAnimationFrame(drawLightning);
+    }
+
+    function startAnimation() {
+      if (!animationActive) {
+        animationActive = true;
+        drawLightning();
+        centerSection.style.opacity = '0.5'; // Make center section 50% transparent
+      }
+    }
+
+    function stopAnimation() {
+      animationActive = false;
+      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+      lightningPath = [];
+      centerSection.style.opacity = '1'; // Reset center section opacity to 100%
+    }
+
+    // Event Listeners for the "Animated Background" Link
+    const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
+    if (animatedBackgroundLink) {
+      animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
+      animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
+    }
+
+    // Initialize Canvas Size
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
   </script>
 
   <!-- Main Script -->
@@ -357,15 +460,105 @@
     }
 
     function fetchTranslations() {
-      // [Fetch translations as before]
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
+
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch translations: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Update section titles
+          document.getElementById("qualifications").innerText = data.qualifications || "Qualifications";
+          document.getElementById("socialLinks").innerText = data.socialLinks || "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = data.friendlySites || "Friendly Sites";
+          document.getElementById("certifications").innerText = data.certifications || "Certifications";
+          document.getElementById("contact").innerText = data.contact || "Contact";
+          document.getElementById("knowledge-title").innerText = data.knowledge || "Knowledge";
+
+          // Update project links
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update friendly sites links
+          const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
+          friendlySitesLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update Contact links
+          const contactLinks = document.querySelectorAll('.center-section p a');
+          contactLinks.forEach(link => {
+            if (link.href.startsWith("https://wa.me/")) {
+              link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
+            } else if (link.href.startsWith("mailto:")) {
+              link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          // Fallback to default titles if there's an error
+          document.getElementById("qualifications").innerText = "Qualifications";
+          document.getElementById("socialLinks").innerText = "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = "Friendly Sites";
+          document.getElementById("certifications").innerText = "Certifications";
+          document.getElementById("contact").innerText = "Contact";
+          document.getElementById("knowledge-title").innerText = "Knowledge";
+        });
     }
 
     function fetchKnowledgeList() {
-      // [Fetch knowledge list as before]
+      fetch('./KnowledgeList/KnowledgeList.txt')
+        .then(response => response.text())
+        .then(data => {
+          const knowledgeList = document.getElementById("knowledge-list");
+          knowledgeList.innerHTML = ''; // Clear the current list
+
+          const lines = data.split('\n').filter(line => line.trim() !== '');
+          lines.forEach(line => {
+            const [enText, ptText] = line.split('||'); // Split the text by "||"
+            const listItem = document.createElement('li');
+            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
+            knowledgeList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error('Error loading knowledge list:', error));
     }
 
     function loadQualificationsPDF() {
-      // [Load qualifications PDF as before]
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
+      const canvas = document.getElementById('pdf-canvas');
+      const context = canvas.getContext('2d');
+
+      pdfjsLib.getDocument(url).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 2; // Adjust scale for better resolution
+          const viewport = page.getViewport({ scale: scale });
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          // Render PDF page into canvas context
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+        });
+      }).catch(error => {
+        console.error(`Error loading Qualifications PDF:`, error);
+        alert('Failed to load Qualifications PDF.');
+      });
     }
 
     async function fetchCertificationsList() {
@@ -402,21 +595,15 @@
               isFirstCertification = false; // Ensure only the first is set as open
             }
 
+            // Certification Title Container
             const titleContainer = document.createElement('div');
             titleContainer.classList.add('cert-title-container');
+            titleContainer.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
 
-            const topHalf = document.createElement('div');
-            topHalf.classList.add('cert-title-half', 'top');
-            topHalf.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            const bottomHalf = document.createElement('div');
-            bottomHalf.classList.add('cert-title-half', 'bottom');
-            bottomHalf.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            titleContainer.appendChild(topHalf);
-            titleContainer.appendChild(bottomHalf);
+            // Append the title container to the list item
             listItem.appendChild(titleContainer);
 
+            // PDF Canvas
             const pdfCanvas = document.createElement('canvas');
             pdfCanvas.classList.add('pdf-canvas');
             pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
@@ -424,6 +611,7 @@
             listItem.appendChild(pdfCanvas);
             certificationsList.appendChild(listItem);
 
+            // Event Listeners
             listItem.addEventListener('mouseenter', () => {
               if (currentlyOpenCert !== listItem) {
                 if (currentlyOpenCert) {
@@ -434,6 +622,7 @@
               }
             });
 
+            // Render the first page of the PDF
             renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
           }
         });
