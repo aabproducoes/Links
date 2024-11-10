@@ -163,7 +163,7 @@
       flex-direction: column;
       align-items: center;
       position: relative;
-      overflow: hidden;
+      overflow: hidden; /* To contain the animated PDF canvas */
     }
 
     .certifications-list li:hover {
@@ -171,30 +171,40 @@
       box-shadow: 0 0 20px #ffd700;
     }
 
+    /* Title Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .cert-title {
       margin-bottom: 10px;
       font-size: 1.2em;
       font-weight: bold;
       color: #00ffff;
-      transition: color 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
     }
 
-    .certifications-list li:hover .cert-title {
-      color: #ffd700; /* Change color on hover */
-      transform: translateY(-5px); /* Slightly move up on hover */
-    }
-
+    /* PDF Canvas Styling */
     .pdf-canvas {
       width: 100%;
       max-width: 600px; /* Set a max width to ensure responsiveness */
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      opacity: 0.8;
+      transform: translateY(-50px);
+      opacity: 0;
+      transition: transform 0.5s ease, opacity 0.5s ease;
     }
 
     .certifications-list li:hover .pdf-canvas {
-      transform: scale(1.05);
+      transform: translateY(0);
       opacity: 1;
     }
 
@@ -207,7 +217,6 @@
       box-shadow: 0 0 10px #00ffff;
       position: relative;
       z-index: 2;
-      transition: transform 0.3s ease;
     }
 
     /* Tech Background */
