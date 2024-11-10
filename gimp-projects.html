@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gimp Projects</title>
   <style>
     body {
       margin: 0;
       padding: 20px;
-      background: linear-gradient(135deg, #0a0f2e, #162042);
-      color: #00ffff;
-      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e1e2f, #343a40);
+      color: #00ffcc;
+      font-family: 'Verdana', sans-serif;
     }
 
     header {
@@ -19,8 +19,9 @@
     }
 
     header h1 {
-      font-weight: 600;
+      font-weight: 700;
       margin-bottom: 15px;
+      color: #00ffcc;
     }
 
     .carousel {
@@ -52,6 +53,7 @@
       text-align: center;
       font-size: 1.5rem;
       margin-top: 10px;
+      color: #00ffcc;
     }
 
     .carousel-controls {
@@ -62,31 +64,31 @@
     .carousel-controls button {
       padding: 10px 20px;
       margin: 0 10px;
-      background-color: #00ffff;
+      background-color: #00ffcc;
       border: none;
-      color: #162042;
+      color: #1e1e2f;
       border-radius: 30px;
       cursor: pointer;
       transition: background-color 0.3s, transform 0.3s;
     }
 
     .carousel-controls button:hover {
-      background-color: #162042;
-      color: #00ffff;
+      background-color: #1e1e2f;
+      color: #00ffcc;
       transform: scale(1.1);
     }
 
     .loading-bar {
       height: 5px;
       width: 100%;
-      background-color: #162042;
+      background-color: #1e1e2f;
       position: relative;
       margin-top: 10px;
     }
 
     .loading-bar-fill {
       height: 100%;
-      background-color: #00ffff;
+      background-color: #00ffcc;
       width: 0;
       transition: width 4s linear;
     }
@@ -153,6 +155,23 @@
       <img src="ImagesLoading/Gimp_low/PlayingCards[3].png" data-src="ImagesLoading/Gimp/PlayingCards[3].png" alt="Playing Cards" class="blurred">
     </div>
     <div class="carousel-title">Playing Cards</div>
+    <div class="loading-bar">
+      <div class="loading-bar-fill"></div>
+    </div>
+    <div class="carousel-controls">
+      <button class="prevBtn">Previous</button>
+      <button class="nextBtn">Next</button>
+    </div>
+  </section>
+
+  <!-- Seven Electronics Carousel -->
+  <section class="carousel-section">
+    <div class="carousel">
+      <img src="ImagesLoading/Gimp_low/seven[1].png" data-src="ImagesLoading/Gimp/seven[1].png" alt="Seven Electronics" class="active blurred">
+      <img src="ImagesLoading/Gimp_low/seven[2].png" data-src="ImagesLoading/Gimp/seven[2].png" alt="Seven Electronics" class="blurred">
+      <img src="ImagesLoading/Gimp_low/seven[3].jpg" data-src="ImagesLoading/Gimp/seven[3].jpg" alt="Seven Electronics" class="blurred">
+    </div>
+    <div class="carousel-title">Seven Electronics</div>
     <div class="loading-bar">
       <div class="loading-bar-fill"></div>
     </div>
