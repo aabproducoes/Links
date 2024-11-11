@@ -162,53 +162,53 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      overflow: hidden;
+      overflow: visible; /* Allow overflow for title animation */
       position: relative;
     }
 
     /* Certification Title Styling */
     .cert-title {
       position: absolute;
-      top: 10px;
+      bottom: 0;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
+      transform: translate(-50%, 100%);
       background-color: rgba(22, 32, 66, 0.8);
       padding: 5px 10px;
       border-radius: 5px;
       color: #ffd700;
       font-weight: bold;
       opacity: 0;
-      transition: transform 0.5s ease, opacity 0.5s ease;
       pointer-events: none;
       white-space: nowrap;
+      z-index: 1; /* Start behind the certificate */
     }
 
-    /* Show and animate the title on hover */
-    .certifications-list li:hover .cert-title {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-10px);
-    }
-
-    /* Optional: Add a slight bounce effect */
-    .certifications-list li:hover .cert-title {
-      animation: slideIn 0.5s forwards;
-    }
-
-    @keyframes slideIn {
+    /* Keyframe Animation */
+    @keyframes titleAnimation {
       0% {
-        transform: translateX(-50%) translateY(20px);
+        transform: translate(-50%, 100%);
         opacity: 0;
       }
-      60% {
-        transform: translateX(-50%) translateY(-10px);
+      50% {
+        transform: translate(-50%, -120%);
         opacity: 1;
       }
-      80% {
-        transform: translateX(-50%) translateY(5px);
+      70% {
+        transform: translate(-50%, -100%);
       }
       100% {
-        transform: translateX(-50%) translateY(0px);
+        transform: translate(-50%, -80%);
       }
+    }
+
+    /* Apply animation on hover */
+    .certifications-list li:hover .cert-title {
+      animation: titleAnimation 0.8s forwards;
+    }
+
+    /* Bring title in front after animation starts */
+    .certifications-list li.hovered .cert-title {
+      z-index: 3; /* Bring title in front */
     }
 
     /* PDF Canvas */
@@ -219,7 +219,7 @@
       box-shadow: 0 0 10px #00ffff;
       margin-top: 10px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
     /* Lightning Canvas */
@@ -604,6 +604,15 @@
             listItem.appendChild(certTitle);
             listItem.appendChild(pdfCanvas);
             certificationsList.appendChild(listItem);
+
+            // Event Listener to add 'hovered' class
+            listItem.addEventListener('mouseenter', () => {
+              listItem.classList.add('hovered');
+            });
+
+            listItem.addEventListener('mouseleave', () => {
+              listItem.classList.remove('hovered');
+            });
 
             // Render the first page of the PDF
             renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
