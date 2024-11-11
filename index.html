@@ -169,24 +169,24 @@
     /* Certification Title Styling */
     .cert-title {
       position: absolute;
-      top: 60px;
+      top: 10px;
       left: 50%;
-      transform: translateX(-50%) translateY(100%);
+      transform: translateX(-50%) translateY(-20px);
       background-color: rgba(22, 32, 66, 0.8);
       padding: 5px 10px;
       border-radius: 5px;
       color: #ffd700;
       font-weight: bold;
       opacity: 0;
-      transition: transform 0.4s ease, opacity 0.4s ease;
+      transition: transform 0.5s ease, opacity 0.5s ease;
       pointer-events: none;
       white-space: nowrap;
     }
 
-    /* Animate title from behind and into view on hover */
+    /* Show and animate the title on hover */
     .certifications-list li:hover .cert-title {
       opacity: 1;
-      transform: translateX(-50%) translateY(-100%) scale(1.05); /* "Bounce" forward slightly */
+      transform: translateX(-50%) translateY(0px);
     }
 
     /* PDF Canvas */
@@ -196,13 +196,50 @@
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
       margin-top: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Lightning Canvas */
+    #lightningCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Tech Background */
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Language Selector */
+    .language-selector {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      color: #00ffff;
     }
   </style>
-  
   <!-- Include pdf.js library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
+  <!-- Tech Background -->
+  <div class="tech-bg"></div>
+
   <!-- Language Selector -->
   <div class="language-selector">
     <label for="language">Select Language: </label>
@@ -261,9 +298,134 @@
     <ul class="knowledge-list" id="knowledge-list"></ul>
   </div>
 
-  <!-- JavaScript: Fetching data and rendering PDFs -->
+  <!-- Lightning Effect Canvas -->
+  <canvas id="lightningCanvas"></canvas>
+
+  <!-- Lightning Effect Script -->
   <script>
-    let selectedLanguage = 'en';
+    // Lightning Effect Code
+    const lightningCanvas = document.getElementById('lightningCanvas');
+    const ctx = lightningCanvas.getContext('2d');
+    let lightningPath = [];
+    let fillingLeft = false;
+    let fillingRight = false;
+    let animationActive = false;
+    let currentColor = getRandomLightColor();
+    let fillColor = getDarkerFillColor(currentColor);
+    const fillOpacity = 0.03; // Darker, gradual fill for each frame
+
+    const centerSection = document.getElementById('centerSection');
+
+    function resizeCanvas() {
+      lightningCanvas.width = window.innerWidth;
+      lightningCanvas.height = window.innerHeight;
+    }
+
+    function getRandomLightColor() {
+      const hue = Math.random() * 360;
+      return `hsl(${hue}, 100%, 80%)`; // Random light color with high lightness
+    }
+
+    function getDarkerFillColor(color) {
+      // Extract HSL values and make fill color darker by reducing lightness
+      let [hue, saturation, lightness] = color.match(/\d+/g).map(Number);
+      lightness = Math.max(lightness - 20, 10); // Ensure lightness doesn't go below 10%
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // Darker shade
+    }
+
+    function drawLightning() {
+      if (!animationActive) return;
+
+      // Dark fill to create a fading effect
+      ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
+      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // Set lightning path color
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(lightningCanvas.width / 2, 0);
+
+      // Generate lightning path if it hasn't reached the bottom
+      if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < lightningCanvas.height) {
+        let lastX = lightningCanvas.width / 2;
+        let lastY = 0;
+
+        if (lightningPath.length > 0) {
+          ({ x: lastX, y: lastY } = lightningPath[lightningPath.length - 1]);
+        }
+
+        const xOffset = (Math.random() - 0.5) * 20; // Smaller deviation for tighter lightning
+        const newY = lastY + 10; // Slower descent
+        lightningPath.push({ x: lastX + xOffset, y: newY });
+      }
+
+      lightningPath.forEach(point => {
+        ctx.lineTo(point.x, point.y);
+      });
+      ctx.stroke();
+
+      // Start filling once lightning reaches the bottom
+      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= lightningCanvas.height) {
+        fillingLeft = true;
+        fillingRight = true;
+      }
+
+      // Fill left and right with the darker color
+      if (fillingLeft) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      if (fillingRight) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(lightningCanvas.width / 2, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      // If filling is complete, reset for looping
+      if (fillingLeft && fillingRight) {
+        // Reset for the next loop
+        fillingLeft = false;
+        fillingRight = false;
+        lightningPath = [];
+        currentColor = getRandomLightColor();
+        fillColor = getDarkerFillColor(currentColor);
+      }
+
+      // Continue the animation loop
+      requestAnimationFrame(drawLightning);
+    }
+
+    function startAnimation() {
+      if (!animationActive) {
+        animationActive = true;
+        drawLightning();
+        centerSection.style.opacity = '0.5'; // Make center section 50% transparent
+      }
+    }
+
+    function stopAnimation() {
+      animationActive = false;
+      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+      lightningPath = [];
+      centerSection.style.opacity = '1'; // Reset center section opacity to 100%
+    }
+
+    // Event Listeners for the "Animated Background" Link
+    const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
+    if (animatedBackgroundLink) {
+      animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
+      animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
+    }
+
+    // Initialize Canvas Size
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  </script>
+
+  <!-- Main Script -->
+  <script>
+    let selectedLanguage = 'en'; // Default language
 
     window.addEventListener('DOMContentLoaded', () => {
       changeLanguage(); // Initialize language
@@ -291,15 +453,45 @@
           return response.json();
         })
         .then(data => {
+          // Update section titles
           document.getElementById("qualifications").innerText = data.qualifications || "Qualifications";
           document.getElementById("socialLinks").innerText = data.socialLinks || "Social Links & Projects";
           document.getElementById("friendlySites").innerText = data.friendlySites || "Friendly Sites";
           document.getElementById("certifications").innerText = data.certifications || "Certifications";
           document.getElementById("contact").innerText = data.contact || "Contact";
           document.getElementById("knowledge-title").innerText = data.knowledge || "Knowledge";
+
+          // Update project links
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update friendly sites links
+          const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
+          friendlySitesLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update Contact links
+          const contactLinks = document.querySelectorAll('.center-section p a');
+          contactLinks.forEach(link => {
+            if (link.href.startsWith("https://wa.me/")) {
+              link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
+            } else if (link.href.startsWith("mailto:")) {
+              link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
+            }
+          });
         })
         .catch(error => {
           console.error('Error fetching translation file:', error);
+          // Fallback to default titles if there's an error
           document.getElementById("qualifications").innerText = "Qualifications";
           document.getElementById("socialLinks").innerText = "Social Links & Projects";
           document.getElementById("friendlySites").innerText = "Friendly Sites";
@@ -314,11 +506,11 @@
         .then(response => response.text())
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
-          knowledgeList.innerHTML = '';
+          knowledgeList.innerHTML = ''; // Clear the current list
 
           const lines = data.split('\n').filter(line => line.trim() !== '');
           lines.forEach(line => {
-            const [enText, ptText] = line.split('||');
+            const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
             listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
             knowledgeList.appendChild(listItem);
@@ -328,17 +520,18 @@
     }
 
     function loadQualificationsPDF() {
-      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf';
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
       const canvas = document.getElementById('pdf-canvas');
       const context = canvas.getContext('2d');
 
       pdfjsLib.getDocument(url).promise.then(pdf => {
         pdf.getPage(1).then(page => {
-          const scale = 2;
+          const scale = 2; // Adjust scale for better resolution
           const viewport = page.getViewport({ scale: scale });
           canvas.width = viewport.width;
           canvas.height = viewport.height;
 
+          // Render PDF page into canvas context
           const renderContext = {
             canvasContext: context,
             viewport: viewport
@@ -360,32 +553,37 @@
 
         const data = await response.text();
         const certificationsList = document.getElementById("certifications-list");
-        certificationsList.innerHTML = '';
+        certificationsList.innerHTML = ''; // Clear existing list
 
-        const lines = data.split('\n').filter(line => line.trim() !== '');
+        const lines = data.split('\n').filter(line => line.trim() !== ''); // Remove empty lines
         lines.forEach(line => {
+          // Ensure the line has both a file part and title part
           const [filePart, titlePart] = line.split(':');
           if (filePart && titlePart) {
-            const file = filePart.trim().replace(/["']/g, '');
+            const file = filePart.trim().replace(/["']/g, ''); // Remove quotes from file name
             const titles = titlePart.split('||');
 
+            // Trim titles and set default titles only if missing
             const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
             const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
 
             const listItem = document.createElement('li');
 
+            // Certification Title
             const certTitle = document.createElement('div');
             certTitle.classList.add('cert-title');
             certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
 
+            // PDF Canvas
             const pdfCanvas = document.createElement('canvas');
             pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${file}`;
+            pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
 
             listItem.appendChild(certTitle);
             listItem.appendChild(pdfCanvas);
             certificationsList.appendChild(listItem);
 
+            // Render the first page of the PDF
             renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
           }
         });
@@ -401,7 +599,7 @@
 
       pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
         pdf.getPage(1).then(page => {
-          const scale = 1.5;
+          const scale = 1.5; // Adjust the scale for better resolution
           const viewport = page.getViewport({ scale });
 
           canvas.width = viewport.width;
