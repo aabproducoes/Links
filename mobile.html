@@ -274,14 +274,14 @@
     
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
-      <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
-      <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
-      <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
+      <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link" data-key="facebook">Facebook</a></li>
+      <li><a href="https://twitter.com/aabproducoes" class="social-link" data-key="twitter">Twitter</a></li>
+      <li><a href="https://www.instagram.com/aabproducoes/" class="social-link" data-key="instagram">Instagram</a></li>
       <li>
-        <a href="./blender-projects.html" class="social-link">Blender Projects</a>
+        <a href="./blender-projects.html" class="social-link" data-key="blenderProjects">Blender Projects</a>
         <ul class="project-links">
-          <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
-          <li><a href="./blender-animations.html" class="social-link">Blender Animation</a></li>
+          <li><a href="./gimp-projects.html" class="social-link" data-key="gimpProjects">Gimp Projects</a></li>
+          <li><a href="./blender-animations.html" class="social-link" data-key="blenderAnimations">Blender Animation</a></li>
         </ul>
       </li>
     </ul>
@@ -289,8 +289,8 @@
     <!-- Friendly Sites Section -->
     <h2 id="friendlySites">Friendly Sites</h2>
     <ul class="friendly-sites">
-      <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
-      <li><a href="animated-background.html" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
+      <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link" data-key="newTabReplacement">New Tab Replacement</a></li>
+      <li><a href="animated-background.html" class="social-link" id="animatedBackgroundLink" data-key="animatedBackground">Animated Background</a></li>
     </ul>
 
     <!-- Certifications Section -->
@@ -301,8 +301,8 @@
 
     <!-- Contact Section -->
     <h2 id="contact">Contact</h2>
-    <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
-    <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
+    <p><a href="https://wa.me/54984181968" class="social-link" data-key="whatsappLink">WhatsApp: 54984181968</a></p>
+    <p><a href="mailto:aaugusto444@gmail.com" class="social-link" data-key="emailLink">Email: aaugusto444@gmail.com</a></p>
   </div>
 
   <!-- Right Section: Knowledge -->
@@ -472,37 +472,30 @@
           document.getElementById("contact").innerText = data.contact || "Contact";
           document.getElementById("knowledge-title").innerText = data.knowledge || "Knowledge";
 
-          // Update project links
-          const projectLinks = document.querySelectorAll('.project-links a');
-          projectLinks.forEach(link => {
-            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-            if (data[key]) {
-              link.textContent = data[key];
-            }
-          });
-
-          // Update friendly sites links
-          const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
-          friendlySitesLinks.forEach(link => {
-            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+          // Update project links and social links
+          const linksToTranslate = document.querySelectorAll('.social-link[data-key]');
+          linksToTranslate.forEach(link => {
+            const key = link.getAttribute('data-key');
             if (data[key]) {
               link.textContent = data[key];
             }
           });
 
           // Update Contact links
-          const contactLinks = document.querySelectorAll('.center-section p a');
+          const contactLinks = document.querySelectorAll('.center-section p a[data-key]');
           contactLinks.forEach(link => {
-            if (link.href.startsWith("https://wa.me/")) {
+            const key = link.getAttribute('data-key');
+            if (key === 'whatsappLink') {
               link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
-            } else if (link.href.startsWith("mailto:")) {
+            } else if (key === 'emailLink') {
               link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
             }
           });
         })
         .catch(error => {
           console.error('Error fetching translation file:', error);
-          // Fallback to default titles if there's an error
+
+          // Provide fallback for untranslated elements
           document.getElementById("socialLinks").innerText = "Social Links & Projects";
           document.getElementById("friendlySites").innerText = "Friendly Sites";
           document.getElementById("certifications").innerText = "Certifications";
