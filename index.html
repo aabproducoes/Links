@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- (Same head content as before) -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Resume</title>
+  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
+  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
+  <meta name="author" content="Antonio Augusto Barbaro">
+  
   <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Include pdf.js library (Removed since PDF is no longer used) -->
   
   <style>
     /* General Styles */
@@ -11,7 +19,7 @@
       margin: 0;
       padding: 0;
       display: flex;
-      flex-direction: column; /* Stack sections vertically */
+      flex-wrap: wrap; /* Allow sections to stack on smaller screens */
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
@@ -22,7 +30,7 @@
 
     /* Sections Styling */
     .center-section, .right-section {
-      width: 100%; /* Full width */
+      flex: 1 1 100%; /* Default to full width */
       padding: 20px;
       margin: 10px 0;
       border-radius: 15px;
@@ -33,6 +41,23 @@
 
     .center-section {
       text-align: center;
+    }
+
+    /* Responsive Adjustments */
+    @media (min-width: 768px) {
+      .center-section {
+        flex: 2;
+        margin: 10px;
+      }
+
+      .right-section {
+        flex: 1;
+        margin: 10px;
+      }
+
+      body {
+        flex-wrap: nowrap; /* Prevent stacking on larger screens */
+      }
     }
 
     /* Profile Picture */
@@ -168,7 +193,7 @@
       transform: translateX(-50%) translateY(-10px);
     }
 
-    /* PDF Canvas */
+    /* PDF Canvas for Certifications */
     .pdf-canvas {
       width: 100%;
       max-width: 100%; /* Ensure it fits on mobile */
@@ -246,8 +271,6 @@
       }
     }
   </style>
-  <!-- Include pdf.js library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <!-- Tech Background -->
@@ -302,9 +325,7 @@
   <!-- Right Section: Knowledge -->
   <div class="right-section">
     <h2 id="knowledge-title">Knowledge</h2>
-    <ul class="knowledge-list" id="knowledge-list">
-      <!-- Dynamic content will be loaded here -->
-    </ul>
+    <ul class="knowledge-list" id="knowledge-list"></ul>
   </div>
 
   <!-- Lightning Effect Canvas -->
@@ -312,8 +333,125 @@
 
   <!-- Lightning Effect Script -->
   <script>
+    // (No changes in this script)
     // Lightning Effect Code
-    // (Same as before)
+    const lightningCanvas = document.getElementById('lightningCanvas');
+    const ctx = lightningCanvas.getContext('2d');
+    let lightningPath = [];
+    let fillingLeft = false;
+    let fillingRight = false;
+    let animationActive = false;
+    let currentColor = getRandomLightColor();
+    let fillColor = getDarkerFillColor(currentColor);
+    const fillOpacity = 0.03; // Darker, gradual fill for each frame
+
+    const centerSection = document.getElementById('centerSection');
+
+    function resizeCanvas() {
+      lightningCanvas.width = window.innerWidth;
+      lightningCanvas.height = window.innerHeight;
+    }
+
+    function getRandomLightColor() {
+      const hue = Math.random() * 360;
+      return `hsl(${hue}, 100%, 80%)`; // Random light color with high lightness
+    }
+
+    function getDarkerFillColor(color) {
+      // Extract HSL values and make fill color darker by reducing lightness
+      let [hue, saturation, lightness] = color.match(/\d+/g).map(Number);
+      lightness = Math.max(lightness - 20, 10); // Ensure lightness doesn't go below 10%
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // Darker shade
+    }
+
+    function drawLightning() {
+      if (!animationActive) return;
+
+      // Dark fill to create a fading effect
+      ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
+      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // Set lightning path color
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(lightningCanvas.width / 2, 0);
+
+      // Generate lightning path if it hasn't reached the bottom
+      if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < lightningCanvas.height) {
+        let lastX = lightningCanvas.width / 2;
+        let lastY = 0;
+
+        if (lightningPath.length > 0) {
+          ({ x: lastX, y: lastY } = lightningPath[lightningPath.length - 1]);
+        }
+
+        const xOffset = (Math.random() - 0.5) * 20; // Smaller deviation for tighter lightning
+        const newY = lastY + 10; // Slower descent
+        lightningPath.push({ x: lastX + xOffset, y: newY });
+      }
+
+      lightningPath.forEach(point => {
+        ctx.lineTo(point.x, point.y);
+      });
+      ctx.stroke();
+
+      // Start filling once lightning reaches the bottom
+      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= lightningCanvas.height) {
+        fillingLeft = true;
+        fillingRight = true;
+      }
+
+      // Fill left and right with the darker color
+      if (fillingLeft) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      if (fillingRight) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(lightningCanvas.width / 2, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      // If filling is complete, reset for looping
+      if (fillingLeft && fillingRight) {
+        // Reset for the next loop
+        fillingLeft = false;
+        fillingRight = false;
+        lightningPath = [];
+        currentColor = getRandomLightColor();
+        fillColor = getDarkerFillColor(currentColor);
+      }
+
+      // Continue the animation loop
+      requestAnimationFrame(drawLightning);
+    }
+
+    function startAnimation() {
+      if (!animationActive) {
+        animationActive = true;
+        drawLightning();
+        centerSection.style.opacity = '0.5'; // Make center section 50% transparent
+      }
+    }
+
+    function stopAnimation() {
+      animationActive = false;
+      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+      lightningPath = [];
+      centerSection.style.opacity = '1'; // Reset center section opacity to 100%
+    }
+
+    // Event Listeners for the "Animated Background" Link
+    const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
+    if (animatedBackgroundLink) {
+      animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
+      animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
+    }
+
+    // Initialize Canvas Size
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
   </script>
 
   <!-- Main Script -->
@@ -327,24 +465,161 @@
     });
 
     function changeLanguage() {
-      // (Same as before)
+      const languageSelect = document.getElementById("language");
+      selectedLanguage = languageSelect.value;
+      fetchTranslations();
+      fetchKnowledgeList();
+      fetchCertificationsList();
     }
 
     function fetchTranslations() {
-      // (Same as before, but remove references to "qualifications")
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
+
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch translations: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Update section titles
+          document.getElementById("socialLinks").innerText = data.socialLinks || "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = data.friendlySites || "Friendly Sites";
+          document.getElementById("certifications").innerText = data.certifications || "Certifications";
+          document.getElementById("contact").innerText = data.contact || "Contact";
+          document.getElementById("knowledge-title").innerText = data.knowledge || "Knowledge";
+
+          // Update project links
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update friendly sites links
+          const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
+          friendlySitesLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
+
+          // Update Contact links
+          const contactLinks = document.querySelectorAll('.center-section p a');
+          contactLinks.forEach(link => {
+            if (link.href.startsWith("https://wa.me/")) {
+              link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
+            } else if (link.href.startsWith("mailto:")) {
+              link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          // Fallback to default titles if there's an error
+          document.getElementById("socialLinks").innerText = "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = "Friendly Sites";
+          document.getElementById("certifications").innerText = "Certifications";
+          document.getElementById("contact").innerText = "Contact";
+          document.getElementById("knowledge-title").innerText = "Knowledge";
+        });
     }
 
     function fetchKnowledgeList() {
-      // (Same as before)
+      fetch('./KnowledgeList/KnowledgeList.txt')
+        .then(response => response.text())
+        .then(data => {
+          const knowledgeList = document.getElementById("knowledge-list");
+          knowledgeList.innerHTML = ''; // Clear the current list
+
+          const lines = data.split('\n').filter(line => line.trim() !== '');
+          lines.forEach(line => {
+            const [enText, ptText] = line.split('||'); // Split the text by "||"
+            const listItem = document.createElement('li');
+            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
+            knowledgeList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error('Error loading knowledge list:', error));
     }
 
     async function fetchCertificationsList() {
-      // (Same as before)
+      try {
+        const response = await fetch('./Certificados/CertificadosList.txt');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.text();
+        const certificationsList = document.getElementById("certifications-list");
+        certificationsList.innerHTML = ''; // Clear existing list
+
+        const lines = data.split('\n').filter(line => line.trim() !== ''); // Remove empty lines
+        lines.forEach(line => {
+          // Ensure the line has both a file part and title part
+          const [filePart, titlePart] = line.split(':');
+          if (filePart && titlePart) {
+            const file = filePart.trim().replace(/["']/g, ''); // Remove quotes from file name
+            const titles = titlePart.split('||');
+
+            // Trim titles and set default titles only if missing
+            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
+            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
+
+            const listItem = document.createElement('li');
+
+            // Certification Title
+            const certTitle = document.createElement('div');
+            certTitle.classList.add('cert-title');
+            certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+            // PDF Canvas
+            const pdfCanvas = document.createElement('canvas');
+            pdfCanvas.classList.add('pdf-canvas');
+            pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
+
+            listItem.appendChild(certTitle);
+            listItem.appendChild(pdfCanvas);
+            certificationsList.appendChild(listItem);
+
+            // Render the first page of the PDF
+            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+          }
+        });
+      } catch (error) {
+        console.error('Error loading certifications list:', error);
+        alert('An error occurred while loading the certifications list. Please try again later.');
+      }
     }
 
     function renderFirstPage(pdfUrl, canvasId) {
-      // (Same as before)
+      const canvas = document.getElementById(canvasId);
+      const context = canvas.getContext('2d');
+
+      pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 1.5; // Adjust the scale for better resolution
+          const viewport = page.getViewport({ scale });
+
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+        });
+      }).catch(error => {
+        console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
+      });
     }
   </script>
+  <!-- Include pdf.js library for certifications -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </body>
 </html>
