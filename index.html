@@ -11,26 +11,13 @@
   <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Mobile Detection and Redirection Script -->
-  <script>
-    // Function to detect mobile devices
-    function isMobileDevice() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-
-    // Redirect to mobile.html if a mobile device is detected
-    if (isMobileDevice()) {
-      window.location.href = "mobile.html";
-    }
-  </script>
-
   <style>
     /* General Styles */
     body {
       margin: 0;
       padding: 0;
       display: flex;
-      flex-wrap: wrap; /* Allow sections to stack on smaller screens */
+      flex-direction: column; /* Stack sections vertically */
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
@@ -40,8 +27,8 @@
     }
 
     /* Sections Styling */
-    .left-section, .center-section, .right-section {
-      flex: 1 1 100%; /* Default to full width */
+    .center-section, .right-section {
+      flex: 1 1 100%; /* Full width */
       padding: 20px;
       margin: 10px 0;
       border-radius: 15px;
@@ -52,23 +39,6 @@
 
     .center-section {
       text-align: center;
-    }
-
-    /* Responsive Adjustments */
-    @media (min-width: 768px) {
-      .left-section, .right-section {
-        flex: 1;
-        margin: 10px;
-      }
-
-      .center-section {
-        flex: 2;
-        margin: 10px;
-      }
-
-      body {
-        flex-wrap: nowrap; /* Prevent stacking on larger screens */
-      }
     }
 
     /* Profile Picture */
@@ -298,15 +268,9 @@
     </select>
   </div>
 
-  <!-- Left Section: Qualifications -->
-  <div class="left-section">
-    <h2 id="qualifications">Qualifications</h2>
-    <canvas id="pdf-canvas"></canvas>
-  </div>
-
   <!-- Center Section: Profile, Social Links, Friendly Sites, Certifications, Contact -->
   <div class="center-section" id="centerSection">
-    <img src="./images/292440780_2225688030932761_1836941331334930994_n.webp" alt="Your Profile Picture" class="profile-picture">
+    <img src="./images/your-profile-picture.jpg" alt="Your Profile Picture" class="profile-picture">
     
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
@@ -478,7 +442,6 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       changeLanguage(); // Initialize language
-      loadQualificationsPDF(); // Load Qualifications PDF
       fetchKnowledgeList(); // Load Knowledge List
       fetchCertificationsList(); // Load Certifications List
     });
@@ -503,7 +466,6 @@
         })
         .then(data => {
           // Update section titles
-          document.getElementById("qualifications").innerText = data.qualifications || "Qualifications";
           document.getElementById("socialLinks").innerText = data.socialLinks || "Social Links & Projects";
           document.getElementById("friendlySites").innerText = data.friendlySites || "Friendly Sites";
           document.getElementById("certifications").innerText = data.certifications || "Certifications";
@@ -541,7 +503,6 @@
         .catch(error => {
           console.error('Error fetching translation file:', error);
           // Fallback to default titles if there's an error
-          document.getElementById("qualifications").innerText = "Qualifications";
           document.getElementById("socialLinks").innerText = "Social Links & Projects";
           document.getElementById("friendlySites").innerText = "Friendly Sites";
           document.getElementById("certifications").innerText = "Certifications";
@@ -561,36 +522,11 @@
           lines.forEach(line => {
             const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
-            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
+            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : enText.trim()) : (enText ? enText.trim() : ptText.trim());
             knowledgeList.appendChild(listItem);
           });
         })
         .catch(error => console.error('Error loading knowledge list:', error));
-    }
-
-    function loadQualificationsPDF() {
-      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
-      const canvas = document.getElementById('pdf-canvas');
-      const context = canvas.getContext('2d');
-
-      pdfjsLib.getDocument(url).promise.then(pdf => {
-        pdf.getPage(1).then(page => {
-          const scale = 2; // Adjust scale for better resolution
-          const viewport = page.getViewport({ scale: scale });
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          // Render PDF page into canvas context
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          page.render(renderContext);
-        });
-      }).catch(error => {
-        console.error(`Error loading Qualifications PDF:`, error);
-        alert('Failed to load Qualifications PDF.');
-      });
     }
 
     async function fetchCertificationsList() {
