@@ -16,6 +16,8 @@
     body {
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-wrap: wrap; /* Allow sections to stack on smaller screens */
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
@@ -26,13 +28,34 @@
 
     /* Sections Styling */
     .center-section, .right-section {
-      width: 100%;
+      flex: 1 1 100%; /* Default to full width */
       padding: 20px;
       margin: 10px 0;
       border-radius: 15px;
       background-color: rgba(22, 32, 66, 0.8);
       backdrop-filter: blur(10px);
       overflow-y: auto;
+    }
+
+    .center-section {
+      text-align: center;
+    }
+
+    /* Responsive Adjustments */
+    @media (min-width: 768px) {
+      .center-section {
+        flex: 2;
+        margin: 10px;
+      }
+
+      .right-section {
+        flex: 1;
+        margin: 10px;
+      }
+
+      body {
+        flex-wrap: nowrap; /* Prevent stacking on larger screens */
+      }
     }
 
     /* Profile Picture */
@@ -246,7 +269,7 @@
       }
     }
   </style>
-  <!-- Include pdf.js library -->
+  <!-- Include pdf.js library for Certifications PDFs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
@@ -264,13 +287,13 @@
 
   <!-- Center Section: Profile, Social Links, Friendly Sites, Certifications, Contact -->
   <div class="center-section" id="centerSection">
-    <img src="./images/292440780_2225688030932761_1836941331334930994_n.webp" alt="Your Profile Picture" class="profile-picture">
+    <img src="./images/your-profile-picture.jpg" alt="Your Profile Picture" class="profile-picture">
     
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
-      <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
-      <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
-      <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
+      <li><a href="https://www.facebook.com/yourprofile" class="social-link">Facebook</a></li>
+      <li><a href="https://twitter.com/yourprofile" class="social-link">Twitter</a></li>
+      <li><a href="https://www.instagram.com/yourprofile/" class="social-link">Instagram</a></li>
       <li>
         <a href="./blender-projects.html" class="social-link">Blender Projects</a>
         <ul class="project-links">
@@ -283,7 +306,7 @@
     <!-- Friendly Sites Section -->
     <h2 id="friendlySites">Friendly Sites</h2>
     <ul class="friendly-sites">
-      <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
+      <li><a href="https://yourwebsite.com/newtab" class="social-link">New Tab Replacement</a></li>
       <li><a href="animated-background.html" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
     </ul>
 
@@ -295,8 +318,8 @@
 
     <!-- Contact Section -->
     <h2 id="contact">Contact</h2>
-    <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
-    <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
+    <p><a href="https://wa.me/yournumber" class="social-link">WhatsApp: yournumber</a></p>
+    <p><a href="mailto:youremail@example.com" class="social-link">Email: youremail@example.com</a></p>
   </div>
 
   <!-- Right Section: Knowledge -->
@@ -488,9 +511,9 @@
           const contactLinks = document.querySelectorAll('.center-section p a');
           contactLinks.forEach(link => {
             if (link.href.startsWith("https://wa.me/")) {
-              link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
+              link.textContent = `${data.whatsapp || "WhatsApp"}: yournumber`;
             } else if (link.href.startsWith("mailto:")) {
-              link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
+              link.textContent = `${data.email || "Email"}: youremail@example.com`;
             }
           });
         })
