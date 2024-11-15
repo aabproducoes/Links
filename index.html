@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +17,7 @@
       margin: 0;
       padding: 0;
       display: flex;
-      flex-wrap: wrap; /* Allow sections to stack on smaller screens */
+      flex-wrap: nowrap;
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
@@ -28,52 +27,52 @@
     }
 
     /* Sections Styling */
-    .left-section, .center-section, .right-section {
-      flex: 1 1 100%; /* Default to full width */
-      padding: 20px;
-      margin: 10px 0;
-      border-radius: 15px;
+    .left-section, .right-section {
+      flex: 1;
       background-color: rgba(22, 32, 66, 0.8);
+      padding: 20px;
+      border-radius: 15px;
       backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      position: relative;
+      z-index: 2;
       overflow-y: auto;
     }
 
     .center-section {
+      flex: 2;
+      background-color: rgba(22, 32, 66, 0.8);
+      color: #00ffff;
+      padding: 20px;
       text-align: center;
-    }
-
-    /* Responsive Adjustments */
-    @media (min-width: 768px) {
-      .left-section, .right-section {
-        flex: 1;
-        margin: 10px;
-      }
-
-      .center-section {
-        flex: 2;
-        margin: 10px;
-      }
-
-      body {
-        flex-wrap: nowrap; /* Prevent stacking on larger screens */
-      }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px #00ffff;
+      overflow-y: auto;
+      position: relative;
+      z-index: 2;
+      transition: opacity 0.3s ease;
     }
 
     /* Profile Picture */
     .profile-picture {
-      width: 150px; /* Smaller size for mobile */
-      height: 150px;
+      width: 200px;
+      height: 200px;
       border-radius: 50%;
       border: 5px solid #00ffff;
       box-shadow: 0 0 20px #00ffff;
       margin-bottom: 20px;
+      transition: transform 0.3s ease;
     }
 
-    @media (min-width: 768px) {
-      .profile-picture {
-        width: 200px;
-        height: 200px;
-      }
+    .profile-picture:hover {
+      transform: rotate(10deg) scale(1.1);
     }
 
     /* Lists Styling */
@@ -89,8 +88,8 @@
 
     /* Social Links Styling */
     .social-link {
-      display: block; /* Full width links for touch-friendly interaction */
-      padding: 10px 20px;
+      display: inline-block;
+      padding: 12px 25px;
       background-color: #00ffff;
       color: #162042;
       text-decoration: none;
@@ -101,24 +100,22 @@
       border: 3px solid transparent;
       background-clip: padding-box;
       z-index: 3;
-      font-size: 14px; /* Adjust font size for mobile */
-      text-align: center;
-      margin: 5px 0;
     }
 
     .social-link:hover {
       background-color: #162042;
       color: #00ffff;
-      transform: scale(1.05);
+      transform: scale(1.1);
       border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       animation: border-fill 2s forwards;
     }
 
-    @media (min-width: 768px) {
-      .social-link {
-        display: inline-block; /* Inline for larger screens */
-        padding: 12px 25px;
-        font-size: 16px;
+    @keyframes border-fill {
+      0% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
+      }
+      100% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       }
     }
 
@@ -195,8 +192,7 @@
     /* PDF Canvas */
     .pdf-canvas {
       width: 100%;
-      max-width: 100%; /* Ensure it fits on mobile */
-      height: auto; /* Maintain aspect ratio */
+      max-width: 600px;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
       margin-top: 10px;
@@ -204,15 +200,8 @@
       z-index: 1;
     }
 
-    @media (min-width: 768px) {
-      .pdf-canvas {
-        max-width: 600px; /* Larger size for tablets and desktops */
-      }
-    }
-
     /* Lightning Canvas */
     #lightningCanvas {
-      display: none; /* Hide on smaller screens to save space */
       position: absolute;
       top: 0;
       left: 0;
@@ -220,12 +209,6 @@
       height: 100%;
       pointer-events: none;
       z-index: 0;
-    }
-
-    @media (min-width: 768px) {
-      #lightningCanvas {
-        display: block;
-      }
     }
 
     /* Tech Background */
@@ -243,31 +226,11 @@
 
     /* Language Selector */
     .language-selector {
-      position: fixed; /* Fixed position for easier access */
+      position: absolute;
       top: 10px;
       right: 10px;
       z-index: 1000;
-      background: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
       color: #00ffff;
-    }
-
-    @media (min-width: 768px) {
-      .language-selector {
-        top: 20px;
-        right: 20px;
-      }
-    }
-
-    /* Keyframes */
-    @keyframes border-fill {
-      0% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
-      }
-      100% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      }
     }
   </style>
   <!-- Include pdf.js library -->
@@ -294,7 +257,7 @@
 
   <!-- Center Section: Profile, Social Links, Friendly Sites, Certifications, Contact -->
   <div class="center-section" id="centerSection">
-    <img src="./images/292440780_2225688030932761_1836941331334930994_n.webp" alt="Your Profile Picture" class="profile-picture">
+    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
     
     <h2 id="socialLinks">Social Links & Projects</h2>
     <ul class="social-links">
