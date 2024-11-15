@@ -11,6 +11,19 @@
   <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
+  <!-- Mobile Detection and Redirection Script -->
+  <script>
+    // Function to detect mobile devices
+    function isMobileDevice() {
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    }
+
+    // Redirect to mobile.html if a mobile device is detected
+    if (isMobileDevice()) {
+      window.location.href = "mobile.html";
+    }
+  </script>
+
   <style>
     /* General Styles */
     body {
