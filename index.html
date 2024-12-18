@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- [Head content remains the same, including meta tags, styles, and script imports] -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Your Resume</title>
@@ -10,94 +11,69 @@
   
   <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  
+
   <style>
     /* General Styles */
     body {
       margin: 0;
       padding: 0;
       display: flex;
+      flex-wrap: nowrap;
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden;
       position: relative;
     }
 
-    /* Left-Side Rotated Menu */
-    .menu {
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 80px; /* Increased width to accommodate profile picture */
+    /* Sections Styling */
+    .left-section, .right-section {
+      flex: 1;
       background-color: rgba(22, 32, 66, 0.8);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      position: relative;
+      z-index: 2;
+      overflow-y: auto;
+    }
+
+    .center-section {
+      flex: 2;
+      background-color: rgba(22, 32, 66, 0.8);
+      color: #00ffff;
+      padding: 20px;
+      text-align: center;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      padding-top: 20px;
-      gap: 15px;
-      z-index: 2;
-    }
-
-    /* Rotated Profile Picture */
-    .menu .profile-picture {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 3px solid #00ffff;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 20px;
-      transform: rotate(-90deg); /* Rotate to match menu items */
-    }
-
-    .menu-item {
-      writing-mode: vertical-rl; /* Rotate text vertically */
-      transform: rotate(180deg); /* Flip text for readability */
-      padding: 10px;
-      text-align: center;
-      background-color: rgba(0, 170, 255, 0.3);
-      color: #00ffff;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 2px solid transparent;
-    }
-
-    .menu-item:hover {
-      background-color: #00ffff;
-      color: #162042;
-      transform: scale(1.1) rotate(180deg);
-      border: 2px solid #ffd700;
-    }
-
-    .menu-item.active {
-      background-color: #ffd700;
-      color: #162042;
-    }
-
-    /* Main Content Area */
-    .main-content {
-      flex: 1;
-      margin-left: 80px; /* Adjusted to match menu width */
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-
-    /* Center Section */
-    .center-section {
-      flex: 1;
-      padding: 20px;
-      margin: 10px;
       border-radius: 15px;
-      background-color: rgba(22, 32, 66, 0.8);
       backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px #00ffff;
       overflow-y: auto;
+      position: relative;
+      z-index: 2;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Profile Picture */
+    .profile-picture {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 5px solid #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-picture:hover {
+      transform: rotate(10deg) scale(1.1);
     }
 
     /* Lists Styling */
@@ -113,8 +89,8 @@
 
     /* Social Links Styling */
     .social-link {
-      display: block;
-      padding: 10px 20px;
+      display: inline-block;
+      padding: 12px 25px;
       background-color: #00ffff;
       color: #162042;
       text-decoration: none;
@@ -125,24 +101,22 @@
       border: 3px solid transparent;
       background-clip: padding-box;
       z-index: 3;
-      font-size: 14px;
-      text-align: center;
-      margin: 5px 0;
     }
 
     .social-link:hover {
       background-color: #162042;
       color: #00ffff;
-      transform: scale(1.05);
+      transform: scale(1.1);
       border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       animation: border-fill 2s forwards;
     }
 
-    @media (min-width: 768px) {
-      .social-link {
-        display: inline-block;
-        padding: 12px 25px;
-        font-size: 16px;
+    @keyframes border-fill {
+      0% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
+      }
+      100% {
+        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       }
     }
 
@@ -167,6 +141,17 @@
       transform: scale(1.05);
     }
 
+    /* Nested Project Links */
+    .project-links {
+      list-style: none;
+      padding-left: 20px;
+      margin-top: 10px;
+    }
+
+    .project-links li {
+      margin: 10px 0;
+    }
+
     /* Certifications List Styling */
     .certifications-list li {
       margin: 20px 0;
@@ -185,9 +170,9 @@
     /* Certification Title Styling */
     .cert-title {
       position: absolute;
-      top: 10px;
+      bottom: 0;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
+      transform: translate(-50%, 100%);
       background-color: rgba(22, 32, 66, 0.8);
       padding: 5px 10px;
       border-radius: 5px;
@@ -196,31 +181,45 @@
       opacity: 0;
       pointer-events: none;
       white-space: nowrap;
-      transition: transform 0.6s ease, opacity 0.6s ease;
+      z-index: 1;
     }
 
-    /* Animation for title on hover */
+    /* Animate the title on hover */
     .certifications-list li:hover .cert-title {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-10px);
+      animation: title-move 0.7s forwards;
     }
 
-    /* PDF Canvas for Certifications */
+    /* Keyframes for the title animation */
+    @keyframes title-move {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 100%); /* Start behind the certificate */
+        z-index: 0;
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -120%); /* Move up past the top */
+        z-index: 1;
+      }
+      70% {
+        transform: translate(-50%, -100%); /* Start to fall down */
+        z-index: 1;
+      }
+      100% {
+        transform: translate(-50%, -90%); /* Settle slightly above the certificate */
+        z-index: 1;
+      }
+    }
+
+    /* PDF Canvas */
     .pdf-canvas {
       width: 100%;
-      max-width: 100%;
-      height: auto;
+      max-width: 600px;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
       margin-top: 10px;
       position: relative;
-      z-index: 1;
-    }
-
-    @media (min-width: 768px) {
-      .pdf-canvas {
-        max-width: 600px;
-      }
+      z-index: 0;
     }
 
     /* Lightning Canvas */
@@ -231,7 +230,7 @@
       width: 100%;
       height: 100%;
       pointer-events: none;
-      z-index: 1;
+      z-index: 0;
     }
 
     /* Tech Background */
@@ -242,40 +241,22 @@
       width: 100%;
       height: 100%;
       background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
-      opacity: 0.7;
+      opacity: 0.3;
       pointer-events: none;
       z-index: 1;
     }
 
     /* Language Selector */
     .language-selector {
-      position: fixed;
+      position: absolute;
       top: 10px;
       right: 10px;
       z-index: 1000;
-      background: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
       color: #00ffff;
     }
-
-    @media (min-width: 768px) {
-      .language-selector {
-        top: 20px;
-        right: 20px;
-      }
-    }
-
-    /* Keyframes */
-    @keyframes border-fill {
-      0% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
-      }
-      100% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      }
-    }
   </style>
+  <!-- Include pdf.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <!-- Tech Background -->
@@ -284,85 +265,59 @@
   <!-- Language Selector -->
   <div class="language-selector">
     <label for="language">Select Language: </label>
-    <select id="language">
+    <select id="language" onchange="changeLanguage()">
       <option value="en">English</option>
       <option value="pt">Português</option>
     </select>
   </div>
 
-  <!-- Rotated Menu with Profile Picture -->
-  <div class="menu" id="menu">
-    <!-- Rotated Profile Picture with Correct Image Source -->
-    <img src="./images/292440780_2225688030932761_1836941331334930994_n.webp" alt="Profile Picture" class="profile-picture">
-
-    <div class="menu-item" data-section="profile">Profile</div>
-    <div class="menu-item" data-section="socialLinks">Social Links</div>
-    <div class="menu-item" data-section="friendlySites">Friendly Sites</div>
-    <div class="menu-item" data-section="certifications">Certifications</div>
-    <div class="menu-item" data-section="contact">Contact</div>
+  <!-- Left Section: Qualifications -->
+  <div class="left-section">
+    <h2 id="qualifications">Qualifications</h2>
+    <canvas id="pdf-canvas"></canvas>
   </div>
 
-  <!-- Main Content Area -->
-  <div class="main-content">
-    <!-- Center Section -->
-    <div class="center-section" id="centerSection">
-      <!-- Profile Section -->
-      <div id="profile" class="content-section">
-        <h2>Profile</h2>
-        <!-- Add your profile details here -->
-        <p>Your profile description or introduction goes here. This is a placeholder for your profile text.</p>
-
-        <!-- Knowledge Content -->
-        <h2 id="knowledge-title">Knowledge</h2>
-        <ul class="knowledge-list" id="knowledge-list"></ul>
-      </div>
-
-      <!-- Social Links Section -->
-      <div id="socialLinks" class="content-section" style="display: none;">
-        <h2>Social Links & Projects</h2>
-        <ul class="social-links">
-          <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
-          <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
-          <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
-          <li>
-            <a href="./blender-projects.html" class="social-link">Blender Projects</a>
-            <ul class="project-links">
-              <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
-              <li><a href="./blender-animations.html" class="social-link">Blender Animation</a></li>
-            </ul>
-          </li>
+  <!-- Center Section: Profile, Social Links, Friendly Sites, Certifications, Contact -->
+  <div class="center-section" id="centerSection">
+    <img src="./images/292440780_2225688030932761_1836941331334930994_n.jpg" alt="Your Profile Picture" class="profile-picture">
+    
+    <h2 id="socialLinks">Social Links & Projects</h2>
+    <ul class="social-links">
+      <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
+      <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
+      <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
+      <li>
+        <a href="./blender-projects.html" class="social-link">Blender Projects</a>
+        <ul class="project-links">
+          <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
+          <li><a href="./blender-animations.html" class="social-link">Blender Animation</a></li>
         </ul>
-      </div>
+      </li>
+    </ul>
 
-      <!-- Friendly Sites Section -->
-      <div id="friendlySites" class="content-section" style="display: none;">
-        <h2>Friendly Sites</h2>
-        <ul class="friendly-sites">
-          <li>
-            <a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a>
-          </li>
-          <li>
-            <!-- Corrected Animated Background Link -->
-            <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
-          </li>
-        </ul>
-      </div>
+    <!-- Friendly Sites Section -->
+    <h2 id="friendlySites">Friendly Sites</h2>
+    <ul class="friendly-sites">
+      <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
+      <li><a href="animated-background.html" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
+    </ul>
 
-      <!-- Certifications Section -->
-      <div id="certifications" class="content-section" style="display: none;">
-        <h2>Certifications</h2>
-        <ul class="certifications-list" id="certifications-list">
-          <!-- Dynamic content will be loaded here -->
-        </ul>
-      </div>
+    <!-- Certifications Section -->
+    <h2 id="certifications">Certifications</h2>
+    <ul class="certifications-list" id="certifications-list">
+      <!-- Dynamic content will be loaded here -->
+    </ul>
 
-      <!-- Contact Section -->
-      <div id="contact" class="content-section" style="display: none;">
-        <h2>Contact</h2>
-        <p><a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
-        <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
-      </div>
-    </div>
+    <!-- Contact Section -->
+    <h2 id="contact">Contact</h2>
+    <p><a href="https://wa.me/54984181968" class="social-link">WhatsApp: 54984181968</a></p>
+    <p><a href="mailto:aaugusto444@gmail.com" class="social-link">Email: aaugusto444@gmail.com</a></p>
+  </div>
+
+  <!-- Right Section: Knowledge -->
+  <div class="right-section">
+    <h2 id="knowledge-title">Knowledge</h2>
+    <ul class="knowledge-list" id="knowledge-list"></ul>
   </div>
 
   <!-- Lightning Effect Canvas -->
@@ -370,13 +325,18 @@
 
   <!-- Lightning Effect Script -->
   <script>
-    // Lightning Effect Code remains the same
+    // Lightning Effect Code
     const lightningCanvas = document.getElementById('lightningCanvas');
     const ctx = lightningCanvas.getContext('2d');
     let lightningPath = [];
+    let fillingLeft = false;
+    let fillingRight = false;
     let animationActive = false;
     let currentColor = getRandomLightColor();
-    const maxPathLength = 100;
+    let fillColor = getDarkerFillColor(currentColor);
+    const fillOpacity = 0.03; // Darker, gradual fill for each frame
+
+    const centerSection = document.getElementById('centerSection');
 
     function resizeCanvas() {
       lightningCanvas.width = window.innerWidth;
@@ -385,44 +345,76 @@
 
     function getRandomLightColor() {
       const hue = Math.random() * 360;
-      return `hsl(${hue}, 100%, 75%)`;
+      return `hsl(${hue}, 100%, 80%)`; // Random light color with high lightness
+    }
+
+    function getDarkerFillColor(color) {
+      // Extract HSL values and make fill color darker by reducing lightness
+      let [hue, saturation, lightness] = color.match(/\d+/g).map(Number);
+      lightness = Math.max(lightness - 20, 10); // Ensure lightness doesn't go below 10%
+      return `hsl(${hue}, ${saturation}%, ${lightness}%)`; // Darker shade
     }
 
     function drawLightning() {
       if (!animationActive) return;
-      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+
+      // Dark fill to create a fading effect
+      ctx.fillStyle = `rgba(0, 0, 0, ${fillOpacity})`;
       ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // Set lightning path color
       ctx.strokeStyle = currentColor;
       ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.8;
       ctx.beginPath();
       ctx.moveTo(lightningCanvas.width / 2, 0);
 
-      let lastPoint = lightningPath[lightningPath.length - 1] || { x: lightningCanvas.width / 2, y: 0 };
-      if (lastPoint.y < lightningCanvas.height) {
-        const xOffset = (Math.random() - 0.5) * 30;
-        const newPoint = { x: lastPoint.x + xOffset, y: lastPoint.y + 15 };
-        lightningPath.push(newPoint);
+      // Generate lightning path if it hasn't reached the bottom
+      if (lightningPath.length === 0 || lightningPath[lightningPath.length - 1].y < lightningCanvas.height) {
+        let lastX = lightningCanvas.width / 2;
+        let lastY = 0;
+
+        if (lightningPath.length > 0) {
+          ({ x: lastX, y: lastY } = lightningPath[lightningPath.length - 1]);
+        }
+
+        const xOffset = (Math.random() - 0.5) * 20; // Smaller deviation for tighter lightning
+        const newY = lastY + 10; // Slower descent
+        lightningPath.push({ x: lastX + xOffset, y: newY });
       }
 
-      if (lightningPath.length > maxPathLength) {
-        lightningPath.shift();
-      }
-
-      lightningPath.forEach(point => ctx.lineTo(point.x, point.y));
+      lightningPath.forEach(point => {
+        ctx.lineTo(point.x, point.y);
+      });
       ctx.stroke();
 
-      ctx.globalAlpha = 0.2;
-      ctx.fillStyle = currentColor.replace('hsl', 'hsla').replace(')', ', 0.2)');
-      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-
-      if (lastPoint.y >= lightningCanvas.height) {
-        lightningPath = [];
-        currentColor = getRandomLightColor();
+      // Start filling once lightning reaches the bottom
+      if (lightningPath.length > 0 && lightningPath[lightningPath.length - 1].y >= lightningCanvas.height) {
+        fillingLeft = true;
+        fillingRight = true;
       }
 
-      ctx.globalAlpha = 1.0;
+      // Fill left and right with the darker color
+      if (fillingLeft) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(0, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      if (fillingRight) {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(lightningCanvas.width / 2, 0, lightningCanvas.width / 2, lightningCanvas.height);
+      }
+
+      // If filling is complete, reset for looping
+      if (fillingLeft && fillingRight) {
+        // Reset for the next loop
+        fillingLeft = false;
+        fillingRight = false;
+        lightningPath = [];
+        currentColor = getRandomLightColor();
+        fillColor = getDarkerFillColor(currentColor);
+      }
+
+      // Continue the animation loop
       requestAnimationFrame(drawLightning);
     }
 
@@ -430,6 +422,7 @@
       if (!animationActive) {
         animationActive = true;
         drawLightning();
+        centerSection.style.opacity = '0.5'; // Make center section 50% transparent
       }
     }
 
@@ -437,144 +430,97 @@
       animationActive = false;
       ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
       lightningPath = [];
+      centerSection.style.opacity = '1'; // Reset center section opacity to 100%
     }
 
+    // Event Listeners for the "Animated Background" Link
     const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
     if (animatedBackgroundLink) {
       animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
       animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
     }
 
+    // Initialize Canvas Size
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
   </script>
 
-  <!-- Include pdf.js library for certifications -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-
   <!-- Main Script -->
   <script>
-    let selectedLanguage = 'en';
+    let selectedLanguage = 'en'; // Default language
 
     window.addEventListener('DOMContentLoaded', () => {
-      initializeLanguageSelector();
-      setupMenu();
-      fetchTranslations();
-      fetchKnowledgeList();
-      fetchCertificationsList();
-      showSection('profile'); // Show the profile section by default
+      changeLanguage(); // Initialize language
+      loadQualificationsPDF(); // Load Qualifications PDF
+      fetchKnowledgeList(); // Load Knowledge List
+      fetchCertificationsList(); // Load Certifications List
     });
 
-    function initializeLanguageSelector() {
-      const languageSelect = document.getElementById("language");
-      if (localStorage.getItem('selectedLanguage')) {
-        selectedLanguage = localStorage.getItem('selectedLanguage');
-        languageSelect.value = selectedLanguage;
-      }
-      languageSelect.addEventListener('change', () => {
-        selectedLanguage = languageSelect.value;
-        localStorage.setItem('selectedLanguage', selectedLanguage);
-        changeLanguage();
-      });
-    }
-
     function changeLanguage() {
+      const languageSelect = document.getElementById("language");
+      selectedLanguage = languageSelect.value;
       fetchTranslations();
       fetchKnowledgeList();
       fetchCertificationsList();
     }
 
     function fetchTranslations() {
-      const translations = {
-        "en": {
-          "socialLinks": "Social Links & Projects",
-          "friendlySites": "Friendly Sites",
-          "certifications": "Certifications",
-          "contact": "Contact",
-          "knowledge": "Knowledge",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "twitter": "Twitter",
-          "instagram": "Instagram",
-          "blenderprojects": "Blender Projects",
-          "gimpprojects": "Gimp Projects",
-          "blenderanimation": "Blender Animation",
-          "newtabreplacement": "New Tab Replacement",
-          "animatedbackground": "Animated Background",
-          "profile": "Profile"
-        },
-        "pt": {
-          "socialLinks": "Redes Sociais & Projetos",
-          "friendlySites": "Sites Amigos",
-          "certifications": "Certificações",
-          "contact": "Contato",
-          "knowledge": "Conhecimentos",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "twitter": "Twitter",
-          "instagram": "Instagram",
-          "blenderprojects": "Projetos Blender",
-          "gimpprojects": "Projetos Gimp",
-          "blenderanimation": "Animação Blender",
-          "newtabreplacement": "Substituição da Nova Guia",
-          "animatedbackground": "Fundo Animado",
-          "profile": "Perfil"
-        }
-      };
+      const translationFile = `./translations/translations_${selectedLanguage}.json`;
 
-      const data = translations[selectedLanguage] || translations["en"];
+      fetch(translationFile)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Failed to fetch translations: ${response.status} ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Update section titles
+          document.getElementById("qualifications").innerText = data.qualifications || "Qualifications";
+          document.getElementById("socialLinks").innerText = data.socialLinks || "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = data.friendlySites || "Friendly Sites";
+          document.getElementById("certifications").innerText = data.certifications || "Certifications";
+          document.getElementById("contact").innerText = data.contact || "Contact";
+          document.getElementById("knowledge-title").innerText = data.knowledge || "Knowledge";
 
-      // Update section titles
-      document.querySelectorAll('.content-section h2').forEach(el => {
-        const id = el.id || el.parentElement.id;
-        if (data[id]) {
-          el.innerText = data[id];
-        }
-      });
+          // Update project links
+          const projectLinks = document.querySelectorAll('.project-links a');
+          projectLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
 
-      // Update menu items
-      document.querySelectorAll('.menu-item').forEach(el => {
-        const section = el.getAttribute('data-section');
-        if (data[section]) {
-          el.innerText = data[section];
-        }
-      });
+          // Update friendly sites links
+          const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
+          friendlySitesLinks.forEach(link => {
+            const key = link.textContent.replace(/\s+/g, '').toLowerCase();
+            if (data[key]) {
+              link.textContent = data[key];
+            }
+          });
 
-      // Update project links
-      const projectLinks = document.querySelectorAll('.project-links a');
-      projectLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
-      });
-
-      // Update social links
-      const socialLinks = document.querySelectorAll('.social-links > li > a');
-      socialLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
-      });
-
-      // Update friendly sites links
-      const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
-      friendlySitesLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
-      });
-
-      // Update Contact links
-      const whatsappLink = document.getElementById('whatsappLink');
-      whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
-
-      const emailLink = document.getElementById('emailLink');
-      emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
+          // Update Contact links
+          const contactLinks = document.querySelectorAll('.center-section p a');
+          contactLinks.forEach(link => {
+            if (link.href.startsWith("https://wa.me/")) {
+              link.textContent = `${data.whatsapp || "WhatsApp"}: 54984181968`;
+            } else if (link.href.startsWith("mailto:")) {
+              link.textContent = `${data.email || "Email"}: aaugusto444@gmail.com`;
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching translation file:', error);
+          // Fallback to default titles if there's an error
+          document.getElementById("qualifications").innerText = "Qualifications";
+          document.getElementById("socialLinks").innerText = "Social Links & Projects";
+          document.getElementById("friendlySites").innerText = "Friendly Sites";
+          document.getElementById("certifications").innerText = "Certifications";
+          document.getElementById("contact").innerText = "Contact";
+          document.getElementById("knowledge-title").innerText = "Knowledge";
+        });
     }
 
     function fetchKnowledgeList() {
@@ -582,21 +528,42 @@
         .then(response => response.text())
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
-          if (!knowledgeList) {
-            console.error('Knowledge list element not found');
-            return;
-          }
-          knowledgeList.innerHTML = '';
+          knowledgeList.innerHTML = ''; // Clear the current list
 
           const lines = data.split('\n').filter(line => line.trim() !== '');
           lines.forEach(line => {
-            const [enText, ptText] = line.split('||');
+            const [enText, ptText] = line.split('||'); // Split the text by "||"
             const listItem = document.createElement('li');
             listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
             knowledgeList.appendChild(listItem);
           });
         })
         .catch(error => console.error('Error loading knowledge list:', error));
+    }
+
+    function loadQualificationsPDF() {
+      const url = './docs/AntonioAugustoBarbaro-Curricullum.pdf'; // PDF file URL
+      const canvas = document.getElementById('pdf-canvas');
+      const context = canvas.getContext('2d');
+
+      pdfjsLib.getDocument(url).promise.then(pdf => {
+        pdf.getPage(1).then(page => {
+          const scale = 2; // Adjust scale for better resolution
+          const viewport = page.getViewport({ scale: scale });
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          // Render PDF page into canvas context
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          page.render(renderContext);
+        });
+      }).catch(error => {
+        console.error(`Error loading Qualifications PDF:`, error);
+        alert('Failed to load Qualifications PDF.');
+      });
     }
 
     async function fetchCertificationsList() {
@@ -608,19 +575,17 @@
 
         const data = await response.text();
         const certificationsList = document.getElementById("certifications-list");
-        if (!certificationsList) {
-          console.error('Certifications list element not found');
-          return;
-        }
-        certificationsList.innerHTML = '';
+        certificationsList.innerHTML = ''; // Clear existing list
 
-        const lines = data.split('\n').filter(line => line.trim() !== '');
+        const lines = data.split('\n').filter(line => line.trim() !== ''); // Remove empty lines
         lines.forEach(line => {
+          // Ensure the line has both a file part and title part
           const [filePart, titlePart] = line.split(':');
           if (filePart && titlePart) {
-            const file = filePart.trim().replace(/["']/g, '');
+            const file = filePart.trim().replace(/["']/g, ''); // Remove quotes from file name
             const titles = titlePart.split('||');
 
+            // Trim titles and set default titles only if missing
             const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
             const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
 
@@ -634,7 +599,7 @@
             // PDF Canvas
             const pdfCanvas = document.createElement('canvas');
             pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${file}`;
+            pdfCanvas.id = `pdf-canvas-${file}`; // Unique ID for each canvas
 
             listItem.appendChild(certTitle);
             listItem.appendChild(pdfCanvas);
@@ -656,7 +621,7 @@
 
       pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
         pdf.getPage(1).then(page => {
-          const scale = 1.5;
+          const scale = 1.5; // Adjust the scale for better resolution
           const viewport = page.getViewport({ scale });
 
           canvas.width = viewport.width;
@@ -670,30 +635,6 @@
         });
       }).catch(error => {
         console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
-      });
-    }
-
-    function setupMenu() {
-      const menuItems = document.querySelectorAll('.menu-item');
-      menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-          // Remove active class from all menu items
-          menuItems.forEach(i => i.classList.remove('active'));
-
-          // Add active class to the clicked item
-          item.classList.add('active');
-
-          // Show the corresponding section
-          const sectionId = item.getAttribute('data-section');
-          showSection(sectionId);
-        });
-      });
-    }
-
-    function showSection(sectionId) {
-      const sections = document.querySelectorAll('.content-section');
-      sections.forEach(section => {
-        section.style.display = section.id === sectionId ? 'block' : 'none';
       });
     }
   </script>
