@@ -8,9 +8,9 @@
   <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
   <meta name="author" content="Antonio Augusto Barbaro">
   
-  <!-- Google Fonts -->
+  <!-- Import Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+  
   <style>
     /* General Styles */
     body {
@@ -25,12 +25,13 @@
       position: relative;
     }
 
+    /* Left-Side Rotated Menu */
     .menu {
       position: fixed;
       left: 0;
       top: 0;
       height: 100%;
-      width: 80px;
+      width: 80px; /* Increased width to accommodate profile picture */
       background-color: rgba(22, 32, 66, 0.8);
       display: flex;
       flex-direction: column;
@@ -41,6 +42,7 @@
       z-index: 2;
     }
 
+    /* Rotated Profile Picture */
     .menu .profile-picture {
       width: 60px;
       height: 60px;
@@ -48,12 +50,12 @@
       border: 3px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
       margin-bottom: 20px;
-      transform: rotate(-90deg); 
+      transform: rotate(-90deg); /* Rotate to match menu items */
     }
 
     .menu-item {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
+      writing-mode: vertical-rl; /* Rotate text vertically */
+      transform: rotate(180deg); /* Flip text for readability */
       padding: 10px;
       text-align: center;
       background-color: rgba(0, 170, 255, 0.3);
@@ -78,14 +80,16 @@
       color: #162042;
     }
 
+    /* Main Content Area */
     .main-content {
       flex: 1;
-      margin-left: 80px;
+      margin-left: 80px; /* Adjusted to match menu width */
       display: flex;
       flex-direction: column;
       overflow-y: auto;
     }
 
+    /* Center Section */
     .center-section {
       flex: 1;
       padding: 20px;
@@ -96,6 +100,7 @@
       overflow-y: auto;
     }
 
+    /* Lists Styling */
     .social-links, .friendly-sites, .project-links, .certifications-list, .knowledge-list {
       list-style: none;
       padding: 0;
@@ -106,6 +111,7 @@
       position: relative;
     }
 
+    /* Social Links Styling */
     .social-link {
       display: block;
       padding: 10px 20px;
@@ -114,6 +120,7 @@
       text-decoration: none;
       border-radius: 30px;
       transition: background-color 0.3s, transform 0.3s;
+      position: relative;
       font-weight: bold;
       border: 3px solid transparent;
       background-clip: padding-box;
@@ -139,6 +146,7 @@
       }
     }
 
+    /* Knowledge List Styling */
     .knowledge-list li {
       margin: 10px 0;
       padding: 12px 25px;
@@ -159,6 +167,7 @@
       transform: scale(1.05);
     }
 
+    /* Certifications List Styling */
     .certifications-list li {
       margin: 20px 0;
       padding: 15px;
@@ -173,6 +182,7 @@
       position: relative;
     }
 
+    /* Certification Title Styling */
     .cert-title {
       position: absolute;
       top: 10px;
@@ -189,11 +199,13 @@
       transition: transform 0.6s ease, opacity 0.6s ease;
     }
 
+    /* Animation for title on hover */
     .certifications-list li:hover .cert-title {
       opacity: 1;
       transform: translateX(-50%) translateY(-10px);
     }
 
+    /* PDF Canvas for Certifications */
     .pdf-canvas {
       width: 100%;
       max-width: 100%;
@@ -211,6 +223,7 @@
       }
     }
 
+    /* Lightning Canvas */
     #lightningCanvas {
       position: absolute;
       top: 0;
@@ -221,6 +234,7 @@
       z-index: 1;
     }
 
+    /* Tech Background */
     .tech-bg {
       position: absolute;
       top: 0;
@@ -233,6 +247,7 @@
       z-index: 1;
     }
 
+    /* Language Selector */
     .language-selector {
       position: fixed;
       top: 10px;
@@ -251,6 +266,7 @@
       }
     }
 
+    /* Keyframes */
     @keyframes border-fill {
       0% {
         border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
@@ -262,79 +278,91 @@
   </style>
 </head>
 <body>
+  <!-- Tech Background -->
   <div class="tech-bg"></div>
 
+  <!-- Language Selector -->
   <div class="language-selector">
     <label for="language">Select Language: </label>
     <select id="language">
-      <option value="en">English</option>
       <option value="pt">Português</option>
+      <!-- Optionally, keep English if needed -->
+      <!-- <option value="en">English</option> -->
     </select>
   </div>
 
+  <!-- Rotated Menu with Profile Picture -->
   <div class="menu" id="menu">
     <img src="./images/292440780_2225688030932761_1836941331334930994_n.webp" alt="Profile Picture" class="profile-picture">
-    <div class="menu-item" data-section="profile">Profile</div>
-    <div class="menu-item" data-section="socialLinks">Social Links</div>
-    <div class="menu-item" data-section="friendlySites">Friendly Sites</div>
-    <div class="menu-item" data-section="certifications">Certifications</div>
-    <div class="menu-item" data-section="contact">Contact</div>
+    <div class="menu-item" data-section="profile">Perfil</div>
+    <div class="menu-item" data-section="socialLinks">Redes Sociais</div>
+    <div class="menu-item" data-section="friendlySites">Sites Amigos</div>
+    <div class="menu-item" data-section="certifications">Certificações</div>
+    <div class="menu-item" data-section="contact">Contato</div>
   </div>
 
+  <!-- Main Content Area -->
   <div class="main-content">
     <div class="center-section" id="centerSection">
+      <!-- Profile Section -->
       <div id="profile" class="content-section">
-        <h2>Profile</h2>
-        <p>Your profile description or introduction goes here. This is a placeholder for your profile text.</p>
-        <h2 id="knowledge-title">Knowledge</h2>
+        <h2>Perfil</h2>
+        <p>Sua descrição de perfil ou introdução aqui. Este é um espaço reservado para o texto do seu perfil.</p>
+        <h2 id="knowledge-title">Conhecimentos</h2>
         <ul class="knowledge-list" id="knowledge-list"></ul>
       </div>
 
+      <!-- Social Links Section -->
       <div id="socialLinks" class="content-section" style="display: none;">
-        <h2>Social Links & Projects</h2>
+        <h2>Redes Sociais & Projetos</h2>
         <ul class="social-links">
           <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
           <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
           <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
           <li>
-            <a href="./blender-projects.html" class="social-link">Blender Projects</a>
+            <a href="./blender-projects.html" class="social-link">Projetos Blender</a>
             <ul class="project-links">
-              <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
-              <li><a href="./blender-animations.html" class="social-link">Blender Animation</a></li>
+              <li><a href="./gimp-projects.html" class="social-link">Projetos Gimp</a></li>
+              <li><a href="./blender-animations.html" class="social-link">Animação Blender</a></li>
             </ul>
           </li>
         </ul>
       </div>
 
+      <!-- Friendly Sites Section -->
       <div id="friendlySites" class="content-section" style="display: none;">
-        <h2>Friendly Sites</h2>
+        <h2>Sites Amigos</h2>
         <ul class="friendly-sites">
           <li>
-            <a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a>
+            <a href="https://aabproducoes.github.io/NewTab/" class="social-link">Substituição da Nova Guia</a>
           </li>
           <li>
-            <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
+            <a href="#" class="social-link" id="animatedBackgroundLink">Fundo Animado</a>
           </li>
         </ul>
       </div>
 
+      <!-- Certifications Section -->
       <div id="certifications" class="content-section" style="display: none;">
-        <h2>Certifications</h2>
+        <h2>Certificações</h2>
         <ul class="certifications-list" id="certifications-list">
           <!-- Dynamic content will be loaded here -->
         </ul>
       </div>
 
+      <!-- Contact Section -->
       <div id="contact" class="content-section" style="display: none;">
-        <h2>Contact</h2>
+        <h2>Contato</h2>
         <p><a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
         <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
       </div>
     </div>
   </div>
 
+  <!-- Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
 
+  <!-- Lightning Effect Script -->
   <script>
     const lightningCanvas = document.getElementById('lightningCanvas');
     const ctx = lightningCanvas.getContext('2d');
@@ -413,18 +441,22 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
   </script>
+
+  <!-- Include pdf.js library for certifications -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+
+  <!-- Main Script -->
   <script>
-    let selectedLanguage = 'en';
+    let selectedLanguage = 'pt';
 
     window.addEventListener('DOMContentLoaded', () => {
       initializeLanguageSelector();
       setupMenu();
-      fetchTranslations();
       fetchKnowledgeList();
       fetchCertificationsList();
-      showSection('profile');
+      showSection('profile'); // Show the profile section by default
 
+      // Highlight the Profile tab after showing the profile section
       const profileTab = document.querySelector('.menu-item[data-section="profile"]');
       if (profileTab) {
         profileTab.classList.add('active');
@@ -452,24 +484,6 @@
 
     function fetchTranslations() {
       const translations = {
-        "en": {
-          "socialLinks": "Social Links & Projects",
-          "friendlySites": "Friendly Sites",
-          "certifications": "Certifications",
-          "contact": "Contact",
-          "knowledge": "Knowledge",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "twitter": "Twitter",
-          "instagram": "Instagram",
-          "blenderprojects": "Blender Projects",
-          "gimpprojects": "Gimp Projects",
-          "blenderanimation": "Blender Animation",
-          "newtabreplacement": "New Tab Replacement",
-          "animatedbackground": "Animated Background",
-          "profile": "Profile"
-        },
         "pt": {
           "socialLinks": "Redes Sociais & Projetos",
           "friendlySites": "Sites Amigos",
@@ -488,9 +502,10 @@
           "animatedbackground": "Fundo Animado",
           "profile": "Perfil"
         }
+        // Add "en" translations here if needed
       };
 
-      const data = translations[selectedLanguage] || translations["en"];
+      const data = translations[selectedLanguage] || translations["pt"];
 
       // Update section titles
       document.querySelectorAll('.content-section h2').forEach(el => {
@@ -511,31 +526,23 @@
       // Update project links
       const projectLinks = document.querySelectorAll('.project-links a');
       projectLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
+        // Assuming project links don't need translation or have separate handling
+        // If they do, add corresponding translations
       });
 
       // Update social links
       const socialLinks = document.querySelectorAll('.social-links > li > a');
       socialLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
+        // Assuming social links don't need translation
       });
 
-      // Update friendly sites
+      // Update friendly sites links
       const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
       friendlySitesLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
+        // Assuming friendly sites links don't need translation
       });
 
-      // Update contact links
+      // Update Contact links
       const whatsappLink = document.getElementById('whatsappLink');
       whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
 
@@ -545,7 +552,12 @@
 
     function fetchKnowledgeList() {
       fetch('./KnowledgeList/KnowledgeList.txt')
-        .then(response => response.text())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.text();
+        })
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
           if (!knowledgeList) {
@@ -556,96 +568,88 @@
 
           const lines = data.split('\n').filter(line => line.trim() !== '');
           if (lines.length === 0) {
-            knowledgeList.innerHTML = '<li>No knowledge items available.</li>';
+            knowledgeList.innerHTML = '<li>Nenhum item de conhecimento disponível.</li>';
             return;
           }
 
           lines.forEach((line, index) => {
-            const [enText, ptText] = line.split('||');
-            if (!enText || !ptText) {
-              console.warn(`Invalid format in KnowledgeList.txt at line ${index + 1}`);
+            const [ptText] = line.split(':'); // Adjusted to single language
+            if (!ptText) {
+              console.warn(`Formato inválido em KnowledgeList.txt na linha ${index + 1}: "${line}"`);
               return;
             }
             const listItem = document.createElement('li');
-            listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
+            listItem.textContent = ptText.trim();
             knowledgeList.appendChild(listItem);
           });
         })
-        .catch(error => console.error('Error loading knowledge list:', error));
+        .catch(error => console.error('Erro ao carregar a lista de conhecimentos:', error));
     }
 
-    function fetchCertificationsList() {
-      console.log('Fetching certifications list...');
-      fetch('./Certificados/CertificadosList.txt')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
-          }
-          return response.text();
-        })
-        .then(data => {
-          const certificationsList = document.getElementById("certifications-list");
-          if (!certificationsList) {
-            console.error('Certifications list element not found');
+    async function fetchCertificationsList() {
+      console.log('Carregando lista de certificações...');
+      try {
+        const response = await fetch('./Certificados/CertificadosList.txt');
+        if (!response.ok) {
+          throw new Error(`Falha ao carregar a lista de certificações: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.text();
+        const certificationsList = document.getElementById("certifications-list");
+        if (!certificationsList) {
+          console.error('Elemento da lista de certificações não encontrado');
+          return;
+        }
+        certificationsList.innerHTML = '';
+
+        const lines = data.split('\n').filter(line => line.trim() !== '');
+        if (lines.length === 0) {
+          console.log('Nenhuma certificação disponível.');
+          certificationsList.innerHTML = '<li>Nenhuma certificação disponível.</li>';
+          return;
+        }
+
+        lines.forEach((line, i) => {
+          const [filePart, titlePart] = line.split(':');
+          if (!filePart || !titlePart) {
+            console.warn(`Formato inválido em CertificadosList.txt na linha ${i + 1}: "${line}"`);
             return;
           }
-          certificationsList.innerHTML = '';
 
-          const lines = data.split('\n').filter(line => line.trim() !== '');
-          if (lines.length === 0) {
-            console.log('No certifications available.');
-            certificationsList.innerHTML = '<li>No certifications available.</li>';
-            return;
-          }
+          const file = filePart.trim().replace(/["']/g, '');
+          const title = titlePart.trim();
 
-          lines.forEach((line, i) => {
-            const [filePart, titlePart] = line.split(':');
-            if (!filePart || !titlePart) {
-              console.warn(`Invalid format in CertificadosList.txt at line ${i + 1}`);
-              return;
-            }
+          const pdfUrl = `./Certificados/${file}`;
 
-            const file = filePart.trim().replace(/["']/g, '');
-            const titles = titlePart.split('||');
+          console.log(`Carregando certificação ${i + 1}: ${file} - ${title}`);
 
-            if (titles.length < 2) {
-              console.warn(`Missing Portuguese title at line ${i + 1}`);
-              return;
-            }
+          const listItem = document.createElement('li');
 
-            const enTitle = titles[0].trim() || "Untitled Certification";
-            const ptTitle = titles[1].trim() || "Certificação Sem Título";
-            const pdfUrl = `./Certificados/${file}`;
+          const certTitle = document.createElement('div');
+          certTitle.classList.add('cert-title');
+          certTitle.textContent = title;
 
-            console.log(`Loading certification ${i+1}: ${file} - ${enTitle}/${ptTitle}`);
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${i}`; // Use index to ensure unique ID
 
-            const listItem = document.createElement('li');
+          listItem.appendChild(certTitle);
+          listItem.appendChild(pdfCanvas);
+          certificationsList.appendChild(listItem);
 
-            const certTitle = document.createElement('div');
-            certTitle.classList.add('cert-title');
-            certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            const pdfCanvas = document.createElement('canvas');
-            pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${i}`;
-
-            listItem.appendChild(certTitle);
-            listItem.appendChild(pdfCanvas);
-            certificationsList.appendChild(listItem);
-
-            renderFirstPage(pdfUrl, pdfCanvas.id);
-          });
-        })
-        .catch(error => {
-          console.error('Error loading certifications list:', error);
-          alert('An error occurred while loading the certifications list. Please try again later.');
+          // Render the first page of the PDF
+          renderFirstPage(pdfUrl, pdfCanvas.id);
         });
+      } catch (error) {
+        console.error('Erro ao carregar a lista de certificações:', error);
+        alert('Ocorreu um erro ao carregar a lista de certificações. Por favor, tente novamente mais tarde.');
+      }
     }
 
     function renderFirstPage(pdfUrl, canvasId) {
       const canvas = document.getElementById(canvasId);
       if (!canvas) {
-        console.error(`Canvas ${canvasId} not found.`);
+        console.error(`Elemento canvas ${canvasId} não encontrado.`);
         return;
       }
       const context = canvas.getContext('2d');
@@ -663,15 +667,15 @@
             viewport: viewport
           };
           page.render(renderContext).promise.then(() => {
-            console.log(`Rendered first page of ${pdfUrl}`);
+            console.log(`Página 1 renderizada de ${pdfUrl} no canvas ${canvasId}`);
           }).catch(error => {
-            console.error(`Error rendering first page of ${pdfUrl}:`, error);
+            console.error(`Erro ao renderizar a página 1 de ${pdfUrl}:`, error);
           });
         }).catch(error => {
-          console.error(`Error getting page 1 of ${pdfUrl}:`, error);
+          console.error(`Erro ao obter a página 1 de ${pdfUrl}:`, error);
         });
       }).catch(error => {
-        console.error(`Error loading PDF ${pdfUrl}:`, error);
+        console.error(`Erro ao carregar o PDF ${pdfUrl}:`, error);
       });
     }
 
@@ -679,8 +683,13 @@
       const menuItems = document.querySelectorAll('.menu-item');
       menuItems.forEach(item => {
         item.addEventListener('click', () => {
+          // Remove active class from all menu items
           menuItems.forEach(i => i.classList.remove('active'));
+
+          // Add active class to the clicked item
           item.classList.add('active');
+
+          // Show the corresponding section
           const sectionId = item.getAttribute('data-section');
           showSection(sectionId);
         });
