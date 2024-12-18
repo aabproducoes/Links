@@ -303,6 +303,7 @@
   <!-- Main Content Area -->
   <div class="main-content">
     <div class="center-section" id="centerSection">
+      <!-- Profile Section -->
       <div id="profile" class="content-section">
         <h2>Profile</h2>
         <p>Your profile description or introduction goes here. This is a placeholder for your profile text.</p>
@@ -310,6 +311,7 @@
         <ul class="knowledge-list" id="knowledge-list"></ul>
       </div>
 
+      <!-- Social Links Section -->
       <div id="socialLinks" class="content-section" style="display: none;">
         <h2>Social Links & Projects</h2>
         <ul class="social-links">
@@ -326,6 +328,7 @@
         </ul>
       </div>
 
+      <!-- Friendly Sites Section -->
       <div id="friendlySites" class="content-section" style="display: none;">
         <h2>Friendly Sites</h2>
         <ul class="friendly-sites">
@@ -338,6 +341,7 @@
         </ul>
       </div>
 
+      <!-- Certifications Section -->
       <div id="certifications" class="content-section" style="display: none;">
         <h2>Certifications</h2>
         <ul class="certifications-list" id="certifications-list">
@@ -345,6 +349,7 @@
         </ul>
       </div>
 
+      <!-- Contact Section -->
       <div id="contact" class="content-section" style="display: none;">
         <h2>Contact</h2>
         <p><a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
@@ -572,7 +577,12 @@
 
     function fetchKnowledgeList() {
       fetch('./KnowledgeList/KnowledgeList.txt')
-        .then(response => response.text())
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.text();
+        })
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
           if (!knowledgeList) {
@@ -582,10 +592,19 @@
           knowledgeList.innerHTML = '';
 
           const lines = data.split('\n').filter(line => line.trim() !== '');
-          lines.forEach(line => {
+          if (lines.length === 0) {
+            knowledgeList.innerHTML = '<li>No knowledge items available.</li>';
+            return;
+          }
+
+          lines.forEach((line, index) => {
             const [enText, ptText] = line.split('||');
+            if (!enText || !ptText) {
+              console.warn(`Invalid format in KnowledgeList.txt at line ${index + 1}: "${line}"`);
+              return;
+            }
             const listItem = document.createElement('li');
-            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
+            listItem.textContent = selectedLanguage === 'pt' ? ptText.trim() : enText.trim();
             knowledgeList.appendChild(listItem);
           });
         })
@@ -608,35 +627,61 @@
         certificationsList.innerHTML = '';
 
         const lines = data.split('\n').filter(line => line.trim() !== '');
-        lines.forEach(line => {
+        if (lines.length === 0) {
+          certificationsList.innerHTML = '<li>No certifications available.</li>';
+          return;
+        }
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i];
           const [filePart, titlePart] = line.split(':');
-          if (filePart && titlePart) {
-            const file = filePart.trim().replace(/["']/g, '');
-            const titles = titlePart.split('||');
-
-            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
-            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
-
-            const listItem = document.createElement('li');
-
-            // Certification Title
-            const certTitle = document.createElement('div');
-            certTitle.classList.add('cert-title');
-            certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            // PDF Canvas
-            const pdfCanvas = document.createElement('canvas');
-            pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${file}`;
-
-            listItem.appendChild(certTitle);
-            listItem.appendChild(pdfCanvas);
-            certificationsList.appendChild(listItem);
-
-            // Render the first page of the PDF
-            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+          if (!filePart || !titlePart) {
+            console.warn(`Invalid format in CertificadosList.txt at line ${i + 1}: "${line}"`);
+            continue;
           }
-        });
+          const file = filePart.trim().replace(/["']/g, '');
+          const titles = titlePart.split('||');
+
+          if (titles.length < 2) {
+            console.warn(`Missing Portuguese title in CertificadosList.txt at line ${i + 1}: "${line}"`);
+            continue;
+          }
+
+          const enTitle = titles[0].trim() || "Untitled Certification";
+          const ptTitle = titles[1].trim() || "Certificação Sem Título";
+
+          // Check if the PDF file exists by attempting to fetch it
+          const pdfUrl = `./Certificados/${file}`;
+          try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (!pdfResponse.ok) {
+              console.warn(`PDF file not found: ${pdfUrl}`);
+              continue;
+            }
+          } catch (err) {
+            console.error(`Error checking PDF file ${pdfUrl}:`, err);
+            continue;
+          }
+
+          const listItem = document.createElement('li');
+
+          // Certification Title
+          const certTitle = document.createElement('div');
+          certTitle.classList.add('cert-title');
+          certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+          // PDF Canvas
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${i}`; // Use index to ensure unique ID
+
+          listItem.appendChild(certTitle);
+          listItem.appendChild(pdfCanvas);
+          certificationsList.appendChild(listItem);
+
+          // Render the first page of the PDF
+          renderFirstPage(pdfUrl, pdfCanvas.id);
+        }
       } catch (error) {
         console.error('Error loading certifications list:', error);
         alert('An error occurred while loading the certifications list. Please try again later.');
@@ -645,6 +690,10 @@
 
     function renderFirstPage(pdfUrl, canvasId) {
       const canvas = document.getElementById(canvasId);
+      if (!canvas) {
+        console.error(`Canvas element with ID ${canvasId} not found.`);
+        return;
+      }
       const context = canvas.getContext('2d');
 
       pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
@@ -659,10 +708,16 @@
             canvasContext: context,
             viewport: viewport
           };
-          page.render(renderContext);
+          page.render(renderContext).promise.then(() => {
+            console.log(`Rendered page 1 of ${pdfUrl} on canvas ${canvasId}`);
+          }).catch(error => {
+            console.error(`Error rendering page 1 of ${pdfUrl}:`, error);
+          });
+        }).catch(error => {
+          console.error(`Error getting page 1 of ${pdfUrl}:`, error);
         });
       }).catch(error => {
-        console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
+        console.error(`Error loading PDF ${pdfUrl}:`, error);
       });
     }
 
