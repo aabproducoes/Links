@@ -317,7 +317,6 @@
       <!-- Profile Section -->
       <div id="profile" class="content-section">
         <h2>Profile</h2>
-        <!-- Add your profile content here -->
         <h2 id="knowledge-title">Knowledge</h2>
         <ul class="knowledge-list" id="knowledge-list"></ul>
       </div>
@@ -608,21 +607,19 @@
         certificationsList.innerHTML = '';
 
         const lines = data.split('\n').filter(line => line.trim() !== '');
-        
-        // Limit the number of loaded certifications to just one
-        const limitedLines = lines.slice(0, 1);
 
-        limitedLines.forEach(line => {
+        // Process only the first non-empty line
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue; // skip empty lines
           const [filePart, titlePart] = line.split(':');
           if (filePart && titlePart) {
             const file = filePart.trim().replace(/["']/g, '');
             const titles = titlePart.split('||');
-
             const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
             const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
 
             const listItem = document.createElement('li');
-
             const certTitle = document.createElement('div');
             certTitle.classList.add('cert-title');
             certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
@@ -636,8 +633,9 @@
             certificationsList.appendChild(listItem);
 
             renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+            break; // Stop after the first certificate
           }
-        });
+        }
       } catch (error) {
         console.error('Error loading certifications list:', error);
         alert('An error occurred while loading the certifications list. Please try again later.');
