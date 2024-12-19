@@ -109,20 +109,12 @@
     }
 
     /* Lists Styling */
-    .social-links,
-    .friendly-sites,
-    .project-links,
-    .certifications-list,
-    .knowledge-list {
+    .social-links, .friendly-sites, .project-links, .certifications-list, .knowledge-list {
       list-style: none;
       padding: 0;
     }
 
-    .social-links li,
-    .friendly-sites li,
-    .project-links li,
-    .certifications-list li,
-    .knowledge-list li {
+    .social-links li, .friendly-sites li, .project-links li, .certifications-list li, .knowledge-list li {
       margin: 15px 0;
       position: relative;
     }
@@ -282,7 +274,6 @@
       }
     }
 
-    /* Keyframes */
     @keyframes border-fill {
       0% {
         border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
@@ -337,14 +328,14 @@
       <div id="socialLinks" class="content-section" style="display: none;">
         <h2>Social Links & Projects</h2>
         <ul class="social-links">
-          <li><a href="https://www.facebook.com/antonio.augusto.barbaro" class="social-link">Facebook</a></li>
-          <li><a href="https://twitter.com/aabproducoes" class="social-link">Twitter</a></li>
-          <li><a href="https://www.instagram.com/aabproducoes/" class="social-link">Instagram</a></li>
+          <li><a href="#" class="social-link">Facebook</a></li>
+          <li><a href="#" class="social-link">Twitter</a></li>
+          <li><a href="#" class="social-link">Instagram</a></li>
           <li>
-            <a href="./blender-projects.html" class="social-link">Blender Projects</a>
+            <a href="#" class="social-link">Blender Projects</a>
             <ul class="project-links">
-              <li><a href="./gimp-projects.html" class="social-link">Gimp Projects</a></li>
-              <li><a href="./blender-animations.html" class="social-link">Blender Animation</a></li>
+              <li><a href="#" class="social-link">Gimp Projects</a></li>
+              <li><a href="#" class="social-link">Blender Animation</a></li>
             </ul>
           </li>
         </ul>
@@ -355,7 +346,7 @@
         <h2>Friendly Sites</h2>
         <ul class="friendly-sites">
           <li>
-            <a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a>
+            <a href="#" class="social-link">New Tab Replacement</a>
           </li>
           <li>
             <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
@@ -372,7 +363,7 @@
       <!-- Contact Section -->
       <div id="contact" class="content-section" style="display: none;">
         <h2>Contact</h2>
-        <p><a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
+        <p><a href="#" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
         <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
       </div>
     </div>
@@ -383,7 +374,7 @@
 
   <!-- Lightning Effect Script -->
   <script>
-    // Lightning Effect Code remains the same
+    // Lightning Effect Code
     const lightningCanvas = document.getElementById('lightningCanvas');
     const ctx = lightningCanvas.getContext('2d');
     let lightningPath = [];
@@ -462,8 +453,10 @@
     resizeCanvas();
   </script>
 
-  <!-- Main Script -->
+  <!-- PDF.js Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+
+  <!-- Main Script -->
   <script>
     let selectedLanguage = 'en';
 
@@ -611,7 +604,7 @@
     }
 
     async function fetchCertificationsList() {
-      const MAX_CERTIFICATIONS = 2; // Set this to the desired number of certificates to load
+      const MAX_CERTIFICATIONS = 1; // Set this to the desired number of certificates to load
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
         if (!response.ok) {
@@ -619,6 +612,9 @@
         }
 
         const data = await response.text();
+        console.log("CertificadosList.txt Content:");
+        console.log(data); // Print the entire content of the file to the console
+
         const certificationsList = document.getElementById("certifications-list");
         if (!certificationsList) {
           console.error('Certifications list element not found');
@@ -627,46 +623,49 @@
         certificationsList.innerHTML = '';
 
         const lines = data.split('\n').filter(line => line.trim() !== '');
+        console.log("Parsed Certificates List:", lines);
+
+        if (lines.length === 0) {
+          certificationsList.innerHTML = '<li>No certifications available.</li>';
+          console.warn('No valid certifications found in CertificadosList.txt');
+          return;
+        }
+
         let certificationsLoaded = 0;
 
-        for (let i = 0; i < lines.length; i++) {
+        // Each line expected format: "Certificados/Certificado-XYZ.pdf - Curso de ..."
+        for (const line of lines) {
           if (certificationsLoaded >= MAX_CERTIFICATIONS) {
             break;
           }
 
-          const line = lines[i].trim();
-          if (!line) continue; // Skip empty lines
-
-          const [filePart, titlePart] = line.split(':');
-          if (filePart && titlePart) {
-            const file = filePart.trim().replace(/["']/g, '');
-            const titles = titlePart.split('||');
-
-            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
-            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
-
-            const listItem = document.createElement('li');
-
-            const certTitle = document.createElement('div');
-            certTitle.classList.add('cert-title');
-            certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            const pdfCanvas = document.createElement('canvas');
-            pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${file}`;
-
-            listItem.appendChild(certTitle);
-            listItem.appendChild(pdfCanvas);
-            certificationsList.appendChild(listItem);
-
-            // Render the first page of the PDF
-            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
-
-            certificationsLoaded++;
-            console.log(`Loaded certification: ${file}`);
-          } else {
-            console.warn(`Invalid line format in CertificadosList.txt at line ${i + 1}: "${line}"`);
+          const parts = line.split(' - ');
+          if (parts.length < 2) {
+            console.warn(`Invalid line format: "${line}"`);
+            continue;
           }
+
+          const filePath = parts[0].trim();
+          const title = parts.slice(1).join(' - ').trim(); // In case the title itself contains '-'
+
+          const listItem = document.createElement('li');
+
+          const certTitle = document.createElement('div');
+          certTitle.classList.add('cert-title');
+          certTitle.textContent = title;
+
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${certificationsLoaded}`;
+
+          listItem.appendChild(certTitle);
+          listItem.appendChild(pdfCanvas);
+          certificationsList.appendChild(listItem);
+
+          // Render the first page of the PDF
+          renderFirstPage(filePath, pdfCanvas.id);
+
+          certificationsLoaded++;
         }
 
         if (certificationsLoaded === 0) {
