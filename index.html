@@ -525,6 +525,7 @@
 
       const data = translations[selectedLanguage] || translations["en"];
 
+      // Update section titles
       document.querySelectorAll('.content-section h2').forEach(el => {
         const id = el.parentElement.id;
         if (data[id]) {
@@ -532,6 +533,7 @@
         }
       });
 
+      // Update menu items
       document.querySelectorAll('.menu-item').forEach(el => {
         const section = el.getAttribute('data-section');
         if (data[section]) {
@@ -539,6 +541,7 @@
         }
       });
 
+      // Update project links
       const projectLinks = document.querySelectorAll('.project-links a');
       projectLinks.forEach(link => {
         const key = link.textContent.replace(/\s+/g, '').toLowerCase();
@@ -547,6 +550,7 @@
         }
       });
 
+      // Update social links
       const socialLinks = document.querySelectorAll('.social-links > li > a');
       socialLinks.forEach(link => {
         const key = link.textContent.replace(/\s+/g, '').toLowerCase();
@@ -555,6 +559,7 @@
         }
       });
 
+      // Update friendly sites links
       const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
       friendlySitesLinks.forEach(link => {
         const key = link.textContent.replace(/\s+/g, '').toLowerCase();
@@ -563,6 +568,7 @@
         }
       });
 
+      // Update Contact links
       const whatsappLink = document.getElementById('whatsappLink');
       whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
 
@@ -608,36 +614,52 @@
         certificationsList.innerHTML = '';
 
         const lines = data.split('\n').filter(line => line.trim() !== '');
-        
-        // Limit the number of loaded certifications to just two
-        const limitedLines = lines.slice(0, 2);
+        console.log(`Total certifications found: ${lines.length}`);
 
-        limitedLines.forEach(line => {
+        let count = 0; // Counter to limit to two certifications
+
+        for (const line of lines) {
+          if (count >= 2) break; // Stop after loading two certifications
+
           const [filePart, titlePart] = line.split(':');
-          if (filePart && titlePart) {
-            const file = filePart.trim().replace(/["']/g, '');
-            const titles = titlePart.split('||');
-
-            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
-            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
-
-            const listItem = document.createElement('li');
-
-            const certTitle = document.createElement('div');
-            certTitle.classList.add('cert-title');
-            certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            const pdfCanvas = document.createElement('canvas');
-            pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${file}`;
-
-            listItem.appendChild(certTitle);
-            listItem.appendChild(pdfCanvas);
-            certificationsList.appendChild(listItem);
-
-            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+          if (!filePart || !titlePart) {
+            console.warn(`Skipping invalid line: "${line}"`);
+            continue; // Skip lines that don't have both file and title parts
           }
-        });
+
+          const file = filePart.trim().replace(/["']/g, '');
+          const titles = titlePart.split('||');
+
+          const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
+          const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
+
+          const listItem = document.createElement('li');
+
+          // Certification Title
+          const certTitle = document.createElement('div');
+          certTitle.classList.add('cert-title');
+          certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+          // PDF Canvas
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${file}`;
+
+          listItem.appendChild(certTitle);
+          listItem.appendChild(pdfCanvas);
+          certificationsList.appendChild(listItem);
+
+          // Render the first page of the PDF
+          renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+
+          console.log(`Loaded certification: ${file}`);
+          count++;
+        }
+
+        if (count === 0) {
+          certificationsList.innerHTML = '<li>No certifications available.</li>';
+          console.warn('No valid certifications were loaded.');
+        }
       } catch (error) {
         console.error('Error loading certifications list:', error);
         alert('An error occurred while loading the certifications list. Please try again later.');
@@ -664,6 +686,10 @@
         });
       }).catch(error => {
         console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
+        // Optionally, display a placeholder or error message on the canvas
+        context.font = "16px Arial";
+        context.fillStyle = "#ff0000";
+        context.fillText("Failed to load PDF.", 10, 50);
       });
     }
 
