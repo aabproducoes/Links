@@ -34,7 +34,6 @@
       position: relative;
     }
 
-    /* Left-Side Rotated Menu */
     .menu {
       position: fixed;
       left: 0;
@@ -88,7 +87,6 @@
       color: #162042;
     }
 
-    /* Main Content Area */
     .main-content {
       flex: 1;
       margin-left: 80px;
@@ -97,7 +95,6 @@
       overflow-y: auto;
     }
 
-    /* Center Section */
     .center-section {
       flex: 1;
       padding: 20px;
@@ -295,14 +292,13 @@
     </select>
   </div>
 
-  <!-- Rotated Menu with Profile Picture -->
+  <!-- Rotated Menu -->
   <div class="menu" id="menu">
     <img
       src="./images/292440780_2225688030932761_1836941331334930994_n.webp"
       alt="Profile Picture"
       class="profile-picture"
     />
-
     <div class="menu-item" data-section="profile">Profile</div>
     <div class="menu-item" data-section="socialLinks">Social Links</div>
     <div class="menu-item" data-section="friendlySites">Friendly Sites</div>
@@ -310,18 +306,14 @@
     <div class="menu-item" data-section="contact">Contact</div>
   </div>
 
-  <!-- Main Content Area -->
   <div class="main-content">
-    <!-- Center Section -->
     <div class="center-section" id="centerSection">
-      <!-- Profile Section -->
       <div id="profile" class="content-section">
         <h2>Profile</h2>
         <h2 id="knowledge-title">Knowledge</h2>
         <ul class="knowledge-list" id="knowledge-list"></ul>
       </div>
 
-      <!-- Social Links Section -->
       <div id="socialLinks" class="content-section" style="display: none;">
         <h2>Social Links & Projects</h2>
         <ul class="social-links">
@@ -338,26 +330,19 @@
         </ul>
       </div>
 
-      <!-- Friendly Sites Section -->
       <div id="friendlySites" class="content-section" style="display: none;">
         <h2>Friendly Sites</h2>
         <ul class="friendly-sites">
-          <li>
-            <a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a>
-          </li>
-          <li>
-            <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
-          </li>
+          <li><a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a></li>
+          <li><a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
         </ul>
       </div>
 
-      <!-- Certifications Section -->
       <div id="certifications" class="content-section" style="display: none;">
         <h2>Certifications</h2>
         <ul class="certifications-list" id="certifications-list"></ul>
       </div>
 
-      <!-- Contact Section -->
       <div id="contact" class="content-section" style="display: none;">
         <h2>Contact</h2>
         <p><a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
@@ -366,11 +351,9 @@
     </div>
   </div>
 
-  <!-- Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
 
   <script>
-    // Lightning Effect Code remains the same
     const lightningCanvas = document.getElementById('lightningCanvas');
     const ctx = lightningCanvas.getContext('2d');
     let lightningPath = [];
@@ -449,18 +432,18 @@
     resizeCanvas();
   </script>
 
-  <!-- Main Script -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
   <script>
     let selectedLanguage = 'en';
 
     window.addEventListener('DOMContentLoaded', () => {
+      console.log("DOM Content Loaded. Initializing...");
       initializeLanguageSelector();
       setupMenu();
       fetchTranslations();
       fetchKnowledgeList();
       fetchCertificationsList();
-      showSection('profile'); // Show the profile section by default
+      showSection('profile');
     });
 
     function initializeLanguageSelector() {
@@ -483,6 +466,7 @@
     }
 
     function fetchTranslations() {
+      console.log("Fetching translations for:", selectedLanguage);
       const translations = {
         "en": {
           "socialLinks": "Social Links & Projects",
@@ -570,8 +554,12 @@
     }
 
     function fetchKnowledgeList() {
+      console.log("Fetching Knowledge List...");
       fetch('./KnowledgeList/KnowledgeList.txt')
-        .then(response => response.text())
+        .then(response => {
+          console.log("KnowledgeList Response:", response);
+          return response.text();
+        })
         .then(data => {
           const knowledgeList = document.getElementById("knowledge-list");
           if (!knowledgeList) {
@@ -592,13 +580,16 @@
     }
 
     async function fetchCertificationsList() {
+      console.log("Fetching Certifications List...");
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
+        console.log("Certifications List Response:", response);
         if (!response.ok) {
           throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.text();
+        console.log("Certifications List Data:", data);
         const certificationsList = document.getElementById("certifications-list");
         if (!certificationsList) {
           console.error('Certifications list element not found');
@@ -607,34 +598,55 @@
         certificationsList.innerHTML = '';
 
         const lines = data.split('\n').filter(line => line.trim() !== '');
+        console.log("Parsed Lines:", lines);
 
-        // Process only the first non-empty line
+        // Process only the first non-empty valid line
+        let certificateLoaded = false;
         for (let i = 0; i < lines.length; i++) {
           const line = lines[i].trim();
-          if (!line) continue; // skip empty lines
-          const [filePart, titlePart] = line.split(':');
-          if (filePart && titlePart) {
-            const file = filePart.trim().replace(/["']/g, '');
-            const titles = titlePart.split('||');
-            const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
-            const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
+          console.log("Processing line:", line);
+          if (!line) continue;
 
-            const listItem = document.createElement('li');
-            const certTitle = document.createElement('div');
-            certTitle.classList.add('cert-title');
-            certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
-
-            const pdfCanvas = document.createElement('canvas');
-            pdfCanvas.classList.add('pdf-canvas');
-            pdfCanvas.id = `pdf-canvas-${file}`;
-
-            listItem.appendChild(certTitle);
-            listItem.appendChild(pdfCanvas);
-            certificationsList.appendChild(listItem);
-
-            renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
-            break; // Stop after the first certificate
+          const parts = line.split(':');
+          if (parts.length < 2) {
+            console.warn("Line is missing a colon or title:", line);
+            continue;
           }
+
+          const filePart = parts[0].trim();
+          const titlePart = parts[1].trim();
+          if (!filePart || !titlePart) {
+            console.warn("Invalid formatting in line:", line);
+            continue;
+          }
+
+          const file = filePart.replace(/["']/g, '');
+          const titles = titlePart.split('||');
+          const enTitle = (titles[0] && titles[0].trim()) || "Untitled Certification";
+          const ptTitle = (titles[1] && titles[1].trim()) || "Certificação Sem Título";
+
+          const listItem = document.createElement('li');
+          const certTitle = document.createElement('div');
+          certTitle.classList.add('cert-title');
+          certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
+
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${file}`;
+
+          listItem.appendChild(certTitle);
+          listItem.appendChild(pdfCanvas);
+          certificationsList.appendChild(listItem);
+
+          console.log("Attempting to load PDF:", `./Certificados/${file}`);
+          renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
+
+          certificateLoaded = true;
+          break; // stop after first certificate
+        }
+
+        if (!certificateLoaded) {
+          console.log("No certificates were loaded. Check the CertificadosList.txt formatting and file paths.");
         }
       } catch (error) {
         console.error('Error loading certifications list:', error);
@@ -643,11 +655,19 @@
     }
 
     function renderFirstPage(pdfUrl, canvasId) {
+      console.log("Rendering PDF first page:", pdfUrl, "on canvas:", canvasId);
       const canvas = document.getElementById(canvasId);
+      if (!canvas) {
+        console.error("Canvas not found:", canvasId);
+        return;
+      }
+
       const context = canvas.getContext('2d');
 
       pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        console.log("PDF loaded:", pdfUrl);
         pdf.getPage(1).then(page => {
+          console.log("Page loaded:", page);
           const scale = 1.5;
           const viewport = page.getViewport({ scale });
 
@@ -658,10 +678,16 @@
             canvasContext: context,
             viewport: viewport
           };
-          page.render(renderContext);
+          page.render(renderContext).promise.then(() => {
+            console.log("PDF page rendered successfully!");
+          }).catch(err => {
+            console.error("Error rendering PDF page:", err);
+          });
+        }).catch(err => {
+          console.error("Error getting page from PDF:", err);
         });
       }).catch(error => {
-        console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
+        console.error(`Error loading PDF ${pdfUrl}:`, error);
       });
     }
 
