@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Your Resume</title>
-  <meta name="description" content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information.">
-  <meta name="keywords" content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information">
-  <meta name="author" content="Antonio Augusto Barbaro">
-  
+  <meta
+    name="description"
+    content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information."
+  />
+  <meta
+    name="keywords"
+    content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information"
+  />
+  <meta name="author" content="Antonio Augusto Barbaro" />
+
   <!-- Import Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
     /* General Styles */
     body {
@@ -31,7 +40,7 @@
       left: 0;
       top: 0;
       height: 100%;
-      width: 80px; /* Increased width to accommodate profile picture */
+      width: 80px;
       background-color: rgba(22, 32, 66, 0.8);
       display: flex;
       flex-direction: column;
@@ -42,7 +51,6 @@
       z-index: 2;
     }
 
-    /* Rotated Profile Picture */
     .menu .profile-picture {
       width: 60px;
       height: 60px;
@@ -50,12 +58,12 @@
       border: 3px solid #00ffff;
       box-shadow: 0 0 10px #00ffff;
       margin-bottom: 20px;
-      transform: rotate(-90deg); /* Rotate to match menu items */
+      transform: rotate(-90deg);
     }
 
     .menu-item {
       writing-mode: vertical-rl; /* Rotate text vertically */
-      transform: rotate(180deg); /* Flip text for readability */
+      transform: rotate(180deg);
       padding: 10px;
       text-align: center;
       background-color: rgba(0, 170, 255, 0.3);
@@ -83,7 +91,7 @@
     /* Main Content Area */
     .main-content {
       flex: 1;
-      margin-left: 80px; /* Adjusted to match menu width */
+      margin-left: 80px;
       display: flex;
       flex-direction: column;
       overflow-y: auto;
@@ -100,18 +108,24 @@
       overflow-y: auto;
     }
 
-    /* Lists Styling */
-    .social-links, .friendly-sites, .project-links, .certifications-list, .knowledge-list {
+    .social-links,
+    .friendly-sites,
+    .project-links,
+    .certifications-list,
+    .knowledge-list {
       list-style: none;
       padding: 0;
     }
 
-    .social-links li, .friendly-sites li, .project-links li, .certifications-list li, .knowledge-list li {
+    .social-links li,
+    .friendly-sites li,
+    .project-links li,
+    .certifications-list li,
+    .knowledge-list li {
       margin: 15px 0;
       position: relative;
     }
 
-    /* Social Links Styling */
     .social-link {
       display: block;
       padding: 10px 20px;
@@ -146,7 +160,6 @@
       }
     }
 
-    /* Knowledge List Styling */
     .knowledge-list li {
       margin: 10px 0;
       padding: 12px 25px;
@@ -167,7 +180,6 @@
       transform: scale(1.05);
     }
 
-    /* Certifications List Styling */
     .certifications-list li {
       margin: 20px 0;
       padding: 15px;
@@ -182,7 +194,6 @@
       position: relative;
     }
 
-    /* Certification Title Styling */
     .cert-title {
       position: absolute;
       top: 10px;
@@ -199,13 +210,11 @@
       transition: transform 0.6s ease, opacity 0.6s ease;
     }
 
-    /* Animation for title on hover */
     .certifications-list li:hover .cert-title {
       opacity: 1;
       transform: translateX(-50%) translateY(-10px);
     }
 
-    /* PDF Canvas for Certifications */
     .pdf-canvas {
       width: 100%;
       max-width: 100%;
@@ -223,7 +232,6 @@
       }
     }
 
-    /* Lightning Canvas */
     #lightningCanvas {
       position: absolute;
       top: 0;
@@ -234,7 +242,6 @@
       z-index: 1;
     }
 
-    /* Tech Background */
     .tech-bg {
       position: absolute;
       top: 0;
@@ -247,7 +254,6 @@
       z-index: 1;
     }
 
-    /* Language Selector */
     .language-selector {
       position: fixed;
       top: 10px;
@@ -266,7 +272,6 @@
       }
     }
 
-    /* Keyframes */
     @keyframes border-fill {
       0% {
         border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
@@ -292,14 +297,16 @@
 
   <!-- Rotated Menu with Profile Picture -->
   <div class="menu" id="menu">
-    <!-- Rotated Profile Picture with Correct Image Source -->
-    <img src="./images/292440780_2225688030932761_1836941331334930994_n.webp" alt="Profile Picture" class="profile-picture">
+    <img
+      src="./images/292440780_2225688030932761_1836941331334930994_n.webp"
+      alt="Profile Picture"
+      class="profile-picture"
+    />
 
     <div class="menu-item" data-section="profile">Profile</div>
     <div class="menu-item" data-section="socialLinks">Social Links</div>
     <div class="menu-item" data-section="friendlySites">Friendly Sites</div>
     <div class="menu-item" data-section="certifications">Certifications</div>
-    <!-- Removed the "Knowledge" menu item -->
     <div class="menu-item" data-section="contact">Contact</div>
   </div>
 
@@ -311,8 +318,6 @@
       <div id="profile" class="content-section">
         <h2>Profile</h2>
         <!-- Add your profile content here -->
-
-        <!-- Added Knowledge Content -->
         <h2 id="knowledge-title">Knowledge</h2>
         <ul class="knowledge-list" id="knowledge-list"></ul>
       </div>
@@ -342,7 +347,6 @@
             <a href="https://aabproducoes.github.io/NewTab/" class="social-link">New Tab Replacement</a>
           </li>
           <li>
-            <!-- Corrected Animated Background Link -->
             <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
           </li>
         </ul>
@@ -351,9 +355,7 @@
       <!-- Certifications Section -->
       <div id="certifications" class="content-section" style="display: none;">
         <h2>Certifications</h2>
-        <ul class="certifications-list" id="certifications-list">
-          <!-- Dynamic content will be loaded here -->
-        </ul>
+        <ul class="certifications-list" id="certifications-list"></ul>
       </div>
 
       <!-- Contact Section -->
@@ -368,7 +370,6 @@
   <!-- Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
 
-  <!-- Lightning Effect Script -->
   <script>
     // Lightning Effect Code remains the same
     const lightningCanvas = document.getElementById('lightningCanvas');
@@ -524,7 +525,6 @@
 
       const data = translations[selectedLanguage] || translations["en"];
 
-      // Update section titles
       document.querySelectorAll('.content-section h2').forEach(el => {
         const id = el.parentElement.id;
         if (data[id]) {
@@ -532,7 +532,6 @@
         }
       });
 
-      // Update menu items
       document.querySelectorAll('.menu-item').forEach(el => {
         const section = el.getAttribute('data-section');
         if (data[section]) {
@@ -540,7 +539,6 @@
         }
       });
 
-      // Update project links
       const projectLinks = document.querySelectorAll('.project-links a');
       projectLinks.forEach(link => {
         const key = link.textContent.replace(/\s+/g, '').toLowerCase();
@@ -549,7 +547,6 @@
         }
       });
 
-      // Update social links
       const socialLinks = document.querySelectorAll('.social-links > li > a');
       socialLinks.forEach(link => {
         const key = link.textContent.replace(/\s+/g, '').toLowerCase();
@@ -558,7 +555,6 @@
         }
       });
 
-      // Update friendly sites links
       const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
       friendlySitesLinks.forEach(link => {
         const key = link.textContent.replace(/\s+/g, '').toLowerCase();
@@ -567,7 +563,6 @@
         }
       });
 
-      // Update Contact links
       const whatsappLink = document.getElementById('whatsappLink');
       whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
 
@@ -613,7 +608,11 @@
         certificationsList.innerHTML = '';
 
         const lines = data.split('\n').filter(line => line.trim() !== '');
-        lines.forEach(line => {
+        
+        // Limit the number of loaded certifications to just two
+        const limitedLines = lines.slice(0, 2);
+
+        limitedLines.forEach(line => {
           const [filePart, titlePart] = line.split(':');
           if (filePart && titlePart) {
             const file = filePart.trim().replace(/["']/g, '');
@@ -624,12 +623,10 @@
 
             const listItem = document.createElement('li');
 
-            // Certification Title
             const certTitle = document.createElement('div');
             certTitle.classList.add('cert-title');
             certTitle.textContent = selectedLanguage === 'pt' ? ptTitle : enTitle;
 
-            // PDF Canvas
             const pdfCanvas = document.createElement('canvas');
             pdfCanvas.classList.add('pdf-canvas');
             pdfCanvas.id = `pdf-canvas-${file}`;
@@ -638,7 +635,6 @@
             listItem.appendChild(pdfCanvas);
             certificationsList.appendChild(listItem);
 
-            // Render the first page of the PDF
             renderFirstPage(`./Certificados/${file}`, pdfCanvas.id);
           }
         });
@@ -675,13 +671,8 @@
       const menuItems = document.querySelectorAll('.menu-item');
       menuItems.forEach(item => {
         item.addEventListener('click', () => {
-          // Remove active class from all menu items
           menuItems.forEach(i => i.classList.remove('active'));
-
-          // Add active class to the clicked item
           item.classList.add('active');
-
-          // Show the corresponding section
           const sectionId = item.getAttribute('data-section');
           showSection(sectionId);
         });
