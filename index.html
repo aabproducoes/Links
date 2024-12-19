@@ -600,7 +600,6 @@
     }
 
     async function fetchCertificationsList() {
-      const MAX_CERTIFICATIONS = 2; // Adjust this number to 1 or 2 as needed
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
         if (!response.ok) {
@@ -618,15 +617,14 @@
         const lines = data.split('\n').filter(line => line.trim() !== '');
         let certificationsLoaded = 0;
 
-        for (let i = 0; i < lines.length; i++) {
-          if (certificationsLoaded >= MAX_CERTIFICATIONS) {
-            break;
+        lines.forEach((line, index) => {
+          const trimmedLine = line.trim();
+          if (!trimmedLine) {
+            console.warn(`Skipping empty line at ${index + 1}`);
+            return; // Skip empty lines
           }
 
-          const line = lines[i].trim();
-          if (!line) continue; // Skip empty lines
-
-          const [filePart, titlePart] = line.split(':');
+          const [filePart, titlePart] = trimmedLine.split(':');
           if (filePart && titlePart) {
             const file = filePart.trim().replace(/["']/g, '');
             const titles = titlePart.split('||');
@@ -654,13 +652,15 @@
             certificationsLoaded++;
             console.log(`Loaded certification: ${file}`);
           } else {
-            console.warn(`Invalid line format in CertificadosList.txt at line ${i + 1}: "${line}"`);
+            console.warn(`Invalid line format in CertificadosList.txt at line ${index + 1}: "${line}"`);
           }
-        }
+        });
 
         if (certificationsLoaded === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
           console.warn('No valid certifications found in CertificadosList.txt');
+        } else {
+          console.log(`Total certifications loaded: ${certificationsLoaded}`);
         }
       } catch (error) {
         console.error('Error loading certifications list:', error);
