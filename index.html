@@ -465,7 +465,7 @@
       setupMenu();
       fetchTranslations();
       fetchKnowledgeList();
-      fetchCertificationsList();
+      fetchCertificationsList(); // Load certificates on page load
       showSection('profile'); // Show the profile section by default
     });
 
@@ -596,7 +596,10 @@
           lines.forEach(line => {
             const [enText, ptText] = line.split('||');
             const listItem = document.createElement('li');
-            listItem.textContent = selectedLanguage === 'pt' ? (ptText ? ptText.trim() : '') : (enText ? enText.trim() : '');
+            listItem.textContent =
+              selectedLanguage === 'pt'
+                ? (ptText ? ptText.trim() : '')
+                : (enText ? enText.trim() : '');
             knowledgeList.appendChild(listItem);
           });
         })
@@ -604,7 +607,12 @@
     }
 
     async function fetchCertificationsList() {
-      const MAX_CERTIFICATIONS = 100; // Set this to the desired number of certificates to load
+      /**
+       * Adjust MAX_CERTIFICATIONS to the desired number of certificates to load.
+       * Set to a large number (or Infinity) to load all.
+       */
+      const MAX_CERTIFICATIONS = 10; // e.g., set to 2, 6, or Infinity as you like
+
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
         if (!response.ok) {
@@ -612,8 +620,7 @@
         }
 
         const data = await response.text();
-        console.log("CertificadosList.txt Content:");
-        console.log(data); // Print the entire content of the file to the console
+        console.log("CertificadosList.txt content:\n", data);
 
         const certificationsList = document.getElementById("certifications-list");
         if (!certificationsList) {
@@ -622,8 +629,9 @@
         }
         certificationsList.innerHTML = '';
 
+        // Split lines and filter out empty lines
         const lines = data.split('\n').filter(line => line.trim() !== '');
-        console.log("Parsed Certificates List:", lines);
+        console.log("Parsed certificate lines:", lines);
 
         if (lines.length === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
@@ -633,21 +641,22 @@
 
         let certificationsLoaded = 0;
 
-        // Each line expected format: "Certificados/Certificado-XYZ.pdf - Curso de ..."
-        for (const line of lines) {
-          if (certificationsLoaded >= MAX_CERTIFICATIONS) {
-            break;
-          }
+        // Process each line
+        lines.forEach((line, index) => {
+          console.log(`Processing line ${index + 1}: ${line}`);
+
+          if (certificationsLoaded >= MAX_CERTIFICATIONS) return;
 
           const parts = line.split(' - ');
           if (parts.length < 2) {
-            console.warn(`Invalid line format: "${line}"`);
-            continue;
+            console.warn(`Skipping invalid line: "${line}"`);
+            return;
           }
 
           const filePath = parts[0].trim();
-          const title = parts.slice(1).join(' - ').trim(); // In case the title itself contains '-'
+          const title = parts.slice(1).join(' - ').trim(); // Handles potential multiple dashes
 
+          // Create list item
           const listItem = document.createElement('li');
 
           const certTitle = document.createElement('div');
@@ -666,11 +675,11 @@
           renderFirstPage(filePath, pdfCanvas.id);
 
           certificationsLoaded++;
-        }
+        });
 
         if (certificationsLoaded === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
-          console.warn('No valid certifications found in CertificadosList.txt');
+          console.warn('No valid certifications found for rendering.');
         }
       } catch (error) {
         console.error('Error loading certifications list:', error);
@@ -686,8 +695,9 @@
       }
       const context = canvas.getContext('2d');
 
-      pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
-        pdf.getPage(1).then(page => {
+      pdfjsLib.getDocument(pdfUrl).promise
+        .then(pdf => pdf.getPage(1))
+        .then(page => {
           const scale = 1.5;
           const viewport = page.getViewport({ scale });
 
@@ -699,10 +709,10 @@
             viewport: viewport
           };
           page.render(renderContext);
+        })
+        .catch(error => {
+          console.error(`Error rendering PDF "${pdfUrl}":`, error);
         });
-      }).catch(error => {
-        console.error(`Error rendering first page of PDF ${pdfUrl}:`, error);
-      });
     }
 
     function setupMenu() {
@@ -720,7 +730,7 @@
     function showSection(sectionId) {
       const sections = document.querySelectorAll('.content-section');
       sections.forEach(section => {
-        section.style.display = section.id === sectionId ? 'block' : 'none';
+        section.style.display = (section.id === sectionId) ? 'block' : 'none';
       });
     }
   </script>
