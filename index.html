@@ -604,7 +604,7 @@
     }
 
     async function fetchCertificationsList() {
-      const MAX_CERTIFICATIONS = 1; // Set this to the desired number of certificates to load
+      const MAX_CERTIFICATIONS = 100; // Set this to the desired number of certificates to load
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
         if (!response.ok) {
