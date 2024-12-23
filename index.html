@@ -3,616 +3,71 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Resume</title>
-  <meta
-    name="description"
-    content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information."
-  />
-  <meta
-    name="keywords"
-    content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information"
-  />
-  <meta name="author" content="Antonio Augusto Barbaro" />
-
-  <!-- Import Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Poppins:wght@400;600&display=swap"
-    rel="stylesheet"
-  />
-
+  <title>Resume (Alternative PDF Loading)</title>
+  
+  <!-- Basic Styles (Minimal for Demo) -->
   <style>
-    /* General Styles */
     body {
       margin: 0;
       padding: 0;
-      display: flex;
+      font-family: sans-serif;
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
-      font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
-      overflow: hidden;
-      position: relative;
     }
-
-    /* Left-Side Rotated Menu */
-    .menu {
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 80px;
-      background-color: rgba(22, 32, 66, 0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 20px;
-      gap: 15px;
-      z-index: 2;
-    }
-
-    .menu .profile-picture {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 3px solid #00ffff;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 20px;
-      transform: rotate(-90deg);
-    }
-
-    .menu-item {
-      writing-mode: vertical-rl; /* Rotate text vertically */
-      transform: rotate(180deg);
-      padding: 10px;
-      text-align: center;
-      background-color: rgba(0, 170, 255, 0.3);
-      color: #00ffff;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 2px solid transparent;
-    }
-
-    .menu-item:hover {
-      background-color: #00ffff;
-      color: #162042;
-      transform: scale(1.1) rotate(180deg);
-      border: 2px solid #ffd700;
-    }
-
-    .menu-item.active {
-      background-color: #ffd700;
-      color: #162042;
-    }
-
-    /* Main Content Area */
-    .main-content {
-      flex: 1;
-      margin-left: 80px;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-    }
-
-    /* Center Section */
     .center-section {
-      flex: 1;
       padding: 20px;
-      margin: 10px;
-      border-radius: 15px;
-      background-color: rgba(22, 32, 66, 0.8);
-      backdrop-filter: blur(10px);
-      overflow-y: auto;
+      background: rgba(22, 32, 66, 0.8);
     }
-
-    /* Lists Styling */
-    .social-links, .friendly-sites, .project-links, .certifications-list, .knowledge-list {
+    .certifications-list {
       list-style: none;
       padding: 0;
     }
-
-    .social-links li, .friendly-sites li, .project-links li, .certifications-list li, .knowledge-list li {
-      margin: 15px 0;
-      position: relative;
-    }
-
-    /* Social Links Styling */
-    .social-link {
-      display: block;
-      padding: 10px 20px;
-      background-color: #00ffff;
-      color: #162042;
-      text-decoration: none;
-      border-radius: 30px;
-      transition: background-color 0.3s, transform 0.3s;
-      position: relative;
-      font-weight: bold;
-      border: 3px solid transparent;
-      background-clip: padding-box;
-      z-index: 3;
-      font-size: 14px;
-      text-align: center;
-      margin: 5px 0;
-    }
-
-    .social-link:hover {
-      background-color: #162042;
-      color: #00ffff;
-      transform: scale(1.05);
-      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      animation: border-fill 2s forwards;
-    }
-
-    @media (min-width: 768px) {
-      .social-link {
-        display: inline-block;
-        padding: 12px 25px;
-        font-size: 16px;
-      }
-    }
-
-    /* Knowledge List Styling */
-    .knowledge-list li {
-      margin: 10px 0;
-      padding: 12px 25px;
-      background-color: transparent;
-      color: #00ffff;
-      position: relative;
-      border-radius: 15px;
-      text-align: center;
-      border: 3px solid transparent;
-      transition: transform 0.3s, border-image 2s;
-      background-clip: padding-box;
-      z-index: 3;
-    }
-
-    .knowledge-list li:hover {
-      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      animation: border-fill 2s forwards;
-      transform: scale(1.05);
-    }
-
-    /* Certifications List Styling */
     .certifications-list li {
       margin: 20px 0;
-      padding: 15px;
       background-color: rgba(22, 32, 66, 0.9);
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
+      padding: 15px;
       position: relative;
     }
-
-    /* Certification Title Styling */
     .cert-title {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
       background-color: rgba(22, 32, 66, 0.8);
       padding: 5px 10px;
       border-radius: 5px;
       color: #ffd700;
       font-weight: bold;
-      opacity: 0;
-      pointer-events: none;
-      white-space: nowrap;
-      transition: transform 0.6s ease, opacity 0.6s ease;
+      text-align: center;
+      margin-bottom: 10px;
     }
-
-    /* Animation for title on hover */
-    .certifications-list li:hover .cert-title {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-10px);
-    }
-
-    /* PDF Canvas for Certifications */
-    .pdf-canvas {
+    /* Iframe for PDFs */
+    .pdf-iframe {
       width: 100%;
-      max-width: 100%;
-      height: auto;
+      height: 600px; /* adjust as needed */
+      border: none;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
-      margin-top: 10px;
-      position: relative;
-      z-index: 1;
-    }
-
-    @media (min-width: 768px) {
-      .pdf-canvas {
-        max-width: 600px;
-      }
-    }
-
-    /* Lightning Canvas */
-    #lightningCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Tech Background */
-    .tech-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
-      opacity: 0.7;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Language Selector */
-    .language-selector {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-      background: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: #00ffff;
-    }
-
-    @media (min-width: 768px) {
-      .language-selector {
-        top: 20px;
-        right: 20px;
-      }
-    }
-
-    @keyframes border-fill {
-      0% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
-      }
-      100% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      }
     }
   </style>
 </head>
 <body>
-  <!-- Tech Background -->
-  <div class="tech-bg"></div>
-
-  <!-- Language Selector -->
-  <div class="language-selector">
-    <label for="language">Select Language: </label>
-    <select id="language">
-      <option value="en">English</option>
-      <option value="pt">Português</option>
-    </select>
+  <div class="center-section">
+    <h2>Certifications</h2>
+    <ul id="certifications-list" class="certifications-list"></ul>
   </div>
 
-  <!-- Rotated Menu with Profile Picture -->
-  <div class="menu" id="menu">
-    <img
-      src="./images/292440780_2225688030932761_1836941331334930994_n.webp"
-      alt="Profile Picture"
-      class="profile-picture"
-    />
-
-    <div class="menu-item" data-section="profile">Profile</div>
-    <div class="menu-item" data-section="socialLinks">Social Links</div>
-    <div class="menu-item" data-section="friendlySites">Friendly Sites</div>
-    <div class="menu-item" data-section="certifications">Certifications</div>
-    <div class="menu-item" data-section="contact">Contact</div>
-  </div>
-
-  <!-- Main Content Area -->
-  <div class="main-content">
-    <!-- Center Section -->
-    <div class="center-section" id="centerSection">
-      <!-- Profile Section -->
-      <div id="profile" class="content-section">
-        <h2>Profile</h2>
-        <!-- Add your profile content here -->
-        <h2 id="knowledge-title">Knowledge</h2>
-        <ul class="knowledge-list" id="knowledge-list"></ul>
-      </div>
-
-      <!-- Social Links Section -->
-      <div id="socialLinks" class="content-section" style="display: none;">
-        <h2>Social Links & Projects</h2>
-        <ul class="social-links">
-          <li><a href="#" class="social-link">Facebook</a></li>
-          <li><a href="#" class="social-link">Twitter</a></li>
-          <li><a href="#" class="social-link">Instagram</a></li>
-          <li>
-            <a href="#" class="social-link">Blender Projects</a>
-            <ul class="project-links">
-              <li><a href="#" class="social-link">Gimp Projects</a></li>
-              <li><a href="#" class="social-link">Blender Animation</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Friendly Sites Section -->
-      <div id="friendlySites" class="content-section" style="display: none;">
-        <h2>Friendly Sites</h2>
-        <ul class="friendly-sites">
-          <li>
-            <a href="#" class="social-link">New Tab Replacement</a>
-          </li>
-          <li>
-            <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Certifications Section -->
-      <div id="certifications" class="content-section" style="display: none;">
-        <h2>Certifications</h2>
-        <ul class="certifications-list" id="certifications-list"></ul>
-      </div>
-
-      <!-- Contact Section -->
-      <div id="contact" class="content-section" style="display: none;">
-        <h2>Contact</h2>
-        <p><a href="#" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
-        <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lightning Effect Canvas -->
-  <canvas id="lightningCanvas"></canvas>
-
-  <!-- Lightning Effect Script -->
   <script>
-    // Lightning Effect Code
-    const lightningCanvas = document.getElementById('lightningCanvas');
-    const ctx = lightningCanvas.getContext('2d');
-    let lightningPath = [];
-    let animationActive = false;
-    let currentColor = getRandomLightColor();
-    const maxPathLength = 100;
+    // We no longer need pdf.js, so we've removed that script.
 
-    function resizeCanvas() {
-      lightningCanvas.width = window.innerWidth;
-      lightningCanvas.height = window.innerHeight;
-    }
-
-    function getRandomLightColor() {
-      const hue = Math.random() * 360;
-      return `hsl(${hue}, 100%, 75%)`;
-    }
-
-    function drawLightning() {
-      if (!animationActive) return;
-      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-      ctx.strokeStyle = currentColor;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.8;
-      ctx.beginPath();
-      ctx.moveTo(lightningCanvas.width / 2, 0);
-
-      let lastPoint = lightningPath[lightningPath.length - 1] || { x: lightningCanvas.width / 2, y: 0 };
-      if (lastPoint.y < lightningCanvas.height) {
-        const xOffset = (Math.random() - 0.5) * 30;
-        const newPoint = { x: lastPoint.x + xOffset, y: lastPoint.y + 15 };
-        lightningPath.push(newPoint);
-      }
-
-      if (lightningPath.length > maxPathLength) {
-        lightningPath.shift();
-      }
-
-      lightningPath.forEach(point => ctx.lineTo(point.x, point.y));
-      ctx.stroke();
-
-      ctx.globalAlpha = 0.2;
-      ctx.fillStyle = currentColor.replace('hsl', 'hsla').replace(')', ', 0.2)');
-      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-
-      if (lastPoint.y >= lightningCanvas.height) {
-        lightningPath = [];
-        currentColor = getRandomLightColor();
-      }
-
-      ctx.globalAlpha = 1.0;
-      requestAnimationFrame(drawLightning);
-    }
-
-    function startAnimation() {
-      if (!animationActive) {
-        animationActive = true;
-        drawLightning();
-      }
-    }
-
-    function stopAnimation() {
-      animationActive = false;
-      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-      lightningPath = [];
-    }
-
-    const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
-    if (animatedBackgroundLink) {
-      animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
-      animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-  </script>
-
-  <!-- PDF.js Script -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-
-  <!-- Main Script -->
-  <script>
-    let selectedLanguage = 'en';
-
-    window.addEventListener('DOMContentLoaded', () => {
-      initializeLanguageSelector();
-      setupMenu();
-      fetchTranslations();
-      fetchKnowledgeList();
-      fetchCertificationsList(); // Load certificates on page load
-      showSection('profile'); // Show the profile section by default
-    });
-
-    function initializeLanguageSelector() {
-      const languageSelect = document.getElementById("language");
-      if (localStorage.getItem('selectedLanguage')) {
-        selectedLanguage = localStorage.getItem('selectedLanguage');
-        languageSelect.value = selectedLanguage;
-      }
-      languageSelect.addEventListener('change', () => {
-        selectedLanguage = languageSelect.value;
-        localStorage.setItem('selectedLanguage', selectedLanguage);
-        changeLanguage();
-      });
-    }
-
-    function changeLanguage() {
-      fetchTranslations();
-      fetchKnowledgeList();
+    document.addEventListener('DOMContentLoaded', () => {
       fetchCertificationsList();
-    }
-
-    function fetchTranslations() {
-      const translations = {
-        "en": {
-          "socialLinks": "Social Links & Projects",
-          "friendlySites": "Friendly Sites",
-          "certifications": "Certifications",
-          "contact": "Contact",
-          "knowledge": "Knowledge",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "twitter": "Twitter",
-          "instagram": "Instagram",
-          "blenderprojects": "Blender Projects",
-          "gimpprojects": "Gimp Projects",
-          "blenderanimation": "Blender Animation",
-          "newtabreplacement": "New Tab Replacement",
-          "animatedbackground": "Animated Background",
-          "profile": "Profile"
-        },
-        "pt": {
-          "socialLinks": "Redes Sociais & Projetos",
-          "friendlySites": "Sites Amigos",
-          "certifications": "Certificações",
-          "contact": "Contato",
-          "knowledge": "Conhecimentos",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "twitter": "Twitter",
-          "instagram": "Instagram",
-          "blenderprojects": "Projetos Blender",
-          "gimpprojects": "Projetos Gimp",
-          "blenderanimation": "Animação Blender",
-          "newtabreplacement": "Substituição da Nova Guia",
-          "animatedbackground": "Fundo Animado",
-          "profile": "Perfil"
-        }
-      };
-
-      const data = translations[selectedLanguage] || translations["en"];
-
-      // Update section titles
-      document.querySelectorAll('.content-section h2').forEach(el => {
-        const id = el.parentElement.id;
-        if (data[id]) {
-          el.innerText = data[id];
-        }
-      });
-
-      // Update menu items
-      document.querySelectorAll('.menu-item').forEach(el => {
-        const section = el.getAttribute('data-section');
-        if (data[section]) {
-          el.innerText = data[section];
-        }
-      });
-
-      // Update project links
-      const projectLinks = document.querySelectorAll('.project-links a');
-      projectLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
-      });
-
-      // Update social links
-      const socialLinks = document.querySelectorAll('.social-links > li > a');
-      socialLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
-      });
-
-      // Update friendly sites links
-      const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
-      friendlySitesLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
-        }
-      });
-
-      // Update Contact links
-      const whatsappLink = document.getElementById('whatsappLink');
-      whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
-
-      const emailLink = document.getElementById('emailLink');
-      emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
-    }
-
-    function fetchKnowledgeList() {
-      fetch('./KnowledgeList/KnowledgeList.txt')
-        .then(response => response.text())
-        .then(data => {
-          const knowledgeList = document.getElementById("knowledge-list");
-          if (!knowledgeList) {
-            console.error('Knowledge list element not found');
-            return;
-          }
-          knowledgeList.innerHTML = '';
-
-          const lines = data.split('\n').filter(line => line.trim() !== '');
-          lines.forEach(line => {
-            const [enText, ptText] = line.split('||');
-            const listItem = document.createElement('li');
-            listItem.textContent =
-              selectedLanguage === 'pt'
-                ? (ptText ? ptText.trim() : '')
-                : (enText ? enText.trim() : '');
-            knowledgeList.appendChild(listItem);
-          });
-        })
-        .catch(error => console.error('Error loading knowledge list:', error));
-    }
+    });
 
     async function fetchCertificationsList() {
       /**
-       * Adjust MAX_CERTIFICATIONS to the desired number of certificates to load.
-       * Set to a large number (or Infinity) to load all.
+       * We'll display all certificates by default.
+       * If you want to limit to 2, set MAX_CERTIFICATIONS = 2.
        */
-      const MAX_CERTIFICATIONS = 10; // e.g., set to 2, 6, or Infinity as you like
-
+      const MAX_CERTIFICATIONS = 6; // or Infinity, or 2, as you prefer
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
         if (!response.ok) {
@@ -635,103 +90,51 @@
 
         if (lines.length === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
-          console.warn('No valid certifications found in CertificadosList.txt');
           return;
         }
 
         let certificationsLoaded = 0;
 
-        // Process each line
-        lines.forEach((line, index) => {
-          console.log(`Processing line ${index + 1}: ${line}`);
-
-          if (certificationsLoaded >= MAX_CERTIFICATIONS) return;
+        for (const line of lines) {
+          if (certificationsLoaded >= MAX_CERTIFICATIONS) break;
 
           const parts = line.split(' - ');
           if (parts.length < 2) {
             console.warn(`Skipping invalid line: "${line}"`);
-            return;
+            continue;
           }
 
           const filePath = parts[0].trim();
-          const title = parts.slice(1).join(' - ').trim(); // Handles potential multiple dashes
+          const title = parts.slice(1).join(' - ').trim();
 
-          // Create list item
+          // Create <li> container
           const listItem = document.createElement('li');
 
+          // Certification title
           const certTitle = document.createElement('div');
           certTitle.classList.add('cert-title');
           certTitle.textContent = title;
-
-          const pdfCanvas = document.createElement('canvas');
-          pdfCanvas.classList.add('pdf-canvas');
-          pdfCanvas.id = `pdf-canvas-${certificationsLoaded}`;
-
           listItem.appendChild(certTitle);
-          listItem.appendChild(pdfCanvas);
+
+          // Create iframe for the PDF
+          const pdfIframe = document.createElement('iframe');
+          pdfIframe.classList.add('pdf-iframe');
+          pdfIframe.src = filePath; // Let the browser handle PDF preview
+          listItem.appendChild(pdfIframe);
+
           certificationsList.appendChild(listItem);
-
-          // Render the first page of the PDF
-          renderFirstPage(filePath, pdfCanvas.id);
-
           certificationsLoaded++;
-        });
+        }
 
+        // If no valid lines loaded
         if (certificationsLoaded === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
-          console.warn('No valid certifications found for rendering.');
         }
+
       } catch (error) {
         console.error('Error loading certifications list:', error);
         alert('An error occurred while loading the certifications list. Please try again later.');
       }
-    }
-
-    function renderFirstPage(pdfUrl, canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) {
-        console.error(`Canvas element with ID "${canvasId}" not found.`);
-        return;
-      }
-      const context = canvas.getContext('2d');
-
-      pdfjsLib.getDocument(pdfUrl).promise
-        .then(pdf => pdf.getPage(1))
-        .then(page => {
-          const scale = 1.5;
-          const viewport = page.getViewport({ scale });
-
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
-
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          page.render(renderContext);
-        })
-        .catch(error => {
-          console.error(`Error rendering PDF "${pdfUrl}":`, error);
-        });
-    }
-
-    function setupMenu() {
-      const menuItems = document.querySelectorAll('.menu-item');
-      menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-          menuItems.forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          const sectionId = item.getAttribute('data-section');
-          showSection(sectionId);
-        });
-      });
-    }
-
-    function showSection(sectionId) {
-      const sections = document.querySelectorAll('.content-section');
-      sections.forEach(section => {
-        section.style.display = (section.id === sectionId) ? 'block' : 'none';
-      });
     }
   </script>
 </body>
