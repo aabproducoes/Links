@@ -33,12 +33,12 @@
     /* General Styles */
     body {
       display: flex;
-      flex-direction: row; /* Explicitly set to row */
+      flex-direction: row; /* Align menu and main content horizontally */
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      overflow-x: hidden; /* Prevent horizontal scrollbar from body */
+      overflow-x: hidden; /* Prevent horizontal scrollbar */
       position: relative;
     }
 
@@ -82,6 +82,8 @@
       cursor: pointer;
       transition: background-color 0.3s, color 0.3s, transform 0.3s, border 0.3s;
       border: 2px solid transparent;
+      width: 100%; /* Ensure menu items take full width */
+      max-width: 100%;
     }
 
     .menu-item:hover {
@@ -310,6 +312,18 @@
         border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       }
     }
+
+    /* Download Link Styling */
+    .download-link {
+      margin-top: 10px;
+      text-decoration: underline;
+      color: #00ffff;
+      font-weight: bold;
+    }
+
+    .download-link:hover {
+      color: #ffd700;
+    }
   </style>
 </head>
 <body>
@@ -329,7 +343,7 @@
   <div class="menu" id="menu">
     <img
       src="./images/292440780_2225688030932761_1836941331334930994_n.webp"
-      alt="Profile Picture"
+      alt="Antonio Augusto Barbaro Profile Picture"
       class="profile-picture"
     />
 
@@ -495,6 +509,12 @@
       fetchKnowledgeList();
       fetchCertificationsList(); // Load certificates on page load
       showSection('profile'); // Show the profile section by default
+
+      // Highlight the "Profile" menu item on load
+      const profileMenuItem = document.querySelector('.menu-item[data-section="profile"]');
+      if (profileMenuItem) {
+        profileMenuItem.classList.add('active');
+      }
     });
 
     function initializeLanguageSelector() {
@@ -560,9 +580,9 @@
 
       // Update section titles
       document.querySelectorAll('.content-section h2').forEach(el => {
-        const id = el.parentElement.id;
-        if (data[id]) {
-          el.innerText = data[id];
+        const parentId = el.parentElement.id;
+        if (data[parentId]) {
+          el.innerText = data[parentId];
         }
       });
 
@@ -699,6 +719,15 @@
           // Render the first page of the PDF
           renderFirstPage(filePath, pdfCanvas.id);
 
+          // Create and append download link
+          const downloadLink = document.createElement('a');
+          downloadLink.href = filePath;
+          downloadLink.textContent = 'Download Certificate';
+          downloadLink.classList.add('download-link');
+          downloadLink.target = '_blank';
+
+          listItem.appendChild(downloadLink);
+
           console.log(`Loaded certificate ${certificationsLoaded + 1}: ${title}`);
           certificationsLoaded++;
         }
@@ -720,6 +749,19 @@
         return;
       }
       const context = canvas.getContext('2d');
+
+      // Create a loading indicator
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.textContent = 'Loading...';
+      loadingIndicator.style.position = 'absolute';
+      loadingIndicator.style.top = '50%';
+      loadingIndicator.style.left = '50%';
+      loadingIndicator.style.transform = 'translate(-50%, -50%)';
+      loadingIndicator.style.color = '#00ffff';
+      loadingIndicator.style.fontSize = '18px';
+      loadingIndicator.style.fontWeight = 'bold';
+      loadingIndicator.id = `loading-${canvasId}`;
+      canvas.parentElement.appendChild(loadingIndicator);
 
       // Create an Intersection Observer to lazy load the PDF when canvas is in view
       const observer = new IntersectionObserver((entries, observer) => {
@@ -746,10 +788,21 @@
               })
               .then(() => {
                 console.log(`Page rendered for ${pdfUrl}`);
+                // Remove the loading indicator
+                const loading = document.getElementById(`loading-${canvasId}`);
+                if (loading) {
+                  loading.remove();
+                }
                 observer.unobserve(canvas); // Stop observing after rendering
               })
               .catch(error => {
                 console.error(`Error rendering PDF "${pdfUrl}":`, error);
+                // Update loading indicator to show error
+                const loading = document.getElementById(`loading-${canvasId}`);
+                if (loading) {
+                  loading.textContent = 'Failed to load PDF';
+                  loading.style.color = '#ff0000';
+                }
               });
           }
         });
