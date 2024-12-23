@@ -1,141 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Resume (Alternative PDF Loading)</title>
-  
-  <!-- Basic Styles (Minimal for Demo) -->
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: sans-serif;
-      background: linear-gradient(135deg, #0a0f2e, #162042);
-      color: #00ffff;
+async function fetchCertificationsList() {
+  try {
+    const response = await fetch('./Certificados/CertificadosList.txt');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
     }
-    .center-section {
-      padding: 20px;
-      background: rgba(22, 32, 66, 0.8);
+
+    const data = await response.text();
+    console.log("CertificadosList.txt content:\n", data);
+
+    const certificationsList = document.getElementById("certifications-list");
+    if (!certificationsList) {
+      console.error('Certifications list element not found');
+      return;
     }
-    .certifications-list {
-      list-style: none;
-      padding: 0;
+    certificationsList.innerHTML = ''; // Clear existing content
+
+    // Split lines and filter out empty lines
+    const lines = data.split('\n').filter(line => line.trim() !== '');
+    console.log("Parsed certificate lines:", lines);
+
+    if (lines.length === 0) {
+      certificationsList.innerHTML = '<li>No certifications available.</li>';
+      console.warn('No valid certifications found in CertificadosList.txt');
+      return;
     }
-    .certifications-list li {
-      margin: 20px 0;
-      background-color: rgba(22, 32, 66, 0.9);
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-      padding: 15px;
-      position: relative;
-    }
-    .cert-title {
-      background-color: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: #ffd700;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    /* Iframe for PDFs */
-    .pdf-iframe {
-      width: 100%;
-      height: 600px; /* adjust as needed */
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-    }
-  </style>
-</head>
-<body>
-  <div class="center-section">
-    <h2>Certifications</h2>
-    <ul id="certifications-list" class="certifications-list"></ul>
-  </div>
 
-  <script>
-    // We no longer need pdf.js, so we've removed that script.
+    lines.forEach((line, index) => {
+      console.log(`Processing line ${index + 1}: ${line}`);
 
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchCertificationsList();
-    });
-
-    async function fetchCertificationsList() {
-      /**
-       * We'll display all certificates by default.
-       * If you want to limit to 2, set MAX_CERTIFICATIONS = 2.
-       */
-      const MAX_CERTIFICATIONS = 6; // or Infinity, or 2, as you prefer
-      try {
-        const response = await fetch('./Certificados/CertificadosList.txt');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.text();
-        console.log("CertificadosList.txt content:\n", data);
-
-        const certificationsList = document.getElementById("certifications-list");
-        if (!certificationsList) {
-          console.error('Certifications list element not found');
-          return;
-        }
-        certificationsList.innerHTML = '';
-
-        // Split lines and filter out empty lines
-        const lines = data.split('\n').filter(line => line.trim() !== '');
-        console.log("Parsed certificate lines:", lines);
-
-        if (lines.length === 0) {
-          certificationsList.innerHTML = '<li>No certifications available.</li>';
-          return;
-        }
-
-        let certificationsLoaded = 0;
-
-        for (const line of lines) {
-          if (certificationsLoaded >= MAX_CERTIFICATIONS) break;
-
-          const parts = line.split(' - ');
-          if (parts.length < 2) {
-            console.warn(`Skipping invalid line: "${line}"`);
-            continue;
-          }
-
-          const filePath = parts[0].trim();
-          const title = parts.slice(1).join(' - ').trim();
-
-          // Create <li> container
-          const listItem = document.createElement('li');
-
-          // Certification title
-          const certTitle = document.createElement('div');
-          certTitle.classList.add('cert-title');
-          certTitle.textContent = title;
-          listItem.appendChild(certTitle);
-
-          // Create iframe for the PDF
-          const pdfIframe = document.createElement('iframe');
-          pdfIframe.classList.add('pdf-iframe');
-          pdfIframe.src = filePath; // Let the browser handle PDF preview
-          listItem.appendChild(pdfIframe);
-
-          certificationsList.appendChild(listItem);
-          certificationsLoaded++;
-        }
-
-        // If no valid lines loaded
-        if (certificationsLoaded === 0) {
-          certificationsList.innerHTML = '<li>No certifications available.</li>';
-        }
-
-      } catch (error) {
-        console.error('Error loading certifications list:', error);
-        alert('An error occurred while loading the certifications list. Please try again later.');
+      const parts = line.split(' - ');
+      if (parts.length < 2) {
+        console.warn(`Skipping invalid line: "${line}"`);
+        return;
       }
-    }
-  </script>
-</body>
-</html>
+
+      const filePath = parts[0].trim();
+      const title = parts.slice(1).join(' - ').trim();
+
+      // Create list item
+      const listItem = document.createElement('li');
+
+      const certTitle = document.createElement('div');
+      certTitle.classList.add('cert-title');
+      certTitle.textContent = title;
+
+      const iframe = document.createElement('iframe');
+      iframe.src = filePath;
+      iframe.classList.add('pdf-frame');
+      iframe.title = title;
+      iframe.setAttribute('loading', 'lazy'); // Lazy load for performance
+      iframe.width = "100%";
+      iframe.height = "400px";
+
+      const downloadLink = document.createElement('a');
+      downloadLink.href = filePath;
+      downloadLink.target = "_blank";
+      downloadLink.textContent = "View/Download PDF";
+      downloadLink.classList.add('pdf-link');
+
+      // Append to list item
+      listItem.appendChild(certTitle);
+      listItem.appendChild(iframe);
+      listItem.appendChild(downloadLink);
+
+      // Add the list item to the certifications list
+      certificationsList.appendChild(listItem);
+    });
+  } catch (error) {
+    console.error('Error loading certifications list:', error);
+    alert('An error occurred while loading the certifications list. Please try again later.');
+  }
+}
