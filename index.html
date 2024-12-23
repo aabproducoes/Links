@@ -94,7 +94,8 @@
       margin-left: 80px;
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
+      overflow-y: auto; /* Allow vertical scrolling */
+      height: 100vh; /* Ensure it takes full viewport height */
     }
 
     /* Center Section */
@@ -105,7 +106,7 @@
       border-radius: 15px;
       background-color: rgba(22, 32, 66, 0.8);
       backdrop-filter: blur(10px);
-      overflow-y: auto;
+      overflow-y: auto; /* Allow vertical scrolling */
     }
 
     /* Lists Styling */
@@ -176,8 +177,13 @@
     }
 
     /* Certifications List Styling */
+    .certifications-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; /* Adds space between certificates */
+    }
+
     .certifications-list li {
-      margin: 20px 0;
       padding: 15px;
       background-color: rgba(22, 32, 66, 0.9);
       border-radius: 10px;
@@ -217,7 +223,7 @@
     .pdf-iframe {
       width: 100%;
       max-width: 600px; /* Adjust as needed */
-      height: 500px; /* Adjust as needed */
+      height: 500px; /* Adjust height as needed */
       border: none;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
@@ -604,7 +610,7 @@
     }
 
     async function fetchCertificationsList() {
-      const MAX_CERTIFICATIONS = 2; // Load only two certificates
+      const MAX_CERTIFICATIONS = 6; // Set to 6 to load all certificates
 
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
@@ -669,6 +675,7 @@
           listItem.appendChild(pdfIframe);
           certificationsList.appendChild(listItem);
 
+          console.log(`Loaded certificate ${certificationsLoaded + 1}: ${title}`);
           certificationsLoaded++;
         }
 
