@@ -219,21 +219,21 @@
       transform: translateX(-50%) translateY(-10px);
     }
 
-    /* Embedded PDF Styling */
-    .pdf-iframe {
+    /* PDF Canvas for Certifications */
+    .pdf-canvas {
       width: 100%;
       max-width: 600px; /* Adjust as needed */
-      height: 500px; /* Adjust height as needed */
-      border: none;
+      height: auto;
       border-radius: 10px;
       box-shadow: 0 0 10px #00ffff;
       margin-top: 20px;
+      position: relative;
+      z-index: 1;
     }
 
     @media (min-width: 768px) {
-      .pdf-iframe {
+      .pdf-canvas {
         max-width: 600px;
-        height: 500px;
       }
     }
 
@@ -459,6 +459,9 @@
     resizeCanvas();
   </script>
 
+  <!-- PDF.js Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+
   <!-- Main Script -->
   <script>
     let selectedLanguage = 'en';
@@ -662,18 +665,17 @@
           certTitle.classList.add('cert-title');
           certTitle.textContent = title;
 
-          // Create iframe to embed the PDF
-          const pdfIframe = document.createElement('iframe');
-          pdfIframe.classList.add('pdf-iframe');
-          pdfIframe.src = filePath;
-          pdfIframe.width = "600"; // Adjust width as needed
-          pdfIframe.height = "500px"; // Adjust height as needed
-          pdfIframe.style.border = "none";
-          pdfIframe.setAttribute('allowfullscreen', '');
+          // Create canvas for PDF rendering
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${certificationsLoaded}`;
 
           listItem.appendChild(certTitle);
-          listItem.appendChild(pdfIframe);
+          listItem.appendChild(pdfCanvas);
           certificationsList.appendChild(listItem);
+
+          // Render the first page of the PDF
+          renderFirstPage(filePath, pdfCanvas.id);
 
           console.log(`Loaded certificate ${certificationsLoaded + 1}: ${title}`);
           certificationsLoaded++;
@@ -687,6 +689,41 @@
         console.error('Error loading certifications list:', error);
         alert('An error occurred while loading the certifications list. Please try again later.');
       }
+    }
+
+    function renderFirstPage(pdfUrl, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) {
+        console.error(`Canvas element with ID "${canvasId}" not found.`);
+        return;
+      }
+      const context = canvas.getContext('2d');
+
+      pdfjsLib.getDocument(pdfUrl).promise
+        .then(pdf => {
+          console.log(`PDF loaded: ${pdfUrl}`);
+          return pdf.getPage(1);
+        })
+        .then(page => {
+          console.log(`Rendering page 1 of ${pdfUrl}`);
+          const scale = 1.5;
+          const viewport = page.getViewport({ scale });
+
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+
+          const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+          };
+          return page.render(renderContext).promise;
+        })
+        .then(() => {
+          console.log(`Page rendered for ${pdfUrl}`);
+        })
+        .catch(error => {
+          console.error(`Error rendering PDF "${pdfUrl}":`, error);
+        });
     }
 
     function setupMenu() {
