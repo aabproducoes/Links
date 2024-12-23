@@ -21,16 +21,24 @@
   />
 
   <style>
-    /* General Styles */
-    body {
+    /* Global CSS Reset */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    /* General Styles */
+    body {
       display: flex;
+      flex-direction: row; /* Explicitly set to row */
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
-      overflow: hidden;
+      overflow-x: hidden; /* Prevent horizontal scrollbar from body */
       position: relative;
     }
 
@@ -72,7 +80,7 @@
       font-weight: bold;
       border-radius: 10px;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: background-color 0.3s, color 0.3s, transform 0.3s, border 0.3s;
       border: 2px solid transparent;
     }
 
@@ -91,11 +99,12 @@
     /* Main Content Area */
     .main-content {
       flex: 1;
-      margin-left: 80px;
+      margin-left: 80px; /* Width of the fixed menu */
       display: flex;
       flex-direction: column;
       overflow-y: auto; /* Allow vertical scrolling */
-      height: 100vh; /* Ensure it takes full viewport height */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
+      height: 100vh; /* Full viewport height */
     }
 
     /* Center Section */
@@ -107,12 +116,15 @@
       background-color: rgba(22, 32, 66, 0.8);
       backdrop-filter: blur(10px);
       overflow-y: auto; /* Allow vertical scrolling */
+      overflow-x: hidden; /* Prevent horizontal scrolling */
     }
 
     /* Lists Styling */
     .social-links, .friendly-sites, .project-links, .certifications-list, .knowledge-list {
       list-style: none;
       padding: 0;
+      width: 100%; /* Ensure lists take full width */
+      max-width: 100%;
     }
 
     .social-links li, .friendly-sites li, .project-links li, .certifications-list li, .knowledge-list li {
@@ -137,6 +149,7 @@
       font-size: 14px;
       text-align: center;
       margin: 5px 0;
+      max-width: 100%; /* Prevent overflow */
     }
 
     .social-link:hover {
@@ -168,6 +181,7 @@
       transition: transform 0.3s, border-image 2s;
       background-clip: padding-box;
       z-index: 3;
+      max-width: 100%; /* Prevent overflow */
     }
 
     .knowledge-list li:hover {
@@ -181,6 +195,8 @@
       display: flex;
       flex-direction: column;
       gap: 20px; /* Adds space between certificates */
+      width: 100%; /* Ensure it takes full width */
+      max-width: 100%;
     }
 
     .certifications-list li {
@@ -194,6 +210,8 @@
       align-items: center;
       overflow: hidden;
       position: relative;
+      width: 100%;
+      max-width: 100%;
     }
 
     /* Certification Title Styling */
@@ -211,6 +229,7 @@
       pointer-events: none;
       white-space: nowrap;
       transition: transform 0.6s ease, opacity 0.6s ease;
+      z-index: 2; /* Ensure it stays above other elements */
     }
 
     /* Animation for title on hover */
@@ -246,6 +265,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 1;
+      overflow: hidden; /* Prevent any overflow */
     }
 
     /* Tech Background */
@@ -259,6 +279,7 @@
       opacity: 0.7;
       pointer-events: none;
       z-index: 1;
+      overflow: hidden; /* Prevent any overflow */
     }
 
     /* Language Selector */
@@ -271,6 +292,7 @@
       padding: 5px 10px;
       border-radius: 5px;
       color: #00ffff;
+      max-width: 100%;
     }
 
     @media (min-width: 768px) {
@@ -699,31 +721,45 @@
       }
       const context = canvas.getContext('2d');
 
-      pdfjsLib.getDocument(pdfUrl).promise
-        .then(pdf => {
-          console.log(`PDF loaded: ${pdfUrl}`);
-          return pdf.getPage(1);
-        })
-        .then(page => {
-          console.log(`Rendering page 1 of ${pdfUrl}`);
-          const scale = 1.5;
-          const viewport = page.getViewport({ scale });
+      // Create an Intersection Observer to lazy load the PDF when canvas is in view
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            pdfjsLib.getDocument(pdfUrl).promise
+              .then(pdf => {
+                console.log(`PDF loaded: ${pdfUrl}`);
+                return pdf.getPage(1);
+              })
+              .then(page => {
+                console.log(`Rendering page 1 of ${pdfUrl}`);
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale });
 
-          canvas.width = viewport.width;
-          canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
 
-          const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-          };
-          return page.render(renderContext).promise;
-        })
-        .then(() => {
-          console.log(`Page rendered for ${pdfUrl}`);
-        })
-        .catch(error => {
-          console.error(`Error rendering PDF "${pdfUrl}":`, error);
+                const renderContext = {
+                  canvasContext: context,
+                  viewport: viewport
+                };
+                return page.render(renderContext).promise;
+              })
+              .then(() => {
+                console.log(`Page rendered for ${pdfUrl}`);
+                observer.unobserve(canvas); // Stop observing after rendering
+              })
+              .catch(error => {
+                console.error(`Error rendering PDF "${pdfUrl}":`, error);
+              });
+          }
         });
+      }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      });
+
+      observer.observe(canvas);
     }
 
     function setupMenu() {
