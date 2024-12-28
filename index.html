@@ -54,7 +54,6 @@
       flex-direction: column;
       align-items: center;
       justify-content: center; /* Centers items vertically */
-      padding-top: 0;          /* Removed top padding */
       gap: 15px;
       z-index: 2;
     }
@@ -69,7 +68,8 @@
       transform: rotate(-90deg);
     }
 
-    .menu-item {
+    /* More Specific Class for Menu Items */
+    .menu .sidebar-menu-item {
       writing-mode: vertical-rl; /* Rotate text vertically */
       transform: rotate(180deg);
       padding: 10px;
@@ -89,12 +89,12 @@
     }
 
     /* Accessible Focus Styles */
-    .menu-item:focus {
+    .menu .sidebar-menu-item:focus {
       outline: 2px solid #ffd700;
       outline-offset: 4px;
     }
 
-    .menu-item::after {
+    .menu .sidebar-menu-item::after {
       content: '▶️'; /* Unicode arrow */
       position: absolute;
       right: 10px; /* Adjusted Position from the right */
@@ -105,20 +105,20 @@
       pointer-events: none; /* Prevent arrow from capturing mouse events */
     }
 
-    .menu-item:hover::after,
-    .menu-item:focus::after {
+    .menu .sidebar-menu-item:hover::after,
+    .menu .sidebar-menu-item:focus::after {
       transform: translateY(-50%) rotate(180deg) scale(1.2); /* Slightly enlarge on hover/focus */
       color: #ffd700; /* Change color on hover/focus */
     }
 
-    .menu-item:hover {
+    .menu .sidebar-menu-item:hover {
       background-color: #00ffff;
       color: #162042;
       transform: scale(1.1) rotate(180deg);
       border: 2px solid #ffd700;
     }
 
-    .menu-item.active {
+    .menu .sidebar-menu-item.active {
       background-color: #ffd700;
       color: #162042;
       box-shadow: 0 0 10px #ffd700;
@@ -153,12 +153,11 @@
       padding: 0;
       width: 100%; /* Ensure lists take full width */
       max-width: 100%;
-      display: flex;          /* Added Flexbox */
-      justify-content: center; /* Centers items horizontally */
-      align-items: center;    /* Centers items vertically */
-      flex-wrap: wrap;        /* Allows items to wrap */
-      gap: 15px;              /* Adds space between buttons */
-      padding: 10px 0;        /* Adds vertical padding */
+    }
+
+    .social-links li, .friendly-sites li, .project-links li, .certifications-list li, .knowledge-list li {
+      margin: 15px 0;
+      position: relative;
     }
 
     /* Social Links Styling */
@@ -179,11 +178,9 @@
       text-align: center;
       margin: 5px 0;
       max-width: 100%; /* Prevent overflow */
-      min-width: 150px; /* Optional: Ensures uniform button sizes */
     }
 
-    .social-link:hover,
-    .social-link:focus {
+    .social-link:hover {
       background-color: #162042;
       color: #00ffff;
       transform: scale(1.05);
@@ -191,18 +188,11 @@
       animation: border-fill 2s forwards;
     }
 
-    /* Focus Styles for Accessibility */
-    .social-link:focus {
-      outline: 2px solid #ffd700;
-      outline-offset: 2px;
-    }
-
     @media (min-width: 768px) {
       .social-link {
         display: inline-block;
         padding: 12px 25px;
         font-size: 16px;
-        min-width: 150px;
       }
     }
 
@@ -222,8 +212,7 @@
       max-width: 100%; /* Prevent overflow */
     }
 
-    .knowledge-list li:hover,
-    .knowledge-list li:focus {
+    .knowledge-list li:hover {
       border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
       animation: border-fill 2s forwards;
       transform: scale(1.05);
@@ -236,7 +225,6 @@
       gap: 20px; /* Adds space between certificates */
       width: 100%; /* Ensure it takes full width */
       max-width: 100%;
-      align-items: center; /* Centers items horizontally */
     }
 
     .certifications-list li {
@@ -251,13 +239,7 @@
       overflow: hidden;
       position: relative;
       width: 100%;
-      max-width: 600px; /* Limits width for better centering */
-    }
-
-    .certifications-list li:hover,
-    .certifications-list li:focus {
-      transform: scale(1.02);
-      box-shadow: 0 0 15px #ffd700;
+      max-width: 100%;
     }
 
     /* Certification Title Styling */
@@ -279,8 +261,7 @@
     }
 
     /* Animation for title on hover */
-    .certifications-list li:hover .cert-title,
-    .certifications-list li:focus .cert-title {
+    .certifications-list li:hover .cert-title {
       opacity: 1;
       transform: translateX(-50%) translateY(-10px);
     }
@@ -366,23 +347,8 @@
       font-weight: bold;
     }
 
-    .download-link:hover,
-    .download-link:focus {
+    .download-link:hover {
       color: #ffd700;
-      outline: none;
-    }
-
-    /* Optional: Centralize Content in Profile Section */
-    #profile {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    /* Ensure No Horizontal Scrollbar in Main Content */
-    .main-content, .center-section {
-      overflow-x: hidden;
     }
   </style>
 </head>
@@ -407,11 +373,11 @@
       class="profile-picture"
     />
 
-    <div class="menu-item" data-section="profile" tabindex="0" aria-label="Profile Section">Profile</div>
-    <div class="menu-item" data-section="socialLinks" tabindex="0" aria-label="Social Links Section">Social Links</div>
-    <div class="menu-item" data-section="friendlySites" tabindex="0" aria-label="Friendly Sites Section">Friendly Sites</div>
-    <div class="menu-item" data-section="certifications" tabindex="0" aria-label="Certifications Section">Certifications</div>
-    <div class="menu-item" data-section="contact" tabindex="0" aria-label="Contact Section">Contact</div>
+    <div class="menu-item sidebar-menu-item" data-section="profile" tabindex="0" aria-label="Profile Section">Profile</div>
+    <div class="menu-item sidebar-menu-item" data-section="socialLinks" tabindex="0" aria-label="Social Links Section">Social Links</div>
+    <div class="menu-item sidebar-menu-item" data-section="friendlySites" tabindex="0" aria-label="Friendly Sites Section">Friendly Sites</div>
+    <div class="menu-item sidebar-menu-item" data-section="certifications" tabindex="0" aria-label="Certifications Section">Certifications</div>
+    <div class="menu-item sidebar-menu-item" data-section="contact" tabindex="0" aria-label="Contact Section">Contact</div>
   </div>
 
   <!-- Main Content Area -->
@@ -430,14 +396,14 @@
       <div id="socialLinks" class="content-section" style="display: none;">
         <h2>Social Links & Projects</h2>
         <ul class="social-links">
-          <li><a href="#" class="social-link" aria-label="Facebook Profile">Facebook</a></li>
-          <li><a href="#" class="social-link" aria-label="Twitter Profile">Twitter</a></li>
-          <li><a href="#" class="social-link" aria-label="Instagram Profile">Instagram</a></li>
+          <li><a href="#" class="social-link">Facebook</a></li>
+          <li><a href="#" class="social-link">Twitter</a></li>
+          <li><a href="#" class="social-link">Instagram</a></li>
           <li>
-            <a href="#" class="social-link" aria-label="Blender Projects">Blender Projects</a>
+            <a href="#" class="social-link">Blender Projects</a>
             <ul class="project-links">
-              <li><a href="#" class="social-link" aria-label="Gimp Projects">Gimp Projects</a></li>
-              <li><a href="#" class="social-link" aria-label="Blender Animation">Blender Animation</a></li>
+              <li><a href="#" class="social-link">Gimp Projects</a></li>
+              <li><a href="#" class="social-link">Blender Animation</a></li>
             </ul>
           </li>
         </ul>
@@ -448,10 +414,10 @@
         <h2>Friendly Sites</h2>
         <ul class="friendly-sites">
           <li>
-            <a href="#" class="social-link" aria-label="New Tab Replacement">New Tab Replacement</a>
+            <a href="#" class="social-link">New Tab Replacement</a>
           </li>
           <li>
-            <a href="#" class="social-link" id="animatedBackgroundLink" aria-label="Animated Background">Animated Background</a>
+            <a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a>
           </li>
         </ul>
       </div>
@@ -465,8 +431,8 @@
       <!-- Contact Section -->
       <div id="contact" class="content-section" style="display: none;">
         <h2>Contact</h2>
-        <p><a href="#" class="social-link" id="whatsappLink" aria-label="WhatsApp Contact">WhatsApp: 54984181968</a></p>
-        <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink" aria-label="Email Contact">Email: aaugusto444@gmail.com</a></p>
+        <p><a href="#" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
+        <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
       </div>
     </div>
   </div>
@@ -571,7 +537,7 @@
       showSection('profile'); // Show the profile section by default
 
       // Highlight the "Profile" menu item on load
-      const profileMenuItem = document.querySelector('.menu-item[data-section="profile"]');
+      const profileMenuItem = document.querySelector('.menu .sidebar-menu-item[data-section="profile"]');
       if (profileMenuItem) {
         profileMenuItem.classList.add('active');
       }
@@ -647,7 +613,7 @@
       });
 
       // Update menu items
-      document.querySelectorAll('.menu-item').forEach(el => {
+      document.querySelectorAll('.menu .sidebar-menu-item').forEach(el => {
         const section = el.getAttribute('data-section');
         if (data[section]) {
           el.innerText = data[section];
@@ -785,7 +751,6 @@
           downloadLink.textContent = 'Download Certificate';
           downloadLink.classList.add('download-link');
           downloadLink.target = '_blank';
-          downloadLink.setAttribute('aria-label', `Download ${title}`);
 
           listItem.appendChild(downloadLink);
 
@@ -877,7 +842,7 @@
     }
 
     function setupMenu() {
-      const menuItems = document.querySelectorAll('.menu-item');
+      const menuItems = document.querySelectorAll('.menu .sidebar-menu-item');
       menuItems.forEach(item => {
         item.addEventListener('click', () => {
           menuItems.forEach(i => i.classList.remove('active'));
