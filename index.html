@@ -104,6 +104,34 @@
       transition: transform 0.3s, color 0.3s;
       pointer-events: none; /* Prevent arrow from capturing mouse events */
     }
+    
+
+    /* Arrow Styles */
+    .menu .menu-item::after {
+      content: '▶️'; /* Unicode arrow */
+      position: absolute;
+      right: 30px; /* Original position from the right */
+      top: 50%;
+      transform: translateY(-50%) rotate(10deg); /* Original rotation */
+      font-size: 46px; /* Original size */
+      transition: transform 0.3s, color 0.3s;
+      pointer-events: none; /* Prevent arrow from capturing mouse events */
+    }
+
+    /* Arrow Hover and Focus Effects */
+    .menu .menu-item:hover::after,
+    .menu .menu-item:focus::after {
+      transform: translateY(-50%) rotate(180deg) scale(1.2); /* Rotate and enlarge on hover/focus */
+      color: #ffd700; /* Change color on hover/focus */
+    }
+
+    /* Menu Item Hover Effects */
+    .menu .menu-item:hover {
+      background-color: #00ffff;
+      color: #162042;
+      transform: scale(1.1) rotate(180deg);
+      border: 2px solid #ffd700;
+    }
 
     .menu .sidebar-menu-item:hover::after,
     .menu .sidebar-menu-item:focus::after {
