@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Your Resume</title>
+  <title>Antonio Augusto Barbaro's Resume</title>
   <meta
     name="description"
     content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information."
@@ -68,7 +68,7 @@
       transform: rotate(-90deg);
     }
 
-    /* More Specific Class for Menu Items */
+    /* Sidebar Menu Items */
     .menu .sidebar-menu-item {
       writing-mode: vertical-rl; /* Rotate text vertically */
       transform: rotate(180deg);
@@ -104,41 +104,15 @@
       transition: transform 0.3s, color 0.3s;
       pointer-events: none; /* Prevent arrow from capturing mouse events */
     }
-    
-
-    /* Arrow Styles */
-    .menu .menu-item::after {
-      content: '▶️'; /* Unicode arrow */
-      position: absolute;
-      right: 30px; /* Original position from the right */
-      top: 50%;
-      transform: translateY(-50%) rotate(10deg); /* Original rotation */
-      font-size: 46px; /* Original size */
-      transition: transform 0.3s, color 0.3s;
-      pointer-events: none; /* Prevent arrow from capturing mouse events */
-    }
 
     /* Arrow Hover and Focus Effects */
-    .menu .menu-item:hover::after,
-    .menu .menu-item:focus::after {
-      transform: translateY(-50%) rotate(180deg) scale(1.2); /* Rotate and enlarge on hover/focus */
-      color: #ffd700; /* Change color on hover/focus */
-    }
-
-    /* Menu Item Hover Effects */
-    .menu .menu-item:hover {
-      background-color: #00ffff;
-      color: #162042;
-      transform: scale(1.1) rotate(180deg);
-      border: 2px solid #ffd700;
-    }
-
     .menu .sidebar-menu-item:hover::after,
     .menu .sidebar-menu-item:focus::after {
       transform: translateY(-50%) rotate(180deg) scale(1.2); /* Slightly enlarge on hover/focus */
       color: #ffd700; /* Change color on hover/focus */
     }
 
+    /* Menu Item Hover Effects */
     .menu .sidebar-menu-item:hover {
       background-color: #00ffff;
       color: #162042;
@@ -394,24 +368,24 @@
   </div>
 
   <!-- Rotated Menu with Profile Picture -->
-  <div class="menu" id="menu">
+  <nav class="menu" id="menu" aria-label="Main Navigation">
     <img
       src="./images/292440780_2225688030932761_1836941331334930994_n.webp"
       alt="Antonio Augusto Barbaro Profile Picture"
       class="profile-picture"
     />
 
-    <div class="sidebar-menu-item" data-section="profile" tabindex="0" aria-label="Profile Section">Profile</div>
-    <div class="sidebar-menu-item" data-section="socialLinks" tabindex="0" aria-label="Social Links Section">Social Links</div>
-    <div class="sidebar-menu-item" data-section="friendlySites" tabindex="0" aria-label="Friendly Sites Section">Friendly Sites</div>
-    <div class="sidebar-menu-item" data-section="certifications" tabindex="0" aria-label="Certifications Section">Certifications</div>
-    <div class="sidebar-menu-item" data-section="contact" tabindex="0" aria-label="Contact Section">Contact</div>
-  </div>
+    <button class="sidebar-menu-item" data-section="profile" tabindex="0" aria-label="Profile Section">Profile</button>
+    <button class="sidebar-menu-item" data-section="socialLinks" tabindex="0" aria-label="Social Links Section">Social Links</button>
+    <button class="sidebar-menu-item" data-section="friendlySites" tabindex="0" aria-label="Friendly Sites Section">Friendly Sites</button>
+    <button class="sidebar-menu-item" data-section="certifications" tabindex="0" aria-label="Certifications Section">Certifications</button>
+    <button class="sidebar-menu-item" data-section="contact" tabindex="0" aria-label="Contact Section">Contact</button>
+  </nav>
 
   <!-- Main Content Area -->
-  <div class="main-content">
+  <main class="main-content">
     <!-- Center Section -->
-    <div class="center-section" id="centerSection">
+    <section class="center-section" id="centerSection">
       <!-- Profile Section -->
       <div id="profile" class="content-section">
         <h2>Profile</h2>
@@ -462,8 +436,8 @@
         <p><a href="#" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
         <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <!-- Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
@@ -550,7 +524,7 @@
   </script>
 
   <!-- PDF.js Script -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" defer></script>
 
   <!-- Main Script -->
   <script>
