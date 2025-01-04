@@ -410,7 +410,7 @@
       class="profile-picture"
     />
 
-    <!-- Buttons for each Section (arrow starts pointing up) -->
+    <!-- Buttons for each Section -->
     <button class="sidebar-menu-item active" data-section="profile" tabindex="0" aria-label="Profile Section">
       Profile
     </button>
@@ -433,7 +433,11 @@
     <!-- Profile Section -->
     <section class="center-section active" id="profile">
       <h2>Profile</h2>
-      <p>Welcome to my profile! Here you will find information about my background, skills, and experience.</p>
+
+      <!-- Welcome Message Paragraph -->
+      <p id="welcomeMessage">
+        Welcome to my profile! Here you will find information about my background, skills, and experience.
+      </p>
 
       <h2 id="knowledge-title">Knowledge</h2>
       <ul class="knowledge-list" id="knowledge-list"></ul>
@@ -443,13 +447,45 @@
     <section class="center-section" id="socialLinks">
       <h2>Social Links & Projects</h2>
       <ul class="social-links">
-        <li><a href="https://www.facebook.com/antonio.augusto.barbaro" target="_blank" class="social-link">Facebook</a></li>
-        <li><a href="https://www.instagram.com/aabproducoes/" target="_blank" class="social-link">Instagram</a></li>
+        <li>
+          <a
+            href="https://www.facebook.com/antonio.augusto.barbaro"
+            target="_blank"
+            class="social-link"
+          >
+            Facebook
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://www.instagram.com/aabproducoes/"
+            target="_blank"
+            class="social-link"
+          >
+            Instagram
+          </a>
+        </li>
         <li>
           <a href="#" class="social-link">Blender Projects</a>
           <ul class="project-links">
-            <li><a href="./gimp-projects.html" target="_blank" class="social-link">Gimp Projects</a></li>
-            <li><a href="./blender-animations.html" target="_blank" class="social-link">Blender Animation</a></li>
+            <li>
+              <a
+                href="./gimp-projects.html"
+                target="_blank"
+                class="social-link"
+              >
+                Gimp Projects
+              </a>
+            </li>
+            <li>
+              <a
+                href="./blender-animations.html"
+                target="_blank"
+                class="social-link"
+              >
+                Blender Animation
+              </a>
+            </li>
           </ul>
         </li>
       </ul>
@@ -460,7 +496,15 @@
       <h2>Friendly Sites</h2>
       <ul class="friendly-sites">
         <li><a href="#" class="social-link">New Tab Replacement</a></li>
-        <li><a href="./animated-background.html" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
+        <li>
+          <a
+            href="./animated-background.html"
+            class="social-link"
+            id="animatedBackgroundLink"
+          >
+            Animated Background
+          </a>
+        </li>
       </ul>
     </section>
 
@@ -474,12 +518,20 @@
     <section class="center-section" id="contact">
       <h2>Contact</h2>
       <p>
-        <a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">
+        <a
+          href="https://wa.me/54984181968"
+          class="social-link"
+          id="whatsappLink"
+        >
           WhatsApp: 54984181968
         </a>
       </p>
       <p>
-        <a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">
+        <a
+          href="mailto:aaugusto444@gmail.com"
+          class="social-link"
+          id="emailLink"
+        >
           Email: aaugusto444@gmail.com
         </a>
       </p>
@@ -541,7 +593,7 @@
       }
 
       // Draw the lightning path
-      lightningPath.forEach(point => ctx.lineTo(point.x, point.y));
+      lightningPath.forEach((point) => ctx.lineTo(point.x, point.y));
       ctx.stroke();
 
       // Subtle glow overlay
@@ -634,7 +686,9 @@
           "gimpprojects": "Gimp Projects",
           "blenderanimation": "Blender Animation",
           "newtabreplacement": "New Tab Replacement",
-          "animatedbackground": "Animated Background"
+          "animatedbackground": "Animated Background",
+          "welcomeMessage":
+            "Welcome to my profile! Here you will find information about my background, skills, and experience.",
         },
         "pt": {
           "profile": "Perfil",
@@ -651,10 +705,14 @@
           "gimpprojects": "Projetos Gimp",
           "blenderanimation": "Animação Blender",
           "newtabreplacement": "Substituição da Nova Guia",
-          "animatedbackground": "Fundo Animado"
+          "animatedbackground": "Fundo Animado",
+          "welcomeMessage":
+            "Bem-vindo ao meu perfil! Aqui você encontrará informações sobre meu histórico, habilidades e experiência.",
         }
       };
-      const data = translations[selectedLanguage] || translations['en'];
+
+      // Pick the right language object
+      const data = translations[selectedLanguage] || translations.en;
 
       // Update section titles (h2)
       document.querySelectorAll('.center-section h2').forEach(el => {
@@ -668,6 +726,12 @@
         }
       });
 
+      // Update the welcome message in the Profile section
+      const welcomeMessageEl = document.getElementById('welcomeMessage');
+      if (welcomeMessageEl && data.welcomeMessage) {
+        welcomeMessageEl.textContent = data.welcomeMessage;
+      }
+
       // Update sidebar menu items
       document.querySelectorAll('.sidebar-menu-item').forEach(btn => {
         const sectionKey = btn.getAttribute('data-section');
@@ -678,7 +742,7 @@
 
       // Update social links
       document.querySelectorAll('.social-links > li > a').forEach(link => {
-        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, "");
+        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, '');
         if (data[textKey]) {
           link.textContent = data[textKey];
         }
@@ -686,19 +750,19 @@
 
       // Update friendly sites links
       document.querySelectorAll('.friendly-sites a').forEach(link => {
-        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, "");
+        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, '');
         if (data[textKey]) {
           link.textContent = data[textKey];
         }
       });
 
       // Update Contact Links
-      const whatsappLink = document.getElementById("whatsappLink");
+      const whatsappLink = document.getElementById('whatsappLink');
       if (whatsappLink) {
         whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
       }
 
-      const emailLink = document.getElementById("emailLink");
+      const emailLink = document.getElementById('emailLink');
       if (emailLink) {
         emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
       }
