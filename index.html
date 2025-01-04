@@ -20,6 +20,11 @@
     rel="stylesheet"
   />
 
+  <!-- PDF.js Worker Configuration -->
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
+  </script>
+  
   <!-- PDF.js (Required for Certifications PDF Previews) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" defer></script>
 
@@ -438,14 +443,13 @@
     <section class="center-section" id="socialLinks">
       <h2>Social Links & Projects</h2>
       <ul class="social-links">
-        <li><a href="#" class="social-link">Facebook</a></li>
-        <li><a href="#" class="social-link">Twitter</a></li>
-        <li><a href="#" class="social-link">Instagram</a></li>
+        <li><a href="https://www.facebook.com/antonio.augusto.barbaro" target="_blank" class="social-link">Facebook</a></li>
+        <li><a href="https://www.instagram.com/aabproducoes/" target="_blank" class="social-link">Instagram</a></li>
         <li>
           <a href="#" class="social-link">Blender Projects</a>
           <ul class="project-links">
-            <li><a href="#" class="social-link">Gimp Projects</a></li>
-            <li><a href="#" class="social-link">Blender Animation</a></li>
+            <li><a href="./gimp-projects.html" target="_blank" class="social-link">Gimp Projects</a></li>
+            <li><a href="./blender-animations.html" target="_blank" class="social-link">Blender Animation</a></li>
           </ul>
         </li>
       </ul>
@@ -456,7 +460,7 @@
       <h2>Friendly Sites</h2>
       <ul class="friendly-sites">
         <li><a href="#" class="social-link">New Tab Replacement</a></li>
-        <li><a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
+        <li><a href="./animated-background.html" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
       </ul>
     </section>
 
@@ -470,7 +474,7 @@
     <section class="center-section" id="contact">
       <h2>Contact</h2>
       <p>
-        <a href="#" class="social-link" id="whatsappLink">
+        <a href="https://wa.me/54984181968" class="social-link" id="whatsappLink">
           WhatsApp: 54984181968
         </a>
       </p>
@@ -625,7 +629,6 @@
           "whatsapp": "WhatsApp",
           "email": "Email",
           "facebook": "Facebook",
-          "twitter": "Twitter",
           "instagram": "Instagram",
           "blenderprojects": "Blender Projects",
           "gimpprojects": "Gimp Projects",
@@ -643,7 +646,6 @@
           "whatsapp": "WhatsApp",
           "email": "Email",
           "facebook": "Facebook",
-          "twitter": "Twitter",
           "instagram": "Instagram",
           "blenderprojects": "Projetos Blender",
           "gimpprojects": "Projetos Gimp",
@@ -658,11 +660,11 @@
       document.querySelectorAll('.center-section h2').forEach(el => {
         const parentId = el.parentElement.id;
         if (data[parentId]) {
-          el.innerText = data[parentId];
+          el.textContent = data[parentId];
         }
         // Also handle the knowledge subtitle
         if (el.id === 'knowledge-title') {
-          el.innerText = data['knowledge'] || 'Knowledge';
+          el.textContent = data['knowledge'];
         }
       });
 
@@ -670,13 +672,13 @@
       document.querySelectorAll('.sidebar-menu-item').forEach(btn => {
         const sectionKey = btn.getAttribute('data-section');
         if (data[sectionKey]) {
-          btn.innerText = data[sectionKey];
+          btn.textContent = data[sectionKey];
         }
       });
 
       // Update social links
       document.querySelectorAll('.social-links > li > a').forEach(link => {
-        const textKey = link.textContent.replace(/\s+/g, '').toLowerCase();
+        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, "");
         if (data[textKey]) {
           link.textContent = data[textKey];
         }
@@ -684,20 +686,21 @@
 
       // Update friendly sites links
       document.querySelectorAll('.friendly-sites a').forEach(link => {
-        const textKey = link.textContent.replace(/\s+/g, '').toLowerCase();
+        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, "");
         if (data[textKey]) {
           link.textContent = data[textKey];
         }
       });
 
-      // Contact links
-      const whatsappLink = document.getElementById('whatsappLink');
+      // Update Contact Links
+      const whatsappLink = document.getElementById("whatsappLink");
       if (whatsappLink) {
-        whatsappLink.textContent = `${data.whatsapp || 'WhatsApp'}: 54984181968`;
+        whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
       }
-      const emailLink = document.getElementById('emailLink');
+
+      const emailLink = document.getElementById("emailLink");
       if (emailLink) {
-        emailLink.textContent = `${data.email || 'Email'}: aaugusto444@gmail.com`;
+        emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
       }
     }
 
