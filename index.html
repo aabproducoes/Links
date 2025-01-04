@@ -868,14 +868,12 @@
 
       menuButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          // Remove active from all
+          // Remove active from all buttons and hide all sections
           menuButtons.forEach(item => item.classList.remove('active'));
           sections.forEach(section => section.classList.remove('active'));
 
-          // Mark this button active
+          // Add active to the clicked button and show the corresponding section
           btn.classList.add('active');
-
-          // Show the corresponding section
           const sectionId = btn.getAttribute('data-section');
           const targetSection = document.getElementById(sectionId);
           if (targetSection) {
