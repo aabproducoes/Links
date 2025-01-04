@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Seu Currículo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Antonio Augusto Barbaro's Resume</title>
   <meta
     name="description"
-    content="Currículo de Antonio Augusto Barbaro. Confira qualificações, links sociais e informações de contato."
+    content="Antonio Augusto Barbaro's resume. Check out qualifications, social links, and contact information."
   />
   <meta
     name="keywords"
-    content="Currículo, Antonio Augusto Barbaro, Qualificações, Links Sociais, Informações de Contato"
+    content="Resume, Antonio Augusto Barbaro, Qualifications, Social Links, Contact Information"
   />
   <meta name="author" content="Antonio Augusto Barbaro" />
 
@@ -20,8 +20,13 @@
     rel="stylesheet"
   />
 
+  <!-- PDF.js (Required for Certifications PDF Previews) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" defer></script>
+
   <style>
-    /* Global CSS Reset */
+    /* -------------------------------
+       1. RESET & BASE STYLES
+    ------------------------------- */
     *,
     *::before,
     *::after {
@@ -30,311 +35,20 @@
       padding: 0;
     }
 
-    /* General Styles */
     body {
       display: flex;
-      flex-direction: row; /* Align menu and main content horizontally */
+      flex-direction: row;
+      min-height: 100vh;
       background: linear-gradient(135deg, #0a0f2e, #162042);
       color: #00ffff;
       font-family: 'Poppins', sans-serif;
-      min-height: 100vh;
+      position: relative;
       overflow-x: hidden; /* Prevent horizontal scrollbar */
-      position: relative;
     }
 
-    /* Left-Side Rotated Menu */
-    .menu {
-      position: fixed;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 80px;
-      background-color: rgba(22, 32, 66, 0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start; /* Align items to the top */
-      padding-top: 20px;
-      gap: 15px;
-      z-index: 2;
-    }
-
-    .menu .profile-picture {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 3px solid #00ffff;
-      box-shadow: 0 0 10px #00ffff;
-      margin-bottom: 20px;
-      transform: rotate(-90deg);
-    }
-
-    /* Menu Item Styles */
-    .menu .menu-item {
-      position: relative; /* To position the arrow correctly */
-      writing-mode: vertical-rl; /* Rotate text vertically */
-      transform: rotate(180deg);
-      padding: 10px;
-      text-align: center;
-      background-color: rgba(0, 170, 255, 0.3);
-      color: #00ffff;
-      font-size: 14px;
-      font-weight: bold;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s, color 0.3s, transform 0.3s, border 0.3s;
-      border: 2px solid transparent;
-      width: 100%; /* Ensure menu items take full width */
-      max-width: 100%;
-      outline: none; /* Remove default focus outline */
-    }
-
-    /* Accessible Focus Styles */
-    .menu .menu-item:focus {
-      outline: 2px solid #ffd700;
-      outline-offset: 4px;
-    }
-
-    /* Enhanced Arrow Styles */
-    .menu .menu-item::after {
-      content: '▶️'; /* Unicode arrow */
-      position: absolute;
-      right: 30px; /* Position from the right */
-      top: 50%;
-      transform: translateY(-50%) rotate(10deg); /* Original rotation */
-      font-size: 24px; /* Increased size for better visibility */
-      color: #ffd700;  /* Bright gold color */
-      text-shadow: 0 0 6px #ffd700; /* Glow effect around the arrow */
-      transition: transform 0.3s, color 0.3s, text-shadow 0.3s;
-      pointer-events: none; /* Prevent arrow from capturing mouse events */
-    }
-
-    /* Arrow Hover and Focus Effects */
-    .menu .menu-item:hover::after,
-    .menu .menu-item:focus::after {
-      transform: translateY(-50%) rotate(180deg) scale(1.2); /* Rotate and enlarge on hover/focus */
-      color: #ffffff; /* Change color on hover/focus for contrast */
-      text-shadow: 0 0 10px #ffffff; /* Stronger glow effect */
-    }
-
-    /* Menu Item Hover Effects */
-    .menu .menu-item:hover {
-      background-color: #00ffff;
-      color: #162042;
-      transform: scale(1.1) rotate(180deg);
-      border: 2px solid #ffd700;
-    }
-
-    /* Active Menu Item Styles */
-    .menu .menu-item.active {
-      background-color: #ffd700;
-      color: #162042;
-      box-shadow: 0 0 10px #ffd700;
-    }
-
-    /* Main Content Area */
-    .main-content {
-      flex: 1;
-      margin-left: 80px; /* Width of the fixed menu */
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto; /* Allow vertical scrolling */
-      overflow-x: hidden; /* Prevent horizontal scrolling */
-      height: 100vh; /* Full viewport height */
-    }
-
-    /* Center Section */
-    .center-section {
-      flex: 1;
-      padding: 20px;
-      margin: 10px;
-      border-radius: 15px;
-      background-color: rgba(22, 32, 66, 0.8);
-      backdrop-filter: blur(10px);
-      overflow-y: auto; /* Allow vertical scrolling */
-      overflow-x: hidden; /* Prevent horizontal scrolling */
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Center content horizontally */
-    }
-
-    /* Lists Styling */
-    .social-links,
-    .friendly-sites,
-    .project-links,
-    .certifications-list,
-    .knowledge-list {
-      list-style: none; /* Remove default list styles */
-      padding: 0;
-      margin: 0;
-      display: flex; /* Use Flexbox */
-      flex-direction: column; /* Stack items vertically */
-      align-items: center; /* Center items horizontally */
-      gap: 10px; /* Space between items */
-      width: 100%; /* Occupy full width of the parent */
-      max-width: 600px; /* Limit maximum width for better readability */
-    }
-
-    /* Ensuring list items take full width and center their content */
-    .social-links li,
-    .friendly-sites li,
-    .project-links li,
-    .certifications-list li,
-    .knowledge-list li {
-      width: 100%; /* Make list items occupy full width */
-      display: flex; /* Use Flexbox */
-      justify-content: center; /* Center the button within the list item */
-    }
-
-    /* Button Styles */
-    .social-link,
-    .download-link {
-      display: block; /* Make buttons block-level elements */
-      width: 100%; /* Occupy full width of the parent list item */
-      padding: 10px 20px;
-      background-color: #00ffff;
-      color: #162042;
-      text-decoration: none;
-      border-radius: 30px;
-      transition: background-color 0.3s, transform 0.3s, border 0.3s;
-      font-weight: bold;
-      border: 2px solid transparent;
-      text-align: center;
-      box-sizing: border-box; /* Ensure padding and borders are included in width */
-    }
-
-    .social-link:hover,
-    .download-link:hover {
-      background-color: #162042;
-      color: #00ffff;
-      transform: scale(1.05); /* Slightly enlarge on hover */
-      border: 2px solid #ffd700; /* Add border on hover */
-    }
-
-    /* Responsive Adjustments */
-    @media (min-width: 768px) {
-      .social-link,
-      .download-link {
-        max-width: 400px; /* Limit the width on larger screens */
-        padding: 12px 25px;
-        font-size: 16px;
-      }
-    }
-
-    /* Knowledge List Styling */
-    .knowledge-list li {
-      padding: 12px 25px;
-      background-color: transparent;
-      color: #00ffff;
-      border-radius: 15px;
-      text-align: center;
-      border: 3px solid transparent;
-      transition: transform 0.3s, border-image 2s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .knowledge-list li:hover {
-      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      animation: border-fill 2s forwards;
-      transform: scale(1.05);
-    }
-
-    /* Certifications List Styling */
-    .certifications-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px; /* Adds space between certificates */
-      width: 100%; /* Ensure it takes full width */
-      max-width: 600px; /* Limit the width for better readability */
-      align-items: center; /* Center list items horizontally */
-    }
-
-    .certifications-list li {
-      padding: 15px;
-      background-color: rgba(22, 32, 66, 0.9);
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-    }
-
-    /* Certification Title Styling */
-    .cert-title {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background-color: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: #ffd700;
-      font-weight: bold;
-      opacity: 0;
-      pointer-events: none;
-      white-space: nowrap;
-      transition: transform 0.6s ease, opacity 0.6s ease;
-      z-index: 2; /* Ensure it stays above other elements */
-    }
-
-    /* Animation for title on hover */
-    .certifications-list li:hover .cert-title {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-10px);
-    }
-
-    /* PDF Canvas for Certifications */
-    .pdf-canvas {
-      width: 100%;
-      max-width: 600px; /* Adjust as needed */
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-      margin-top: 20px;
-      position: relative;
-      z-index: 1;
-    }
-
-    @media (min-width: 768px) {
-      .pdf-canvas {
-        max-width: 600px;
-      }
-    }
-
-    /* Lightning Canvas */
-    #lightningCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden; /* Prevent any overflow */
-    }
-
-    /* Tech Background */
-    .tech-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
-      opacity: 0.7;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden; /* Prevent any overflow */
-    }
-
-    /* Language Selector */
+    /* -------------------------------
+       2. LANGUAGE SELECTOR
+    ------------------------------- */
     .language-selector {
       position: fixed;
       top: 10px;
@@ -354,6 +68,208 @@
       }
     }
 
+    /* -------------------------------
+       3. SIDEBAR MENU
+    ------------------------------- */
+    .menu {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 80px;
+      background-color: rgba(22, 32, 66, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding-top: 20px;
+      gap: 15px;
+      z-index: 2;
+      height: 100vh;
+    }
+
+    .menu .profile-picture {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 3px solid #00ffff;
+      box-shadow: 0 0 10px #00ffff;
+      margin-bottom: 20px;
+    }
+
+    /* -------------------------------
+       4. SIDEBAR MENU ITEMS & ARROW
+    ------------------------------- */
+    .sidebar-menu-item {
+      position: relative; /* To position the arrow relative to the button */
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      background-color: rgba(0, 170, 255, 0.3);
+      color: #00ffff;
+      font-weight: bold;
+      font-size: 12px;
+      text-align: center;
+      border: 2px solid transparent;
+      cursor: pointer;
+      outline: none;
+      transition: background-color 0.3s, transform 0.3s, border 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Accessible focus outline */
+    .sidebar-menu-item:focus {
+      outline: 2px solid #ffd700;
+      outline-offset: 4px;
+    }
+
+    /* Hover & Focus effect for menu items */
+    .sidebar-menu-item:hover {
+      background-color: #00ffff;
+      color: #162042;
+      transform: scale(1.1);
+      border: 2px solid #ffd700;
+    }
+
+    /* Arrow starts pointing up (▲), above the button */
+    .sidebar-menu-item::after {
+      content: '▲';
+      position: absolute;
+      top: -18px; /* Slightly above the button */
+      left: 50%;
+      transform: translateX(-50%) rotate(0deg);
+      font-size: 14px;
+      color: #ffd700;
+      text-shadow: 0 0 6px #ffd700; /* Glow effect */
+      transition: transform 0.3s ease, color 0.3s ease, top 0.3s, left 0.3s;
+      pointer-events: none; /* Arrow doesn't capture mouse events */
+    }
+
+    /* When active, arrow moves to the right side and changes to point right (►) */
+    .sidebar-menu-item.active::after {
+      content: '►';
+      top: 50%;
+      left: 100%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      font-size: 18px;
+      color: #ffffff;
+      text-shadow: 0 0 10px #ffffff; /* Stronger glow */
+    }
+
+    /* Active Menu Item Styles */
+    .sidebar-menu-item.active {
+      background-color: #ffd700;
+      color: #162042;
+      box-shadow: 0 0 10px #ffd700;
+    }
+
+    /* -------------------------------
+       5. MAIN CONTENT AREA
+    ------------------------------- */
+    .main-content {
+      flex: 1;
+      margin-left: 80px; /* Space for the fixed sidebar */
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto; /* Scroll vertically if needed */
+      overflow-x: hidden;
+      height: 100vh; /* Full viewport height */
+      padding: 20px;
+    }
+
+    .center-section {
+      padding: 20px;
+      margin: 10px;
+      border-radius: 15px;
+      background-color: rgba(22, 32, 66, 0.8);
+      backdrop-filter: blur(10px);
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: none; /* All sections hidden by default */
+    }
+
+    /* Visible section */
+    .center-section.active {
+      display: block;
+    }
+
+    /* -------------------------------
+       6. LIST STYLES
+    ------------------------------- */
+    .social-links,
+    .friendly-sites,
+    .project-links,
+    .certifications-list,
+    .knowledge-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto; /* Center align in container */
+    }
+
+    .social-links li,
+    .friendly-sites li,
+    .project-links li,
+    .certifications-list li,
+    .knowledge-list li {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* -------------------------------
+       7. BUTTON & LINK STYLES
+    ------------------------------- */
+    .social-link,
+    .download-link {
+      display: block;
+      width: 100%;
+      max-width: 400px; /* For better readability */
+      padding: 10px 20px;
+      background-color: #00ffff;
+      color: #162042;
+      text-decoration: none;
+      border-radius: 30px;
+      transition: background-color 0.3s, transform 0.3s, border 0.3s;
+      font-weight: bold;
+      border: 2px solid transparent;
+      text-align: center;
+      box-sizing: border-box; /* Ensure padding is counted in total width */
+    }
+
+    .social-link:hover,
+    .download-link:hover {
+      background-color: #162042;
+      color: #00ffff;
+      transform: scale(1.05);
+      border: 2px solid #ffd700;
+    }
+
+    /* -------------------------------
+       8. KNOWLEDGE LIST
+    ------------------------------- */
+    .knowledge-list li {
+      padding: 12px 25px;
+      color: #00ffff;
+      border: 3px solid transparent;
+      border-radius: 15px;
+      text-align: center;
+      transition: transform 0.3s, border-image 2s;
+    }
+
+    .knowledge-list li:hover {
+      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+      animation: border-fill 2s forwards;
+      transform: scale(1.05);
+    }
+
     @keyframes border-fill {
       0% {
         border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
@@ -363,7 +279,60 @@
       }
     }
 
-    /* Download Link Styling */
+    /* -------------------------------
+       9. CERTIFICATIONS LIST
+    ------------------------------- */
+    .certifications-list li {
+      padding: 15px;
+      background-color: rgba(22, 32, 66, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    /* Certification Title */
+    .cert-title {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background-color: rgba(22, 32, 66, 0.8);
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: #ffd700;
+      font-weight: bold;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: transform 0.6s ease, opacity 0.6s ease;
+      z-index: 2;
+    }
+
+    /* Show title on hover */
+    .certifications-list li:hover .cert-title {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .pdf-canvas {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ffff;
+      margin-top: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Download link for certifications */
     .download-link {
       margin-top: 10px;
       text-decoration: underline;
@@ -374,97 +343,154 @@
     .download-link:hover {
       color: #ffd700;
     }
+
+    /* -------------------------------
+       10. LIGHTNING & TECH BACKGROUND
+    ------------------------------- */
+    /* Tech Background */
+    .tech-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Lightning Canvas */
+    #lightningCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    /* -------------------------------
+       11. MEDIA QUERIES 
+    ------------------------------- */
+    @media (min-width: 768px) {
+      .social-link,
+      .download-link {
+        font-size: 16px;
+        padding: 12px 25px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Tech Background -->
+  <!-- 1. Tech Background -->
   <div class="tech-bg"></div>
 
-  <!-- Language Selector -->
+  <!-- 2. Language Selector -->
   <div class="language-selector">
-    <label for="language">Selecione o Idioma: </label>
+    <label for="language">Select Language: </label>
     <select id="language">
       <option value="en">English</option>
       <option value="pt">Português</option>
     </select>
   </div>
 
-  <!-- Rotated Menu with Profile Picture -->
-  <div class="menu" id="menu">
+  <!-- 3. Sidebar Menu -->
+  <nav class="menu" id="menu" aria-label="Main Navigation">
     <img
-      src="./images/292440780_2225688030932761_1836941331334930994_n.webp"
-      alt="Foto de Perfil de Antonio Augusto Barbaro"
+      src="./images/profile-picture.webp"
+      alt="Antonio Augusto Barbaro Profile Picture"
       class="profile-picture"
     />
 
-    <div class="menu-item" data-section="profile" tabindex="0" aria-label="Seção de Perfil">Perfil</div>
-    <div class="menu-item" data-section="socialLinks" tabindex="0" aria-label="Seção de Redes Sociais">Redes Sociais & Projetos</div>
-    <div class="menu-item" data-section="friendlySites" tabindex="0" aria-label="Seção de Sites Amigos">Sites Amigos</div>
-    <div class="menu-item" data-section="certifications" tabindex="0" aria-label="Seção de Certificações">Certificações</div>
-    <div class="menu-item" data-section="contact" tabindex="0" aria-label="Seção de Contato">Contato</div>
-  </div>
+    <!-- Buttons for each Section (arrow starts pointing up) -->
+    <button class="sidebar-menu-item active" data-section="profile" tabindex="0" aria-label="Profile Section">
+      Profile
+    </button>
+    <button class="sidebar-menu-item" data-section="socialLinks" tabindex="0" aria-label="Social Links Section">
+      Social Links
+    </button>
+    <button class="sidebar-menu-item" data-section="friendlySites" tabindex="0" aria-label="Friendly Sites Section">
+      Friendly Sites
+    </button>
+    <button class="sidebar-menu-item" data-section="certifications" tabindex="0" aria-label="Certifications Section">
+      Certifications
+    </button>
+    <button class="sidebar-menu-item" data-section="contact" tabindex="0" aria-label="Contact Section">
+      Contact
+    </button>
+  </nav>
 
-  <!-- Main Content Area -->
-  <div class="main-content">
-    <!-- Center Section -->
-    <div class="center-section" id="centerSection">
-      <!-- Profile Section -->
-      <div id="profile" class="content-section">
-        <h2>Perfil</h2>
-        <!-- Add your profile content here -->
-        <p>Bem-vindo ao meu perfil! Aqui você encontrará informações sobre meu histórico, habilidades e experiência.</p>
+  <!-- 4. Main Content Area -->
+  <main class="main-content">
+    <!-- Profile Section -->
+    <section class="center-section active" id="profile">
+      <h2>Profile</h2>
+      <p>Welcome to my profile! Here you will find information about my background, skills, and experience.</p>
 
-        <h2 id="knowledge-title">Conhecimentos</h2>
-        <ul class="knowledge-list" id="knowledge-list"></ul>
-      </div>
+      <h2 id="knowledge-title">Knowledge</h2>
+      <ul class="knowledge-list" id="knowledge-list"></ul>
+    </section>
 
-      <!-- Social Links & Projects Section -->
-      <div id="socialLinks" class="content-section" style="display: none;">
-        <h2>Redes Sociais & Projetos</h2>
-        <ul class="social-links">
-          <li><a href="#" class="social-link">Facebook</a></li>
-          <li><a href="#" class="social-link">Twitter</a></li>
-          <li><a href="#" class="social-link">Instagram</a></li>
-            <a href="#" class="social-link">Projetos Blender</a>
-            <ul class="project-links">
-              <li><a href="#" class="social-link">Projetos Blender</a></li>
-              <li><a href="#" class="social-link">Projetos Gimp</a></li>
-              <li><a href="#" class="social-link">Animação Blender</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+    <!-- Social Links Section -->
+    <section class="center-section" id="socialLinks">
+      <h2>Social Links & Projects</h2>
+      <ul class="social-links">
+        <li><a href="#" class="social-link">Facebook</a></li>
+        <li><a href="#" class="social-link">Twitter</a></li>
+        <li><a href="#" class="social-link">Instagram</a></li>
+        <li>
+          <a href="#" class="social-link">Blender Projects</a>
+          <ul class="project-links">
+            <li><a href="#" class="social-link">Gimp Projects</a></li>
+            <li><a href="#" class="social-link">Blender Animation</a></li>
+          </ul>
+        </li>
+      </ul>
+    </section>
 
-      <!-- Friendly Sites Section -->
-      <div id="friendlySites" class="content-section" style="display: none;">
-        <h2>Sites Amigos</h2>
-        <ul class="friendly-sites">
-          <li><a href="#" class="social-link">Substituição da Nova Guia</a></li>
-          <li><a href="#" class="social-link" id="animatedBackgroundLink">Fundo Animado</a></li>
-        </ul>
-      </div>
+    <!-- Friendly Sites Section -->
+    <section class="center-section" id="friendlySites">
+      <h2>Friendly Sites</h2>
+      <ul class="friendly-sites">
+        <li><a href="#" class="social-link">New Tab Replacement</a></li>
+        <li><a href="#" class="social-link" id="animatedBackgroundLink">Animated Background</a></li>
+      </ul>
+    </section>
 
-      <!-- Certifications Section -->
-      <div id="certifications" class="content-section" style="display: none;">
-        <h2>Certificações</h2>
-        <ul class="certifications-list" id="certifications-list"></ul>
-      </div>
+    <!-- Certifications Section -->
+    <section class="center-section" id="certifications">
+      <h2>Certifications</h2>
+      <ul class="certifications-list" id="certifications-list"></ul>
+    </section>
 
-      <!-- Contact Section -->
-      <div id="contact" class="content-section" style="display: none;">
-        <h2>Contato</h2>
-        <p><a href="#" class="social-link" id="whatsappLink">WhatsApp: 54984181968</a></p>
-        <p><a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">Email: aaugusto444@gmail.com</a></p>
-      </div>
-    </div>
-  </div>
+    <!-- Contact Section -->
+    <section class="center-section" id="contact">
+      <h2>Contact</h2>
+      <p>
+        <a href="#" class="social-link" id="whatsappLink">
+          WhatsApp: 54984181968
+        </a>
+      </p>
+      <p>
+        <a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink">
+          Email: aaugusto444@gmail.com
+        </a>
+      </p>
+    </section>
+  </main>
 
-  <!-- Lightning Effect Canvas -->
+  <!-- 5. Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
+
+  <!-- -------------------------------
+       6. JavaScript
+  ------------------------------- -->
 
   <!-- Lightning Effect Script -->
   <script>
-    // Lightning Effect Code
     const lightningCanvas = document.getElementById('lightningCanvas');
     const ctx = lightningCanvas.getContext('2d');
     let lightningPath = [];
@@ -485,15 +511,21 @@
     function drawLightning() {
       if (!animationActive) return;
       ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // Slight "persistence" effect
       ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
       ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
       ctx.strokeStyle = currentColor;
       ctx.lineWidth = 2;
       ctx.globalAlpha = 0.8;
       ctx.beginPath();
       ctx.moveTo(lightningCanvas.width / 2, 0);
 
-      let lastPoint = lightningPath[lightningPath.length - 1] || { x: lightningCanvas.width / 2, y: 0 };
+      const lastPoint = lightningPath[lightningPath.length - 1] || {
+        x: lightningCanvas.width / 2,
+        y: 0
+      };
       if (lastPoint.y < lightningCanvas.height) {
         const xOffset = (Math.random() - 0.5) * 30;
         const newPoint = { x: lastPoint.x + xOffset, y: lastPoint.y + 15 };
@@ -504,13 +536,16 @@
         lightningPath.shift();
       }
 
+      // Draw the lightning path
       lightningPath.forEach(point => ctx.lineTo(point.x, point.y));
       ctx.stroke();
 
+      // Subtle glow overlay
       ctx.globalAlpha = 0.2;
       ctx.fillStyle = currentColor.replace('hsl', 'hsla').replace(')', ', 0.2)');
       ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
 
+      // If the path has reached bottom, reset
       if (lastPoint.y >= lightningCanvas.height) {
         lightningPath = [];
         currentColor = getRandomLightColor();
@@ -533,6 +568,7 @@
       lightningPath = [];
     }
 
+    // Trigger lightning on hover over "Animated Background" link
     const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
     if (animatedBackgroundLink) {
       animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
@@ -543,10 +579,7 @@
     resizeCanvas();
   </script>
 
-  <!-- PDF.js Script -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-
-  <!-- Main Script -->
+  <!-- Main Script for Translations, Knowledge List, Certifications, and Menu Handling -->
   <script>
     let selectedLanguage = 'en';
 
@@ -555,22 +588,17 @@
       setupMenu();
       fetchTranslations();
       fetchKnowledgeList();
-      fetchCertificationsList(); // Load certificates on page load
-      showSection('profile'); // Show the profile section by default
-
-      // Highlight the "Profile" menu item on load
-      const profileMenuItem = document.querySelector('.menu .menu-item[data-section="profile"]');
-      if (profileMenuItem) {
-        profileMenuItem.classList.add('active');
-      }
+      fetchCertificationsList();
     });
 
     function initializeLanguageSelector() {
-      const languageSelect = document.getElementById("language");
+      const languageSelect = document.getElementById('language');
+      // Load saved language if available
       if (localStorage.getItem('selectedLanguage')) {
         selectedLanguage = localStorage.getItem('selectedLanguage');
         languageSelect.value = selectedLanguage;
       }
+      // Update language on change
       languageSelect.addEventListener('change', () => {
         selectedLanguage = languageSelect.value;
         localStorage.setItem('selectedLanguage', selectedLanguage);
@@ -584,9 +612,11 @@
       fetchCertificationsList();
     }
 
+    // 1. FETCH TRANSLATIONS
     function fetchTranslations() {
       const translations = {
         "en": {
+          "profile": "Profile",
           "socialLinks": "Social Links & Projects",
           "friendlySites": "Friendly Sites",
           "certifications": "Certifications",
@@ -601,11 +631,10 @@
           "gimpprojects": "Gimp Projects",
           "blenderanimation": "Blender Animation",
           "newtabreplacement": "New Tab Replacement",
-          "animatedbackground": "Animated Background",
-          "profile": "Profile",
-          "downloadCertificate": "Download Certificate"
+          "animatedbackground": "Animated Background"
         },
         "pt": {
+          "profile": "Perfil",
           "socialLinks": "Redes Sociais & Projetos",
           "friendlySites": "Sites Amigos",
           "certifications": "Certificações",
@@ -620,76 +649,61 @@
           "gimpprojects": "Projetos Gimp",
           "blenderanimation": "Animação Blender",
           "newtabreplacement": "Substituição da Nova Guia",
-          "animatedbackground": "Fundo Animado",
-          "profile": "Perfil",
-          "downloadCertificate": "Baixar Certificado"
+          "animatedbackground": "Fundo Animado"
         }
       };
+      const data = translations[selectedLanguage] || translations['en'];
 
-      const data = translations[selectedLanguage] || translations["en"];
-
-      // Update section titles
-      document.querySelectorAll('.content-section h2').forEach(el => {
+      // Update section titles (h2)
+      document.querySelectorAll('.center-section h2').forEach(el => {
         const parentId = el.parentElement.id;
         if (data[parentId]) {
           el.innerText = data[parentId];
         }
-      });
-
-      // Update menu items
-      document.querySelectorAll('.menu .menu-item').forEach(el => {
-        const section = el.getAttribute('data-section');
-        if (data[section]) {
-          el.innerText = data[section];
+        // Also handle the knowledge subtitle
+        if (el.id === 'knowledge-title') {
+          el.innerText = data['knowledge'] || 'Knowledge';
         }
       });
 
-      // Update project links
-      const projectLinks = document.querySelectorAll('.project-links a');
-      projectLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
+      // Update sidebar menu items
+      document.querySelectorAll('.sidebar-menu-item').forEach(btn => {
+        const sectionKey = btn.getAttribute('data-section');
+        if (data[sectionKey]) {
+          btn.innerText = data[sectionKey];
         }
       });
 
       // Update social links
-      const socialLinks = document.querySelectorAll('.social-links > li > a');
-      socialLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
+      document.querySelectorAll('.social-links > li > a').forEach(link => {
+        const textKey = link.textContent.replace(/\s+/g, '').toLowerCase();
+        if (data[textKey]) {
+          link.textContent = data[textKey];
         }
       });
 
       // Update friendly sites links
-      const friendlySitesLinks = document.querySelectorAll('.friendly-sites a');
-      friendlySitesLinks.forEach(link => {
-        const key = link.textContent.replace(/\s+/g, '').toLowerCase();
-        if (data[key]) {
-          link.textContent = data[key];
+      document.querySelectorAll('.friendly-sites a').forEach(link => {
+        const textKey = link.textContent.replace(/\s+/g, '').toLowerCase();
+        if (data[textKey]) {
+          link.textContent = data[textKey];
         }
       });
 
-      // Update Contact links
+      // Contact links
       const whatsappLink = document.getElementById('whatsappLink');
       if (whatsappLink) {
-        whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
+        whatsappLink.textContent = `${data.whatsapp || 'WhatsApp'}: 54984181968`;
       }
-
       const emailLink = document.getElementById('emailLink');
       if (emailLink) {
-        emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
+        emailLink.textContent = `${data.email || 'Email'}: aaugusto444@gmail.com`;
       }
-
-      // Update Download Certificate link text
-      const downloadLinks = document.querySelectorAll('.download-link');
-      downloadLinks.forEach(link => {
-        link.textContent = data['downloadCertificate'] || 'Download Certificate';
-      });
     }
 
+    // 2. FETCH KNOWLEDGE LIST
     function fetchKnowledgeList() {
+      // Make sure the file path matches your structure
       fetch('./KnowledgeList/KnowledgeList.txt')
         .then(response => {
           if (!response.ok) {
@@ -698,23 +712,15 @@
           return response.text();
         })
         .then(data => {
-          console.log('KnowledgeList.txt fetched successfully.');
-          const knowledgeList = document.getElementById("knowledge-list");
-          if (!knowledgeList) {
-            console.error('Knowledge list element not found.');
-            return;
-          }
+          const knowledgeList = document.getElementById('knowledge-list');
+          if (!knowledgeList) return;
+
           knowledgeList.innerHTML = '';
-
           const lines = data.split('\n').filter(line => line.trim() !== '');
-          console.log(`Number of knowledge items: ${lines.length}`);
-
           lines.forEach(line => {
             const [enText, ptText] = line.split('||');
-            if (!enText || !ptText) {
-              console.warn(`Invalid line format: "${line}"`);
-              return;
-            }
+            if (!enText || !ptText) return; // skip invalid lines
+
             const listItem = document.createElement('li');
             listItem.textContent =
               selectedLanguage === 'pt'
@@ -723,9 +729,10 @@
             knowledgeList.appendChild(listItem);
           });
         })
-        .catch(error => console.error('Error loading knowledge list:', error));
+        .catch(err => console.error('Error loading knowledge list:', err));
     }
 
+    // 3. FETCH CERTIFICATIONS LIST
     async function fetchCertificationsList() {
       const MAX_CERTIFICATIONS = 6; // Adjust as needed
 
@@ -734,95 +741,73 @@
         if (!response.ok) {
           throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
         }
-
         const data = await response.text();
-        console.log("CertificadosList.txt content:\n", data);
 
-        const certificationsList = document.getElementById("certifications-list");
-        if (!certificationsList) {
-          console.error('Certifications list element not found');
-          return;
-        }
+        const certificationsList = document.getElementById('certifications-list');
+        if (!certificationsList) return;
         certificationsList.innerHTML = '';
 
-        // Split lines and filter out empty lines
         const lines = data.split('\n').filter(line => line.trim() !== '');
-        console.log("Parsed certificate lines:", lines);
-
         if (lines.length === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
-          console.warn('No valid certifications found in CertificadosList.txt');
           return;
         }
 
         let certificationsLoaded = 0;
-
-        // Process each line
         for (const line of lines) {
-          if (certificationsLoaded >= MAX_CERTIFICATIONS) {
-            break; // Stop loading more than the maximum specified
-          }
+          if (certificationsLoaded >= MAX_CERTIFICATIONS) break;
 
           const parts = line.split(' - ');
-          if (parts.length < 2) {
-            console.warn(`Skipping invalid line: "${line}"`);
-            continue;
-          }
+          if (parts.length < 2) continue;
 
           const filePath = parts[0].trim();
-          const title = parts.slice(1).join(' - ').trim(); // Handles potential multiple dashes
+          const title = parts.slice(1).join(' - ').trim();
 
           // Create list item
-          const listItem = document.createElement('li');
+          const li = document.createElement('li');
 
+          // Title
           const certTitle = document.createElement('div');
           certTitle.classList.add('cert-title');
           certTitle.textContent = title;
+          li.appendChild(certTitle);
 
-          // Create canvas for PDF rendering
+          // Canvas for PDF
           const pdfCanvas = document.createElement('canvas');
           pdfCanvas.classList.add('pdf-canvas');
           pdfCanvas.id = `pdf-canvas-${certificationsLoaded}`;
+          li.appendChild(pdfCanvas);
 
-          listItem.appendChild(certTitle);
-          listItem.appendChild(pdfCanvas);
-          certificationsList.appendChild(listItem);
-
-          // Render the first page of the PDF
-          renderFirstPage(filePath, pdfCanvas.id);
-
-          // Create and append download link
+          // Download link
           const downloadLink = document.createElement('a');
           downloadLink.href = filePath;
           downloadLink.textContent = 'Download Certificate';
           downloadLink.classList.add('download-link');
           downloadLink.target = '_blank';
+          li.appendChild(downloadLink);
 
-          listItem.appendChild(downloadLink);
+          certificationsList.appendChild(li);
 
-          console.log(`Loaded certificate ${certificationsLoaded + 1}: ${title}`);
+          renderFirstPage(filePath, pdfCanvas.id);
           certificationsLoaded++;
         }
 
         if (certificationsLoaded === 0) {
           certificationsList.innerHTML = '<li>No certifications available.</li>';
-          console.warn('No valid certifications found for rendering.');
         }
       } catch (error) {
-        console.error('Error loading certifications list:', error);
-        alert('An error occurred while loading the certifications list. Please try again later.');
+        console.error('Error loading certifications:', error);
+        alert('An error occurred while loading the certifications list.');
       }
     }
 
+    // 4. RENDER PDF FIRST PAGE
     function renderFirstPage(pdfUrl, canvasId) {
       const canvas = document.getElementById(canvasId);
-      if (!canvas) {
-        console.error(`Canvas element with ID "${canvasId}" not found.`);
-        return;
-      }
+      if (!canvas) return;
       const context = canvas.getContext('2d');
 
-      // Create a loading indicator
+      // Loading indicator
       const loadingIndicator = document.createElement('div');
       loadingIndicator.textContent = 'Loading...';
       loadingIndicator.style.position = 'absolute';
@@ -835,45 +820,34 @@
       loadingIndicator.id = `loading-${canvasId}`;
       canvas.parentElement.appendChild(loadingIndicator);
 
-      // Create an Intersection Observer to lazy load the PDF when canvas is in view
-      const observer = new IntersectionObserver((entries, observer) => {
+      // Lazy load with IntersectionObserver
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             pdfjsLib.getDocument(pdfUrl).promise
-              .then(pdf => {
-                console.log(`PDF loaded: ${pdfUrl}`);
-                return pdf.getPage(1);
-              })
+              .then(pdf => pdf.getPage(1))
               .then(page => {
-                console.log(`Rendering page 1 of ${pdfUrl}`);
                 const scale = 1.5;
                 const viewport = page.getViewport({ scale });
-
                 canvas.width = viewport.width;
                 canvas.height = viewport.height;
 
-                const renderContext = {
+                return page.render({
                   canvasContext: context,
                   viewport: viewport
-                };
-                return page.render(renderContext).promise;
+                }).promise;
               })
               .then(() => {
-                console.log(`Page rendered for ${pdfUrl}`);
-                // Remove the loading indicator
-                const loading = document.getElementById(`loading-${canvasId}`);
-                if (loading) {
-                  loading.remove();
-                }
+                const loadingEl = document.getElementById(`loading-${canvasId}`);
+                if (loadingEl) loadingEl.remove();
                 observer.unobserve(canvas); // Stop observing after rendering
               })
-              .catch(error => {
-                console.error(`Error rendering PDF "${pdfUrl}":`, error);
-                // Update loading indicator to show error
-                const loading = document.getElementById(`loading-${canvasId}`);
-                if (loading) {
-                  loading.textContent = 'Failed to load PDF';
-                  loading.style.color = '#ff0000';
+              .catch(err => {
+                console.error(`Error rendering PDF ${pdfUrl}: `, err);
+                const loadingEl = document.getElementById(`loading-${canvasId}`);
+                if (loadingEl) {
+                  loadingEl.textContent = 'Failed to load PDF';
+                  loadingEl.style.color = '#ff0000';
                 }
               });
           }
@@ -887,32 +861,35 @@
       observer.observe(canvas);
     }
 
+    // 5. MENU HANDLING
     function setupMenu() {
-      const menuItems = document.querySelectorAll('.menu .menu-item');
-      menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-          menuItems.forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          const sectionId = item.getAttribute('data-section');
-          showSection(sectionId);
-        });
-      });
+      const menuButtons = document.querySelectorAll('.menu .sidebar-menu-item');
+      const sections = document.querySelectorAll('.center-section');
 
-      // Enable keyboard navigation
-      menuItems.forEach(item => {
-        item.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            item.click();
+      menuButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active from all
+          menuButtons.forEach(item => item.classList.remove('active'));
+          sections.forEach(section => section.classList.remove('active'));
+
+          // Mark this button active
+          btn.classList.add('active');
+
+          // Show the corresponding section
+          const sectionId = btn.getAttribute('data-section');
+          const targetSection = document.getElementById(sectionId);
+          if (targetSection) {
+            targetSection.classList.add('active');
           }
         });
-      });
-    }
 
-    function showSection(sectionId) {
-      const sections = document.querySelectorAll('.content-section');
-      sections.forEach(section => {
-        section.style.display = (section.id === sectionId) ? 'flex' : 'none';
+        // Keyboard navigation (Enter or Space)
+        btn.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
       });
     }
   </script>
