@@ -22,6 +22,8 @@
 
   <!-- PDF.js Worker Configuration -->
   <script>
+    // Ensure PDF.js worker is correctly configured
+    window.pdfjsLib = window.pdfjsLib || {};
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
   </script>
   
@@ -204,7 +206,6 @@
     ------------------------------- */
     .social-links,
     .friendly-sites,
-    .project-links,
     .certifications-list,
     .knowledge-list {
       list-style: none;
@@ -212,21 +213,20 @@
       margin: 0;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: center; /* Center align the links */
       gap: 10px;
       width: 100%;
       max-width: 600px;
-      margin: 0 auto; /* Center align in container */
+      margin: 0 auto; /* Center align the container */
     }
 
-    .social-links li,
-    .friendly-sites li,
-    .project-links li,
-    .certifications-list li,
-    .knowledge-list li {
+    .social-links > li,
+    .friendly-sites > li,
+    .certifications-list > li,
+    .knowledge-list > li {
       width: 100%;
       display: flex;
-      justify-content: center;
+      justify-content: center; /* Center align each link */
     }
 
     /* -------------------------------
@@ -242,19 +242,53 @@
       color: #162042;
       text-decoration: none;
       border-radius: 30px;
-      transition: background-color 0.3s, transform 0.3s, border 0.3s;
+      transition: all 0.3s ease;
       font-weight: bold;
       border: 2px solid transparent;
       text-align: center;
       box-sizing: border-box; /* Ensure padding is counted in total width */
+      position: relative;
+      overflow: hidden;
     }
 
-    .social-link:hover,
+    /* Enhanced Hover Effect */
+    .social-link::before,
+    .download-link::before {
+      content: '';
+      position: absolute;
+      width: 300%;
+      height: 300%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      background: rgba(255, 255, 255, 0.15);
+      transition: all 0.5s ease;
+      border-radius: 50%;
+      z-index: -1;
+    }
+
+    .social-link:hover::before,
+    .download-link:hover::before {
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    .social-link:hover {
+      background-color: #162042;
+      color: #00ffff;
+      transform: scale(1.05);
+      border: 2px solid #ffd700;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
     .download-link:hover {
       background-color: #162042;
       color: #00ffff;
       transform: scale(1.05);
       border: 2px solid #ffd700;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     /* -------------------------------
@@ -387,6 +421,42 @@
         padding: 12px 25px;
       }
     }
+
+    /* -------------------------------
+       12. SOCIAL LINKS & PROJECTS STYLES
+    ------------------------------- */
+    /* Social Links Styling */
+    .social-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center align the links */
+      gap: 15px;
+    }
+
+    .social-links > li {
+      text-align: center;
+    }
+
+    /* -------------------------------
+       13. FRIENDLY SITES STYLES
+    ------------------------------- */
+    /* Friendly Sites Styling */
+    .friendly-sites {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center align the links */
+      gap: 10px;
+    }
+
+    .friendly-sites > li {
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -411,19 +481,44 @@
     />
 
     <!-- Buttons for each Section -->
-    <button class="sidebar-menu-item active" data-section="profile" tabindex="0" aria-label="Profile Section">
+    <button
+      class="sidebar-menu-item active"
+      data-section="profile"
+      tabindex="0"
+      aria-label="Profile Section"
+    >
       Profile
     </button>
-    <button class="sidebar-menu-item" data-section="socialLinks" tabindex="0" aria-label="Social Links Section">
+    <button
+      class="sidebar-menu-item"
+      data-section="socialLinks"
+      tabindex="0"
+      aria-label="Social Links Section"
+    >
       Social Links
     </button>
-    <button class="sidebar-menu-item" data-section="friendlySites" tabindex="0" aria-label="Friendly Sites Section">
+    <button
+      class="sidebar-menu-item"
+      data-section="friendlySites"
+      tabindex="0"
+      aria-label="Friendly Sites Section"
+    >
       Friendly Sites
     </button>
-    <button class="sidebar-menu-item" data-section="certifications" tabindex="0" aria-label="Certifications Section">
+    <button
+      class="sidebar-menu-item"
+      data-section="certifications"
+      tabindex="0"
+      aria-label="Certifications Section"
+    >
       Certifications
     </button>
-    <button class="sidebar-menu-item" data-section="contact" tabindex="0" aria-label="Contact Section">
+    <button
+      class="sidebar-menu-item"
+      data-section="contact"
+      tabindex="0"
+      aria-label="Contact Section"
+    >
       Contact
     </button>
   </nav>
@@ -443,10 +538,11 @@
       <ul class="knowledge-list" id="knowledge-list"></ul>
     </section>
 
-    <!-- Social Links Section -->
+    <!-- Social Links & Projects Section -->
     <section class="center-section" id="socialLinks">
       <h2>Social Links & Projects</h2>
       <ul class="social-links">
+        <!-- Facebook -->
         <li>
           <a
             href="https://www.facebook.com/antonio.augusto.barbaro"
@@ -456,6 +552,8 @@
             Facebook
           </a>
         </li>
+
+        <!-- Instagram -->
         <li>
           <a
             href="https://www.instagram.com/aabproducoes/"
@@ -465,28 +563,38 @@
             Instagram
           </a>
         </li>
+
+        <!-- Blender Projects -->
         <li>
-          <a href="#" class="social-link">Blender Projects</a>
-          <ul class="project-links">
-            <li>
-              <a
-                href="./gimp-projects.html"
-                target="_blank"
-                class="social-link"
-              >
-                Gimp Projects
-              </a>
-            </li>
-            <li>
-              <a
-                href="./blender-animations.html"
-                target="_blank"
-                class="social-link"
-              >
-                Blender Animation
-              </a>
-            </li>
-          </ul>
+          <a
+            href="./blender-projects.html"
+            target="_blank"
+            class="social-link"
+          >
+            Blender Projects
+          </a>
+        </li>
+
+        <!-- Gimp Projects -->
+        <li>
+          <a
+            href="./gimp-projects.html"
+            target="_blank"
+            class="social-link"
+          >
+            Gimp Projects
+          </a>
+        </li>
+
+        <!-- Blender Animations -->
+        <li>
+          <a
+            href="./blender-animations.html"
+            target="_blank"
+            class="social-link"
+          >
+            Blender Animations
+          </a>
         </li>
       </ul>
     </section>
@@ -495,7 +603,9 @@
     <section class="center-section" id="friendlySites">
       <h2>Friendly Sites</h2>
       <ul class="friendly-sites">
-        <li><a href="#" class="social-link">New Tab Replacement</a></li>
+        <li>
+          <a href="#" class="social-link">New Tab Replacement</a>
+        </li>
         <li>
           <a
             href="./animated-background.html"
@@ -517,24 +627,30 @@
     <!-- Contact Section -->
     <section class="center-section" id="contact">
       <h2>Contact</h2>
-      <p>
-        <a
-          href="https://wa.me/54984181968"
-          class="social-link"
-          id="whatsappLink"
-        >
-          WhatsApp: 54984181968
-        </a>
-      </p>
-      <p>
-        <a
-          href="mailto:aaugusto444@gmail.com"
-          class="social-link"
-          id="emailLink"
-        >
-          Email: aaugusto444@gmail.com
-        </a>
-      </p>
+      <ul class="social-links">
+        <!-- WhatsApp -->
+        <li>
+          <a
+            href="https://wa.me/54984181968"
+            class="social-link"
+            id="whatsappLink"
+            target="_blank"
+          >
+            WhatsApp: 54984181968
+          </a>
+        </li>
+        <!-- Email -->
+        <li>
+          <a
+            href="mailto:aaugusto444@gmail.com"
+            class="social-link"
+            id="emailLink"
+            target="_blank"
+          >
+            Email: aaugusto444@gmail.com
+          </a>
+        </li>
+      </ul>
     </section>
   </main>
 
@@ -710,9 +826,7 @@
             "Bem-vindo ao meu perfil! Aqui você encontrará informações sobre meu histórico, habilidades e experiência.",
         }
       };
-
-      // Pick the right language object
-      const data = translations[selectedLanguage] || translations.en;
+      const data = translations[selectedLanguage] || translations['en'];
 
       // Update section titles (h2)
       document.querySelectorAll('.center-section h2').forEach(el => {
@@ -757,12 +871,12 @@
       });
 
       // Update Contact Links
-      const whatsappLink = document.getElementById('whatsappLink');
+      const whatsappLink = document.getElementById("whatsappLink");
       if (whatsappLink) {
         whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
       }
 
-      const emailLink = document.getElementById('emailLink');
+      const emailLink = document.getElementById("emailLink");
       if (emailLink) {
         emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
       }
