@@ -1,5 +1,5 @@
 /* -------------------------------
-   CSS Variables for Themes
+   0. CSS Variables for Themes
 ------------------------------- */
 :root {
   --background-gradient: linear-gradient(135deg, #0a0f2e, #162042);
@@ -9,6 +9,7 @@
   --button-text: #00ffff;
   --button-hover-bg: #00ffff;
   --button-hover-text: #162042;
+  /* Add more variables as needed */
 }
 
 /* Theme 1 */
@@ -66,7 +67,17 @@
   --button-hover-text: #8e2de2;
 }
 
-/* Base Styles (e.g., body, menu, buttons) */
+/* -------------------------------
+   1. RESET & BASE STYLES
+------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   display: flex;
   flex-direction: row;
@@ -75,23 +86,41 @@ body {
   color: var(--text-color);
   font-family: 'Poppins', sans-serif;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
   transition: background 0.5s, color 0.5s;
 }
 
-.menu {
+/* Include other styles from your original inline CSS file here */
+
+/* -------------------------------
+   14. STYLE SELECTOR
+------------------------------- */
+.style-selector {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  display: flex;
+  gap: 10px;
+}
+
+.style-button {
+  padding: 8px 12px;
   background-color: rgba(22, 32, 66, 0.8);
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.sidebar-menu-item {
-  background-color: var(--button-bg);
-  color: var(--button-text);
-}
-
-.sidebar-menu-item:hover {
+.style-button:hover,
+.style-button:focus {
   background-color: var(--button-hover-bg);
   color: var(--button-hover-text);
-  border: 2px solid var(--accent-color);
+  outline: none;
 }
 
-/* Add remaining styles here... */
+/* Add the rest of your CSS styles here */
