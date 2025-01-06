@@ -20,6 +20,9 @@
     rel="stylesheet"
   />
 
+  <!-- Link to the external CSS file -->
+  <link rel="stylesheet" href="styles.css" />
+
   <!-- PDF.js Worker Configuration -->
   <script>
     // Ensure PDF.js worker is correctly configured
@@ -29,564 +32,6 @@
   
   <!-- PDF.js (Required for Certifications PDF Previews) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js" defer></script>
-
-  <style>
-    /* -------------------------------
-       0. CSS Variables for Themes
-    ------------------------------- */
-    :root {
-      --background-gradient: linear-gradient(135deg, #0a0f2e, #162042);
-      --text-color: #00ffff;
-      --accent-color: #ffd700;
-      --button-bg: rgba(0, 170, 255, 0.3);
-      --button-text: #00ffff;
-      --button-hover-bg: #00ffff;
-      --button-hover-text: #162042;
-      /* Add more variables as needed */
-    }
-
-    /* Theme 1 */
-    .theme-style1 {
-      --background-gradient: linear-gradient(135deg, #ff7e5f, #feb47b);
-      --text-color: #ffffff;
-      --accent-color: #ff6347;
-      --button-bg: rgba(255, 126, 95, 0.8);
-      --button-text: #ffffff;
-      --button-hover-bg: #ffffff;
-      --button-hover-text: #ff7e5f;
-    }
-
-    /* Theme 2 */
-    .theme-style2 {
-      --background-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
-      --text-color: #ffffff;
-      --accent-color: #00ff7f;
-      --button-bg: rgba(106, 17, 203, 0.8);
-      --button-text: #ffffff;
-      --button-hover-bg: #ffffff;
-      --button-hover-text: #6a11cb;
-    }
-
-    /* Theme 3 */
-    .theme-style3 {
-      --background-gradient: linear-gradient(135deg, #11998e, #38ef7d);
-      --text-color: #ffffff;
-      --accent-color: #ff1493;
-      --button-bg: rgba(17, 153, 142, 0.8);
-      --button-text: #ffffff;
-      --button-hover-bg: #ffffff;
-      --button-hover-text: #11998e;
-    }
-
-    /* Theme 4 */
-    .theme-style4 {
-      --background-gradient: linear-gradient(135deg, #fc4a1a, #f7b733);
-      --text-color: #ffffff;
-      --accent-color: #1e90ff;
-      --button-bg: rgba(252, 74, 26, 0.8);
-      --button-text: #ffffff;
-      --button-hover-bg: #ffffff;
-      --button-hover-text: #fc4a1a;
-    }
-
-    /* Theme 5 */
-    .theme-style5 {
-      --background-gradient: linear-gradient(135deg, #8e2de2, #4a00e0);
-      --text-color: #ffffff;
-      --accent-color: #ff6347;
-      --button-bg: rgba(142, 45, 226, 0.8);
-      --button-text: #ffffff;
-      --button-hover-bg: #ffffff;
-      --button-hover-text: #8e2de2;
-    }
-
-    /* -------------------------------
-       1. RESET & BASE STYLES
-    ------------------------------- */
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      display: flex;
-      flex-direction: row;
-      min-height: 100vh;
-      background: var(--background-gradient);
-      color: var(--text-color);
-      font-family: 'Poppins', sans-serif;
-      position: relative;
-      overflow-x: hidden; /* Prevent horizontal scrollbar */
-      transition: background 0.5s, color 0.5s;
-    }
-
-    /* -------------------------------
-       2. LANGUAGE SELECTOR
-    ------------------------------- */
-    .language-selector {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-      background: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: var(--text-color);
-      max-width: 100%;
-    }
-
-    @media (min-width: 768px) {
-      .language-selector {
-        top: 20px;
-        right: 20px;
-      }
-    }
-
-    /* -------------------------------
-       14. STYLE SELECTOR
-    ------------------------------- */
-    .style-selector {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 1001;
-      display: flex;
-      gap: 10px;
-    }
-
-    .style-button {
-      padding: 8px 12px;
-      background-color: rgba(22, 32, 66, 0.8);
-      color: var(--text-color);
-      border: 2px solid var(--text-color);
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .style-button:hover,
-    .style-button:focus {
-      background-color: var(--button-hover-bg);
-      color: var(--button-hover-text);
-      outline: none;
-    }
-
-    /* -------------------------------
-       3. SIDEBAR MENU
-    ------------------------------- */
-    .menu {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 80px;
-      background-color: rgba(22, 32, 66, 0.8);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      padding-top: 60px; /* Adjusted to accommodate style selector */
-      gap: 15px;
-      z-index: 2;
-      height: 100vh;
-    }
-
-    .menu .profile-picture {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 3px solid var(--accent-color);
-      box-shadow: 0 0 10px var(--accent-color);
-      margin-bottom: 20px;
-    }
-
-    /* -------------------------------
-       4. SIDEBAR MENU ITEMS & ARROW
-    ------------------------------- */
-    .sidebar-menu-item {
-      position: relative; /* To position the arrows and pseudo-elements */
-      width: 70px;
-      height: 70px;
-      border-radius: 10px;
-      background-color: var(--button-bg);
-      color: var(--button-text);
-      font-weight: bold;
-      font-size: 12px;
-      text-align: center;
-      border: 2px solid transparent;
-      cursor: pointer;
-      outline: none;
-      transition: background-color 0.3s, transform 0.3s, border 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Accessible focus outline */
-    .sidebar-menu-item:focus {
-      outline: 2px solid #ffd700;
-      outline-offset: 4px;
-    }
-
-    /* Hover & Focus effect for menu items */
-    .sidebar-menu-item:hover {
-      background-color: var(--button-hover-bg);
-      color: var(--button-hover-text);
-      transform: scale(1.1);
-      border: 2px solid var(--accent-color);
-    }
-
-    /* Arrow starts pointing up (▲), above the button */
-    .sidebar-menu-item::after {
-      content: '▲';
-      position: absolute;
-      top: -18px; /* Slightly above the button */
-      left: 50%;
-      transform: translateX(-50%) rotate(0deg);
-      font-size: 14px;
-      color: #ffd700;
-      text-shadow: 0 0 6px #ffd700; /* Glow effect */
-      transition: transform 0.3s ease, color 0.3s ease, top 0.3s, left 0.3s;
-      pointer-events: none; /* Arrow doesn't capture mouse events */
-    }
-
-    /* When active, arrow moves to the right side and changes to point right (►) */
-    .sidebar-menu-item.active::after {
-      content: '►';
-      top: 50%;
-      left: 100%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      font-size: 18px;
-      color: #ffffff;
-      text-shadow: 0 0 10px #ffffff; /* Stronger glow */
-    }
-
-    /* Active Menu Item Styles */
-    .sidebar-menu-item.active {
-      background-color: var(--accent-color);
-      color: #162042;
-      box-shadow: 0 0 10px var(--accent-color);
-    }
-
-    /* -------------------------------
-       4.1 BORDER SHRINKING COLOR EFFECT
-    ------------------------------- */
-    .sidebar-menu-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: 2px solid #ff00ff; /* This can be adjusted or made variable */
-      border-radius: 10px;
-      box-sizing: border-box;
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: scale(1);
-    }
-
-    .sidebar-menu-item:hover::before {
-      opacity: 1;
-      animation: shrink-border 0.5s forwards;
-    }
-
-    @keyframes shrink-border {
-      from {
-        transform: scale(1);
-        opacity: 1;
-      }
-      to {
-        transform: scale(0);
-        opacity: 0;
-      }
-    }
-
-    /* -------------------------------
-       5. MAIN CONTENT AREA
-    ------------------------------- */
-    .main-content {
-      flex: 1;
-      margin-left: 80px; /* Space for the fixed sidebar */
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto; /* Scroll vertically if needed */
-      overflow-x: hidden;
-      height: 100vh; /* Full viewport height */
-      padding: 20px;
-    }
-
-    .center-section {
-      padding: 20px;
-      margin: 10px;
-      border-radius: 15px;
-      background-color: rgba(22, 32, 66, 0.8);
-      backdrop-filter: blur(10px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      display: none; /* All sections hidden by default */
-      transition: background-color 0.5s;
-    }
-
-    /* Visible section */
-    .center-section.active {
-      display: block;
-    }
-
-    /* -------------------------------
-       6. LIST STYLES
-    ------------------------------- */
-    .social-links,
-    .friendly-sites,
-    .certifications-list,
-    .knowledge-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Center align the links */
-      gap: 10px;
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto; /* Center align the container */
-    }
-
-    .social-links > li,
-    .friendly-sites > li,
-    .certifications-list > li,
-    .knowledge-list > li {
-      width: 100%;
-      display: flex;
-      justify-content: center; /* Center align each link */
-    }
-
-    /* -------------------------------
-       7. BUTTON & LINK STYLES
-    ------------------------------- */
-    .social-link,
-    .download-link {
-      display: block;
-      width: 100%;
-      max-width: 400px; /* For better readability */
-      padding: 10px 20px;
-      background-color: #00ffff;
-      color: #162042;
-      text-decoration: none;
-      border-radius: 30px;
-      transition: all 0.3s ease;
-      font-weight: bold;
-      border: 2px solid transparent;
-      text-align: center;
-      box-sizing: border-box; /* Ensure padding is counted in total width */
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Enhanced Hover Effect with Ripple Animation */
-    .social-link::before,
-    .download-link::before {
-      content: '';
-      position: absolute;
-      width: 300%;
-      height: 300%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(45deg);
-      background: rgba(255, 255, 255, 0.15);
-      transition: all 0.5s ease;
-      border-radius: 50%;
-      z-index: -1;
-    }
-
-    .social-link:hover::before,
-    .download-link:hover::before {
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-
-    .social-link:hover,
-    .download-link:hover {
-      background-color: #162042;
-      color: #00ffff;
-      transform: scale(1.05);
-      border: 2px solid #ffd700;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    /* -------------------------------
-       8. KNOWLEDGE LIST
-    ------------------------------- */
-    .knowledge-list li {
-      padding: 12px 25px;
-      color: #00ffff;
-      border: 3px solid transparent;
-      border-radius: 15px;
-      text-align: center;
-      transition: transform 0.3s, border-image 2s;
-    }
-
-    .knowledge-list li:hover {
-      border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      animation: border-fill 2s forwards;
-      transform: scale(1.05);
-    }
-
-    @keyframes border-fill {
-      0% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
-      }
-      100% {
-        border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
-      }
-    }
-
-    /* -------------------------------
-       9. CERTIFICATIONS LIST
-    ------------------------------- */
-    .certifications-list li {
-      padding: 15px;
-      background-color: rgba(22, 32, 66, 0.9);
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-
-    /* Certification Title */
-    .cert-title {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background-color: rgba(22, 32, 66, 0.8);
-      padding: 5px 10px;
-      border-radius: 5px;
-      color: #ffd700;
-      font-weight: bold;
-      opacity: 0;
-      pointer-events: none;
-      white-space: nowrap;
-      transition: transform 0.6s ease, opacity 0.6s ease;
-      z-index: 2;
-    }
-
-    /* Show title on hover */
-    .certifications-list li:hover .cert-title {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-10px);
-    }
-
-    .pdf-canvas {
-      width: 100%;
-      max-width: 600px;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00ffff;
-      margin-top: 20px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* Download link for certifications */
-    .download-link {
-      margin-top: 10px;
-      text-decoration: underline;
-      color: #00ffff;
-      font-weight: bold;
-    }
-
-    .download-link:hover {
-      color: #ffd700;
-    }
-
-    /* -------------------------------
-       10. LIGHTNING & TECH BACKGROUND
-    ------------------------------- */
-    /* Tech Background */
-    .tech-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
-      opacity: 0.7;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    /* Lightning Canvas */
-    #lightningCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-      overflow: hidden;
-    }
-
-    /* -------------------------------
-       11. MEDIA QUERIES 
-    ------------------------------- */
-    @media (min-width: 768px) {
-      .social-link,
-      .download-link {
-        font-size: 16px;
-        padding: 12px 25px;
-      }
-    }
-
-    /* -------------------------------
-       12. SOCIAL LINKS & PROJECTS STYLES
-    ------------------------------- */
-    /* Social Links Styling */
-    .social-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Center align the links */
-      gap: 15px;
-    }
-
-    .social-links > li {
-      text-align: center;
-    }
-
-    /* -------------------------------
-       13. FRIENDLY SITES STYLES
-    ------------------------------- */
-    /* Friendly Sites Styling */
-    .friendly-sites {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center; /* Center align the links */
-      gap: 10px;
-    }
-
-    .friendly-sites > li {
-      text-align: center;
-    }
-  </style>
 </head>
 <body>
   <!-- 1. Style Selector -->
@@ -677,57 +122,28 @@
     <section class="center-section" id="socialLinks">
       <h2>Social Links & Projects</h2>
       <ul class="social-links">
-        <!-- Facebook -->
         <li>
-          <a
-            href="https://www.facebook.com/antonio.augusto.barbaro"
-            target="_blank"
-            class="social-link"
-          >
+          <a href="https://www.facebook.com/antonio.augusto.barbaro" target="_blank" class="social-link">
             Facebook
           </a>
         </li>
-
-        <!-- Instagram -->
         <li>
-          <a
-            href="https://www.instagram.com/aabproducoes/"
-            target="_blank"
-            class="social-link"
-          >
+          <a href="https://www.instagram.com/aabproducoes/" target="_blank" class="social-link">
             Instagram
           </a>
         </li>
-
-        <!-- Blender Projects -->
         <li>
-          <a
-            href="./blender-projects.html"
-            target="_blank"
-            class="social-link"
-          >
+          <a href="./blender-projects.html" target="_blank" class="social-link">
             Blender Projects
           </a>
         </li>
-
-        <!-- Gimp Projects -->
         <li>
-          <a
-            href="./gimp-projects.html"
-            target="_blank"
-            class="social-link"
-          >
+          <a href="./gimp-projects.html" target="_blank" class="social-link">
             Gimp Projects
           </a>
         </li>
-
-        <!-- Blender Animations -->
         <li>
-          <a
-            href="./blender-animations.html"
-            target="_blank"
-            class="social-link"
-          >
+          <a href="./blender-animations.html" target="_blank" class="social-link">
             Blender Animations
           </a>
         </li>
@@ -742,11 +158,7 @@
           <a href="#" class="social-link">New Tab Replacement</a>
         </li>
         <li>
-          <a
-            href="./animated-background.html"
-            class="social-link"
-            id="animatedBackgroundLink"
-          >
+          <a href="./animated-background.html" class="social-link" id="animatedBackgroundLink">
             Animated Background
           </a>
         </li>
@@ -763,25 +175,13 @@
     <section class="center-section" id="contact">
       <h2>Contact</h2>
       <ul class="social-links">
-        <!-- WhatsApp -->
         <li>
-          <a
-            href="https://wa.me/54984181968"
-            class="social-link"
-            id="whatsappLink"
-            target="_blank"
-          >
+          <a href="https://wa.me/54984181968" class="social-link" id="whatsappLink" target="_blank">
             WhatsApp: 54984181968
           </a>
         </li>
-        <!-- Email -->
         <li>
-          <a
-            href="mailto:aaugusto444@gmail.com"
-            class="social-link"
-            id="emailLink"
-            target="_blank"
-          >
+          <a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink" target="_blank">
             Email: aaugusto444@gmail.com
           </a>
         </li>
@@ -792,464 +192,40 @@
   <!-- 5. Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
 
-  <!-- -------------------------------
-       6. JavaScript
-  ------------------------------- -->
-
-  <!-- Lightning Effect Script -->
+  <!-- Main JavaScript for Style Switching -->
   <script>
-    const lightningCanvas = document.getElementById('lightningCanvas');
-    const ctx = lightningCanvas.getContext('2d');
-    let lightningPath = [];
-    let animationActive = false;
-    let currentColor = getRandomLightColor();
-    const maxPathLength = 100;
-
-    function resizeCanvas() {
-      lightningCanvas.width = window.innerWidth;
-      lightningCanvas.height = window.innerHeight;
-    }
-
-    function getRandomLightColor() {
-      const hue = Math.random() * 360;
-      return `hsl(${hue}, 100%, 75%)`;
-    }
-
-    function drawLightning() {
-      if (!animationActive) return;
-      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-
-      // Slight "persistence" effect
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-
-      ctx.strokeStyle = currentColor;
-      ctx.lineWidth = 2;
-      ctx.globalAlpha = 0.8;
-      ctx.beginPath();
-      ctx.moveTo(lightningCanvas.width / 2, 0);
-
-      const lastPoint = lightningPath[lightningPath.length - 1] || {
-        x: lightningCanvas.width / 2,
-        y: 0
-      };
-      if (lastPoint.y < lightningCanvas.height) {
-        const xOffset = (Math.random() - 0.5) * 30;
-        const newPoint = { x: lastPoint.x + xOffset, y: lastPoint.y + 15 };
-        lightningPath.push(newPoint);
-      }
-
-      if (lightningPath.length > maxPathLength) {
-        lightningPath.shift();
-      }
-
-      // Draw the lightning path
-      lightningPath.forEach((point) => ctx.lineTo(point.x, point.y));
-      ctx.stroke();
-
-      // Subtle glow overlay
-      ctx.globalAlpha = 0.2;
-      ctx.fillStyle = currentColor.replace('hsl', 'hsla').replace(')', ', 0.2)');
-      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-
-      // If the path has reached bottom, reset
-      if (lastPoint.y >= lightningCanvas.height) {
-        lightningPath = [];
-        currentColor = getRandomLightColor();
-      }
-
-      ctx.globalAlpha = 1.0;
-      requestAnimationFrame(drawLightning);
-    }
-
-    function startAnimation() {
-      if (!animationActive) {
-        animationActive = true;
-        drawLightning();
-      }
-    }
-
-    function stopAnimation() {
-      animationActive = false;
-      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
-      lightningPath = [];
-    }
-
-    // Trigger lightning on hover over "Animated Background" link
-    const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
-    if (animatedBackgroundLink) {
-      animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
-      animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-  </script>
-
-  <!-- Main Script for Translations, Knowledge List, Certifications, and Menu Handling -->
-  <script>
-    let selectedLanguage = 'en';
-
-    window.addEventListener('DOMContentLoaded', () => {
-      initializeLanguageSelector();
-      setupMenu();
-      fetchTranslations();
-      fetchKnowledgeList();
-      fetchCertificationsList();
-    });
-
-    function initializeLanguageSelector() {
-      const languageSelect = document.getElementById('language');
-      // Load saved language if available
-      if (localStorage.getItem('selectedLanguage')) {
-        selectedLanguage = localStorage.getItem('selectedLanguage');
-        languageSelect.value = selectedLanguage;
-      }
-      // Update language on change
-      languageSelect.addEventListener('change', () => {
-        selectedLanguage = languageSelect.value;
-        localStorage.setItem('selectedLanguage', selectedLanguage);
-        changeLanguage();
-      });
-    }
-
-    function changeLanguage() {
-      fetchTranslations();
-      fetchKnowledgeList();
-      fetchCertificationsList();
-    }
-
-    // 1. FETCH TRANSLATIONS
-    function fetchTranslations() {
-      const translations = {
-        "en": {
-          "profile": "Profile",
-          "socialLinks": "Social Links & Projects",
-          "friendlySites": "Friendly Sites",
-          "certifications": "Certifications",
-          "contact": "Contact",
-          "knowledge": "Knowledge",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "instagram": "Instagram",
-          "blenderprojects": "Blender Projects",
-          "gimpprojects": "Gimp Projects",
-          "blenderanimation": "Blender Animation",
-          "newtabreplacement": "New Tab Replacement",
-          "animatedbackground": "Animated Background",
-          "welcomeMessage":
-            "Welcome to my profile! Here you will find information about my background, skills, and experience.",
-        },
-        "pt": {
-          "profile": "Perfil",
-          "socialLinks": "Redes Sociais & Projetos",
-          "friendlySites": "Sites Amigos",
-          "certifications": "Certificações",
-          "contact": "Contato",
-          "knowledge": "Conhecimentos",
-          "whatsapp": "WhatsApp",
-          "email": "Email",
-          "facebook": "Facebook",
-          "instagram": "Instagram",
-          "blenderprojects": "Projetos Blender",
-          "gimpprojects": "Projetos Gimp",
-          "blenderanimation": "Animação Blender",
-          "newtabreplacement": "Substituição da Nova Guia",
-          "animatedbackground": "Fundo Animado",
-          "welcomeMessage":
-            "Bem-vindo ao meu perfil! Aqui você encontrará informações sobre meu histórico, habilidades e experiência.",
-        }
-      };
-      const data = translations[selectedLanguage] || translations['en'];
-
-      // Update section titles (h2)
-      document.querySelectorAll('.center-section h2').forEach(el => {
-        const parentId = el.parentElement.id;
-        if (data[parentId]) {
-          el.textContent = data[parentId];
-        }
-        // Also handle the knowledge subtitle
-        if (el.id === 'knowledge-title') {
-          el.textContent = data['knowledge'];
-        }
-      });
-
-      // Update the welcome message in the Profile section
-      const welcomeMessageEl = document.getElementById('welcomeMessage');
-      if (welcomeMessageEl && data.welcomeMessage) {
-        welcomeMessageEl.textContent = data.welcomeMessage;
-      }
-
-      // Update sidebar menu items
-      document.querySelectorAll('.sidebar-menu-item').forEach(btn => {
-        const sectionKey = btn.getAttribute('data-section');
-        if (data[sectionKey]) {
-          btn.textContent = data[sectionKey];
-        }
-      });
-
-      // Update social links
-      document.querySelectorAll('.social-links > li > a').forEach(link => {
-        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, '');
-        if (data[textKey]) {
-          link.textContent = data[textKey];
-        }
-      });
-
-      // Update friendly sites links
-      document.querySelectorAll('.friendly-sites a').forEach(link => {
-        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, '');
-        if (data[textKey]) {
-          link.textContent = data[textKey];
-        }
-      });
-
-      // Update Contact Links
-      const whatsappLink = document.getElementById("whatsappLink");
-      if (whatsappLink) {
-        whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
-      }
-
-      const emailLink = document.getElementById("emailLink");
-      if (emailLink) {
-        emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
-      }
-    }
-
-    // 2. FETCH KNOWLEDGE LIST
-    function fetchKnowledgeList() {
-      // Make sure the file path matches your structure
-      fetch('./KnowledgeList/KnowledgeList.txt')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.text();
-        })
-        .then(data => {
-          const knowledgeList = document.getElementById('knowledge-list');
-          if (!knowledgeList) return;
-
-          knowledgeList.innerHTML = '';
-          const lines = data.split('\n').filter(line => line.trim() !== '');
-          lines.forEach(line => {
-            const [enText, ptText] = line.split('||');
-            if (!enText || !ptText) return; // skip invalid lines
-
-            const listItem = document.createElement('li');
-            listItem.textContent =
-              selectedLanguage === 'pt'
-                ? ptText.trim()
-                : enText.trim();
-            knowledgeList.appendChild(listItem);
-          });
-        })
-        .catch(err => console.error('Error loading knowledge list:', err));
-    }
-
-    // 3. FETCH CERTIFICATIONS LIST
-    async function fetchCertificationsList() {
-      const MAX_CERTIFICATIONS = 6; // Adjust as needed
-
-      try {
-        const response = await fetch('./Certificados/CertificadosList.txt');
-        if (!response.ok) {
-          throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.text();
-
-        const certificationsList = document.getElementById('certifications-list');
-        if (!certificationsList) return;
-        certificationsList.innerHTML = '';
-
-        const lines = data.split('\n').filter(line => line.trim() !== '');
-        if (lines.length === 0) {
-          certificationsList.innerHTML = '<li>No certifications available.</li>';
-          return;
-        }
-
-        let certificationsLoaded = 0;
-        for (const line of lines) {
-          if (certificationsLoaded >= MAX_CERTIFICATIONS) break;
-
-          const parts = line.split(' - ');
-          if (parts.length < 2) continue;
-
-          const filePath = parts[0].trim();
-          const title = parts.slice(1).join(' - ').trim();
-
-          // Create list item
-          const li = document.createElement('li');
-
-          // Title
-          const certTitle = document.createElement('div');
-          certTitle.classList.add('cert-title');
-          certTitle.textContent = title;
-          li.appendChild(certTitle);
-
-          // Canvas for PDF
-          const pdfCanvas = document.createElement('canvas');
-          pdfCanvas.classList.add('pdf-canvas');
-          pdfCanvas.id = `pdf-canvas-${certificationsLoaded}`;
-          li.appendChild(pdfCanvas);
-
-          // Download link
-          const downloadLink = document.createElement('a');
-          downloadLink.href = filePath;
-          downloadLink.textContent = 'Download Certificate';
-          downloadLink.classList.add('download-link');
-          downloadLink.target = '_blank';
-          li.appendChild(downloadLink);
-
-          certificationsList.appendChild(li);
-
-          renderFirstPage(filePath, pdfCanvas.id);
-          certificationsLoaded++;
-        }
-
-        if (certificationsLoaded === 0) {
-          certificationsList.innerHTML = '<li>No certifications available.</li>';
-        }
-      } catch (error) {
-        console.error('Error loading certifications:', error);
-        alert('An error occurred while loading the certifications list.');
-      }
-    }
-
-    // 4. RENDER PDF FIRST PAGE
-    function renderFirstPage(pdfUrl, canvasId) {
-      const canvas = document.getElementById(canvasId);
-      if (!canvas) return;
-      const context = canvas.getContext('2d');
-
-      // Loading indicator
-      const loadingIndicator = document.createElement('div');
-      loadingIndicator.textContent = 'Loading...';
-      loadingIndicator.style.position = 'absolute';
-      loadingIndicator.style.top = '50%';
-      loadingIndicator.style.left = '50%';
-      loadingIndicator.style.transform = 'translate(-50%, -50%)';
-      loadingIndicator.style.color = '#00ffff';
-      loadingIndicator.style.fontSize = '18px';
-      loadingIndicator.style.fontWeight = 'bold';
-      loadingIndicator.id = `loading-${canvasId}`;
-      canvas.parentElement.appendChild(loadingIndicator);
-
-      // Lazy load with IntersectionObserver
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            pdfjsLib.getDocument(pdfUrl).promise
-              .then(pdf => pdf.getPage(1))
-              .then(page => {
-                const scale = 1.5;
-                const viewport = page.getViewport({ scale });
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-
-                return page.render({
-                  canvasContext: context,
-                  viewport: viewport
-                }).promise;
-              })
-              .then(() => {
-                const loadingEl = document.getElementById(`loading-${canvasId}`);
-                if (loadingEl) loadingEl.remove();
-                observer.unobserve(canvas); // Stop observing after rendering
-              })
-              .catch(err => {
-                console.error(`Error rendering PDF ${pdfUrl}: `, err);
-                const loadingEl = document.getElementById(`loading-${canvasId}`);
-                if (loadingEl) {
-                  loadingEl.textContent = 'Failed to load PDF';
-                  loadingEl.style.color = '#ff0000';
-                }
-              });
-          }
-        });
-      }, {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-      });
-
-      observer.observe(canvas);
-    }
-
-    // 5. MENU HANDLING
-    function setupMenu() {
-      const menuButtons = document.querySelectorAll('.menu .sidebar-menu-item');
-      const sections = document.querySelectorAll('.center-section');
-
-      menuButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          // Remove active from all buttons and hide all sections
-          menuButtons.forEach(item => item.classList.remove('active'));
-          sections.forEach(section => section.classList.remove('active'));
-
-          // Add active to the clicked button and show the corresponding section
-          btn.classList.add('active');
-          const sectionId = btn.getAttribute('data-section');
-          const targetSection = document.getElementById(sectionId);
-          if (targetSection) {
-            targetSection.classList.add('active');
-          }
-        });
-
-        // Keyboard navigation (Enter or Space)
-        btn.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            btn.click();
-          }
-        });
-      });
-    }
-  </script>
-
-  <!-- -------------------------------
-       7. JavaScript for Style Switching
-  ------------------------------- -->
-  <script>
-    // Function to remove existing theme classes
     function removeExistingThemes() {
       document.body.classList.remove(
-        'theme-style1',
-        'theme-style2',
-        'theme-style3',
-        'theme-style4',
-        'theme-style5'
+        "theme-style1",
+        "theme-style2",
+        "theme-style3",
+        "theme-style4",
+        "theme-style5"
       );
     }
 
-    // Function to apply a selected theme
     function applyTheme(themeClass) {
       removeExistingThemes();
       document.body.classList.add(themeClass);
     }
 
-    // Initialize theme selector
     function initializeThemeSelector() {
-      const styleButtons = document.querySelectorAll('.style-button');
+      const styleButtons = document.querySelectorAll(".style-button");
 
-      // Load saved theme from localStorage if available
-      const savedTheme = localStorage.getItem('selectedTheme');
+      const savedTheme = localStorage.getItem("selectedTheme");
       if (savedTheme) {
         applyTheme(savedTheme);
       }
 
-      styleButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const selectedStyle = button.getAttribute('data-style');
+      styleButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const selectedStyle = button.getAttribute("data-style");
           applyTheme(selectedStyle);
-          // Save selected theme to localStorage
-          localStorage.setItem('selectedTheme', selectedStyle);
+          localStorage.setItem("selectedTheme", selectedStyle);
         });
 
-        // Accessibility: Handle keyboard events
-        button.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+        button.addEventListener("keypress", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             button.click();
           }
@@ -1257,8 +233,7 @@
       });
     }
 
-    // Call the initializer after DOM content is loaded
-    window.addEventListener('DOMContentLoaded', initializeThemeSelector);
+    window.addEventListener("DOMContentLoaded", initializeThemeSelector);
   </script>
 </body>
 </html>
