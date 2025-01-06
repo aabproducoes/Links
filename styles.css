@@ -1,0 +1,97 @@
+/* -------------------------------
+   CSS Variables for Themes
+------------------------------- */
+:root {
+  --background-gradient: linear-gradient(135deg, #0a0f2e, #162042);
+  --text-color: #00ffff;
+  --accent-color: #ffd700;
+  --button-bg: rgba(0, 170, 255, 0.3);
+  --button-text: #00ffff;
+  --button-hover-bg: #00ffff;
+  --button-hover-text: #162042;
+}
+
+/* Theme 1 */
+.theme-style1 {
+  --background-gradient: linear-gradient(135deg, #ff7e5f, #feb47b);
+  --text-color: #ffffff;
+  --accent-color: #ff6347;
+  --button-bg: rgba(255, 126, 95, 0.8);
+  --button-text: #ffffff;
+  --button-hover-bg: #ffffff;
+  --button-hover-text: #ff7e5f;
+}
+
+/* Theme 2 */
+.theme-style2 {
+  --background-gradient: linear-gradient(135deg, #6a11cb, #2575fc);
+  --text-color: #ffffff;
+  --accent-color: #00ff7f;
+  --button-bg: rgba(106, 17, 203, 0.8);
+  --button-text: #ffffff;
+  --button-hover-bg: #ffffff;
+  --button-hover-text: #6a11cb;
+}
+
+/* Theme 3 */
+.theme-style3 {
+  --background-gradient: linear-gradient(135deg, #11998e, #38ef7d);
+  --text-color: #ffffff;
+  --accent-color: #ff1493;
+  --button-bg: rgba(17, 153, 142, 0.8);
+  --button-text: #ffffff;
+  --button-hover-bg: #ffffff;
+  --button-hover-text: #11998e;
+}
+
+/* Theme 4 */
+.theme-style4 {
+  --background-gradient: linear-gradient(135deg, #fc4a1a, #f7b733);
+  --text-color: #ffffff;
+  --accent-color: #1e90ff;
+  --button-bg: rgba(252, 74, 26, 0.8);
+  --button-text: #ffffff;
+  --button-hover-bg: #ffffff;
+  --button-hover-text: #fc4a1a;
+}
+
+/* Theme 5 */
+.theme-style5 {
+  --background-gradient: linear-gradient(135deg, #8e2de2, #4a00e0);
+  --text-color: #ffffff;
+  --accent-color: #ff6347;
+  --button-bg: rgba(142, 45, 226, 0.8);
+  --button-text: #ffffff;
+  --button-hover-bg: #ffffff;
+  --button-hover-text: #8e2de2;
+}
+
+/* Base Styles (e.g., body, menu, buttons) */
+body {
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+  background: var(--background-gradient);
+  color: var(--text-color);
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow-x: hidden;
+  transition: background 0.5s, color 0.5s;
+}
+
+.menu {
+  background-color: rgba(22, 32, 66, 0.8);
+}
+
+.sidebar-menu-item {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+}
+
+.sidebar-menu-item:hover {
+  background-color: var(--button-hover-bg);
+  color: var(--button-hover-text);
+  border: 2px solid var(--accent-color);
+}
+
+/* Add remaining styles here... */
