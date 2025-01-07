@@ -90,7 +90,27 @@ body {
   transition: background 0.5s, color 0.5s;
 }
 
-/* Include other styles from your original inline CSS file here */
+/* -------------------------------
+   2. LANGUAGE SELECTOR
+------------------------------- */
+.language-selector {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: rgba(22, 32, 66, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--text-color);
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .language-selector {
+    top: 20px;
+    right: 20px;
+  }
+}
 
 /* -------------------------------
    14. STYLE SELECTOR
@@ -123,4 +143,413 @@ body {
   outline: none;
 }
 
-/* Add the rest of your CSS styles here */
+/* -------------------------------
+   3. SIDEBAR MENU
+------------------------------- */
+.menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 80px;
+  background-color: rgba(22, 32, 66, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 60px; /* Adjusted to accommodate style selector */
+  gap: 15px;
+  z-index: 2;
+  height: 100vh;
+}
+
+.menu .profile-picture {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-color);
+  box-shadow: 0 0 10px var(--accent-color);
+  margin-bottom: 20px;
+}
+
+/* -------------------------------
+   4. SIDEBAR MENU ITEMS & ARROW
+------------------------------- */
+.sidebar-menu-item {
+  position: relative; /* To position the arrows and pseudo-elements */
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-weight: bold;
+  font-size: 12px;
+  text-align: center;
+  border: 2px solid transparent;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s, transform 0.3s, border 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Accessible focus outline */
+.sidebar-menu-item:focus {
+  outline: 2px solid #ffd700;
+  outline-offset: 4px;
+}
+
+/* Hover & Focus effect for menu items */
+.sidebar-menu-item:hover {
+  background-color: var(--button-hover-bg);
+  color: var(--button-hover-text);
+  transform: scale(1.1);
+  border: 2px solid var(--accent-color);
+}
+
+/* Arrow starts pointing up (▲), above the button */
+.sidebar-menu-item::after {
+  content: '▲';
+  position: absolute;
+  top: -18px; /* Slightly above the button */
+  left: 50%;
+  transform: translateX(-50%) rotate(0deg);
+  font-size: 14px;
+  color: #ffd700;
+  text-shadow: 0 0 6px #ffd700; /* Glow effect */
+  transition: transform 0.3s ease, color 0.3s ease, top 0.3s, left 0.3s;
+  pointer-events: none; /* Arrow doesn't capture mouse events */
+}
+
+/* When active, arrow moves to the right side and changes to point right (►) */
+.sidebar-menu-item.active::after {
+  content: '►';
+  top: 50%;
+  left: 100%;
+  transform: translate(-50%, -50%) rotate(0deg);
+  font-size: 18px;
+  color: #ffffff;
+  text-shadow: 0 0 10px #ffffff; /* Stronger glow */
+}
+
+/* Active Menu Item Styles */
+.sidebar-menu-item.active {
+  background-color: var(--accent-color);
+  color: #162042;
+  box-shadow: 0 0 10px var(--accent-color);
+}
+
+/* -------------------------------
+   4.1 BORDER SHRINKING COLOR EFFECT
+------------------------------- */
+.sidebar-menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #ff00ff; /* This can be adjusted or made variable */
+  border-radius: 10px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(1);
+}
+
+.sidebar-menu-item:hover::before {
+  opacity: 1;
+  animation: shrink-border 0.5s forwards;
+}
+
+@keyframes shrink-border {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+/* -------------------------------
+   5. MAIN CONTENT AREA
+------------------------------- */
+.main-content {
+  flex: 1;
+  margin-left: 80px; /* Space for the fixed sidebar */
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* Scroll vertically if needed */
+  overflow-x: hidden;
+  height: 100vh; /* Full viewport height */
+  padding: 20px;
+}
+
+.center-section {
+  padding: 20px;
+  margin: 10px;
+  border-radius: 15px;
+  background-color: rgba(22, 32, 66, 0.8);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none; /* All sections hidden by default */
+  transition: background-color 0.5s;
+}
+
+/* Visible section */
+.center-section.active {
+  display: block;
+}
+
+/* -------------------------------
+   6. LIST STYLES
+------------------------------- */
+.social-links,
+.friendly-sites,
+.certifications-list,
+.knowledge-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto; /* Center align the container */
+}
+
+.social-links > li,
+.friendly-sites > li,
+.certifications-list > li,
+.knowledge-list > li {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Center align each link */
+}
+
+/* -------------------------------
+   7. BUTTON & LINK STYLES
+------------------------------- */
+.social-link,
+.download-link {
+  display: block;
+  width: 100%;
+  max-width: 400px; /* For better readability */
+  padding: 10px 20px;
+  background-color: #00ffff;
+  color: #162042;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  border: 2px solid transparent;
+  text-align: center;
+  box-sizing: border-box; /* Ensure padding is counted in total width */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Enhanced Hover Effect with Ripple Animation */
+.social-link::before,
+.download-link::before {
+  content: '';
+  position: absolute;
+  width: 300%;
+  height: 300%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: rgba(255, 255, 255, 0.15);
+  transition: all 0.5s ease;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.social-link:hover::before,
+.download-link:hover::before {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.social-link:hover,
+.download-link:hover {
+  background-color: #162042;
+  color: #00ffff;
+  transform: scale(1.05);
+  border: 2px solid #ffd700;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* -------------------------------
+   8. KNOWLEDGE LIST
+------------------------------- */
+.knowledge-list li {
+  padding: 12px 25px;
+  color: #00ffff;
+  border: 3px solid transparent;
+  border-radius: 15px;
+  text-align: center;
+  transition: transform 0.3s, border-image 2s;
+}
+
+.knowledge-list li:hover {
+  border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+  animation: border-fill 2s forwards;
+  transform: scale(1.05);
+}
+
+@keyframes border-fill {
+  0% {
+    border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
+  }
+  100% {
+    border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
+  }
+}
+
+/* -------------------------------
+   9. CERTIFICATIONS LIST
+------------------------------- */
+.certifications-list li {
+  padding: 15px;
+  background-color: rgba(22, 32, 66, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Certification Title */
+.cert-title {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background-color: rgba(22, 32, 66, 0.8);
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #ffd700;
+  font-weight: bold;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  z-index: 2;
+}
+
+/* Show title on hover */
+.certifications-list li:hover .cert-title {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.pdf-canvas {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #00ffff;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Download link for certifications */
+.download-link {
+  margin-top: 10px;
+  text-decoration: underline;
+  color: #00ffff;
+  font-weight: bold;
+}
+
+.download-link:hover {
+  color: #ffd700;
+}
+
+/* -------------------------------
+   10. LIGHTNING & TECH BACKGROUND
+------------------------------- */
+/* Tech Background */
+.tech-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 170, 255, 0.2), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Lightning Canvas */
+#lightningCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* -------------------------------
+   11. MEDIA QUERIES 
+------------------------------- */
+@media (min-width: 768px) {
+  .social-link,
+  .download-link {
+    font-size: 16px;
+    padding: 12px 25px;
+  }
+}
+
+/* -------------------------------
+   12. SOCIAL LINKS & PROJECTS STYLES
+------------------------------- */
+/* Social Links Styling */
+.social-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 15px;
+}
+
+.social-links > li {
+  text-align: center;
+}
+
+/* -------------------------------
+   13. FRIENDLY SITES STYLES
+------------------------------- */
+/* Friendly Sites Styling */
+.friendly-sites {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 10px;
+}
+
+.friendly-sites > li {
+  text-align: center;
+}
