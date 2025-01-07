@@ -122,28 +122,57 @@
     <section class="center-section" id="socialLinks">
       <h2>Social Links & Projects</h2>
       <ul class="social-links">
+        <!-- Facebook -->
         <li>
-          <a href="https://www.facebook.com/antonio.augusto.barbaro" target="_blank" class="social-link">
+          <a
+            href="https://www.facebook.com/antonio.augusto.barbaro"
+            target="_blank"
+            class="social-link"
+          >
             Facebook
           </a>
         </li>
+
+        <!-- Instagram -->
         <li>
-          <a href="https://www.instagram.com/aabproducoes/" target="_blank" class="social-link">
+          <a
+            href="https://www.instagram.com/aabproducoes/"
+            target="_blank"
+            class="social-link"
+          >
             Instagram
           </a>
         </li>
+
+        <!-- Blender Projects -->
         <li>
-          <a href="./blender-projects.html" target="_blank" class="social-link">
+          <a
+            href="./blender-projects.html"
+            target="_blank"
+            class="social-link"
+          >
             Blender Projects
           </a>
         </li>
+
+        <!-- Gimp Projects -->
         <li>
-          <a href="./gimp-projects.html" target="_blank" class="social-link">
+          <a
+            href="./gimp-projects.html"
+            target="_blank"
+            class="social-link"
+          >
             Gimp Projects
           </a>
         </li>
+
+        <!-- Blender Animations -->
         <li>
-          <a href="./blender-animations.html" target="_blank" class="social-link">
+          <a
+            href="./blender-animations.html"
+            target="_blank"
+            class="social-link"
+          >
             Blender Animations
           </a>
         </li>
@@ -158,7 +187,11 @@
           <a href="#" class="social-link">New Tab Replacement</a>
         </li>
         <li>
-          <a href="./animated-background.html" class="social-link" id="animatedBackgroundLink">
+          <a
+            href="./animated-background.html"
+            class="social-link"
+            id="animatedBackgroundLink"
+          >
             Animated Background
           </a>
         </li>
@@ -175,13 +208,25 @@
     <section class="center-section" id="contact">
       <h2>Contact</h2>
       <ul class="social-links">
+        <!-- WhatsApp -->
         <li>
-          <a href="https://wa.me/54984181968" class="social-link" id="whatsappLink" target="_blank">
+          <a
+            href="https://wa.me/54984181968"
+            class="social-link"
+            id="whatsappLink"
+            target="_blank"
+          >
             WhatsApp: 54984181968
           </a>
         </li>
+        <!-- Email -->
         <li>
-          <a href="mailto:aaugusto444@gmail.com" class="social-link" id="emailLink" target="_blank">
+          <a
+            href="mailto:aaugusto444@gmail.com"
+            class="social-link"
+            id="emailLink"
+            target="_blank"
+          >
             Email: aaugusto444@gmail.com
           </a>
         </li>
@@ -192,40 +237,464 @@
   <!-- 5. Lightning Effect Canvas -->
   <canvas id="lightningCanvas"></canvas>
 
-  <!-- Main JavaScript for Style Switching -->
+  <!-- -------------------------------
+       6. JavaScript
+  ------------------------------- -->
+
+  <!-- Lightning Effect Script -->
   <script>
+    const lightningCanvas = document.getElementById('lightningCanvas');
+    const ctx = lightningCanvas.getContext('2d');
+    let lightningPath = [];
+    let animationActive = false;
+    let currentColor = getRandomLightColor();
+    const maxPathLength = 100;
+
+    function resizeCanvas() {
+      lightningCanvas.width = window.innerWidth;
+      lightningCanvas.height = window.innerHeight;
+    }
+
+    function getRandomLightColor() {
+      const hue = Math.random() * 360;
+      return `hsl(${hue}, 100%, 75%)`;
+    }
+
+    function drawLightning() {
+      if (!animationActive) return;
+      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // Slight "persistence" effect
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      ctx.strokeStyle = currentColor;
+      ctx.lineWidth = 2;
+      ctx.globalAlpha = 0.8;
+      ctx.beginPath();
+      ctx.moveTo(lightningCanvas.width / 2, 0);
+
+      const lastPoint = lightningPath[lightningPath.length - 1] || {
+        x: lightningCanvas.width / 2,
+        y: 0
+      };
+      if (lastPoint.y < lightningCanvas.height) {
+        const xOffset = (Math.random() - 0.5) * 30;
+        const newPoint = { x: lastPoint.x + xOffset, y: lastPoint.y + 15 };
+        lightningPath.push(newPoint);
+      }
+
+      if (lightningPath.length > maxPathLength) {
+        lightningPath.shift();
+      }
+
+      // Draw the lightning path
+      lightningPath.forEach((point) => ctx.lineTo(point.x, point.y));
+      ctx.stroke();
+
+      // Subtle glow overlay
+      ctx.globalAlpha = 0.2;
+      ctx.fillStyle = currentColor.replace('hsl', 'hsla').replace(')', ', 0.2)');
+      ctx.fillRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+
+      // If the path has reached bottom, reset
+      if (lastPoint.y >= lightningCanvas.height) {
+        lightningPath = [];
+        currentColor = getRandomLightColor();
+      }
+
+      ctx.globalAlpha = 1.0;
+      requestAnimationFrame(drawLightning);
+    }
+
+    function startAnimation() {
+      if (!animationActive) {
+        animationActive = true;
+        drawLightning();
+      }
+    }
+
+    function stopAnimation() {
+      animationActive = false;
+      ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+      lightningPath = [];
+    }
+
+    // Trigger lightning on hover over "Animated Background" link
+    const animatedBackgroundLink = document.getElementById('animatedBackgroundLink');
+    if (animatedBackgroundLink) {
+      animatedBackgroundLink.addEventListener('mouseenter', startAnimation);
+      animatedBackgroundLink.addEventListener('mouseleave', stopAnimation);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  </script>
+
+  <!-- Main Script for Translations, Knowledge List, Certifications, and Menu Handling -->
+  <script>
+    let selectedLanguage = 'en';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initializeLanguageSelector();
+      setupMenu();
+      fetchTranslations();
+      fetchKnowledgeList();
+      fetchCertificationsList();
+    });
+
+    function initializeLanguageSelector() {
+      const languageSelect = document.getElementById('language');
+      // Load saved language if available
+      if (localStorage.getItem('selectedLanguage')) {
+        selectedLanguage = localStorage.getItem('selectedLanguage');
+        languageSelect.value = selectedLanguage;
+      }
+      // Update language on change
+      languageSelect.addEventListener('change', () => {
+        selectedLanguage = languageSelect.value;
+        localStorage.setItem('selectedLanguage', selectedLanguage);
+        changeLanguage();
+      });
+    }
+
+    function changeLanguage() {
+      fetchTranslations();
+      fetchKnowledgeList();
+      fetchCertificationsList();
+    }
+
+    // 1. FETCH TRANSLATIONS
+    function fetchTranslations() {
+      const translations = {
+        "en": {
+          "profile": "Profile",
+          "socialLinks": "Social Links & Projects",
+          "friendlySites": "Friendly Sites",
+          "certifications": "Certifications",
+          "contact": "Contact",
+          "knowledge": "Knowledge",
+          "whatsapp": "WhatsApp",
+          "email": "Email",
+          "facebook": "Facebook",
+          "instagram": "Instagram",
+          "blenderprojects": "Blender Projects",
+          "gimpprojects": "Gimp Projects",
+          "blenderanimation": "Blender Animation",
+          "newtabreplacement": "New Tab Replacement",
+          "animatedbackground": "Animated Background",
+          "welcomeMessage":
+            "Welcome to my profile! Here you will find information about my background, skills, and experience.",
+        },
+        "pt": {
+          "profile": "Perfil",
+          "socialLinks": "Redes Sociais & Projetos",
+          "friendlySites": "Sites Amigos",
+          "certifications": "Certificações",
+          "contact": "Contato",
+          "knowledge": "Conhecimentos",
+          "whatsapp": "WhatsApp",
+          "email": "Email",
+          "facebook": "Facebook",
+          "instagram": "Instagram",
+          "blenderprojects": "Projetos Blender",
+          "gimpprojects": "Projetos Gimp",
+          "blenderanimation": "Animação Blender",
+          "newtabreplacement": "Substituição da Nova Guia",
+          "animatedbackground": "Fundo Animado",
+          "welcomeMessage":
+            "Bem-vindo ao meu perfil! Aqui você encontrará informações sobre meu histórico, habilidades e experiência.",
+        }
+      };
+      const data = translations[selectedLanguage] || translations['en'];
+
+      // Update section titles (h2)
+      document.querySelectorAll('.center-section h2').forEach(el => {
+        const parentId = el.parentElement.id;
+        if (data[parentId]) {
+          el.textContent = data[parentId];
+        }
+        // Also handle the knowledge subtitle
+        if (el.id === 'knowledge-title') {
+          el.textContent = data['knowledge'];
+        }
+      });
+
+      // Update the welcome message in the Profile section
+      const welcomeMessageEl = document.getElementById('welcomeMessage');
+      if (welcomeMessageEl && data.welcomeMessage) {
+        welcomeMessageEl.textContent = data.welcomeMessage;
+      }
+
+      // Update sidebar menu items
+      document.querySelectorAll('.sidebar-menu-item').forEach(btn => {
+        const sectionKey = btn.getAttribute('data-section');
+        if (data[sectionKey]) {
+          btn.textContent = data[sectionKey];
+        }
+      });
+
+      // Update social links
+      document.querySelectorAll('.social-links > li > a').forEach(link => {
+        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, '');
+        if (data[textKey]) {
+          link.textContent = data[textKey];
+        }
+      });
+
+      // Update friendly sites links
+      document.querySelectorAll('.friendly-sites a').forEach(link => {
+        const textKey = link.textContent.trim().toLowerCase().replace(/\s+/g, '');
+        if (data[textKey]) {
+          link.textContent = data[textKey];
+        }
+      });
+
+      // Update Contact Links
+      const whatsappLink = document.getElementById("whatsappLink");
+      if (whatsappLink) {
+        whatsappLink.textContent = `${data.whatsapp}: 54984181968`;
+      }
+
+      const emailLink = document.getElementById("emailLink");
+      if (emailLink) {
+        emailLink.textContent = `${data.email}: aaugusto444@gmail.com`;
+      }
+    }
+
+    // 2. FETCH KNOWLEDGE LIST
+    function fetchKnowledgeList() {
+      // Make sure the file path matches your structure
+      fetch('./KnowledgeList/KnowledgeList.txt')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(data => {
+          const knowledgeList = document.getElementById('knowledge-list');
+          if (!knowledgeList) return;
+
+          knowledgeList.innerHTML = '';
+          const lines = data.split('\n').filter(line => line.trim() !== '');
+          lines.forEach(line => {
+            const [enText, ptText] = line.split('||');
+            if (!enText || !ptText) return; // skip invalid lines
+
+            const listItem = document.createElement('li');
+            listItem.textContent =
+              selectedLanguage === 'pt'
+                ? ptText.trim()
+                : enText.trim();
+            knowledgeList.appendChild(listItem);
+          });
+        })
+        .catch(err => console.error('Error loading knowledge list:', err));
+    }
+
+    // 3. FETCH CERTIFICATIONS LIST
+    async function fetchCertificationsList() {
+      const MAX_CERTIFICATIONS = 6; // Adjust as needed
+
+      try {
+        const response = await fetch('./Certificados/CertificadosList.txt');
+        if (!response.ok) {
+          throw new Error(`Failed to fetch certifications list: ${response.status} ${response.statusText}`);
+        }
+        const data = await response.text();
+
+        const certificationsList = document.getElementById('certifications-list');
+        if (!certificationsList) return;
+        certificationsList.innerHTML = '';
+
+        const lines = data.split('\n').filter(line => line.trim() !== '');
+        if (lines.length === 0) {
+          certificationsList.innerHTML = '<li>No certifications available.</li>';
+          return;
+        }
+
+        let certificationsLoaded = 0;
+        for (const line of lines) {
+          if (certificationsLoaded >= MAX_CERTIFICATIONS) break;
+
+          const parts = line.split(' - ');
+          if (parts.length < 2) continue;
+
+          const filePath = parts[0].trim();
+          const title = parts.slice(1).join(' - ').trim();
+
+          // Create list item
+          const li = document.createElement('li');
+
+          // Title
+          const certTitle = document.createElement('div');
+          certTitle.classList.add('cert-title');
+          certTitle.textContent = title;
+          li.appendChild(certTitle);
+
+          // Canvas for PDF
+          const pdfCanvas = document.createElement('canvas');
+          pdfCanvas.classList.add('pdf-canvas');
+          pdfCanvas.id = `pdf-canvas-${certificationsLoaded}`;
+          li.appendChild(pdfCanvas);
+
+          // Download link
+          const downloadLink = document.createElement('a');
+          downloadLink.href = filePath;
+          downloadLink.textContent = 'Download Certificate';
+          downloadLink.classList.add('download-link');
+          downloadLink.target = '_blank';
+          li.appendChild(downloadLink);
+
+          certificationsList.appendChild(li);
+
+          renderFirstPage(filePath, pdfCanvas.id);
+          certificationsLoaded++;
+        }
+
+        if (certificationsLoaded === 0) {
+          certificationsList.innerHTML = '<li>No certifications available.</li>';
+        }
+      } catch (error) {
+        console.error('Error loading certifications:', error);
+        alert('An error occurred while loading the certifications list.');
+      }
+    }
+
+    // 4. RENDER PDF FIRST PAGE
+    function renderFirstPage(pdfUrl, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const context = canvas.getContext('2d');
+
+      // Loading indicator
+      const loadingIndicator = document.createElement('div');
+      loadingIndicator.textContent = 'Loading...';
+      loadingIndicator.style.position = 'absolute';
+      loadingIndicator.style.top = '50%';
+      loadingIndicator.style.left = '50%';
+      loadingIndicator.style.transform = 'translate(-50%, -50%)';
+      loadingIndicator.style.color = '#00ffff';
+      loadingIndicator.style.fontSize = '18px';
+      loadingIndicator.style.fontWeight = 'bold';
+      loadingIndicator.id = `loading-${canvasId}`;
+      canvas.parentElement.appendChild(loadingIndicator);
+
+      // Lazy load with IntersectionObserver
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            pdfjsLib.getDocument(pdfUrl).promise
+              .then(pdf => pdf.getPage(1))
+              .then(page => {
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale });
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+
+                return page.render({
+                  canvasContext: context,
+                  viewport: viewport
+                }).promise;
+              })
+              .then(() => {
+                const loadingEl = document.getElementById(`loading-${canvasId}`);
+                if (loadingEl) loadingEl.remove();
+                observer.unobserve(canvas); // Stop observing after rendering
+              })
+              .catch(err => {
+                console.error(`Error rendering PDF ${pdfUrl}: `, err);
+                const loadingEl = document.getElementById(`loading-${canvasId}`);
+                if (loadingEl) {
+                  loadingEl.textContent = 'Failed to load PDF';
+                  loadingEl.style.color = '#ff0000';
+                }
+              });
+          }
+        });
+      }, {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      });
+
+      observer.observe(canvas);
+    }
+
+    // 5. MENU HANDLING
+    function setupMenu() {
+      const menuButtons = document.querySelectorAll('.menu .sidebar-menu-item');
+      const sections = document.querySelectorAll('.center-section');
+
+      menuButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active from all buttons and hide all sections
+          menuButtons.forEach(item => item.classList.remove('active'));
+          sections.forEach(section => section.classList.remove('active'));
+
+          // Add active to the clicked button and show the corresponding section
+          btn.classList.add('active');
+          const sectionId = btn.getAttribute('data-section');
+          const targetSection = document.getElementById(sectionId);
+          if (targetSection) {
+            targetSection.classList.add('active');
+          }
+        });
+
+        // Keyboard navigation (Enter or Space)
+        btn.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            btn.click();
+          }
+        });
+      });
+    }
+  </script>
+
+  <!-- -------------------------------
+       7. JavaScript for Style Switching
+  ------------------------------- -->
+  <script>
+    // Function to remove existing theme classes
     function removeExistingThemes() {
       document.body.classList.remove(
-        "theme-style1",
-        "theme-style2",
-        "theme-style3",
-        "theme-style4",
-        "theme-style5"
+        'theme-style1',
+        'theme-style2',
+        'theme-style3',
+        'theme-style4',
+        'theme-style5'
       );
     }
 
+    // Function to apply a selected theme
     function applyTheme(themeClass) {
       removeExistingThemes();
       document.body.classList.add(themeClass);
     }
 
+    // Initialize theme selector
     function initializeThemeSelector() {
-      const styleButtons = document.querySelectorAll(".style-button");
+      const styleButtons = document.querySelectorAll('.style-button');
 
-      const savedTheme = localStorage.getItem("selectedTheme");
+      // Load saved theme from localStorage if available
+      const savedTheme = localStorage.getItem('selectedTheme');
       if (savedTheme) {
         applyTheme(savedTheme);
       }
 
-      styleButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const selectedStyle = button.getAttribute("data-style");
+      styleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const selectedStyle = button.getAttribute('data-style');
           applyTheme(selectedStyle);
-          localStorage.setItem("selectedTheme", selectedStyle);
+          // Save selected theme to localStorage
+          localStorage.setItem('selectedTheme', selectedStyle);
         });
 
-        button.addEventListener("keypress", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
+        // Accessibility: Handle keyboard events
+        button.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             button.click();
           }
@@ -233,7 +702,8 @@
       });
     }
 
-    window.addEventListener("DOMContentLoaded", initializeThemeSelector);
+    // Call the initializer after DOM content is loaded
+    window.addEventListener('DOMContentLoaded', initializeThemeSelector);
   </script>
 </body>
 </html>
