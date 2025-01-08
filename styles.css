@@ -10,9 +10,6 @@
   --button-text: #00ffff;
   --button-hover-bg: #00ffff;
   --button-hover-text: #162042;
-  --menu-bg: rgba(22, 32, 66, 0.8);
-  --profile-border: var(--accent-color);
-  --hover-transform: scale(1.1);
   /* Add more variables as needed */
 }
 
@@ -25,8 +22,6 @@
   --button-text: #ffffff;
   --button-hover-bg: #ffffff;
   --button-hover-text: #ff7e5f;
-  --menu-bg: rgba(255, 126, 95, 0.8);
-  --profile-border: #ffffff;
 }
 
 /* Theme 2 */
@@ -38,8 +33,6 @@
   --button-text: #ffffff;
   --button-hover-bg: #ffffff;
   --button-hover-text: #6a11cb;
-  --menu-bg: rgba(106, 17, 203, 0.8);
-  --profile-border: #ffffff;
 }
 
 /* Theme 3 */
@@ -51,8 +44,6 @@
   --button-text: #ffffff;
   --button-hover-bg: #ffffff;
   --button-hover-text: #11998e;
-  --menu-bg: rgba(17, 153, 142, 0.8);
-  --profile-border: #ffffff;
 }
 
 /* Theme 4 */
@@ -64,8 +55,6 @@
   --button-text: #ffffff;
   --button-hover-bg: #ffffff;
   --button-hover-text: #fc4a1a;
-  --menu-bg: rgba(252, 74, 26, 0.8);
-  --profile-border: #ffffff;
 }
 
 /* Theme 5 */
@@ -77,14 +66,14 @@
   --button-text: #ffffff;
   --button-hover-bg: #ffffff;
   --button-hover-text: #8e2de2;
-  --menu-bg: rgba(142, 45, 226, 0.8);
-  --profile-border: #ffffff;
 }
 
 /* -------------------------------
    1. RESET & BASE STYLES
 ------------------------------- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -110,12 +99,11 @@ body {
   top: 10px;
   right: 10px;
   z-index: 1002; /* Higher than style-selector */
-  background: var(--menu-bg);
+  background: rgba(22, 32, 66, 0.8);
   padding: 5px 10px;
   border-radius: 5px;
   color: var(--text-color);
   max-width: 100%;
-  transition: background 0.5s;
 }
 
 @media (min-width: 768px) {
@@ -140,7 +128,7 @@ body {
 
 .style-button {
   padding: 8px 12px;
-  background-color: var(--menu-bg);
+  background-color: rgba(22, 32, 66, 0.8);
   color: var(--text-color);
   border: 2px solid var(--text-color);
   border-radius: 5px;
@@ -164,7 +152,7 @@ body {
   left: 0;
   top: 0;
   width: 80px;
-  background-color: var(--menu-bg);
+  background-color: rgba(22, 32, 66, 0.8);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -173,14 +161,13 @@ body {
   gap: 15px;
   z-index: 1000;
   height: 100vh;
-  transition: background-color 0.5s;
 }
 
 .menu .profile-picture {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 3px solid var(--profile-border);
+  border: 3px solid var(--accent-color);
   box-shadow: 0 0 10px var(--accent-color);
   margin-bottom: 20px;
 }
@@ -217,7 +204,7 @@ body {
 .sidebar-menu-item:hover {
   background-color: var(--button-hover-bg);
   color: var(--button-hover-text);
-  transform: var(--hover-transform);
+  transform: scale(1.1);
   border: 2px solid var(--accent-color);
 }
 
@@ -355,8 +342,8 @@ body {
   width: 100%;
   max-width: 400px; /* For better readability */
   padding: 10px 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
+  background-color: #00ffff;
+  color: #162042;
   text-decoration: none;
   border-radius: 30px;
   transition: all 0.3s ease;
@@ -394,8 +381,8 @@ body {
 
 .social-link:hover,
 .download-link:hover {
-  background-color: var(--button-hover-bg);
-  color: var(--button-hover-text);
+  background-color: #162042;
+  color: #00ffff;
   transform: scale(1.05);
   border: 2px solid #ffd700;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
@@ -406,7 +393,7 @@ body {
 ------------------------------- */
 .knowledge-list li {
   padding: 12px 25px;
-  color: var(--text-color);
+  color: #00ffff;
   border: 3px solid transparent;
   border-radius: 15px;
   text-align: center;
@@ -435,7 +422,7 @@ body {
   padding: 15px;
   background-color: rgba(22, 32, 66, 0.9);
   border-radius: 10px;
-  box-shadow: 0 0 10px var(--accent-color);
+  box-shadow: 0 0 10px #00ffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -475,7 +462,7 @@ body {
   max-width: 600px;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 0 10px var(--accent-color);
+  box-shadow: 0 0 10px #00ffff;
   margin-top: 20px;
   position: relative;
   z-index: 1;
@@ -485,7 +472,7 @@ body {
 .download-link {
   margin-top: 10px;
   text-decoration: underline;
-  color: var(--text-color);
+  color: #00ffff;
   font-weight: bold;
 }
 
@@ -530,4 +517,40 @@ body {
     font-size: 16px;
     padding: 12px 25px;
   }
+}
+
+/* -------------------------------
+   14. SOCIAL LINKS & PROJECTS STYLES
+------------------------------- */
+/* Social Links Styling */
+.social-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 15px;
+}
+
+.social-links > li {
+  text-align: center;
+}
+
+/* -------------------------------
+   15. FRIENDLY SITES STYLES
+------------------------------- */
+/* Friendly Sites Styling */
+.friendly-sites {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 10px;
+}
+
+.friendly-sites > li {
+  text-align: center;
 }
