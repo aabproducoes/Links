@@ -12,10 +12,12 @@
   --button-hover-text: #162042;
   --menu-bg: rgba(22, 32, 66, 0.8);
   --profile-border: var(--accent-color);
-  --cert-bg: rgba(22, 32, 66, 0.9);
   --link-color: #00ffff;
   --link-hover-color: #ffd700;
-  /* Add more variables as needed */
+  --cert-background: rgba(22, 32, 66, 0.9);
+  --cert-text-color: #ffd700;
+  --download-link-color: #00ffff;
+  --download-link-hover-color: #ffd700;
 }
 
 /* Theme 1 */
@@ -29,9 +31,12 @@
   --button-hover-text: #ff7e5f;
   --menu-bg: rgba(255, 126, 95, 0.8);
   --profile-border: #ffffff;
-  --cert-bg: rgba(255, 126, 95, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #ff6347;
+  --cert-background: rgba(255, 126, 95, 0.9);
+  --cert-text-color: #ffffff;
+  --download-link-color: #ffffff;
+  --download-link-hover-color: #ff6347;
 }
 
 /* Theme 2 */
@@ -45,9 +50,12 @@
   --button-hover-text: #6a11cb;
   --menu-bg: rgba(106, 17, 203, 0.8);
   --profile-border: #ffffff;
-  --cert-bg: rgba(106, 17, 203, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #00ff7f;
+  --cert-background: rgba(106, 17, 203, 0.9);
+  --cert-text-color: #ffffff;
+  --download-link-color: #ffffff;
+  --download-link-hover-color: #00ff7f;
 }
 
 /* Theme 3 */
@@ -61,9 +69,12 @@
   --button-hover-text: #11998e;
   --menu-bg: rgba(17, 153, 142, 0.8);
   --profile-border: #ffffff;
-  --cert-bg: rgba(17, 153, 142, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #ff1493;
+  --cert-background: rgba(17, 153, 142, 0.9);
+  --cert-text-color: #ffffff;
+  --download-link-color: #ffffff;
+  --download-link-hover-color: #ff1493;
 }
 
 /* Theme 4 */
@@ -77,9 +88,12 @@
   --button-hover-text: #fc4a1a;
   --menu-bg: rgba(252, 74, 26, 0.8);
   --profile-border: #ffffff;
-  --cert-bg: rgba(252, 74, 26, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #1e90ff;
+  --cert-background: rgba(252, 74, 26, 0.9);
+  --cert-text-color: #ffffff;
+  --download-link-color: #ffffff;
+  --download-link-hover-color: #1e90ff;
 }
 
 /* Theme 5 */
@@ -93,9 +107,12 @@
   --button-hover-text: #8e2de2;
   --menu-bg: rgba(142, 45, 226, 0.8);
   --profile-border: #ffffff;
-  --cert-bg: rgba(142, 45, 226, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #ff6347;
+  --cert-background: rgba(142, 45, 226, 0.9);
+  --cert-text-color: #ffffff;
+  --download-link-color: #ffffff;
+  --download-link-hover-color: #ff6347;
 }
 
 /* -------------------------------
@@ -322,7 +339,7 @@ body {
   padding: 20px;
   margin: 10px;
   border-radius: 15px;
-  background-color: var(--cert-bg);
+  background-color: rgba(22, 32, 66, 0.8);
   backdrop-filter: blur(10px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -414,7 +431,7 @@ body {
   background-color: var(--button-hover-bg);
   color: var(--button-hover-text);
   transform: scale(1.05);
-  border: 2px solid #ffd700;
+  border: 2px solid var(--accent-color);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -423,7 +440,7 @@ body {
 ------------------------------- */
 .knowledge-list li {
   padding: 12px 25px;
-  color: var(--link-color);
+  color: var(--text-color);
   border: 3px solid transparent;
   border-radius: 15px;
   text-align: center;
@@ -431,17 +448,17 @@ body {
 }
 
 .knowledge-list li:hover {
-  border-image: radial-gradient(circle, #162042 50%, var(--accent-color) 100%) 1;
+  border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 100%) 1;
   animation: border-fill 2s forwards;
   transform: scale(1.05);
 }
 
 @keyframes border-fill {
   0% {
-    border-image: radial-gradient(circle, #162042 50%, var(--accent-color) 0%) 1;
+    border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 0%) 1;
   }
   100% {
-    border-image: radial-gradient(circle, #162042 50%, var(--accent-color) 100%) 1;
+    border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 100%) 1;
   }
 }
 
@@ -450,7 +467,7 @@ body {
 ------------------------------- */
 .certifications-list li {
   padding: 15px;
-  background-color: var(--cert-bg);
+  background-color: var(--cert-background);
   border-radius: 10px;
   box-shadow: 0 0 10px var(--accent-color);
   display: flex;
@@ -469,10 +486,10 @@ body {
   top: 10px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background-color: var(--cert-bg);
+  background-color: var(--cert-background);
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--accent-color);
+  color: var(--cert-text-color);
   font-weight: bold;
   opacity: 0;
   pointer-events: none;
@@ -502,12 +519,12 @@ body {
 .download-link {
   margin-top: 10px;
   text-decoration: underline;
-  color: var(--link-color);
+  color: var(--download-link-color);
   font-weight: bold;
 }
 
 .download-link:hover {
-  color: var(--link-hover-color);
+  color: var(--download-link-hover-color);
 }
 
 /* -------------------------------
@@ -534,7 +551,7 @@ body {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 1;
   overflow: hidden;
 }
 
@@ -547,40 +564,4 @@ body {
     font-size: 16px;
     padding: 12px 25px;
   }
-}
-
-/* -------------------------------
-   12. SOCIAL LINKS & PROJECTS STYLES
-------------------------------- */
-/* Social Links Styling */
-.social-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center align the links */
-  gap: 15px;
-}
-
-.social-links > li {
-  text-align: center;
-}
-
-/* -------------------------------
-   13. FRIENDLY SITES STYLES
-------------------------------- */
-/* Friendly Sites Styling */
-.friendly-sites {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center align the links */
-  gap: 10px;
-}
-
-.friendly-sites > li {
-  text-align: center;
 }
