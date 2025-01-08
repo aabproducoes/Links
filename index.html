@@ -542,7 +542,7 @@
           // Download link
           const downloadLink = document.createElement('a');
           downloadLink.href = filePath;
-          downloadLink.textContent = 'Download Certificate';
+          downloadLink.textContent = selectedLanguage === 'pt' ? 'Baixar Certificado' : 'Download Certificate';
           downloadLink.classList.add('download-link');
           downloadLink.target = '_blank';
           li.appendChild(downloadLink);
@@ -570,12 +570,12 @@
 
       // Loading indicator
       const loadingIndicator = document.createElement('div');
-      loadingIndicator.textContent = 'Loading...';
+      loadingIndicator.textContent = selectedLanguage === 'pt' ? 'Carregando...' : 'Loading...';
       loadingIndicator.style.position = 'absolute';
       loadingIndicator.style.top = '50%';
       loadingIndicator.style.left = '50%';
       loadingIndicator.style.transform = 'translate(-50%, -50%)';
-      loadingIndicator.style.color = '#00ffff';
+      loadingIndicator.style.color = var(--link-color);
       loadingIndicator.style.fontSize = '18px';
       loadingIndicator.style.fontWeight = 'bold';
       loadingIndicator.id = `loading-${canvasId}`;
@@ -607,7 +607,7 @@
                 console.error(`Error rendering PDF ${pdfUrl}: `, err);
                 const loadingEl = document.getElementById(`loading-${canvasId}`);
                 if (loadingEl) {
-                  loadingEl.textContent = 'Failed to load PDF';
+                  loadingEl.textContent = selectedLanguage === 'pt' ? 'Falha ao carregar PDF' : 'Failed to load PDF';
                   loadingEl.style.color = '#ff0000';
                 }
               });
