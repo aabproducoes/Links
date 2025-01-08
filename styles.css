@@ -11,7 +11,8 @@
   --button-hover-bg: #00ffff;
   --button-hover-text: #162042;
   --menu-bg: rgba(22, 32, 66, 0.8);
-  --menu-text-color: #00ffff;
+  --profile-border: var(--accent-color);
+  --cert-bg: rgba(22, 32, 66, 0.9);
   --link-color: #00ffff;
   --link-hover-color: #ffd700;
   /* Add more variables as needed */
@@ -27,7 +28,8 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #ff7e5f;
   --menu-bg: rgba(255, 126, 95, 0.8);
-  --menu-text-color: #ffffff;
+  --profile-border: #ffffff;
+  --cert-bg: rgba(255, 126, 95, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #ff6347;
 }
@@ -42,7 +44,8 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #6a11cb;
   --menu-bg: rgba(106, 17, 203, 0.8);
-  --menu-text-color: #ffffff;
+  --profile-border: #ffffff;
+  --cert-bg: rgba(106, 17, 203, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #00ff7f;
 }
@@ -57,7 +60,8 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #11998e;
   --menu-bg: rgba(17, 153, 142, 0.8);
-  --menu-text-color: #ffffff;
+  --profile-border: #ffffff;
+  --cert-bg: rgba(17, 153, 142, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #ff1493;
 }
@@ -72,7 +76,8 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #fc4a1a;
   --menu-bg: rgba(252, 74, 26, 0.8);
-  --menu-text-color: #ffffff;
+  --profile-border: #ffffff;
+  --cert-bg: rgba(252, 74, 26, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #1e90ff;
 }
@@ -87,7 +92,8 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #8e2de2;
   --menu-bg: rgba(142, 45, 226, 0.8);
-  --menu-text-color: #ffffff;
+  --profile-border: #ffffff;
+  --cert-bg: rgba(142, 45, 226, 0.9);
   --link-color: #ffffff;
   --link-hover-color: #ff6347;
 }
@@ -126,7 +132,7 @@ body {
   background: var(--menu-bg);
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--menu-text-color);
+  color: var(--text-color);
   max-width: 100%;
 }
 
@@ -152,13 +158,13 @@ body {
 
 .style-button {
   padding: 8px 12px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
+  background-color: var(--menu-bg);
+  color: var(--text-color);
   border: 2px solid var(--text-color);
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .style-button:hover,
@@ -166,7 +172,6 @@ body {
   background-color: var(--button-hover-bg);
   color: var(--button-hover-text);
   outline: none;
-  transform: scale(1.05);
 }
 
 /* -------------------------------
@@ -192,7 +197,7 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 3px solid var(--accent-color);
+  border: 3px solid var(--profile-border);
   box-shadow: 0 0 10px var(--accent-color);
   margin-bottom: 20px;
 }
@@ -317,7 +322,7 @@ body {
   padding: 20px;
   margin: 10px;
   border-radius: 15px;
-  background-color: rgba(22, 32, 66, 0.8);
+  background-color: var(--cert-bg);
   backdrop-filter: blur(10px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -409,7 +414,7 @@ body {
   background-color: var(--button-hover-bg);
   color: var(--button-hover-text);
   transform: scale(1.05);
-  border: 2px solid var(--accent-color);
+  border: 2px solid #ffd700;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -418,7 +423,7 @@ body {
 ------------------------------- */
 .knowledge-list li {
   padding: 12px 25px;
-  color: var(--text-color);
+  color: var(--link-color);
   border: 3px solid transparent;
   border-radius: 15px;
   text-align: center;
@@ -426,17 +431,17 @@ body {
 }
 
 .knowledge-list li:hover {
-  border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 100%) 1;
+  border-image: radial-gradient(circle, #162042 50%, var(--accent-color) 100%) 1;
   animation: border-fill 2s forwards;
   transform: scale(1.05);
 }
 
 @keyframes border-fill {
   0% {
-    border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 0%) 1;
+    border-image: radial-gradient(circle, #162042 50%, var(--accent-color) 0%) 1;
   }
   100% {
-    border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 100%) 1;
+    border-image: radial-gradient(circle, #162042 50%, var(--accent-color) 100%) 1;
   }
 }
 
@@ -445,7 +450,7 @@ body {
 ------------------------------- */
 .certifications-list li {
   padding: 15px;
-  background-color: rgba(22, 32, 66, 0.9);
+  background-color: var(--cert-bg);
   border-radius: 10px;
   box-shadow: 0 0 10px var(--accent-color);
   display: flex;
@@ -464,7 +469,7 @@ body {
   top: 10px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background-color: rgba(22, 32, 66, 0.8);
+  background-color: var(--cert-bg);
   padding: 5px 10px;
   border-radius: 5px;
   color: var(--accent-color);
