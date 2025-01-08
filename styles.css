@@ -10,15 +10,14 @@
   --button-text: #00ffff;
   --button-hover-bg: #00ffff;
   --button-hover-text: #162042;
+  /* Additional Variables */
   --menu-bg: rgba(22, 32, 66, 0.8);
-  --profile-border: var(--accent-color);
-  --link-color: #00ffff;
-  --link-hover-color: #ffd700;
-  --cert-background: rgba(22, 32, 66, 0.9);
-  --cert-text-color: #ffd700;
-  --download-link-color: #00ffff;
-  --download-link-hover-color: #ffd700;
+  --menu-text: var(--text-color);
 }
+
+/* -------------------------------
+   1. THEME DEFINITIONS
+------------------------------- */
 
 /* Theme 1 */
 .theme-style1 {
@@ -30,13 +29,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #ff7e5f;
   --menu-bg: rgba(255, 126, 95, 0.8);
-  --profile-border: #ffffff;
-  --link-color: #ffffff;
-  --link-hover-color: #ff6347;
-  --cert-background: rgba(255, 126, 95, 0.9);
-  --cert-text-color: #ffffff;
-  --download-link-color: #ffffff;
-  --download-link-hover-color: #ff6347;
+  --menu-text: #ffffff;
 }
 
 /* Theme 2 */
@@ -49,13 +42,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #6a11cb;
   --menu-bg: rgba(106, 17, 203, 0.8);
-  --profile-border: #ffffff;
-  --link-color: #ffffff;
-  --link-hover-color: #00ff7f;
-  --cert-background: rgba(106, 17, 203, 0.9);
-  --cert-text-color: #ffffff;
-  --download-link-color: #ffffff;
-  --download-link-hover-color: #00ff7f;
+  --menu-text: #ffffff;
 }
 
 /* Theme 3 */
@@ -68,13 +55,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #11998e;
   --menu-bg: rgba(17, 153, 142, 0.8);
-  --profile-border: #ffffff;
-  --link-color: #ffffff;
-  --link-hover-color: #ff1493;
-  --cert-background: rgba(17, 153, 142, 0.9);
-  --cert-text-color: #ffffff;
-  --download-link-color: #ffffff;
-  --download-link-hover-color: #ff1493;
+  --menu-text: #ffffff;
 }
 
 /* Theme 4 */
@@ -87,13 +68,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #fc4a1a;
   --menu-bg: rgba(252, 74, 26, 0.8);
-  --profile-border: #ffffff;
-  --link-color: #ffffff;
-  --link-hover-color: #1e90ff;
-  --cert-background: rgba(252, 74, 26, 0.9);
-  --cert-text-color: #ffffff;
-  --download-link-color: #ffffff;
-  --download-link-hover-color: #1e90ff;
+  --menu-text: #ffffff;
 }
 
 /* Theme 5 */
@@ -106,21 +81,13 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #8e2de2;
   --menu-bg: rgba(142, 45, 226, 0.8);
-  --profile-border: #ffffff;
-  --link-color: #ffffff;
-  --link-hover-color: #ff6347;
-  --cert-background: rgba(142, 45, 226, 0.9);
-  --cert-text-color: #ffffff;
-  --download-link-color: #ffffff;
-  --download-link-hover-color: #ff6347;
+  --menu-text: #ffffff;
 }
 
 /* -------------------------------
-   1. RESET & BASE STYLES
+   2. RESET & BASE STYLES
 ------------------------------- */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -139,29 +106,7 @@ body {
 }
 
 /* -------------------------------
-   2. LANGUAGE SELECTOR
-------------------------------- */
-.language-selector {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  z-index: 1002; /* Higher than style-selector */
-  background: var(--menu-bg);
-  padding: 5px 10px;
-  border-radius: 5px;
-  color: var(--text-color);
-  max-width: 100%;
-}
-
-@media (min-width: 768px) {
-  .language-selector {
-    top: 20px;
-    right: 20px;
-  }
-}
-
-/* -------------------------------
-   14. STYLE SELECTOR
+   3. STYLE SELECTOR
 ------------------------------- */
 .style-selector {
   position: fixed;
@@ -176,8 +121,8 @@ body {
 .style-button {
   padding: 8px 12px;
   background-color: var(--menu-bg);
-  color: var(--text-color);
-  border: 2px solid var(--text-color);
+  color: var(--menu-text);
+  border: 2px solid var(--menu-text);
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -192,7 +137,29 @@ body {
 }
 
 /* -------------------------------
-   3. SIDEBAR MENU
+   4. LANGUAGE SELECTOR
+------------------------------- */
+.language-selector {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 1002; /* Higher than style-selector */
+  background: var(--menu-bg);
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--menu-text);
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .language-selector {
+    top: 20px;
+    right: 20px;
+  }
+}
+
+/* -------------------------------
+   5. SIDEBAR MENU
 ------------------------------- */
 .menu {
   position: fixed;
@@ -214,13 +181,13 @@ body {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 3px solid var(--profile-border);
+  border: 3px solid var(--accent-color);
   box-shadow: 0 0 10px var(--accent-color);
   margin-bottom: 20px;
 }
 
 /* -------------------------------
-   4. SIDEBAR MENU ITEMS & ARROW
+   6. SIDEBAR MENU ITEMS & ARROW
 ------------------------------- */
 .sidebar-menu-item {
   position: relative; /* To position the arrows and pseudo-elements */
@@ -288,7 +255,7 @@ body {
 }
 
 /* -------------------------------
-   4.1 BORDER SHRINKING COLOR EFFECT
+   7. BORDER SHRINKING COLOR EFFECT
 ------------------------------- */
 .sidebar-menu-item::before {
   content: '';
@@ -297,7 +264,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  border: 2px solid #ff00ff; /* This can be adjusted or made variable */
+  border: 2px solid #ff00ff; /* Adjustable or make variable */
   border-radius: 10px;
   box-sizing: border-box;
   transition: all 0.3s ease;
@@ -322,7 +289,7 @@ body {
 }
 
 /* -------------------------------
-   5. MAIN CONTENT AREA
+   8. MAIN CONTENT AREA
 ------------------------------- */
 .main-content {
   flex: 1;
@@ -353,7 +320,7 @@ body {
 }
 
 /* -------------------------------
-   6. LIST STYLES
+   9. LIST STYLES
 ------------------------------- */
 .social-links,
 .friendly-sites,
@@ -381,7 +348,7 @@ body {
 }
 
 /* -------------------------------
-   7. BUTTON & LINK STYLES
+   10. BUTTON & LINK STYLES
 ------------------------------- */
 .social-link,
 .download-link {
@@ -389,8 +356,8 @@ body {
   width: 100%;
   max-width: 400px; /* For better readability */
   padding: 10px 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
+  background-color: #00ffff;
+  color: #162042;
   text-decoration: none;
   border-radius: 30px;
   transition: all 0.3s ease;
@@ -428,19 +395,19 @@ body {
 
 .social-link:hover,
 .download-link:hover {
-  background-color: var(--button-hover-bg);
-  color: var(--button-hover-text);
+  background-color: #162042;
+  color: #00ffff;
   transform: scale(1.05);
-  border: 2px solid var(--accent-color);
+  border: 2px solid #ffd700;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* -------------------------------
-   8. KNOWLEDGE LIST
+   11. KNOWLEDGE LIST
 ------------------------------- */
 .knowledge-list li {
   padding: 12px 25px;
-  color: var(--text-color);
+  color: #00ffff;
   border: 3px solid transparent;
   border-radius: 15px;
   text-align: center;
@@ -448,28 +415,28 @@ body {
 }
 
 .knowledge-list li:hover {
-  border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 100%) 1;
+  border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
   animation: border-fill 2s forwards;
   transform: scale(1.05);
 }
 
 @keyframes border-fill {
   0% {
-    border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 0%) 1;
+    border-image: radial-gradient(circle, #162042 50%, #ffd700 0%) 1;
   }
   100% {
-    border-image: radial-gradient(circle, var(--text-color) 50%, var(--accent-color) 100%) 1;
+    border-image: radial-gradient(circle, #162042 50%, #ffd700 100%) 1;
   }
 }
 
 /* -------------------------------
-   9. CERTIFICATIONS LIST
+   12. CERTIFICATIONS LIST
 ------------------------------- */
 .certifications-list li {
   padding: 15px;
-  background-color: var(--cert-background);
+  background-color: rgba(22, 32, 66, 0.9);
   border-radius: 10px;
-  box-shadow: 0 0 10px var(--accent-color);
+  box-shadow: 0 0 10px #00ffff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -486,10 +453,10 @@ body {
   top: 10px;
   left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background-color: var(--cert-background);
+  background-color: rgba(22, 32, 66, 0.8);
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--cert-text-color);
+  color: #ffd700;
   font-weight: bold;
   opacity: 0;
   pointer-events: none;
@@ -509,7 +476,7 @@ body {
   max-width: 600px;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 0 10px var(--accent-color);
+  box-shadow: 0 0 10px #00ffff;
   margin-top: 20px;
   position: relative;
   z-index: 1;
@@ -519,16 +486,16 @@ body {
 .download-link {
   margin-top: 10px;
   text-decoration: underline;
-  color: var(--download-link-color);
+  color: #00ffff;
   font-weight: bold;
 }
 
 .download-link:hover {
-  color: var(--download-link-hover-color);
+  color: #ffd700;
 }
 
 /* -------------------------------
-   10. LIGHTNING & TECH BACKGROUND
+   13. LIGHTNING & TECH BACKGROUND
 ------------------------------- */
 /* Tech Background */
 .tech-bg {
@@ -556,7 +523,7 @@ body {
 }
 
 /* -------------------------------
-   11. MEDIA QUERIES 
+   14. MEDIA QUERIES 
 ------------------------------- */
 @media (min-width: 768px) {
   .social-link,
@@ -564,4 +531,40 @@ body {
     font-size: 16px;
     padding: 12px 25px;
   }
+}
+
+/* -------------------------------
+   15. SOCIAL LINKS & PROJECTS STYLES
+------------------------------- */
+/* Social Links Styling */
+.social-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 15px;
+}
+
+.social-links > li {
+  text-align: center;
+}
+
+/* -------------------------------
+   16. FRIENDLY SITES STYLES
+------------------------------- */
+/* Friendly Sites Styling */
+.friendly-sites {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the links */
+  gap: 10px;
+}
+
+.friendly-sites > li {
+  text-align: center;
 }
