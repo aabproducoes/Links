@@ -25,6 +25,7 @@
 
   <!-- PDF.js Worker Configuration -->
   <script>
+    // Ensure PDF.js worker is correctly configured
     window.pdfjsLib = window.pdfjsLib || {};
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js';
   </script>
@@ -653,8 +654,56 @@
   </script>
 
   <!-- -------------------------------
-       7. JavaScript for Theme Switching
+       7. JavaScript for Style Switching
   ------------------------------- -->
-  <script src="scripts/theme-switcher.js"></script>
+  <script>
+    // Function to remove existing theme classes
+    function removeExistingThemes() {
+      document.body.classList.remove(
+        'theme-style1',
+        'theme-style2',
+        'theme-style3',
+        'theme-style4',
+        'theme-style5'
+      );
+    }
+
+    // Function to apply a selected theme
+    function applyTheme(themeClass) {
+      removeExistingThemes();
+      document.body.classList.add(themeClass);
+    }
+
+    // Initialize theme selector
+    function initializeThemeSelector() {
+      const styleButtons = document.querySelectorAll('.style-button');
+
+      // Load saved theme from localStorage if available
+      const savedTheme = localStorage.getItem('selectedTheme');
+      if (savedTheme) {
+        applyTheme(savedTheme);
+      }
+
+      styleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const selectedStyle = button.getAttribute('data-style');
+          applyTheme(selectedStyle);
+          // Save selected theme to localStorage
+          localStorage.setItem('selectedTheme', selectedStyle);
+        });
+
+        // Accessibility: Handle keyboard events
+        button.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            button.click();
+          }
+        });
+      });
+    }
+
+    // Call the initializer after DOM content is loaded
+    window.addEventListener('DOMContentLoaded', initializeThemeSelector);
+  </script>
 </body>
 </html>
