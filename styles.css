@@ -11,8 +11,7 @@
   --button-hover-bg: #00ffff;
   --button-hover-text: #162042;
   --menu-bg: rgba(22, 32, 66, 0.8);
-  --menu-text-color: #ffffff;
-  --hover-effect-color: #ffd700;
+  --profile-border: var(--accent-color);
   /* Add more variables as needed */
 }
 
@@ -25,9 +24,8 @@
   --button-text: #ffffff;
   --button-hover-bg: #ffffff;
   --button-hover-text: #ff7e5f;
-  --menu-bg: rgba(255, 126, 95, 0.8);
-  --menu-text-color: #ffffff;
-  --hover-effect-color: #ff6347;
+  --menu-bg: rgba(255, 99, 71, 0.8);
+  --profile-border: #ffffff;
 }
 
 /* Theme 2 */
@@ -40,8 +38,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #6a11cb;
   --menu-bg: rgba(106, 17, 203, 0.8);
-  --menu-text-color: #ffffff;
-  --hover-effect-color: #00ff7f;
+  --profile-border: #ffffff;
 }
 
 /* Theme 3 */
@@ -54,8 +51,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #11998e;
   --menu-bg: rgba(17, 153, 142, 0.8);
-  --menu-text-color: #ffffff;
-  --hover-effect-color: #ff1493;
+  --profile-border: #ffffff;
 }
 
 /* Theme 4 */
@@ -68,8 +64,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #fc4a1a;
   --menu-bg: rgba(252, 74, 26, 0.8);
-  --menu-text-color: #ffffff;
-  --hover-effect-color: #1e90ff;
+  --profile-border: #ffffff;
 }
 
 /* Theme 5 */
@@ -82,8 +77,7 @@
   --button-hover-bg: #ffffff;
   --button-hover-text: #8e2de2;
   --menu-bg: rgba(142, 45, 226, 0.8);
-  --menu-text-color: #ffffff;
-  --hover-effect-color: #ff6347;
+  --profile-border: #ffffff;
 }
 
 /* -------------------------------
@@ -120,7 +114,7 @@ body {
   background: var(--menu-bg);
   padding: 5px 10px;
   border-radius: 5px;
-  color: var(--menu-text-color);
+  color: var(--text-color);
   max-width: 100%;
 }
 
@@ -146,9 +140,9 @@ body {
 
 .style-button {
   padding: 8px 12px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: 2px solid var(--button-text);
+  background-color: var(--menu-bg);
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
@@ -159,8 +153,8 @@ body {
 .style-button:focus {
   background-color: var(--button-hover-bg);
   color: var(--button-hover-text);
-  outline: none;
   transform: scale(1.05);
+  outline: none;
 }
 
 /* -------------------------------
@@ -176,17 +170,18 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 80px; /* Adjusted to accommodate style and language selectors */
+  padding-top: 80px; /* Adjusted to accommodate style selector and language selector */
   gap: 15px;
   z-index: 1000;
   height: 100vh;
+  transition: background-color 0.5s;
 }
 
 .menu .profile-picture {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 3px solid var(--accent-color);
+  border: 3px solid var(--profile-border);
   box-shadow: 0 0 10px var(--accent-color);
   margin-bottom: 20px;
 }
