@@ -116,11 +116,20 @@
             font-size: 16px;
         }
 
-        /* Conteúdo Principal */
+        /* Conteúdo Principal with CSS Variables for Colors */
         .content {
+            --main-bg-h: 0;
+            --main-bg-s: 0%;
+            --main-bg-l: 50%;
+            --main-text-h: 0;
+            --main-text-s: 0%;
+            --main-text-l: 100%;
+            
             flex: 1;
             padding: 20px;
-            background-color: #fff;
+            background-color: hsl(var(--main-bg-h), var(--main-bg-s), var(--main-bg-l));
+            color: hsl(var(--main-text-h), var(--main-text-s), var(--main-text-l));
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Esconder menu quando fechado */
@@ -157,14 +166,14 @@
             transform: rotate(180deg);
         }
 
-        /* Color Picker Section */
-        .color-picker {
+        /* Color Picker for Main Content */
+        .main-color-picker {
             padding: 20px;
-            background-color: #111; /* Slightly different to distinguish from other sections */
+            background-color: #222; /* Dark background to distinguish */
             border-top: 2px solid #fff;
         }
 
-        .color-picker h3 {
+        .main-color-picker h3 {
             color: #fff;
             margin-bottom: 10px;
             font-size: 18px;
@@ -192,6 +201,23 @@
             margin-top: 5px;
             font-size: 12px;
             color: #ccc;
+        }
+
+        /* Reset Button Styling */
+        .reset-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            background-color: #555;
         }
 
         /* Responsividade */
@@ -231,51 +257,54 @@
             </select>
         </div>
         
-        <!-- Color Picker Section -->
-        <div class="color-picker">
-            <h3>Customize Colors</h3>
+        <!-- Color Picker for Main Content -->
+        <div class="main-color-picker">
+            <h3>Customize Main Content</h3>
             
             <!-- Background Color Picker -->
             <div class="color-control">
-                <label for="bgHue">Background Hue</label>
-                <input type="range" id="bgHue" name="bgHue" min="0" max="360" value="0">
+                <label for="mainBgHue">Background Hue</label>
+                <input type="range" id="mainBgHue" name="mainBgHue" min="0" max="360" value="0">
                 <div class="hsl-values">
-                    <span>H: <span id="bgHValue">0</span></span>
-                    <span>S: <span id="bgSValue">0%</span></span>
-                    <span>L: <span id="bgLValue">0%</span></span>
+                    <span>H: <span id="mainBgHValue">0</span></span>
+                    <span>S: <span id="mainBgSValue">0%</span></span>
+                    <span>L: <span id="mainBgLValue">50%</span></span>
                 </div>
             </div>
             
             <div class="color-control">
-                <label for="bgSaturation">Background Saturation</label>
-                <input type="range" id="bgSaturation" name="bgSaturation" min="0" max="100" value="0">
+                <label for="mainBgSaturation">Background Saturation</label>
+                <input type="range" id="mainBgSaturation" name="mainBgSaturation" min="0" max="100" value="0">
             </div>
             
             <div class="color-control">
-                <label for="bgLightness">Background Lightness</label>
-                <input type="range" id="bgLightness" name="bgLightness" min="0" max="100" value="0">
+                <label for="mainBgLightness">Background Lightness</label>
+                <input type="range" id="mainBgLightness" name="mainBgLightness" min="0" max="100" value="50">
             </div>
             
             <!-- Text Color Picker -->
             <div class="color-control">
-                <label for="textHue">Text Hue</label>
-                <input type="range" id="textHue" name="textHue" min="0" max="360" value="0">
+                <label for="mainTextHue">Text Hue</label>
+                <input type="range" id="mainTextHue" name="mainTextHue" min="0" max="360" value="0">
                 <div class="hsl-values">
-                    <span>H: <span id="textHValue">0</span></span>
-                    <span>S: <span id="textSValue">0%</span></span>
-                    <span>L: <span id="textLValue">100%</span></span>
+                    <span>H: <span id="mainTextHValue">0</span></span>
+                    <span>S: <span id="mainTextSValue">0%</span></span>
+                    <span>L: <span id="mainTextLValue">100%</span></span>
                 </div>
             </div>
             
             <div class="color-control">
-                <label for="textSaturation">Text Saturation</label>
-                <input type="range" id="textSaturation" name="textSaturation" min="0" max="100" value="0">
+                <label for="mainTextSaturation">Text Saturation</label>
+                <input type="range" id="mainTextSaturation" name="mainTextSaturation" min="0" max="100" value="0">
             </div>
             
             <div class="color-control">
-                <label for="textLightness">Text Lightness</label>
-                <input type="range" id="textLightness" name="textLightness" min="0" max="100" value="100">
+                <label for="mainTextLightness">Text Lightness</label>
+                <input type="range" id="mainTextLightness" name="mainTextLightness" min="0" max="100" value="100">
             </div>
+            
+            <!-- Optional: Reset Button -->
+            <button id="resetMainColorsBtn" class="reset-btn">Reset Colors</button>
         </div>
     </div>
 
@@ -295,6 +324,7 @@
         const pageTitle = document.getElementById('pageTitle');
         const knowledgeListDiv = document.getElementById('knowledgeList');
         const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+        const content = document.getElementById('content'); // Reference to main content
 
         const translations = {
             en: {
@@ -333,24 +363,28 @@
         let currentPage = 'profile'; // Default page
         let knowledgeListData = []; // Initialize an empty array
 
-        // References to Background Color Pickers
-        const bgHue = document.getElementById('bgHue');
-        const bgSaturation = document.getElementById('bgSaturation');
-        const bgLightness = document.getElementById('bgLightness');
+        // References to Main Content Background Color Pickers
+        const mainBgHue = document.getElementById('mainBgHue');
+        const mainBgSaturation = document.getElementById('mainBgSaturation');
+        const mainBgLightness = document.getElementById('mainBgLightness');
 
-        // References to Text Color Pickers
-        const textHue = document.getElementById('textHue');
-        const textSaturation = document.getElementById('textSaturation');
-        const textLightness = document.getElementById('textLightness');
+        // References to Main Content Text Color Pickers
+        const mainTextHue = document.getElementById('mainTextHue');
+        const mainTextSaturation = document.getElementById('mainTextSaturation');
+        const mainTextLightness = document.getElementById('mainTextLightness');
 
-        // References to HSL Value Displays
-        const bgHValue = document.getElementById('bgHValue');
-        const bgSValue = document.getElementById('bgSValue');
-        const bgLValue = document.getElementById('bgLValue');
+        // References to HSL Value Displays for Background
+        const mainBgHValue = document.getElementById('mainBgHValue');
+        const mainBgSValue = document.getElementById('mainBgSValue');
+        const mainBgLValue = document.getElementById('mainBgLValue');
 
-        const textHValue = document.getElementById('textHValue');
-        const textSValue = document.getElementById('textSValue');
-        const textLValue = document.getElementById('textLValue');
+        // References to HSL Value Displays for Text
+        const mainTextHValue = document.getElementById('mainTextHValue');
+        const mainTextSValue = document.getElementById('mainTextSValue');
+        const mainTextLValue = document.getElementById('mainTextLValue');
+
+        // Reference to Reset Button
+        const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
 
         // Function to toggle the sidebar
         toggleBtn.addEventListener('click', () => {
@@ -460,58 +494,119 @@
             }
         }
 
-        // Function to update Sidebar Background Color
-        function updateSidebarBackground() {
-            const h = bgHue.value;
-            const s = bgSaturation.value;
-            const l = bgLightness.value;
+        // Function to update Main Content Background Color
+        function updateMainBgColor() {
+            const h = mainBgHue.value;
+            const s = mainBgSaturation.value;
+            const l = mainBgLightness.value;
             
             // Update CSS Variables
-            sidebar.style.setProperty('--sidebar-bg-h', h);
-            sidebar.style.setProperty('--sidebar-bg-s', `${s}%`);
-            sidebar.style.setProperty('--sidebar-bg-l', `${l}%`);
+            content.style.setProperty('--main-bg-h', h);
+            content.style.setProperty('--main-bg-s', `${s}%`);
+            content.style.setProperty('--main-bg-l', `${l}%`);
             
             // Update Display Values
-            bgHValue.textContent = h;
-            bgSValue.textContent = `${s}%`;
-            bgLValue.textContent = `${l}%`;
+            mainBgHValue.textContent = h;
+            mainBgSValue.textContent = `${s}%`;
+            mainBgLValue.textContent = `${l}%`;
+            
+            // Save to Local Storage
+            saveMainColors();
         }
 
-        // Function to update Sidebar Text Color
-        function updateSidebarText() {
-            const h = textHue.value;
-            const s = textSaturation.value;
-            const l = textLightness.value;
+        // Function to update Main Content Text Color
+        function updateMainTextColor() {
+            const h = mainTextHue.value;
+            const s = mainTextSaturation.value;
+            const l = mainTextLightness.value;
             
             // Update CSS Variables
-            sidebar.style.setProperty('--sidebar-text-h', h);
-            sidebar.style.setProperty('--sidebar-text-s', `${s}%`);
-            sidebar.style.setProperty('--sidebar-text-l', `${l}%`);
+            content.style.setProperty('--main-text-h', h);
+            content.style.setProperty('--main-text-s', `${s}%`);
+            content.style.setProperty('--main-text-l', `${l}%`);
             
             // Update Display Values
-            textHValue.textContent = h;
-            textSValue.textContent = `${s}%`;
-            textLValue.textContent = `${l}%`;
+            mainTextHValue.textContent = h;
+            mainTextSValue.textContent = `${s}%`;
+            mainTextLValue.textContent = `${l}%`;
+            
+            // Save to Local Storage
+            saveMainColors();
         }
 
-        // Event Listeners for Background Color Pickers
-        bgHue.addEventListener('input', updateSidebarBackground);
-        bgSaturation.addEventListener('input', updateSidebarBackground);
-        bgLightness.addEventListener('input', updateSidebarBackground);
+        // Event Listeners for Main Content Background Color Pickers
+        mainBgHue.addEventListener('input', updateMainBgColor);
+        mainBgSaturation.addEventListener('input', updateMainBgColor);
+        mainBgLightness.addEventListener('input', updateMainBgColor);
 
-        // Event Listeners for Text Color Pickers
-        textHue.addEventListener('input', updateSidebarText);
-        textSaturation.addEventListener('input', updateSidebarText);
-        textLightness.addEventListener('input', updateSidebarText);
+        // Event Listeners for Main Content Text Color Pickers
+        mainTextHue.addEventListener('input', updateMainTextColor);
+        mainTextSaturation.addEventListener('input', updateMainTextColor);
+        mainTextLightness.addEventListener('input', updateMainTextColor);
 
-        // Initialize with Default Values
-        updateSidebarBackground();
-        updateSidebarText();
+        // Function to reset Main Content Colors to Default
+        function resetMainColors() {
+            // Reset Background Sliders
+            mainBgHue.value = 0;
+            mainBgSaturation.value = 0;
+            mainBgLightness.value = 50;
+            updateMainBgColor();
+            
+            // Reset Text Sliders
+            mainTextHue.value = 0;
+            mainTextSaturation.value = 0;
+            mainTextLightness.value = 100;
+            updateMainTextColor();
+            
+            // Remove from Local Storage
+            localStorage.removeItem('mainBgColor');
+            localStorage.removeItem('mainTextColor');
+        }
 
-        // Initialize content on page load
+        // Event Listener for Reset Button
+        resetMainColorsBtn.addEventListener('click', resetMainColors);
+
+        // Function to save Main Content Colors to Local Storage
+        function saveMainColors() {
+            const mainBgColor = {
+                h: mainBgHue.value,
+                s: mainBgSaturation.value,
+                l: mainBgLightness.value
+            };
+            const mainTextColor = {
+                h: mainTextHue.value,
+                s: mainTextSaturation.value,
+                l: mainTextLightness.value
+            };
+            localStorage.setItem('mainBgColor', JSON.stringify(mainBgColor));
+            localStorage.setItem('mainTextColor', JSON.stringify(mainTextColor));
+        }
+
+        // Function to load Main Content Colors from Local Storage
+        function loadMainColors() {
+            const mainBgColor = JSON.parse(localStorage.getItem('mainBgColor'));
+            const mainTextColor = JSON.parse(localStorage.getItem('mainTextColor'));
+            
+            if (mainBgColor) {
+                mainBgHue.value = mainBgColor.h;
+                mainBgSaturation.value = mainBgColor.s;
+                mainBgLightness.value = mainBgColor.l;
+                updateMainBgColor();
+            }
+            
+            if (mainTextColor) {
+                mainTextHue.value = mainTextColor.h;
+                mainTextSaturation.value = mainTextColor.s;
+                mainTextLightness.value = mainTextColor.l;
+                updateMainTextColor();
+            }
+        }
+
+        // Initialize with Default or Saved Values
         document.addEventListener('DOMContentLoaded', () => {
-            fetchKnowledgeList(); // Fetch the knowledge list
-            updateContent(); // Update content based on the default page and language
+            loadMainColors(); // Load saved colors if available
+            fetchKnowledgeList(); // Existing functionality
+            updateContent(); // Existing functionality
         });
     </script>
 
