@@ -114,6 +114,14 @@
             overflow-y: auto;
         }
 
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         /* Esconder menu quando fechado */
         .sidebar.closed {
             width: 60px;
@@ -169,24 +177,38 @@
     <div class="sidebar" id="sidebar">
         <button class="toggle-btn" id="toggleBtn"></button>
         <ul class="menu">
-            <li class="active" data-icon="👤">Profile</li>
-            <li data-icon="🔗">Social</li>
-            <li data-icon="🔗">Friendly Links</li>
-            <li data-icon="ℹ️">About</li>
+            <li class="active" data-icon="👤" onclick="showTab('profile')">Profile</li>
+            <li data-icon="🔗" onclick="showTab('social')">Social</li>
+            <li data-icon="🔗" onclick="showTab('friendlyLinks')">Friendly Links</li>
+            <li data-icon="ℹ️" onclick="showTab('about')">About</li>
         </ul>
         <div class="language-selector">
             <select id="languageSelect" onchange="changeLanguage()">
                 <option value="en">English</option>
-                <option value="pt">Português</option>
+                <option value="pt">Portuguese</option>
             </select>
         </div>
     </div>
 
     <div class="content" id="content">
-        <h1 id="profileTitle">Profile</h1>
-        <div id="knowledgeList">
-            <h2 id="knowledgeListTitle">Knowledge List</h2>
-            <!-- Conteúdo da lista será inserido aqui -->
+        <div id="profile" class="tab-content active">
+            <h1 id="profileTitle">Profile</h1>
+            <div id="knowledgeList">
+                <h2 id="knowledgeListTitle">Knowledge List</h2>
+                <!-- Conteúdo da lista será inserido aqui -->
+            </div>
+        </div>
+        <div id="social" class="tab-content">
+            <h1>Social</h1>
+            <p>Content for social media links goes here.</p>
+        </div>
+        <div id="friendlyLinks" class="tab-content">
+            <h1>Friendly Links</h1>
+            <p>Content for friendly links goes here.</p>
+        </div>
+        <div id="about" class="tab-content">
+            <h1>About</h1>
+            <p>Content for about section goes here.</p>
         </div>
     </div>
 
@@ -195,6 +217,7 @@
         const sidebar = document.getElementById('sidebar');
         const menuItems = document.querySelectorAll('.menu li');
         const knowledgeListDiv = document.getElementById('knowledgeList');
+        const fileInput = document.getElementById('fileInput');
 
         let knowledgeData = {}; // Armazena dados de conhecimento por idioma
 
@@ -220,13 +243,6 @@
             item.addEventListener('click', () => {
                 menuItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
-
-                // Se clicar em "Profile", exibir a lista de conhecimentos
-                if (item.textContent.trim() === 'Profile' || item.textContent.trim() === 'Perfil') {
-                    knowledgeListDiv.style.display = 'block';
-                } else {
-                    knowledgeListDiv.style.display = 'none';
-                }
             });
         });
 
@@ -291,20 +307,19 @@
             });
         }
 
+        // Show specific tab content based on menu click
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            const activeTab = document.getElementById(tabId);
+            activeTab.classList.add('active');
+        }
+
         // Inicialização
         fetchKnowledgeList(); // Carregar a lista de conhecimentos ao carregar a página
-
-        // Mostrar a lista de conhecimentos apenas se "Profile" estiver ativo
-        window.onload = () => {
-            const activeItem = document.querySelector('.menu li.active');
-            if (activeItem) {
-                if (activeItem.textContent.trim() === 'Profile' || activeItem.textContent.trim() === 'Perfil') {
-                    knowledgeListDiv.style.display = 'block';
-                } else {
-                    knowledgeListDiv.style.display = 'none';
-                }
-            }
-        };
     </script>
 
 </body>
