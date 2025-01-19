@@ -47,6 +47,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.3s ease;
+            z-index: 1; /* Garantir que o botão fique acima de outros elementos */
         }
 
         .toggle-btn:focus {
@@ -58,6 +59,7 @@
             content: '➤';
             display: inline-block;
             transition: transform 0.3s ease;
+            font-size: 18px;
         }
 
         /* Menu Itens */
@@ -76,6 +78,7 @@
             background-size: 200% 100%;
             background-position: left;
             border: 2px solid #fff; /* Borda branca */
+            position: relative;
         }
 
         .menu li:hover {
@@ -99,28 +102,28 @@
             text-align: center;
         }
 
+        .language-selector select {
+            width: 100%;
+            padding: 5px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            outline: none;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .language-selector select option {
+            background-color: #000;
+            color: #fff;
+        }
+
         /* Conteúdo Principal */
         .content {
             flex: 1;
             padding: 20px;
             background-color: #fff;
-        }
-
-        /* Estilos para a Lista de Conhecimento */
-        .knowledge-list {
-            margin-top: 20px;
-        }
-
-        .knowledge-list h2 {
-            margin-bottom: 10px;
-            color: #000;
-        }
-
-        .knowledge-list p {
-            margin-bottom: 8px;
-            padding: 10px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #000;
+            overflow-y: auto;
         }
 
         /* Esconder menu quando fechado */
@@ -142,6 +145,7 @@
             content: attr(data-icon);
             font-size: 20px;
             display: inline-block;
+            color: #fff;
         }
 
         .sidebar.closed .menu li:hover {
@@ -149,8 +153,8 @@
             color: #000;
         }
 
-        .sidebar.closed .toggle-btn {
-            transform: rotate(180deg);
+        .sidebar.closed .toggle-btn::before {
+            transform: rotate(90deg);
         }
 
         /* Responsividade */
@@ -193,7 +197,10 @@
 
     <div class="content" id="content">
         <h1 id="profileTitle">Profile</h1>
-        <div id="knowledgeList" class="knowledge-list"></div>
+        <div id="knowledgeList">
+            <h2 id="knowledgeListTitle">Knowledge List</h2>
+            <!-- Conhecimento será carregado aqui -->
+        </div>
     </div>
 
     <script>
@@ -201,8 +208,9 @@
         const sidebar = document.getElementById('sidebar');
         const menuItems = document.querySelectorAll('.menu li');
         const knowledgeListDiv = document.getElementById('knowledgeList');
+        const languageSelect = document.getElementById('languageSelect');
 
-        let knowledgeData = {}; // Armazena os dados de conhecimento por idioma
+        let knowledgeData = []; // Array para armazenar os dados de conhecimento
 
         const translations = {
             en: {
@@ -215,47 +223,49 @@
             }
         };
 
-        // Alterna a visibilidade da sidebar e a rotação da seta
+        // Toggle sidebar visibility and rotation of arrow
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('closed');
-            toggleBtn.classList.toggle('rotated');
         });
 
-        // Gerencia a classe 'active' nos itens do menu
+        // Handle the active class when clicking on menu items
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
                 menuItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
 
-                // Se o item clicado for 'Profile', exibe a lista de conhecimento
-                if (item.textContent.trim().toLowerCase() === 'profile') {
-                    knowledgeListDiv.style.display = 'block';
+                // Opcional: Adicionar funcionalidade para trocar de página
+                // Por enquanto, apenas exibir o perfil
+                if (item.textContent.trim() === 'Profile' || item.textContent.trim() === 'Perfil') {
+                    document.getElementById('profileTitle').style.display = 'block';
+                    document.getElementById('knowledgeList').style.display = 'block';
                 } else {
-                    knowledgeListDiv.style.display = 'none';
+                    document.getElementById('profileTitle').style.display = 'none';
+                    document.getElementById('knowledgeList').style.display = 'none';
                 }
             });
         });
 
-        // Função para buscar o arquivo KnowledgeList.txt
+        // Fetch the KnowledgeList file from server
         function fetchKnowledgeList() {
             fetch('./KnowledgeList/KnowledgeList.txt')
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error('Erro ao carregar o arquivo KnowledgeList.txt');
+                        throw new Error('Network response was not ok');
                     }
                     return response.text();
                 })
                 .then(text => {
                     parseKnowledgeList(text);
-                    updateContent('en'); // Define inglês como idioma padrão
+                    updateContent(languageSelect.value); // Atualizar com o idioma selecionado
                 })
                 .catch(error => {
-                    console.error('Erro ao buscar o arquivo:', error);
-                    knowledgeListDiv.innerHTML = '<p>Não foi possível carregar a lista de conhecimento.</p>';
+                    console.error('Error fetching the KnowledgeList file:', error);
+                    knowledgeListDiv.innerHTML = '<p>Erro ao carregar a lista de conhecimento.</p>';
                 });
         }
 
-        // Função para analisar e armazenar os dados do KnowledgeList
+        // Parse the knowledge list and store the content for each language
         function parseKnowledgeList(text) {
             const lines = text.split('\n');
             lines.forEach(line => {
@@ -263,43 +273,42 @@
                 if (parts.length === 2) {
                     const englishText = parts[0].trim();
                     const portugueseText = parts[1].trim();
-                    knowledgeData[englishText] = { en: englishText, pt: portugueseText };
+                    knowledgeData.push({ en: englishText, pt: portugueseText });
                 }
             });
         }
 
-        // Função para mudar o idioma
+        // Function to change the language
         function changeLanguage() {
-            const language = document.getElementById('languageSelect').value;
+            const language = languageSelect.value;
             updateContent(language);
         }
 
-        // Função para atualizar o conteúdo com base no idioma selecionado
+        // Update content based on selected language
         function updateContent(language) {
             const selectedTranslation = translations[language];
             
-            // Atualiza o título do perfil
+            // Atualizar título do Perfil
             document.getElementById('profileTitle').textContent = selectedTranslation.profileTitle;
 
-            // Atualiza o título da lista de conhecimento
-            knowledgeListDiv.innerHTML = ''; // Limpa o conteúdo anterior
+            // Atualizar título da Lista de Conhecimento
+            document.getElementById('knowledgeListTitle').textContent = selectedTranslation.knowledgeListTitle;
 
-            if (menuItems[0].classList.contains('active')) { // Verifica se 'Profile' está ativo
-                const knowledgeTitle = document.createElement('h2');
-                knowledgeTitle.textContent = selectedTranslation.knowledgeListTitle;
-                knowledgeListDiv.appendChild(knowledgeTitle);
+            // Limpar conteúdo anterior
+            knowledgeListDiv.innerHTML = `<h2 id="knowledgeListTitle">${selectedTranslation.knowledgeListTitle}</h2>`;
 
-                // Preenche a lista de conhecimento
-                Object.values(knowledgeData).forEach(item => {
-                    const paragraph = document.createElement('p');
-                    paragraph.textContent = item[language];
-                    knowledgeListDiv.appendChild(paragraph);
-                });
-            }
+            // Populando a Lista de Conhecimento com o idioma selecionado
+            knowledgeData.forEach(item => {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = item[language];
+                knowledgeListDiv.appendChild(paragraph);
+            });
         }
 
-        // Chama a função para buscar a lista de conhecimento ao carregar a página
-        window.onload = fetchKnowledgeList;
+        // Inicializar a página
+        window.onload = () => {
+            fetchKnowledgeList();
+        };
     </script>
 
 </body>
