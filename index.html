@@ -90,23 +90,13 @@
 
         /* Dropdown de idiomas */
         .language-selector {
-            margin: 20px;
+            margin-top: 20px;
             padding: 10px;
             background-color: #000;
             color: #fff;
             border: 2px solid #fff;
             cursor: pointer;
             text-align: center;
-        }
-
-        .language-selector select {
-            width: 100%;
-            padding: 5px;
-            background-color: #000;
-            color: #fff;
-            border: none;
-            outline: none;
-            font-size: 16px;
         }
 
         /* Conteúdo Principal */
@@ -142,10 +132,6 @@
             color: #000;
         }
 
-        .sidebar.closed .language-selector {
-            display: none; /* Esconder seletor de idioma quando o menu está fechado */
-        }
-
         .sidebar.closed .toggle-btn {
             transform: rotate(180deg);
         }
@@ -175,132 +161,112 @@
     <div class="sidebar" id="sidebar">
         <button class="toggle-btn" id="toggleBtn"></button>
         <ul class="menu">
-            <li class="active" data-page="profile" data-icon="👤">Profile</li>
-            <li data-page="social" data-icon="🔗">Social</li>
-            <li data-page="projects" data-icon="🖥️">Projects</li> <!-- Nova aba de Projetos -->
-            <li data-page="contact" data-icon="📞">Contact</li> <!-- Renomeado de About para Contact -->
+            <li class="active" data-icon="👤">Profile</li>
+            <li data-icon="🔗">Social</li>
+            <li data-icon="🔗">Friendly Links</li>
+            <li data-icon="ℹ️">About</li>
         </ul>
         <div class="language-selector">
             <select id="languageSelect" onchange="changeLanguage()">
                 <option value="en">English</option>
-                <option value="pt">Português</option>
+                <option value="pt">Portuguese</option>
             </select>
         </div>
     </div>
 
     <div class="content" id="content">
-        <h1 id="pageTitle">Profile</h1>
-        <div id="pageContent">
-            <!-- Removido o placeholder "Knowledge List" -->
-            <!-- Você pode adicionar conteúdo personalizado aqui, se desejar -->
-        </div>
+        <h1 id="profileTitle">Profile</h1>
+        <div id="knowledgeList"></div>
     </div>
 
     <script>
         const toggleBtn = document.getElementById('toggleBtn');
         const sidebar = document.getElementById('sidebar');
         const menuItems = document.querySelectorAll('.menu li');
-        const languageSelect = document.getElementById('languageSelect');
-        const pageTitle = document.getElementById('pageTitle');
-        const pageContentDiv = document.getElementById('pageContent');
+        const knowledgeListDiv = document.getElementById('knowledgeList');
+
+        let knowledgeData = {}; // Store knowledge data per language
 
         const translations = {
             en: {
                 profileTitle: 'Profile',
-                socialTitle: 'Social',
-                contactTitle: 'Contact',
-                facebook: 'Facebook',
-                instagram: 'Instagram',
-                projectsTitle: 'Projects',
-                blenderProjects: 'Blender Projects',
-                gimpProjects: 'Gimp Projects',
-                blenderAnimations: 'Blender Animations',
-                animatedBackground: 'Animated Background',
-                whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-                email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+                knowledgeListTitle: 'Knowledge List',
             },
             pt: {
                 profileTitle: 'Perfil',
-                socialTitle: 'Social',
-                contactTitle: 'Contato',
-                facebook: 'Facebook',
-                instagram: 'Instagram',
-                projectsTitle: 'Projetos',
-                blenderProjects: 'Projetos Blender',
-                gimpProjects: 'Projetos Gimp',
-                blenderAnimations: 'Animações Blender',
-                animatedBackground: 'Fundo Animado',
-                whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-                email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+                knowledgeListTitle: 'Lista de Conhecimento',
             }
         };
 
-        let currentLanguage = 'en'; // Linguagem padrão
-        let currentPage = 'profile'; // Página padrão
-
-        // Função para alternar a barra lateral
+        // Toggle sidebar visibility and rotation of arrow
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('closed');
             toggleBtn.classList.toggle('rotated');
         });
 
-        // Função para lidar com cliques nos itens do menu
+        // Handle the active class when clicking on menu items
         menuItems.forEach(item => {
             item.addEventListener('click', () => {
                 menuItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
-                currentPage = item.getAttribute('data-page');
-                updateContent();
             });
         });
 
-        // Função para mudar a linguagem
+        // Fetch the KnowledgeList file from server
+        function fetchKnowledgeList() {
+            fetch('./KnowledgeList/KnowledgeList.txt')
+                .then(response => response.text())
+                .then(text => {
+                    parseKnowledgeList(text);
+                    updateContent('en'); // Set default language to English
+                })
+                .catch(error => {
+                    console.error('Error fetching the KnowledgeList file:', error);
+                });
+        }
+
+        // Parse the knowledge list and store the content for each language
+        function parseKnowledgeList(text) {
+            const lines = text.split('\n');
+            lines.forEach(line => {
+                const parts = line.split('||');
+                if (parts.length === 2) {
+                    const englishText = parts[0].trim();
+                    const portugueseText = parts[1].trim();
+                    knowledgeData[englishText] = { en: englishText, pt: portugueseText };
+                }
+            });
+        }
+
+        // Function to change the language
         function changeLanguage() {
-            currentLanguage = languageSelect.value;
-            updateContent();
+            const language = document.getElementById('languageSelect').value;
+            updateContent(language);
         }
 
-        // Função para atualizar o conteúdo com base na página e linguagem atuais
-        function updateContent() {
-            // Atualizar título da página
-            pageTitle.textContent = translations[currentLanguage][`${currentPage}Title`] || '';
+        // Update content based on selected language
+        function updateContent(language) {
+            const selectedTranslation = translations[language];
+            
+            // Update Profile title
+            document.getElementById('profileTitle').textContent = selectedTranslation.profileTitle;
 
-            // Atualizar conteúdo com base na página atual
-            if (currentPage === 'profile') {
-                pageContentDiv.style.display = 'block';
-                // Conteúdo personalizado para Profile (atualmente vazio)
-                pageContentDiv.innerHTML = `
-                    <p>Bem-vindo ao seu perfil!</p>
-                    <!-- Adicione mais conteúdo personalizado aqui, se desejar -->
-                `;
-            } else if (currentPage === 'social') {
-                pageContentDiv.style.display = 'block';
-                pageContentDiv.innerHTML = `
-                    <p><a href="https://www.facebook.com/antonio.augusto.barbaro" target="_blank">${translations[currentLanguage].facebook}</a></p>
-                    <p><a href="https://www.instagram.com/aabproducoes/" target="_blank">${translations[currentLanguage].instagram}</a></p>
-                `;
-            } else if (currentPage === 'projects') {
-                pageContentDiv.style.display = 'block';
-                pageContentDiv.innerHTML = `
-                    <p><a href="./blender-projects.html" target="_blank">${translations[currentLanguage].blenderProjects}</a></p>
-                    <p><a href="./gimpt-projects.html" target="_blank">${translations[currentLanguage].gimpProjects}</a></p>
-                    <p><a href="./blender-animations.html" target="_blank">${translations[currentLanguage].blenderAnimations}</a></p>
-                    <p><a href="./animated-background.html" target="_blank">${translations[currentLanguage].animatedBackground}</a></p>
-                `;
-            } else if (currentPage === 'contact') {
-                pageContentDiv.style.display = 'block';
-                pageContentDiv.innerHTML = `
-                    <p>${translations[currentLanguage].whatsapp}</p>
-                    <p>${translations[currentLanguage].email}</p>
-                `;
-            } else {
-                // Esconder conteúdo do perfil quando outras páginas são selecionadas
-                pageContentDiv.style.display = 'none';
-            }
+            // Update Knowledge List title
+            const knowledgeTitle = document.createElement('h2');
+            knowledgeTitle.textContent = selectedTranslation.knowledgeListTitle;
+            knowledgeListDiv.innerHTML = ''; // Clear previous content
+            knowledgeListDiv.appendChild(knowledgeTitle);
+
+            // Populate the Knowledge List with the correct language content
+            Object.values(knowledgeData).forEach(item => {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = item[language];
+                knowledgeListDiv.appendChild(paragraph);
+            });
         }
 
-        // Inicializar conteúdo ao carregar a página
-        updateContent();
+        // Initial call to fetch the Knowledge List
+        fetchKnowledgeList();
     </script>
 
 </body>
