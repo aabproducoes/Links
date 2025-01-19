@@ -47,7 +47,6 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.3s ease;
-            z-index: 1; /* Garantir que o botão fique acima de outros elementos */
         }
 
         .toggle-btn:focus {
@@ -59,7 +58,6 @@
             content: '➤';
             display: inline-block;
             transition: transform 0.3s ease;
-            font-size: 18px;
         }
 
         /* Menu Itens */
@@ -78,14 +76,9 @@
             background-size: 200% 100%;
             background-position: left;
             border: 2px solid #fff; /* Borda branca */
-            position: relative;
         }
 
-        .menu li:hover {
-            background-position: right;
-            color: #000;
-        }
-
+        .menu li:hover,
         .menu li.active {
             background-position: right;
             color: #000;
@@ -113,11 +106,6 @@
             cursor: pointer;
         }
 
-        .language-selector select option {
-            background-color: #000;
-            color: #fff;
-        }
-
         /* Conteúdo Principal */
         .content {
             flex: 1;
@@ -134,7 +122,7 @@
         .sidebar.closed .menu li {
             text-align: center;
             padding: 15px 10px;
-            font-size: 0;
+            font-size: 16px; /* Restaurar fonte para ícones */
             background: linear-gradient(to bottom, #000000, #ffffff);
             background-size: 200% 100%;
             background-position: top;
@@ -145,7 +133,6 @@
             content: attr(data-icon);
             font-size: 20px;
             display: inline-block;
-            color: #fff;
         }
 
         .sidebar.closed .menu li:hover {
@@ -153,8 +140,8 @@
             color: #000;
         }
 
-        .sidebar.closed .toggle-btn::before {
-            transform: rotate(90deg);
+        .sidebar.closed .toggle-btn {
+            transform: rotate(180deg);
         }
 
         /* Responsividade */
@@ -190,7 +177,7 @@
         <div class="language-selector">
             <select id="languageSelect" onchange="changeLanguage()">
                 <option value="en">English</option>
-                <option value="pt">Portuguese</option>
+                <option value="pt">Português</option>
             </select>
         </div>
     </div>
@@ -199,7 +186,7 @@
         <h1 id="profileTitle">Profile</h1>
         <div id="knowledgeList">
             <h2 id="knowledgeListTitle">Knowledge List</h2>
-            <!-- Conhecimento será carregado aqui -->
+            <!-- Conteúdo da lista será inserido aqui -->
         </div>
     </div>
 
@@ -208,9 +195,8 @@
         const sidebar = document.getElementById('sidebar');
         const menuItems = document.querySelectorAll('.menu li');
         const knowledgeListDiv = document.getElementById('knowledgeList');
-        const languageSelect = document.getElementById('languageSelect');
 
-        let knowledgeData = []; // Array para armazenar os dados de conhecimento
+        let knowledgeData = {}; // Armazena dados de conhecimento por idioma
 
         const translations = {
             en: {
@@ -226,6 +212,7 @@
         // Toggle sidebar visibility and rotation of arrow
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('closed');
+            toggleBtn.classList.toggle('rotated');
         });
 
         // Handle the active class when clicking on menu items
@@ -234,14 +221,11 @@
                 menuItems.forEach(i => i.classList.remove('active'));
                 item.classList.add('active');
 
-                // Opcional: Adicionar funcionalidade para trocar de página
-                // Por enquanto, apenas exibir o perfil
+                // Se clicar em "Profile", exibir a lista de conhecimentos
                 if (item.textContent.trim() === 'Profile' || item.textContent.trim() === 'Perfil') {
-                    document.getElementById('profileTitle').style.display = 'block';
-                    document.getElementById('knowledgeList').style.display = 'block';
+                    knowledgeListDiv.style.display = 'block';
                 } else {
-                    document.getElementById('profileTitle').style.display = 'none';
-                    document.getElementById('knowledgeList').style.display = 'none';
+                    knowledgeListDiv.style.display = 'none';
                 }
             });
         });
@@ -257,11 +241,12 @@
                 })
                 .then(text => {
                     parseKnowledgeList(text);
-                    updateContent(languageSelect.value); // Atualizar com o idioma selecionado
+                    updateContent('en'); // Set default language to English
                 })
                 .catch(error => {
                     console.error('Error fetching the KnowledgeList file:', error);
-                    knowledgeListDiv.innerHTML = '<p>Erro ao carregar a lista de conhecimento.</p>';
+                    // Exibir uma mensagem de erro no conteúdo
+                    knowledgeListDiv.innerHTML = '<p>Erro ao carregar a lista de conhecimentos.</p>';
                 });
         }
 
@@ -273,41 +258,52 @@
                 if (parts.length === 2) {
                     const englishText = parts[0].trim();
                     const portugueseText = parts[1].trim();
-                    knowledgeData.push({ en: englishText, pt: portugueseText });
+                    knowledgeData[englishText] = { en: englishText, pt: portugueseText };
                 }
             });
         }
 
         // Function to change the language
         function changeLanguage() {
-            const language = languageSelect.value;
+            const language = document.getElementById('languageSelect').value;
             updateContent(language);
         }
 
         // Update content based on selected language
         function updateContent(language) {
             const selectedTranslation = translations[language];
-            
-            // Atualizar título do Perfil
+
+            // Atualizar o título do Perfil
             document.getElementById('profileTitle').textContent = selectedTranslation.profileTitle;
 
-            // Atualizar título da Lista de Conhecimento
+            // Atualizar o título da Lista de Conhecimento
             document.getElementById('knowledgeListTitle').textContent = selectedTranslation.knowledgeListTitle;
 
-            // Limpar conteúdo anterior
-            knowledgeListDiv.innerHTML = `<h2 id="knowledgeListTitle">${selectedTranslation.knowledgeListTitle}</h2>`;
+            // Limpar conteúdo anterior da lista de conhecimentos
+            const existingParagraphs = knowledgeListDiv.querySelectorAll('p');
+            existingParagraphs.forEach(p => p.remove());
 
-            // Populando a Lista de Conhecimento com o idioma selecionado
-            knowledgeData.forEach(item => {
+            // Popular a Lista de Conhecimento com o idioma selecionado
+            Object.values(knowledgeData).forEach(item => {
                 const paragraph = document.createElement('p');
                 paragraph.textContent = item[language];
                 knowledgeListDiv.appendChild(paragraph);
             });
         }
 
-        // Inicializar a página
+        // Inicialização
+        fetchKnowledgeList(); // Carregar a lista de conhecimentos ao carregar a página
+
+        // Mostrar a lista de conhecimentos apenas se "Profile" estiver ativo
         window.onload = () => {
-            fetchKnowledgeList();
+            const activeItem = document.querySelector('.menu li.active');
+            if (activeItem) {
+                if (activeItem.textContent.trim() === 'Profile' || activeItem.textContent.trim() === 'Perfil') {
+                    knowledgeListDiv.style.display = 'block';
+                } else {
+                    knowledgeListDiv.style.display = 'none';
+                }
+            }
         };
     </script>
 
