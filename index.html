@@ -90,7 +90,7 @@
                 hsl(var(--menu-gradient-start-h), var(--menu-gradient-start-s), var(--menu-gradient-start-l)), 
                 hsl(var(--menu-gradient-end-h), var(--menu-gradient-end-s), var(--menu-gradient-end-l))
             );
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Alterado para usar variáveis */
+            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Utiliza variáveis CSS */
             background-size: 200% 100%;
             background-position: left;
             border: 2px solid #fff; /* Borda branca */
@@ -98,15 +98,13 @@
 
         .menu li:hover {
             background-position: right;
-            /* Removido: color: #000; */
-            /* Opcional: Manter a mesma cor do texto */
+            /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
         }
 
         .menu li.active {
             background-position: right;
-            /* Removido: color: #000; */
-            /* Opcional: Manter a mesma cor do texto */
+            /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
         }
 
@@ -174,8 +172,7 @@
 
         .sidebar.closed .menu li:hover {
             background-position: bottom;
-            /* Removido: color: #000; */
-            /* Opcional: Manter a mesma cor do texto */
+            /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
         }
 
@@ -187,7 +184,7 @@
             transform: rotate(180deg);
         }
 
-        /* Picker de Cores do Conteúdo Principal */
+        /* Picker de Cores do Conteúdo Principal (Apenas Texto) */
         .main-color-picker {
             padding: 20px;
             background-color: #222; /* Fundo escuro para distinguir */
@@ -278,30 +275,9 @@
             </select>
         </div>
         
-        <!-- Picker de Cores do Conteúdo Principal -->
+        <!-- Picker de Cores do Conteúdo Principal (Apenas Texto) -->
         <div class="main-color-picker">
             <h3>Customize Main Content</h3>
-            
-            <!-- Picker de Cor de Fundo -->
-            <div class="color-control">
-                <label for="mainBgHue">Background Hue</label>
-                <input type="range" id="mainBgHue" name="mainBgHue" min="0" max="360" value="0">
-                <div class="hsl-values">
-                    <span>H: <span id="mainBgHValue">0</span></span>
-                    <span>S: <span id="mainBgSValue">0%</span></span>
-                    <span>L: <span id="mainBgLValue">50%</span></span>
-                </div>
-            </div>
-            
-            <div class="color-control">
-                <label for="mainBgSaturation">Background Saturation</label>
-                <input type="range" id="mainBgSaturation" name="mainBgSaturation" min="0" max="100" value="0">
-            </div>
-            
-            <div class="color-control">
-                <label for="mainBgLightness">Background Lightness</label>
-                <input type="range" id="mainBgLightness" name="mainBgLightness" min="0" max="100" value="50">
-            </div>
             
             <!-- Picker de Cor do Texto -->
             <div class="color-control">
@@ -385,20 +361,10 @@
         let currentPage = 'profile'; // Página padrão
         let knowledgeListData = []; // Inicializa um array vazio
 
-        // Referências aos Sliders de Cor do Conteúdo Principal
-        const mainBgHue = document.getElementById('mainBgHue');
-        const mainBgSaturation = document.getElementById('mainBgSaturation');
-        const mainBgLightness = document.getElementById('mainBgLightness');
-
         // Referências aos Sliders de Cor do Texto do Conteúdo Principal
         const mainTextHue = document.getElementById('mainTextHue');
         const mainTextSaturation = document.getElementById('mainTextSaturation');
         const mainTextLightness = document.getElementById('mainTextLightness');
-
-        // Referências às Exibições dos Valores HSL para Fundo
-        const mainBgHValue = document.getElementById('mainBgHValue');
-        const mainBgSValue = document.getElementById('mainBgSValue');
-        const mainBgLValue = document.getElementById('mainBgLValue');
 
         // Referências às Exibições dos Valores HSL para Texto
         const mainTextHValue = document.getElementById('mainTextHValue');
@@ -478,21 +444,12 @@
             sidebar.style.setProperty('--menu-gradient-end-s', `${menuGradientEnd.s}%`);
             sidebar.style.setProperty('--menu-gradient-end-l', `${menuGradientEnd.l}%`);
 
-            // Atualiza as Exibições dos Valores HSL para o Fundo Principal
-            mainBgHValue.textContent = mainBgColor.h;
-            mainBgSValue.textContent = `${mainBgColor.s}%`;
-            mainBgLValue.textContent = `${mainBgColor.l}%`;
-
             // Atualiza as Exibições dos Valores HSL para o Texto Principal
             mainTextHValue.textContent = mainTextColor.h;
             mainTextSValue.textContent = `${mainTextColor.s}%`;
             mainTextLValue.textContent = `${mainTextColor.l}%`;
 
-            // Atualiza os Sliders para Refletir as Cores Randomizadas
-            mainBgHue.value = mainBgColor.h;
-            mainBgSaturation.value = mainBgColor.s;
-            mainBgLightness.value = mainBgColor.l;
-
+            // Atualiza os Sliders para Refletir as Cores Randomizadas (Apenas Texto)
             mainTextHue.value = mainTextColor.h;
             mainTextSaturation.value = mainTextColor.s;
             mainTextLightness.value = mainTextColor.l;
@@ -501,9 +458,9 @@
         // Função para recalcular as cores da barra lateral e do menu após alterações manuais
         function recalculateSidebarColors() {
             // Obtém os valores atuais de HSL do fundo principal
-            const mainBgH = parseInt(mainBgHue.value);
-            const mainBgS = parseInt(mainBgSaturation.value);
-            const mainBgL = parseInt(mainBgLightness.value);
+            const mainBgH = parseInt(getComputedStyle(content).getPropertyValue('--main-bg-h'));
+            const mainBgS = parseInt(getComputedStyle(content).getPropertyValue('--main-bg-s'));
+            const mainBgL = parseInt(getComputedStyle(content).getPropertyValue('--main-bg-l'));
 
             // Calcula a cor de fundo da barra lateral (mais escura que o fundo principal)
             const sidebarBgColor = calculateDarkerHSL(mainBgH, mainBgS, mainBgL, 20);
@@ -533,26 +490,6 @@
             sidebar.style.setProperty('--menu-gradient-end-l', `${menuGradientEnd.l}%`);
         }
 
-        // Função para atualizar a cor de fundo do conteúdo principal
-        function updateMainBgColor() {
-            const h = parseInt(mainBgHue.value);
-            const s = parseInt(mainBgSaturation.value);
-            const l = parseInt(mainBgLightness.value);
-            
-            // Atualiza as Variáveis CSS para o Fundo Principal
-            content.style.setProperty('--main-bg-h', h);
-            content.style.setProperty('--main-bg-s', `${s}%`);
-            content.style.setProperty('--main-bg-l', `${l}%`);
-            
-            // Atualiza as Exibições dos Valores HSL para o Fundo Principal
-            mainBgHValue.textContent = h;
-            mainBgSValue.textContent = `${s}%`;
-            mainBgLValue.textContent = `${l}%`;
-
-            // Recalcula as cores da barra lateral e do menu
-            recalculateSidebarColors();
-        }
-
         // Função para atualizar a cor do texto do conteúdo principal
         function updateMainTextColor() {
             const h = parseInt(mainTextHue.value);
@@ -568,17 +505,15 @@
             mainTextHValue.textContent = h;
             mainTextSValue.textContent = `${s}%`;
             mainTextLValue.textContent = `${l}%`;
+
+            // Recalcula as cores da barra lateral e do menu
+            recalculateSidebarColors();
         }
 
         // Função para resetar as cores para valores randomizados
         function resetMainColors() {
             randomizeColors();
         }
-
-        // Listeners para os Sliders de Cor do Fundo Principal
-        mainBgHue.addEventListener('input', updateMainBgColor);
-        mainBgSaturation.addEventListener('input', updateMainBgColor);
-        mainBgLightness.addEventListener('input', updateMainBgColor);
 
         // Listeners para os Sliders de Cor do Texto Principal
         mainTextHue.addEventListener('input', updateMainTextColor);
