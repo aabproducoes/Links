@@ -18,25 +18,26 @@
             display: flex;
             min-height: 100vh;
             font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
-            background-color: #f0f0f0; /* Fundo claro para a área de conteúdo */
+            background-color: #f0f0f0; /* Fundo estático para a área de conteúdo */
             color: #333;
         }
 
-        /* Sidebar com Variáveis CSS para Cores */
+        /* Sidebar com Cor Estática */
         .sidebar {
-            --sidebar-bg-h: 0;
-            --sidebar-bg-s: 0%;
-            --sidebar-bg-l: 0%;
+            /* Definição de Cor Estática para a Barra Lateral */
+            --sidebar-bg-h: 220; /* Azul */
+            --sidebar-bg-s: 30%;
+            --sidebar-bg-l: 20%;
             --sidebar-text-h: 0;
             --sidebar-text-s: 0%;
             --sidebar-text-l: 100%;
             
-            --menu-gradient-start-h: 0;
-            --menu-gradient-start-s: 0%;
-            --menu-gradient-start-l: 0%;
-            --menu-gradient-end-h: 0;
-            --menu-gradient-end-s: 0%;
-            --menu-gradient-end-l: 0%;
+            --menu-gradient-start-h: 220; /* Mesma cor do fundo da barra lateral */
+            --menu-gradient-start-s: 30%;
+            --menu-gradient-start-l: 20%;
+            --menu-gradient-end-h: 220; /* Gradiente para uma cor um pouco mais escura */
+            --menu-gradient-end-s: 30%;
+            --menu-gradient-end-l: 10%;
             
             width: 250px;
             background-color: hsl(var(--sidebar-bg-h), var(--sidebar-bg-s), var(--sidebar-bg-l));
@@ -140,18 +141,15 @@
             font-family: 'Roboto', sans-serif; /* Fonte consistente */
         }
 
-        /* Conteúdo Principal com Variáveis CSS para Cores */
+        /* Conteúdo Principal com Cor Estática */
         .content {
-            --main-bg-h: 0;
-            --main-bg-s: 0%;
-            --main-bg-l: 50%;
             --main-text-h: 0;
             --main-text-s: 0%;
             --main-text-l: 100%;
             
             flex: 1;
             padding: 20px;
-            background-color: hsl(var(--main-bg-h), var(--main-bg-s), var(--main-bg-l));
+            background-color: #f0f0f0; /* Cor de fundo estática */
             color: hsl(var(--main-text-h), var(--main-text-s), var(--main-text-l));
             transition: background-color 0.3s ease, color 0.3s ease;
             font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
@@ -422,45 +420,10 @@
             // Gera uma cor clara aleatória para o texto principal
             const mainTextColor = generateRandomLightHSL();
 
-            // Calcula a cor de fundo principal (mais escura que o texto)
-            const mainBgColor = calculateDarkerHSL(mainTextColor.h, mainTextColor.s, mainTextColor.l, 20);
-
-            // Calcula a cor de fundo da barra lateral (mais escura que o fundo principal)
-            const sidebarBgColor = calculateDarkerHSL(mainBgColor.h, mainBgColor.s, mainBgColor.l, 20);
-
-            // Determina a cor do texto da barra lateral com base na luminosidade
-            const sidebarTextColor = determineTextColor(sidebarBgColor.l);
-
             // Define as Variáveis CSS para o Texto Principal
             content.style.setProperty('--main-text-h', mainTextColor.h);
             content.style.setProperty('--main-text-s', `${mainTextColor.s}%`);
             content.style.setProperty('--main-text-l', `${mainTextColor.l}%`);
-
-            // Define as Variáveis CSS para o Fundo Principal
-            content.style.setProperty('--main-bg-h', mainBgColor.h);
-            content.style.setProperty('--main-bg-s', `${mainBgColor.s}%`);
-            content.style.setProperty('--main-bg-l', `${mainBgColor.l}%`);
-
-            // Define as Variáveis CSS para o Fundo da Barra Lateral
-            sidebar.style.setProperty('--sidebar-bg-h', sidebarBgColor.h);
-            sidebar.style.setProperty('--sidebar-bg-s', `${sidebarBgColor.s}%`);
-            sidebar.style.setProperty('--sidebar-bg-l', `${sidebarBgColor.l}%`);
-
-            // Define as Variáveis CSS para a Cor do Texto da Barra Lateral
-            sidebar.style.setProperty('--sidebar-text-h', sidebarTextColor.h);
-            sidebar.style.setProperty('--sidebar-text-s', sidebarTextColor.s);
-            sidebar.style.setProperty('--sidebar-text-l', sidebarTextColor.l);
-
-            // Define as Variáveis CSS para o Início do Gradiente do Menu (igual ao fundo da barra lateral)
-            sidebar.style.setProperty('--menu-gradient-start-h', sidebarBgColor.h);
-            sidebar.style.setProperty('--menu-gradient-start-s', `${sidebarBgColor.s}%`);
-            sidebar.style.setProperty('--menu-gradient-start-l', `${sidebarBgColor.l}%`);
-
-            // Calcula a Cor Final do Gradiente do Menu (um pouco mais escura)
-            const menuGradientEnd = calculateDarkerHSL(sidebarBgColor.h, sidebarBgColor.s, sidebarBgColor.l, 10); // 10% de redução
-            sidebar.style.setProperty('--menu-gradient-end-h', menuGradientEnd.h);
-            sidebar.style.setProperty('--menu-gradient-end-s', `${menuGradientEnd.s}%`);
-            sidebar.style.setProperty('--menu-gradient-end-l', `${menuGradientEnd.l}%`);
 
             // Atualiza as Exibições dos Valores HSL para o Texto Principal
             mainTextHValue.textContent = mainTextColor.h;
@@ -475,37 +438,28 @@
 
         // Função para recalcular as cores da barra lateral e do menu após alterações manuais
         function recalculateSidebarColors() {
-            // Obtém os valores atuais de HSL do fundo principal
-            const mainBgH = parseInt(getComputedStyle(content).getPropertyValue('--main-bg-h'));
-            const mainBgS = parseInt(getComputedStyle(content).getPropertyValue('--main-bg-s'));
-            const mainBgL = parseInt(getComputedStyle(content).getPropertyValue('--main-bg-l'));
-
-            // Calcula a cor de fundo da barra lateral (mais escura que o fundo principal)
-            const sidebarBgColor = calculateDarkerHSL(mainBgH, mainBgS, mainBgL, 20);
+            // Obtém os valores atuais de HSL do texto principal
+            const mainTextH = parseInt(getComputedStyle(content).getPropertyValue('--main-text-h'));
+            const mainTextS = parseInt(getComputedStyle(content).getPropertyValue('--main-text-s'));
+            const mainTextL = parseInt(getComputedStyle(content).getPropertyValue('--main-text-l'));
 
             // Determina a cor do texto da barra lateral com base na luminosidade
-            const sidebarTextColor = determineTextColor(sidebarBgColor.l);
-
-            // Define as Variáveis CSS para o Fundo da Barra Lateral
-            sidebar.style.setProperty('--sidebar-bg-h', sidebarBgColor.h);
-            sidebar.style.setProperty('--sidebar-bg-s', `${sidebarBgColor.s}%`);
-            sidebar.style.setProperty('--sidebar-bg-l', `${sidebarBgColor.l}%`);
+            const sidebarTextColor = determineTextColor(mainTextL - 20); // Ajuste conforme necessário
 
             // Define as Variáveis CSS para a Cor do Texto da Barra Lateral
             sidebar.style.setProperty('--sidebar-text-h', sidebarTextColor.h);
             sidebar.style.setProperty('--sidebar-text-s', sidebarTextColor.s);
             sidebar.style.setProperty('--sidebar-text-l', sidebarTextColor.l);
 
-            // Define as Variáveis CSS para o Início do Gradiente do Menu (igual ao fundo da barra lateral)
-            sidebar.style.setProperty('--menu-gradient-start-h', sidebarBgColor.h);
-            sidebar.style.setProperty('--menu-gradient-start-s', `${sidebarBgColor.s}%`);
-            sidebar.style.setProperty('--menu-gradient-start-l', `${sidebarBgColor.l}%`);
+            // Define as Variáveis CSS para o Gradiente do Menu (mesma cor do fundo da barra lateral)
+            sidebar.style.setProperty('--menu-gradient-start-h', 220); /* Azul fixo */
+            sidebar.style.setProperty('--menu-gradient-start-s', '30%');
+            sidebar.style.setProperty('--menu-gradient-start-l', '20%');
 
-            // Calcula a Cor Final do Gradiente do Menu (um pouco mais escura)
-            const menuGradientEnd = calculateDarkerHSL(sidebarBgColor.h, sidebarBgColor.s, sidebarBgColor.l, 10); // 10% de redução
-            sidebar.style.setProperty('--menu-gradient-end-h', menuGradientEnd.h);
-            sidebar.style.setProperty('--menu-gradient-end-s', `${menuGradientEnd.s}%`);
-            sidebar.style.setProperty('--menu-gradient-end-l', `${menuGradientEnd.l}%`);
+            // Define a Cor Final do Gradiente do Menu (um pouco mais escura)
+            sidebar.style.setProperty('--menu-gradient-end-h', 220);
+            sidebar.style.setProperty('--menu-gradient-end-s', '30%');
+            sidebar.style.setProperty('--menu-gradient-end-l', '10%');
         }
 
         // Função para atualizar a cor do texto do conteúdo principal
@@ -651,7 +605,7 @@
 
         // Inicializa as Cores ao Carregar a Página
         document.addEventListener('DOMContentLoaded', () => {
-            randomizeColors(); // Realiza seleção aleatória de cores na carga
+            randomizeColors(); // Realiza seleção aleatória de cores na carga (apenas texto)
             fetchKnowledgeList(); // Função existente para buscar a lista de conhecimento
             updateContent(); // Função existente para atualizar o conteúdo com base na página e idioma
         });
@@ -659,3 +613,4 @@
 
 </body>
 </html>
+
