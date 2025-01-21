@@ -18,27 +18,27 @@
             display: flex;
             min-height: 100vh;
             font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
-            background-color: #f0f0f0; /* Fundo estático para a área de conteúdo */
-            color: #333;
+            background-color: #000; /* Fundo estático preto para a área de conteúdo */
+            color: #fff; /* Cor do texto principal ajustada para branco */
         }
 
-        /* Sidebar com Cor Estática */
+        /* Sidebar com Cor Estática Preta */
         .sidebar {
             /* Definição de Cor Estática para a Barra Lateral */
-            --sidebar-bg-h: 220; /* Azul */
-            --sidebar-bg-s: 30%;
-            --sidebar-bg-l: 20%;
+            --sidebar-bg-h: 0; /* Hue não importa, saturação e luminosidade ajustadas para preto */
+            --sidebar-bg-s: 0%;
+            --sidebar-bg-l: 0%;
             --sidebar-text-h: 0;
             --sidebar-text-s: 0%;
-            --sidebar-text-l: 100%;
-            
-            --menu-gradient-start-h: 220; /* Mesma cor do fundo da barra lateral */
-            --menu-gradient-start-s: 30%;
-            --menu-gradient-start-l: 20%;
-            --menu-gradient-end-h: 220; /* Gradiente para uma cor um pouco mais escura */
-            --menu-gradient-end-s: 30%;
-            --menu-gradient-end-l: 10%;
-            
+            --sidebar-text-l: 100%; /* Texto branco */
+
+            --menu-gradient-start-h: 0; /* Preto */
+            --menu-gradient-start-s: 0%;
+            --menu-gradient-start-l: 0%;
+            --menu-gradient-end-h: 0; /* Preto */
+            --menu-gradient-end-s: 0%;
+            --menu-gradient-end-l: 0%;
+
             width: 250px;
             background-color: hsl(var(--sidebar-bg-h), var(--sidebar-bg-s), var(--sidebar-bg-l));
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
@@ -95,7 +95,7 @@
                 hsl(var(--menu-gradient-start-h), var(--menu-gradient-start-s), var(--menu-gradient-start-l)), 
                 hsl(var(--menu-gradient-end-h), var(--menu-gradient-end-s), var(--menu-gradient-end-l))
             );
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Utiliza variáveis CSS */
+            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Texto branco */
             background-size: 200% 100%;
             background-position: left;
             border: 2px solid #fff; /* Borda branca */
@@ -141,15 +141,15 @@
             font-family: 'Roboto', sans-serif; /* Fonte consistente */
         }
 
-        /* Conteúdo Principal com Cor Estática */
+        /* Conteúdo Principal com Cor Estática Preta */
         .content {
             --main-text-h: 0;
             --main-text-s: 0%;
-            --main-text-l: 100%;
-            
+            --main-text-l: 100%; /* Texto branco */
+
             flex: 1;
             padding: 20px;
-            background-color: #f0f0f0; /* Cor de fundo estática */
+            background-color: #000; /* Cor de fundo estática preta */
             color: hsl(var(--main-text-h), var(--main-text-s), var(--main-text-l));
             transition: background-color 0.3s ease, color 0.3s ease;
             font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
@@ -400,11 +400,11 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // Função para gerar uma cor HSL aleatória clara (L > 60%)
+        // Função para gerar uma cor HSL aleatória clara (L > 80%)
         function generateRandomLightHSL() {
             const h = getRandomInt(0, 360);
             const s = getRandomInt(50, 100);
-            const l = getRandomInt(70, 90);
+            const l = getRandomInt(80, 100); // Ajustado para maior luminosidade
             return { h, s, l };
         }
 
@@ -438,28 +438,23 @@
 
         // Função para recalcular as cores da barra lateral e do menu após alterações manuais
         function recalculateSidebarColors() {
-            // Obtém os valores atuais de HSL do texto principal
-            const mainTextH = parseInt(getComputedStyle(content).getPropertyValue('--main-text-h'));
-            const mainTextS = parseInt(getComputedStyle(content).getPropertyValue('--main-text-s'));
-            const mainTextL = parseInt(getComputedStyle(content).getPropertyValue('--main-text-l'));
-
-            // Determina a cor do texto da barra lateral com base na luminosidade
-            const sidebarTextColor = determineTextColor(mainTextL - 20); // Ajuste conforme necessário
+            // Determina a cor do texto da barra lateral (fixa para branco)
+            const sidebarTextColor = { h: 0, s: '0%', l: '100%' };
 
             // Define as Variáveis CSS para a Cor do Texto da Barra Lateral
             sidebar.style.setProperty('--sidebar-text-h', sidebarTextColor.h);
             sidebar.style.setProperty('--sidebar-text-s', sidebarTextColor.s);
             sidebar.style.setProperty('--sidebar-text-l', sidebarTextColor.l);
 
-            // Define as Variáveis CSS para o Gradiente do Menu (mesma cor do fundo da barra lateral)
-            sidebar.style.setProperty('--menu-gradient-start-h', 220); /* Azul fixo */
-            sidebar.style.setProperty('--menu-gradient-start-s', '30%');
-            sidebar.style.setProperty('--menu-gradient-start-l', '20%');
+            // Define as Variáveis CSS para o Gradiente do Menu (preto para preto, sem gradiente)
+            sidebar.style.setProperty('--menu-gradient-start-h', 0); /* Preto */
+            sidebar.style.setProperty('--menu-gradient-start-s', '0%');
+            sidebar.style.setProperty('--menu-gradient-start-l', '0%');
 
-            // Define a Cor Final do Gradiente do Menu (um pouco mais escura)
-            sidebar.style.setProperty('--menu-gradient-end-h', 220);
-            sidebar.style.setProperty('--menu-gradient-end-s', '30%');
-            sidebar.style.setProperty('--menu-gradient-end-l', '10%');
+            // Define a Cor Final do Gradiente do Menu (preto)
+            sidebar.style.setProperty('--menu-gradient-end-h', 0);
+            sidebar.style.setProperty('--menu-gradient-end-s', '0%');
+            sidebar.style.setProperty('--menu-gradient-end-l', '0%');
         }
 
         // Função para atualizar a cor do texto do conteúdo principal
@@ -478,7 +473,7 @@
             mainTextSValue.textContent = `${s}%`;
             mainTextLValue.textContent = `${l}%`;
 
-            // Recalcula as cores da barra lateral e do menu
+            // Recalcula as cores da barra lateral e do menu (texto branco)
             recalculateSidebarColors();
         }
 
@@ -613,4 +608,3 @@
 
 </body>
 </html>
-
