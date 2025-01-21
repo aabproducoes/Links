@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu Vertical com Tradução e Perfil</title>
+    <!-- Importação das Fontes do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         /* Reset básico */
         * {
@@ -15,7 +17,7 @@
         body {
             display: flex;
             min-height: 100vh;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
             background-color: #f0f0f0; /* Fundo claro para a área de conteúdo */
             color: #333;
         }
@@ -43,6 +45,7 @@
             flex-direction: column;
             transition: width 0.3s ease, background-color 0.3s ease, color 0.3s ease;
             position: relative;
+            font-family: 'Montserrat', sans-serif; /* Fonte para o menu */
         }
 
         /* Botão da seta */
@@ -61,6 +64,7 @@
             align-items: center;
             justify-content: center;
             transition: transform 0.3s ease;
+            font-size: 18px; /* Aumenta o tamanho do ícone */
         }
 
         .toggle-btn:focus {
@@ -94,6 +98,8 @@
             background-size: 200% 100%;
             background-position: left;
             border: 2px solid #fff; /* Borda branca */
+            font-size: 16px; /* Aumenta o tamanho da fonte */
+            font-weight: 500; /* Define peso médio para melhor legibilidade */
         }
 
         .menu li:hover {
@@ -106,6 +112,7 @@
             background-position: right;
             /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
+            font-weight: 700; /* Peso mais forte para indicar a página ativa */
         }
 
         /* Dropdown de idiomas */
@@ -117,6 +124,9 @@
             border: 2px solid #fff;
             cursor: pointer;
             text-align: center;
+            font-family: 'Roboto', sans-serif; /* Fonte consistente com o conteúdo principal */
+            font-size: 16px; /* Tamanho da fonte */
+            border-radius: 5px; /* Bordas arredondadas */
         }
 
         .language-selector select {
@@ -127,6 +137,7 @@
             border: none;
             outline: none;
             font-size: 16px;
+            font-family: 'Roboto', sans-serif; /* Fonte consistente */
         }
 
         /* Conteúdo Principal com Variáveis CSS para Cores */
@@ -143,6 +154,9 @@
             background-color: hsl(var(--main-bg-h), var(--main-bg-s), var(--main-bg-l));
             color: hsl(var(--main-text-h), var(--main-text-s), var(--main-text-l));
             transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
+            font-size: 18px; /* Tamanho base da fonte */
+            line-height: 1.6; /* Espaçamento entre linhas para melhor legibilidade */
         }
 
         /* Esconder menu quando fechado */
@@ -168,6 +182,7 @@
             content: attr(data-icon);
             font-size: 20px;
             display: inline-block;
+            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Mantém a cor do texto */
         }
 
         .sidebar.closed .menu li:hover {
@@ -189,6 +204,8 @@
             padding: 20px;
             background-color: #222; /* Fundo escuro para distinguir */
             border-top: 2px solid #fff;
+            border-radius: 5px; /* Bordas arredondadas */
+            margin-top: 20px; /* Espaçamento superior */
         }
 
         .main-color-picker h3 {
@@ -232,6 +249,7 @@
             font-size: 14px;
             margin-top: 10px;
             transition: background-color 0.3s ease;
+            border-radius: 5px; /* Bordas arredondadas */
         }
 
         .reset-btn:hover {
