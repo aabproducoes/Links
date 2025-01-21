@@ -47,6 +47,7 @@
             transition: width 0.3s ease, background-color 0.3s ease, color 0.3s ease;
             position: relative;
             font-family: 'Montserrat', sans-serif; /* Fonte para o menu */
+            z-index: 1000; /* Garantir que a barra lateral fique acima do conteúdo em dispositivos móveis */
         }
 
         /* Botão da seta */
@@ -54,9 +55,9 @@
             position: absolute;
             top: 20px;
             right: -20px;
-            background-color: #000;
+            background-color: #444;
             color: #fff;
-            border: 2px solid #fff; /* Borda branca */
+            border: none;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -64,12 +65,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
             font-size: 18px; /* Aumenta o tamanho do ícone */
+        }
+
+        .toggle-btn:hover {
+            background-color: #555;
         }
 
         .toggle-btn:focus {
             outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
         }
 
         /* Ícone da seta */
@@ -84,6 +90,8 @@
             list-style: none;
             padding: 80px 0 0 0; /* Espaço para o botão */
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .menu li {
@@ -101,12 +109,15 @@
             border: 2px solid #fff; /* Borda branca */
             font-size: 16px; /* Aumenta o tamanho da fonte */
             font-weight: 500; /* Define peso médio para melhor legibilidade */
+            border-radius: 5px;
+            margin: 5px 10px;
         }
 
         .menu li:hover {
             background-position: right;
             /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
         }
 
         .menu li.active {
@@ -114,13 +125,14 @@
             /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
             font-weight: 700; /* Peso mais forte para indicar a página ativa */
+            background-color: #333;
         }
 
         /* Dropdown de idiomas */
         .language-selector {
             margin: 20px;
             padding: 10px;
-            background-color: #000;
+            background-color: #444;
             color: #fff;
             border: 2px solid #fff;
             cursor: pointer;
@@ -128,12 +140,18 @@
             font-family: 'Roboto', sans-serif; /* Fonte consistente com o conteúdo principal */
             font-size: 16px; /* Tamanho da fonte */
             border-radius: 5px; /* Bordas arredondadas */
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .language-selector:hover {
+            background-color: #555;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
         }
 
         .language-selector select {
             width: 100%;
             padding: 5px;
-            background-color: #000;
+            background-color: #444;
             color: #fff;
             border: none;
             outline: none;
@@ -165,7 +183,7 @@
         .sidebar.closed .menu li {
             text-align: center;
             padding: 15px 10px;
-            font-size: 0;
+            font-size: 16px; /* Ajuste para manter legibilidade */
             background: linear-gradient(
                 to bottom, 
                 hsl(var(--menu-gradient-start-h), var(--menu-gradient-start-s), var(--menu-gradient-start-l)), 
@@ -174,6 +192,8 @@
             background-size: 200% 100%;
             background-position: top;
             border: 2px solid #fff; /* Borda branca */
+            border-radius: 5px;
+            margin: 5px 10px;
         }
 
         .sidebar.closed .menu li::before {
@@ -187,6 +207,7 @@
             background-position: bottom;
             /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
         }
 
         .sidebar.closed .language-selector {
@@ -204,6 +225,9 @@
             border-top: 2px solid #fff;
             border-radius: 5px; /* Bordas arredondadas */
             margin-top: 20px; /* Espaçamento superior */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .main-color-picker h3 {
@@ -214,7 +238,8 @@
         }
 
         .color-control {
-            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
         }
 
         .color-control label {
@@ -226,6 +251,29 @@
 
         .color-control input[type="range"] {
             width: 100%;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #555;
+            outline: none;
+            transition: background 0.3s ease;
+        }
+
+        .color-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .color-control input[type="range"]::-webkit-slider-thumb:hover {
+            background: #ddd;
+            transform: scale(1.1);
         }
 
         .hsl-values {
@@ -239,29 +287,38 @@
         /* Estilização do Botão de Reset */
         .reset-btn {
             width: 100%;
-            padding: 10px;
-            background-color: #444;
+            padding: 12px;
+            background: linear-gradient(45deg, #ff6b6b, #f06595);
             color: #fff;
             border: none;
             cursor: pointer;
             font-size: 14px;
             margin-top: 10px;
-            transition: background-color 0.3s ease;
-            border-radius: 5px; /* Bordas arredondadas */
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
         .reset-btn:hover {
-            background-color: #555;
+            background: linear-gradient(45deg, #f06595, #ff6b6b);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.4);
+        }
+
+        .reset-btn:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.5);
         }
 
         /* Responsividade */
         @media (max-width: 768px) {
             .sidebar {
-                position: absolute;
+                position: fixed;
                 left: -250px;
                 top: 0;
                 height: 100%;
-                z-index: 1000;
+                width: 250px;
+                transition: left 0.3s ease;
             }
 
             .sidebar.open {
@@ -269,7 +326,42 @@
             }
 
             .toggle-btn {
-                right: -20px;
+                position: fixed;
+                top: 20px;
+                left: 250px;
+                right: auto;
+                z-index: 1100;
+            }
+
+            .sidebar.closed .toggle-btn {
+                left: 60px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .main-color-picker {
+                padding: 15px;
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .menu li {
+                font-size: 14px;
+                padding: 12px 15px;
+            }
+
+            .toggle-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .reset-btn {
+                padding: 10px;
+                font-size: 13px;
             }
         }
     </style>
@@ -277,7 +369,7 @@
 <body>
 
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggleBtn"></button>
+        <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar"></button>
         <ul class="menu">
             <li class="active" data-page="profile" data-icon="👤">Profile</li>
             <li data-page="social" data-icon="🔗">Social</li>
@@ -493,7 +585,7 @@
         // Função para alternar a barra lateral
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('closed');
-            toggleBtn.classList.toggle('rotated');
+            sidebar.classList.toggle('open');
         });
 
         // Função para lidar com os cliques nos itens do menu
