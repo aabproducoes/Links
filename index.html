@@ -6,6 +6,8 @@
     <title>Menu Vertical com Tradução e Perfil</title>
     <!-- Importação das Fontes do Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Importação do Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* Reset básico */
         * {
@@ -54,34 +56,34 @@
         .toggle-btn {
             position: absolute;
             top: 20px;
-            right: -20px;
-            background-color: #444;
+            right: -25px; /* Ajuste para centralizar o botão quando fechado */
+            background: linear-gradient(45deg, #ff6b6b, #f06595);
             color: #fff;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
             font-size: 18px; /* Aumenta o tamanho do ícone */
         }
 
         .toggle-btn:hover {
-            background-color: #555;
+            background: linear-gradient(45deg, #f06595, #ff6b6b);
+            transform: rotate(180deg);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
         }
 
-        .toggle-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+        .toggle-btn:active {
+            transform: scale(0.95) rotate(180deg);
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
         }
 
-        /* Ícone da seta */
-        .toggle-btn::before {
-            content: '➤';
-            display: inline-block;
+        .toggle-btn i {
             transition: transform 0.3s ease;
         }
 
@@ -111,6 +113,9 @@
             font-weight: 500; /* Define peso médio para melhor legibilidade */
             border-radius: 5px;
             margin: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .menu li:hover {
@@ -125,38 +130,48 @@
             /* Mantém a mesma cor do texto */
             color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
             font-weight: 700; /* Peso mais forte para indicar a página ativa */
-            background-color: #333;
+            background: #333; /* Fundo mais escuro para o item ativo */
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
         }
 
         /* Dropdown de idiomas */
         .language-selector {
             margin: 20px;
-            padding: 10px;
-            background-color: #444;
+            padding: 10px 15px;
+            background: linear-gradient(45deg, #ffafbd, #ffc3a0);
             color: #fff;
-            border: 2px solid #fff;
-            cursor: pointer;
-            text-align: center;
-            font-family: 'Roboto', sans-serif; /* Fonte consistente com o conteúdo principal */
-            font-size: 16px; /* Tamanho da fonte */
-            border-radius: 5px; /* Bordas arredondadas */
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(255, 175, 189, 0.4);
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .language-selector:hover {
-            background-color: #555;
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+            background: linear-gradient(45deg, #ffc3a0, #ffafbd);
+            box-shadow: 0 6px 20px rgba(255, 175, 189, 0.6);
         }
 
         .language-selector select {
-            width: 100%;
-            padding: 5px;
-            background-color: #444;
+            background: transparent;
             color: #fff;
             border: none;
             outline: none;
             font-size: 16px;
-            font-family: 'Roboto', sans-serif; /* Fonte consistente */
+            font-family: 'Roboto', sans-serif;
+            cursor: pointer;
+            appearance: none; /* Remove a seta padrão do select */
+        }
+
+        .language-selector select::-ms-expand {
+            display: none; /* Remove a seta no IE */
+        }
+
+        .language-selector select option {
+            background: #ffafbd;
+            color: #000;
         }
 
         /* Conteúdo Principal com Cor Estática Preta */
@@ -194,6 +209,9 @@
             border: 2px solid #fff; /* Borda branca */
             border-radius: 5px;
             margin: 5px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .sidebar.closed .menu li::before {
@@ -276,6 +294,22 @@
             transform: scale(1.1);
         }
 
+        .color-control input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .color-control input[type="range"]::-moz-range-thumb:hover {
+            background: #ddd;
+            transform: scale(1.1);
+        }
+
         .hsl-values {
             display: flex;
             justify-content: space-between;
@@ -286,28 +320,34 @@
 
         /* Estilização do Botão de Reset */
         .reset-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, #ff6b6b, #f06595);
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
             color: #fff;
             border: none;
-            cursor: pointer;
-            font-size: 14px;
-            margin-top: 10px;
-            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
             border-radius: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            padding: 12px 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .reset-btn:hover {
-            background: linear-gradient(45deg, #f06595, #ff6b6b);
+            background: linear-gradient(45deg, #2a5298, #1e3c72);
+            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.6);
             transform: translateY(-2px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.4);
         }
 
-        .reset-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.5);
+        .reset-btn:active {
+            transform: scale(0.95) translateY(-2px);
+            box-shadow: 0 3px 10px rgba(30, 60, 114, 0.3);
+        }
+
+        .reset-btn i {
+            transition: transform 0.3s ease;
         }
 
         /* Responsividade */
@@ -354,14 +394,19 @@
             }
 
             .toggle-btn {
-                width: 35px;
-                height: 35px;
+                width: 40px;
+                height: 40px;
                 font-size: 16px;
             }
 
             .reset-btn {
-                padding: 10px;
-                font-size: 13px;
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+
+            .language-selector {
+                padding: 8px 12px;
+                font-size: 14px;
             }
         }
     </style>
@@ -369,7 +414,9 @@
 <body>
 
     <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar"></button>
+        <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+            <i class="fas fa-arrow-left"></i>
+        </button>
         <ul class="menu">
             <li class="active" data-page="profile" data-icon="👤">Profile</li>
             <li data-page="social" data-icon="🔗">Social</li>
@@ -409,7 +456,9 @@
             </div>
             
             <!-- Botão de Reset -->
-            <button id="resetMainColorsBtn" class="reset-btn">Reset Colors</button>
+            <button id="resetMainColorsBtn" class="reset-btn">
+                <i class="fas fa-redo"></i> Reset Colors
+            </button>
         </div>
     </div>
 
@@ -582,10 +631,20 @@
         // Listener para o Botão de Reset
         resetMainColorsBtn.addEventListener('click', resetMainColors);
 
-        // Função para alternar a barra lateral
+        // Função para alternar a barra lateral e o ícone do botão
         toggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('closed');
             sidebar.classList.toggle('open');
+
+            // Mudar o ícone conforme o estado da barra lateral
+            const icon = toggleBtn.querySelector('i');
+            if (sidebar.classList.contains('closed')) {
+                icon.classList.remove('fa-arrow-left');
+                icon.classList.add('fa-arrow-right');
+            } else {
+                icon.classList.remove('fa-arrow-right');
+                icon.classList.add('fa-arrow-left');
+            }
         });
 
         // Função para lidar com os cliques nos itens do menu
