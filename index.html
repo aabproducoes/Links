@@ -190,114 +190,6 @@
             line-height: 1.6; /* Espaçamento entre linhas para melhor legibilidade */
         }
 
-        /* Estilização dos Botões na Área de Conteúdo Principal */
-        .main-btn {
-            background: linear-gradient(45deg, #6a11cb, #2575fc);
-            color: #fff;
-            border: none;
-            border-radius: 30px;
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(37, 117, 252, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-        }
-
-        .main-btn i {
-            transition: transform 0.3s ease;
-        }
-
-        /* Efeitos de Hover para Botões na Área de Conteúdo Principal */
-        .main-btn:hover {
-            background: linear-gradient(45deg, #2575fc, #6a11cb);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(37, 117, 252, 0.6);
-        }
-
-        .main-btn:hover i {
-            transform: rotate(20deg);
-        }
-
-        /* Efeitos de Ativo para Botões na Área de Conteúdo Principal */
-        .main-btn:active {
-            transform: scale(0.95) translateY(-1px);
-            box-shadow: 0 3px 10px rgba(37, 117, 252, 0.3);
-        }
-
-        /* Foco para Acessibilidade */
-        .main-btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.5);
-        }
-
-        /* Estilos Globais para Links na Área de Conteúdo Principal */
-        .main-link {
-            color: #1e90ff;
-            text-decoration: none;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .main-link::after {
-            content: '';
-            position: absolute;
-            width: 0%;
-            height: 2px;
-            left: 0;
-            bottom: -2px;
-            background-color: #1e90ff;
-            transition: width 0.3s ease;
-        }
-
-        .main-link:hover {
-            color: #63a4ff;
-        }
-
-        .main-link:hover::after {
-            width: 100%;
-        }
-
-        .main-link:focus {
-            outline: none;
-            color: #63a4ff;
-        }
-
-        .main-link:focus::after {
-            width: 100%;
-        }
-
-        /* Responsividade para Botões na Área de Conteúdo Principal */
-        @media (max-width: 768px) {
-            .main-btn {
-                padding: 10px 20px;
-                font-size: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-btn {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-        }
-
-        /* Responsividade para Links na Área de Conteúdo Principal */
-        @media (max-width: 768px) {
-            .main-link {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-link {
-                font-size: 14px;
-            }
-        }
-
         /* Esconder menu quando fechado */
         .sidebar.closed {
             width: 60px;
@@ -458,11 +350,60 @@
             transition: transform 0.3s ease;
         }
 
-        /* Estilos Globais para Links na Área de Conteúdo Principal */
+        /* Estilização dos Botões na Área de Conteúdo Principal */
+        /* Estilos Globais para Botões */
+        button {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; /* Espaço entre ícone e texto */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+        }
+
+        /* Botão Principal na Área de Conteúdo */
+        .main-btn {
+            background: linear-gradient(45deg, #ff7e5f, #feb47b);
+            color: #fff;
+            border-radius: 25px;
+            padding: 12px 25px;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(255, 126, 95, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        }
+
+        .main-btn:hover {
+            background: linear-gradient(45deg, #feb47b, #ff7e5f);
+            box-shadow: 0 6px 20px rgba(255, 126, 95, 0.6);
+            transform: translateY(-3px);
+        }
+
+        .main-btn:active {
+            transform: scale(0.95) translateY(-1px);
+            box-shadow: 0 3px 10px rgba(255, 126, 95, 0.3);
+        }
+
+        .main-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .main-btn:hover i {
+            transform: rotate(360deg);
+        }
+
+        /* Estilos para Links na Área de Conteúdo Principal */
         .main-link {
-            color: #1e90ff;
+            color: #00d2ff;
             text-decoration: none;
             position: relative;
+            font-weight: 500;
             transition: color 0.3s ease;
         }
 
@@ -471,14 +412,15 @@
             position: absolute;
             width: 0%;
             height: 2px;
-            left: 0;
-            bottom: -2px;
-            background-color: #1e90ff;
+            display: block;
+            background: #00d2ff;
             transition: width 0.3s ease;
+            left: 0;
+            bottom: -3px;
         }
 
         .main-link:hover {
-            color: #63a4ff;
+            color: #fff;
         }
 
         .main-link:hover::after {
@@ -487,36 +429,36 @@
 
         .main-link:focus {
             outline: none;
-            color: #63a4ff;
+            color: #fff;
         }
 
         .main-link:focus::after {
             width: 100%;
         }
 
-        /* Responsividade para Botões na Área de Conteúdo Principal */
+        /* Responsividade para Botões */
         @media (max-width: 768px) {
             .main-btn {
                 padding: 10px 20px;
-                font-size: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-btn {
-                padding: 8px 15px;
                 font-size: 14px;
             }
-        }
 
-        /* Responsividade para Links na Área de Conteúdo Principal */
-        @media (max-width: 768px) {
-            .main-link {
+            .main-btn i {
                 font-size: 16px;
             }
         }
 
         @media (max-width: 480px) {
+            .main-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+                gap: 6px;
+            }
+
+            .main-btn i {
+                font-size: 14px;
+            }
+
             .main-link {
                 font-size: 14px;
             }
@@ -628,7 +570,7 @@
             </div>
             
             <!-- Botão de Reset -->
-            <button id="resetMainColorsBtn" class="reset-btn main-btn">
+            <button id="resetMainColorsBtn" class="reset-btn">
                 <i class="fas fa-redo"></i> Reset Colors
             </button>
         </div>
@@ -639,13 +581,17 @@
         <div id="pageContent">
             <h2 id="knowledgeListTitle">Knowledge List</h2>
             <div id="knowledgeList">
-                <!-- Exemplo de Links na Área de Conteúdo Principal -->
-                <p><a href="https://www.example.com" class="main-link" target="_blank">Visit Example.com</a></p>
-                <p><a href="https://www.anotherexample.com" class="main-link" target="_blank">Visit AnotherExample.com</a></p>
-                <!-- Exemplo de Botão na Área de Conteúdo Principal -->
+                <p>JavaScript</p>
+                <p>HTML & CSS</p>
+                <p>React</p>
+                <!-- Botão de Download do CV -->
                 <button class="main-btn">
-                    <i class="fas fa-plus"></i> Add New Item
+                    <i class="fas fa-download"></i> Download CV
                 </button>
+                <!-- Link para o Portfólio -->
+                <p>
+                    <a href="https://www.example.com" class="main-link">Visite meu Portfólio</a>
+                </p>
             </div>
         </div>
     </div>
@@ -885,7 +831,7 @@
             // Popula a lista
             knowledgeListData.forEach(item => {
                 const p = document.createElement('p');
-                p.innerHTML = item[currentLanguage] || 'Tradução não disponível';
+                p.textContent = item[currentLanguage] || 'Tradução não disponível';
                 knowledgeListDiv.appendChild(p);
             });
         }
