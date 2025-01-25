@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Divertido com Language Button</title>
+  <title>Site Divertido com Menu Traduzido</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -18,14 +18,14 @@
   />
 
   <style>
-    /* RESET BÁSICO */
+    /* RESET */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    /* TEMA DIVERTIDO COM BG TEXTURIZADO (radial gradient) */
+    /* BACKGROUND & FONT */
     body {
       display: flex;
       min-height: 100vh;
@@ -49,7 +49,6 @@
       border-right: 2px dashed #fa8;
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
-
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -79,8 +78,7 @@
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
-
-    /* EFEITO DE LINHAS NO HOVER DO BOTÃO */
+    /* Efeito de linhas no hover do botão Toggle */
     .toggle-btn .line {
       position: absolute;
       width: 2px;
@@ -111,6 +109,7 @@
       transform: rotate(180deg) translate(-2px, -40px);
     }
 
+    /* MENU */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -143,6 +142,7 @@
       box-shadow: 0 3px 8px rgba(255,0,0,0.2);
     }
 
+    /* Sidebar colapsada */
     .sidebar.closed {
       width: 60px;
     }
@@ -193,7 +193,7 @@
       box-shadow: 0 3px 8px rgba(255, 51, 102, 0.3);
     }
 
-    /* MAIN CONTENT */
+    /* CONTEÚDO PRINCIPAL */
     .content {
       flex: 1;
       padding: 20px;
@@ -226,14 +226,14 @@
       background: #f8c;
       color: #fff;
       padding: 12px 20px;
-      border: 3px solid #f06; 
-      border-radius: 50px; 
+      border: 3px solid #f06;
+      border-radius: 50px;
       text-decoration: none;
       font-weight: 700;
       margin: 10px;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      overflow: hidden; 
+      overflow: hidden;
     }
     a.main-btn:hover {
       background: #f36;
@@ -352,6 +352,7 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
+    <!-- Botão Toggle da sidebar -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
       <div class="line line1"></div>
@@ -360,6 +361,7 @@
       <div class="line line4"></div>
     </button>
 
+    <!-- Menu Lateral com data-page para cada item -->
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -368,7 +370,7 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- Botão de Idioma, em vez de <select> -->
+    <!-- Botão de Idioma (no lugar do <select>) -->
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
 
@@ -377,8 +379,7 @@
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList">
-      </div>
+      <div id="knowledgeList"></div>
     </div>
   </div>
 
@@ -386,14 +387,14 @@
     // =========================
     //  REFERÊNCIAS
     // =========================
-    const toggleBtn = document.getElementById('toggleBtn');
-    const sidebar = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.menu li');
-    const languageBtn = document.getElementById('languageBtn'); // Botão de idioma
-    const pageTitle = document.getElementById('pageTitle');
+    const toggleBtn        = document.getElementById('toggleBtn');
+    const sidebar          = document.getElementById('sidebar');
+    const menuItems        = document.querySelectorAll('.menu li');
+    const languageBtn      = document.getElementById('languageBtn');
+    const pageTitle        = document.getElementById('pageTitle');
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    const content = document.getElementById('content');
+    const content          = document.getElementById('content');
 
     // =========================
     //  TRADUÇÕES
@@ -401,11 +402,11 @@
     const translations = {
       en: {
         profileTitle: 'Profile',
-        knowledgeListTitle: 'Knowledge List',
         socialTitle: 'Social',
+        projectsTitle: 'Projects',
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
-        projectsTitle: 'Projects',
+        knowledgeListTitle: 'Knowledge List',
 
         facebook: 'Facebook',
         instagram: 'Instagram',
@@ -418,11 +419,11 @@
       },
       pt: {
         profileTitle: 'Perfil',
-        knowledgeListTitle: 'Lista de Conhecimento',
         socialTitle: 'Social',
+        projectsTitle: 'Projetos',
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
-        projectsTitle: 'Projetos',
+        knowledgeListTitle: 'Lista de Conhecimento',
 
         facebook: 'Facebook',
         instagram: 'Instagram',
@@ -438,7 +439,9 @@
     let currentLanguage = 'en'; // Padrão
     let currentPage = 'profile';
 
-    // ========== BOTÃO TOGGLE SIDEBAR ==========
+    // =========================
+    //  TOGGLE SIDEBAR
+    // =========================
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -452,7 +455,9 @@
       }
     });
 
-    // ========== MENU ==========
+    // =========================
+    //  MENU
+    // =========================
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -462,18 +467,39 @@
       });
     });
 
-    // ========== BOTÃO DE IDIOMA (Alterna EN <-> PT) ==========
+    // =========================
+    //  BOTÃO DE IDIOMA (ALTERNAR EN <-> PT)
+    // =========================
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
     });
 
-    // Atualiza o texto do botão para Lang: EN ou Lang: PT
+    // Atualiza label do botão de idioma
     function updateLanguageButtonLabel() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    // ========== KNOWLEDGE LIST BILÍNGUE (split "||") ==========
+    // =========================
+    //  ATUALIZA RÓTULOS DO MENU (SIDE MENU)
+    // =========================
+    function updateMenuLabels() {
+      const dict = translations[currentLanguage];
+      menuItems.forEach(item => {
+        const page = item.getAttribute('data-page');
+        // Exemplo: 'profile' => 'profileTitle'
+        const labelKey = page + 'Title';
+        const label = dict[labelKey] || page;
+        const span = item.querySelector('span');
+        if (span) {
+          span.textContent = label;
+        }
+      });
+    }
+
+    // =========================
+    //  KNOWLEDGE LIST BILÍNGUE (split "||")
+    // =========================
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -489,12 +515,11 @@
     async function populateKnowledgeList() {
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
-
       lines.forEach(line => {
-        // ex: "JavaScript || JavaScript (PT)"
+        // "TextoEn || TextoPt"
         const parts = line.split('||').map(p => p.trim());
-        let englishText = parts[0] || line;
-        let portugueseText = parts[1] || line;
+        const englishText = parts[0] || line;
+        const portugueseText = parts[1] || line;
         const p = document.createElement('p');
 
         if (currentLanguage === 'en') {
@@ -502,12 +527,13 @@
         } else {
           p.textContent = portugueseText;
         }
-
         knowledgeListDiv.appendChild(p);
       });
     }
 
-    // ========== CERTIFICADOS (Somente 1ª página) ==========
+    // =========================
+    //  CERTIFICADOS (Somente 1ª página)
+    // =========================
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -525,7 +551,6 @@
           const fullPath = line.substring(0, idx).trim();
           const title    = line.substring(idx+sep.length).trim();
 
-          // Nome PDF
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if(lastSlash !== -1) {
@@ -533,7 +558,6 @@
           }
           // #page=1
           const onlyFirstPagePath = fullPath + '#page=1';
-
           return { fullPath: onlyFirstPagePath, pdfName, title };
         });
       } catch(err) {
@@ -544,7 +568,6 @@
     async function populateCertificatesList() {
       knowledgeListDiv.innerHTML = '';
       const list = await fetchCertificatesList();
-
       list.forEach(cert => {
         if(cert.fullPath){
           const container = document.createElement('div');
@@ -568,16 +591,18 @@
       });
     }
 
-    // ========== UPDATE DE CONTEÚDO ==========
+    // =========================
+    //  UPDATE CONTENT
+    // =========================
     function updateContent() {
-      // Atualiza label do botão de idioma
+      // 1) Atualiza label do botão de idioma
       updateLanguageButtonLabel();
+      // 2) Atualiza rótulos do menu (sidebar)
+      updateMenuLabels();
 
       const dict = translations[currentLanguage];
-      // Título da página (Profile, Social, etc.)
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
-      // Mostra/esconde conteudo
       const validPages = ['profile','social','projects','contact','certificates'];
       if (validPages.includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
@@ -630,7 +655,7 @@
         populateCertificatesList();
       }
 
-      // Lógica p/ efeito de hover e linhas
+      // Efeito de hover p/ botões .main-btn
       setTimeout(() => {
         const btns = document.querySelectorAll('.main-btn');
         btns.forEach(btn => {
@@ -650,7 +675,9 @@
       }, 50);
     }
 
-    // ========== FUNÇÕES DE COR E LINHAS ALEATÓRIAS ==========
+    // =========================
+    //  FUNÇÕES DE COR E LINHAS ALEATÓRIAS
+    // =========================
     function randomColor() {
       const r = Math.floor(Math.random()*256);
       const g = Math.floor(Math.random()*256);
@@ -669,24 +696,22 @@
         // Ângulo aleatório
         const angle = Math.random()*360;
         lineDiv.style.transform = `rotate(${angle}deg)`;
-
         // Cor aleatória
         lineDiv.style.backgroundColor = randomColor();
-
         // Tamanho
         const lineLength = 50 + Math.random()*50; // 50~100
-
         setTimeout(()=> {
           lineDiv.style.height = lineLength + 'px';
         },0);
 
         linesContainer.appendChild(lineDiv);
       }
-
       return linesContainer;
     }
 
-    // ========== INICIALIZAÇÃO ==========
+    // =========================
+    //  INICIALIZAÇÃO
+    // =========================
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
