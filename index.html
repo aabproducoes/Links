@@ -58,17 +58,17 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
       font-size: 18px;
     }
     .toggle-btn:hover {
       background: linear-gradient(45deg, #f06595, #ff6b6b);
       transform: rotate(180deg);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+      box-shadow: 0 6px 20px rgba(255,107,107,0.6);
     }
     .toggle-btn:active {
       transform: scale(0.95) rotate(180deg);
-      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+      box-shadow: 0 3px 10px rgba(255,107,107,0.3);
     }
     .toggle-btn i {
       transition: transform 0.3s ease;
@@ -600,9 +600,10 @@
             console.warn(`Formato inválido: "${line}"`);
             return { pdf: '', title: 'Título não disponível', path: '' };
           }
-          const pdfName = parts[0];
-          const title = parts.slice(1).join(' - ');
-          const path = `./Certificados/${pdfName}`;
+          const pdfName = parts[0]; // "certificado-js.pdf"
+          const title   = parts.slice(1).join(' - ');
+          const path    = `./Certificados/${pdfName}`; // Concatena pasta + nome do PDF
+
           return { pdf: pdfName, title, path };
         });
       } catch (err) {
@@ -623,12 +624,12 @@
 
           // iFrame para exibir o PDF
           const iframe = document.createElement('iframe');
-          iframe.src = cert.path;
+          iframe.src = cert.path;  // ex: ./Certificados/certificado-js.pdf
           iframe.width = '100%';
           iframe.height = '500px';
           iframe.style.border = 'none';
 
-          // Título sobreposto
+          // Div sobreposta com o título e caminho
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           
@@ -642,7 +643,7 @@
           container.appendChild(overlay);
           knowledgeListDiv.appendChild(container);
         } else {
-          // Caso o PDF não esteja disponível
+          // Caso não haja PDF ou path
           const p = document.createElement('p');
           p.textContent = cert.title;
           knowledgeListDiv.appendChild(p);
