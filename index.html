@@ -2,13 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Menu Vertical com Certificados</title>
   
   <!-- Google Fonts (Roboto + Montserrat) -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome (opcional) -->
+  <!-- Font Awesome para ícones (opcional) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
         integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q==" 
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -32,13 +32,13 @@
     /* ====== SIDEBAR ====== */
     .sidebar {
       width: 250px;
-      background-color: #000; /* Fixo em preto, mas pode ajustar via variáveis */
+      background-color: #000; /* Fixo em preto */
       color: #fff;
       display: flex;
       flex-direction: column;
       transition: width 0.3s ease;
       position: relative;
-      font-family: 'Montserrat', sans-serif; /* para o menu */
+      font-family: 'Montserrat', sans-serif; /* Fonte para o menu */
       z-index: 1000;
     }
 
@@ -58,17 +58,17 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
       font-size: 18px;
     }
     .toggle-btn:hover {
       background: linear-gradient(45deg, #f06595, #ff6b6b);
       transform: rotate(180deg);
-      box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
     }
     .toggle-btn:active {
       transform: scale(0.95) rotate(180deg);
-      box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
     }
     .toggle-btn i {
       transition: transform 0.3s ease;
@@ -125,7 +125,7 @@
       gap: 0;
     }
     .sidebar.closed .menu li span {
-      display: none;
+      display: none; /* Esconde o texto */
     }
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
@@ -168,8 +168,12 @@
       cursor: pointer;
       appearance: none;
     }
+    .language-selector select option {
+      background: #ffafbd;
+      color: #000;
+    }
 
-    /* Conteúdo Principal */
+    /* ====== CONTEÚDO PRINCIPAL ====== */
     .content {
       flex: 1;
       padding: 20px;
@@ -222,8 +226,38 @@
       outline: none;
       transition: background 0.3s ease;
     }
-    /* ... [Demais estilos de range omitidos para brevidade] ... */
+    /* Estilos para o Slider Thumb */
+    .color-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .color-control input[type="range"]::-webkit-slider-thumb:hover {
+      background: #ddd;
+      transform: scale(1.1);
+    }
+    .color-control input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .color-control input[type="range"]::-moz-range-thumb:hover {
+      background: #ddd;
+      transform: scale(1.1);
+    }
 
+    /* Estilização do Botão de Reset */
     .reset-btn {
       background: linear-gradient(45deg, #1e3c72, #2a5298);
       color: #fff;
@@ -244,8 +278,42 @@
       box-shadow: 0 6px 20px rgba(30,60,114,0.6);
       transform: translateY(-2px);
     }
+    .reset-btn:active {
+      transform: scale(0.95) translateY(-2px);
+      box-shadow: 0 3px 10px rgba(30,60,114,0.3);
+    }
 
-    /* Responsividade */
+    /* ====== CERTIFICADOS (PDF + TEXTO SOBREPOSTO) ====== */
+    .certificate-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .certificate-container iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    .certificate-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 18px;
+      pointer-events: none; /* Para permitir clique no iframe */
+      max-width: 90%;
+      word-wrap: break-word;
+    }
+    /* Estilo adicional para exibir o caminho do PDF */
+    .certificate-overlay .path {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 5px;
+    }
+
+    /* ====== RESPONSIVIDADE ====== */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -293,34 +361,21 @@
         padding: 8px 12px;
         font-size: 14px;
       }
-    }
-
-    /* ============= CERTIFICADOS (PDF + TEXTO SOBREPOSTO) ============= */
-    .certificate-container {
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .certificate-container iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-    }
-    .certificate-overlay {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      color: #fff;
-      background-color: rgba(0,0,0,0.5);
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 18px;
-      pointer-events: none; /* Para permitir clique no iframe */
+      .certificate-container iframe {
+        height: 300px;
+      }
+      .certificate-overlay {
+        font-size: 16px;
+      }
+      .certificate-overlay .path {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- SIDEBAR -->
+  <!-- ====== SIDEBAR ====== -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
@@ -335,6 +390,7 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
+    <!-- Seletor de Idioma -->
     <div class="language-selector">
       <select id="languageSelect" onchange="changeLanguage()">
         <option value="en">English</option>
@@ -342,6 +398,7 @@
       </select>
     </div>
     
+    <!-- Picker de Cores (apenas texto) -->
     <div class="main-color-picker">
       <h3>Customize Main Content</h3>
       <div class="color-control">
@@ -357,13 +414,14 @@
         <input type="range" id="mainTextLightness" min="0" max="100" value="100">
       </div>
 
+      <!-- Botão de Reset -->
       <button id="resetMainColorsBtn" class="reset-btn">
         <i class="fas fa-redo"></i> Reset Colors
       </button>
     </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
+  <!-- ====== CONTEÚDO PRINCIPAL ====== -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
@@ -377,7 +435,7 @@
   </div>
 
   <script>
-    // Elementos
+    // ====== REFERÊNCIAS ======
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -434,7 +492,8 @@
     let currentLanguage = 'en'; // Padrão
     let currentPage = 'profile';
 
-    // ====== Muda cor do texto principal aleatoriamente ======
+    // ====== FUNÇÕES DE COR ======
+    // Gera cor HSL aleatória clara (L>80%)
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -444,6 +503,8 @@
       const l = getRandomInt(80, 100);
       return { h, s, l };
     }
+
+    // Aplica cor ao texto principal
     function randomizeColors() {
       const mainTextColor = generateRandomLightHSL();
       content.style.setProperty('--main-text-h', mainTextColor.h);
@@ -454,6 +515,7 @@
       mainTextSaturation.value = mainTextColor.s;
       mainTextLightness.value = mainTextColor.l;
     }
+
     function updateMainTextColor() {
       const h = parseInt(mainTextHue.value);
       const s = parseInt(mainTextSaturation.value);
@@ -469,7 +531,7 @@
     mainTextSaturation.addEventListener('input', updateMainTextColor);
     mainTextLightness.addEventListener('input', updateMainTextColor);
 
-    // Toggle sidebar
+    // ====== TOGGLE SIDEBAR ======
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -484,7 +546,7 @@
       }
     });
 
-    // Menu
+    // ====== MENU ======
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -494,15 +556,13 @@
       });
     });
 
-    // Idioma
+    // ====== IDIOMA ======
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // =======================
-    // Exemplo: Knowledge List
-    // =======================
+    // ====== KNOWLEDGE LIST (PROFILE) ======
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -524,9 +584,8 @@
       });
     }
 
-    // ===============================
-    // Leitura e Exibição de PDFs
-    // ===============================
+    // ====== CERTIFICADOS ======
+    // Função para buscar e parsear o arquivo CertificadosList.txt
     async function fetchCertificatesList() {
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
@@ -539,15 +598,16 @@
           const parts = line.split('-').map(part => part.trim());
           if (parts.length < 2) {
             console.warn(`Formato inválido: "${line}"`);
-            return { pdf: '', title: 'Título não disponível' };
+            return { pdf: '', title: 'Título não disponível', path: '' };
           }
           const pdfName = parts[0];
           const title = parts.slice(1).join(' - ');
-          return { pdf: pdfName, title };
+          const path = `./Certificados/${pdfName}`;
+          return { pdf: pdfName, title, path };
         });
       } catch (err) {
         console.error(err);
-        return [{ pdf: '', title: 'Erro ao carregar certificados' }];
+        return [{ pdf: '', title: 'Erro ao carregar certificados', path: '' }];
       }
     }
 
@@ -556,52 +616,63 @@
       const certificates = await fetchCertificatesList();
 
       certificates.forEach(cert => {
-        const container = document.createElement('div');
-        container.classList.add('certificate-container');
+        // Verifica se o PDF está disponível
+        if (cert.pdf && cert.path) {
+          const container = document.createElement('div');
+          container.classList.add('certificate-container');
 
-        // iframe do PDF
-        const iframe = document.createElement('iframe');
-        iframe.src = `./Certificados/${cert.pdf}`;
-        iframe.width = '100%';
-        iframe.height = '500px';
-        iframe.style.border = 'none';
+          // iFrame para exibir o PDF
+          const iframe = document.createElement('iframe');
+          iframe.src = cert.path;
+          iframe.width = '100%';
+          iframe.height = '500px';
+          iframe.style.border = 'none';
 
-        // Título sobreposto
-        const overlay = document.createElement('div');
-        overlay.classList.add('certificate-overlay');
-        overlay.textContent = cert.title;
+          // Título sobreposto
+          const overlay = document.createElement('div');
+          overlay.classList.add('certificate-overlay');
+          
+          // Conteúdo do overlay com título e caminho
+          overlay.innerHTML = `
+            <div class="title">${cert.title}</div>
+            <div class="path">${cert.path}</div>
+          `;
 
-        container.appendChild(iframe);
-        container.appendChild(overlay);
-        knowledgeListDiv.appendChild(container);
+          container.appendChild(iframe);
+          container.appendChild(overlay);
+          knowledgeListDiv.appendChild(container);
+        } else {
+          // Caso o PDF não esteja disponível
+          const p = document.createElement('p');
+          p.textContent = cert.title;
+          knowledgeListDiv.appendChild(p);
+        }
       });
     }
 
-    // ======================
-    // Update de Conteúdo
-    // ======================
+    // ====== UPDATE DE CONTEÚDO ======
     function updateContent() {
       const dict = translations[currentLanguage];
 
-      // Título principal
+      // Atualiza o título principal
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
-      // Exibir area principal se a página estiver reconhecida
+      // Exibe ou esconde a área principal dependendo da página
       if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
       }
 
-      // Sub-título e conteúdo
+      // Atualiza o conteúdo específico da página
       if (currentPage === 'profile') {
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if (currentPage === 'social') {
         knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
-          <p><a href="#" class="main-link">${dict.facebook}</a></p>
-          <p><a href="#" class="main-link">${dict.instagram}</a></p>
+          <p><a href="https://www.facebook.com" target="_blank" class="main-link">${dict.facebook}</a></p>
+          <p><a href="https://www.instagram.com" target="_blank" class="main-link">${dict.instagram}</a></p>
         `;
       } else if (currentPage === 'projects') {
         knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
@@ -623,13 +694,10 @@
       }
     }
 
-    // ====================
-    // Inicialização
-    // ====================
+    // ====== INICIALIZAÇÃO ======
     document.addEventListener('DOMContentLoaded', () => {
       randomizeColors();     // Ajusta cor do texto
-      fetchKnowledgeList();  // Para uso no "profile"
-      updateContent();
+      updateContent();       // Atualiza o conteúdo baseado na página atual e idioma
     });
   </script>
 </body>
