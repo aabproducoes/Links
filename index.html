@@ -3,19 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul sem Linhas e sem Cores Aleatórias, Arrow Animada</title>
+  <title>Tema Azul com Arrow Animado (SVG)</title>
 
-  <!-- Fonte Comic Neue (similar a Comic Sans) -->
+  <!-- Fonte Comic Neue -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
-
-  <!-- Font Awesome (opcional, para setas e ícones) -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
 
   <style>
     /* RESET BÁSICO */
@@ -71,10 +62,10 @@
       overflow: visible;
     }
     /* Animação da seta ao passar o mouse */
-    .toggle-btn i {
+    .toggle-btn svg {
       transition: transform 0.3s ease;
     }
-    .toggle-btn:hover i {
+    .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
     }
 
@@ -139,9 +130,6 @@
       font-size: 20px;
       display: inline-block;
       color: #006aff;
-    }
-    .sidebar.closed .toggle-btn {
-      transform: rotate(180deg);
     }
 
     /* BOTÃO DE IDIOMA */
@@ -305,11 +293,15 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- BOTÃO TOGGLE (sem linhas, mas com ícone setinha) -->
+    <!-- BOTÃO TOGGLE COM SVG INLINE DE SETA -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-      <i class="fas fa-arrow-left"></i>
+      <!-- Seta SVG apontando para a esquerda -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+      </svg>
     </button>
 
+    <!-- MENU LATERAL -->
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -391,16 +383,7 @@
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
-      const icon = toggleBtn.querySelector('i');
-      if (sidebar.classList.contains('closed')) {
-        // Altera ícone para arrow-right
-        icon.classList.remove('fa-arrow-left');
-        icon.classList.add('fa-arrow-right');
-      } else {
-        // Altera ícone para arrow-left
-        icon.classList.remove('fa-arrow-right');
-        icon.classList.add('fa-arrow-left');
-      }
+      // A rotação do SVG é controlada via CSS (.sidebar.closed .toggle-btn svg)
     });
 
     // ========== MENU LATERAL ==========
@@ -422,7 +405,7 @@
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    // ========== ATUALIZA LABEL DO MENU ==========
+    // ========== ATUALIZA RÓTULOS DO MENU ==========
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
@@ -577,9 +560,6 @@
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
-
-      // Sem lines nem cores aleatórias
-      // Efeito de hover simples nos botões
     }
 
     // ========== INICIALIZAÇÃO ==========
