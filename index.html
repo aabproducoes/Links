@@ -2,125 +2,670 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Certificados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Menu Vertical com Certificados</title>
+  
+  <!-- Google Fonts (Roboto + Montserrat) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  
+  <!-- Font Awesome para ícones (opcional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
   <style>
-    body {
-      background: #222;
-      color: #fff;
-      font-family: sans-serif;
-      margin: 0; 
-      padding: 1rem;
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    #certContainer {
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      font-family: "Roboto", sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 250px;
+      background-color: #000; /* fixo em preto */
+      color: #fff;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-    }
-    .certificate {
+      transition: width 0.3s ease;
       position: relative;
-      border: 1px solid #555;
+      font-family: "Montserrat", sans-serif; /* Fonte para o menu */
+      z-index: 1000;
     }
-    .certificate iframe {
-      width: 100%;
-      height: 400px;
-      border: none;
-      display: block;
-    }
-    .overlay {
+    .toggle-btn {
       position: absolute;
-      top: 10px; 
-      left: 10px;
-      background: rgba(0,0,0,0.6);
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      pointer-events: none; /* Permite cliques no iframe */
+      top: 20px;
+      right: -25px;
+      background: linear-gradient(45deg, #ff6b6b, #f06595);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      font-size: 18px;
     }
-    .overlay .path {
-      font-size: 12px;
+    .toggle-btn:hover {
+      background: linear-gradient(45deg, #f06595, #ff6b6b);
+      transform: rotate(180deg);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+    }
+    .toggle-btn:active {
+      transform: scale(0.95) rotate(180deg);
+      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+    }
+    .toggle-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    .menu {
+      list-style: none;
+      padding: 80px 0 0 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .menu li {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+      background: linear-gradient(to right, #000, #444);
+      color: #fff;
+      background-size: 200% 100%;
+      background-position: left;
+      border: 2px solid #fff;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 5px;
+      margin: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .menu li span {
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .menu li:hover {
+      background-position: right;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+    }
+    .menu li.active {
+      background-position: right;
+      font-weight: 700;
+      background: #333;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+    }
+
+    .sidebar.closed {
+      width: 60px;
+    }
+    .sidebar.closed .menu li {
+      justify-content: center;
+      padding: 15px 10px;
+      font-size: 16px;
+      background: linear-gradient(to bottom, #000, #444);
+      gap: 0;
+    }
+    .sidebar.closed .menu li span {
+      display: none;
+    }
+    .sidebar.closed .menu li::before {
+      content: attr(data-icon);
+      font-size: 20px;
+      display: inline-block;
+      color: #fff;
+    }
+    .sidebar.closed .menu li:hover {
+      background-position: bottom;
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+    }
+    .sidebar.closed .toggle-btn {
+      transform: rotate(180deg);
+    }
+
+    /* LANGUAGE SELECTOR */
+    .language-selector {
+      margin: 20px;
+      padding: 10px 15px;
+      background: linear-gradient(45deg, #ffafbd, #ffc3a0);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(255, 175, 189, 0.4);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .language-selector:hover {
+      background: linear-gradient(45deg, #ffc3a0, #ffafbd);
+      box-shadow: 0 6px 20px rgba(255, 175, 189, 0.6);
+    }
+    .language-selector select {
+      background: transparent;
+      color: #fff;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      appearance: none;
+    }
+    .language-selector select option {
+      background: #ffafbd;
+      color: #000;
+    }
+
+    /* MAIN CONTENT */
+    .content {
+      flex: 1;
+      padding: 20px;
+      background-color: #000;
+      color: #fff;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    #pageTitle {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    #knowledgeListTitle {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    /* COLOR PICKER FOR TEXT */
+    .main-color-picker {
+      padding: 20px;
+      background-color: #222;
+      border-top: 2px solid #fff;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .main-color-picker h3 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 18px;
+      text-align: center;
+    }
+    .color-control {
+      display: flex;
+      flex-direction: column;
+    }
+    .color-control label {
+      color: #fff;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    .color-control input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #555;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+
+    .reset-btn {
+      background: linear-gradient(45deg, #1e3c72, #2a5298);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 20px;
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .reset-btn:hover {
+      background: linear-gradient(45deg, #2a5298, #1e3c72);
+      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.6);
+      transform: translateY(-2px);
+    }
+    .reset-btn:active {
+      transform: scale(0.95) translateY(-2px);
+      box-shadow: 0 3px 10px rgba(30, 60, 114, 0.3);
+    }
+
+    /* CERTIFICATES (PDF + TEXT OVERLAY) */
+    .certificate-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .certificate-container iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    .certificate-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 18px;
+      pointer-events: none; /* clique passa p/ iframe */
+      max-width: 90%;
+      word-wrap: break-word;
+    }
+    .certificate-overlay .pdfPath {
+      font-size: 14px;
       color: #ccc;
       margin-top: 4px;
-      word-break: break-all; /* Quebra linha se o caminho for longo */
+    }
+    .certificate-overlay .pdfName {
+      font-size: 14px;
+      color: #bbb;
+      margin-top: 4px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        width: 250px;
+        transition: left 0.3s ease;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .toggle-btn {
+        position: fixed;
+        top: 20px;
+        left: 250px;
+        z-index: 1100;
+      }
+      .sidebar.closed .toggle-btn {
+        left: 60px;
+      }
+      .content {
+        padding: 15px;
+      }
+      .main-color-picker {
+        padding: 15px;
+        margin-top: 15px;
+      }
+    }
+    @media (max-width: 480px) {
+      .toggle-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .menu li {
+        font-size: 14px;
+        padding: 12px 15px;
+      }
+      .reset-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+      }
+      .language-selector {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      .certificate-container iframe {
+        height: 300px;
+      }
+      .certificate-overlay {
+        font-size: 16px;
+      }
+      .certificate-overlay .pdfPath,
+      .certificate-overlay .pdfName {
+        font-size: 12px;
+      }
     }
   </style>
 </head>
 <body>
 
-<h1>Certificados</h1>
-<div id="certContainer">Carregando...</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+    <ul class="menu">
+      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
+      <li data-page="social" data-icon="🔗"><span>Social</span></li>
+      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
+      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
+      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
+    </ul>
 
-<script>
-async function fetchCertificates() {
-  try {
-    // Lê o arquivo CertificadosList.txt
-    const response = await fetch('./Certificados/CertificadosList.txt');
-    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
-    const text = await response.text();
-    
-    // Separa por linhas não vazias
-    const lines = text.split('\n').filter(line => line.trim() !== '');
-    
-    // Cada linha: "Certificados/Certificado-xxx.pdf - Título"
-    return lines.map(line => {
-      // Separa apenas na primeira ocorrência de " - "
-      const separator = ' - ';
-      const separatorIndex = line.indexOf(separator);
-      
-      if (separatorIndex === -1) {
-        console.warn('Formato inválido:', line);
-        return { pdfPath: '', title: 'Título não disponível' };
+    <!-- Language Selector -->
+    <div class="language-selector">
+      <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+      </select>
+    </div>
+
+    <!-- Text Color Picker -->
+    <div class="main-color-picker">
+      <h3>Customize Main Content</h3>
+      <div class="color-control">
+        <label for="mainTextHue">Text Hue</label>
+        <input type="range" id="mainTextHue" min="0" max="360" value="0">
+      </div>
+      <div class="color-control">
+        <label for="mainTextSaturation">Text Saturation</label>
+        <input type="range" id="mainTextSaturation" min="0" max="100" value="0">
+      </div>
+      <div class="color-control">
+        <label for="mainTextLightness">Text Lightness</label>
+        <input type="range" id="mainTextLightness" min="0" max="100" value="100">
+      </div>
+
+      <button id="resetMainColorsBtn" class="reset-btn">
+        <i class="fas fa-redo"></i> Reset Colors
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="content" id="content">
+    <h1 id="pageTitle">Profile</h1>
+    <div id="pageContent">
+      <h2 id="knowledgeListTitle">Knowledge List</h2>
+      <div id="knowledgeList">
+        <!-- Exemplo inicial. Depois, conteudo é carregado dinamicamente -->
+        <p>JavaScript</p>
+        <p>HTML & CSS</p>
+        <p>React</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---- REFERENCIAS ----
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const menuItems = document.querySelectorAll('.menu li');
+    const languageSelect = document.getElementById('languageSelect');
+    const pageTitle = document.getElementById('pageTitle');
+    const knowledgeListDiv = document.getElementById('knowledgeList');
+    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+    const content = document.getElementById('content');
+
+    // Sliders p/ cor do texto
+    const mainTextHue = document.getElementById('mainTextHue');
+    const mainTextSaturation = document.getElementById('mainTextSaturation');
+    const mainTextLightness = document.getElementById('mainTextLightness');
+    const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
+
+    // Traducao
+    const translations = {
+      en: {
+        profileTitle: 'Profile',
+        knowledgeListTitle: 'Knowledge List',
+        socialTitle: 'Social',
+        contactTitle: 'Contact',
+        certificatesTitle: 'Certificates',
+        
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        projectsTitle: 'Projects',
+        blenderProjects: 'Blender Projects',
+        gimpProjects: 'Gimp Projects',
+        blenderAnimations: 'Blender Animations',
+        animatedBackground: 'Animated Background',
+        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+      },
+      pt: {
+        profileTitle: 'Perfil',
+        knowledgeListTitle: 'Lista de Conhecimento',
+        socialTitle: 'Social',
+        contactTitle: 'Contato',
+        certificatesTitle: 'Certificados',
+        
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        projectsTitle: 'Projetos',
+        blenderProjects: 'Projetos Blender',
+        gimpProjects: 'Projetos Gimp',
+        blenderAnimations: 'Animações Blender',
+        animatedBackground: 'Fundo Animado',
+        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
       }
-      
-      const pdfPath = line.substring(0, separatorIndex).trim(); // Antes do " - "
-      const title = line.substring(separatorIndex + separator.length).trim(); // Depois do " - "
-      
-      return { pdfPath, title };
-    });
-  } catch (err) {
-    console.error('Falha ao ler CertificadosList.txt:', err);
-    return [];
-  }
-}
+    };
 
-async function showCertificates() {
-  const container = document.getElementById('certContainer');
-  container.innerHTML = 'Carregando...';
+    let currentLanguage = 'en'; // padrao
+    let currentPage = 'profile';
 
-  const certs = await fetchCertificates();
-  container.innerHTML = ''; // Limpa o carregamento
-
-  certs.forEach(cert => {
-    if (cert.pdfPath) {
-      // Cria um container para cada certificado
-      const div = document.createElement('div');
-      div.className = 'certificate';
-      
-      // IFRAME com o caminho EXATO do TXT
-      const iframe = document.createElement('iframe');
-      iframe.src = cert.pdfPath; 
-      div.appendChild(iframe);
-
-      // Overlay com título e caminho
-      const overlay = document.createElement('div');
-      overlay.className = 'overlay';
-      overlay.innerHTML = `
-        <div class="title">${cert.title}</div>
-        <div class="path">${cert.pdfPath}</div>
-      `;
-      div.appendChild(overlay);
-
-      container.appendChild(div);
-    } else {
-      // Fallback caso não haja pdfPath
-      const p = document.createElement('p');
-      p.textContent = cert.title;
-      container.appendChild(p);
+    // ========== FUNCOES PARA COR DO TEXTO ==========
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-  });
-}
+    function generateRandomLightHSL() {
+      const h = getRandomInt(0, 360);
+      const s = getRandomInt(50, 100);
+      const l = getRandomInt(80, 100);
+      return { h, s, l };
+    }
 
-// Executa ao carregar a página
-document.addEventListener('DOMContentLoaded', showCertificates);
-</script>
+    function randomizeColors() {
+      const c = generateRandomLightHSL();
+      content.style.setProperty('--main-text-h', c.h);
+      content.style.setProperty('--main-text-s', c.s + '%');
+      content.style.setProperty('--main-text-l', c.l + '%');
 
+      mainTextHue.value = c.h;
+      mainTextSaturation.value = c.s;
+      mainTextLightness.value = c.l;
+    }
+    function updateMainTextColor() {
+      const h = parseInt(mainTextHue.value);
+      const s = parseInt(mainTextSaturation.value);
+      const l = parseInt(mainTextLightness.value);
+      content.style.setProperty('--main-text-h', h);
+      content.style.setProperty('--main-text-s', s + '%');
+      content.style.setProperty('--main-text-l', l + '%');
+    }
+
+    resetMainColorsBtn.addEventListener('click', randomizeColors);
+    mainTextHue.addEventListener('input', updateMainTextColor);
+    mainTextSaturation.addEventListener('input', updateMainTextColor);
+    mainTextLightness.addEventListener('input', updateMainTextColor);
+
+    // ========== TOGGLE SIDEBAR ==========
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      sidebar.classList.toggle('open');
+      const icon = toggleBtn.querySelector('i');
+      if (sidebar.classList.contains('closed')) {
+        icon.classList.remove('fa-arrow-left');
+        icon.classList.add('fa-arrow-right');
+      } else {
+        icon.classList.remove('fa-arrow-right');
+        icon.classList.add('fa-arrow-left');
+      }
+    });
+
+    // ========== MENU ==========
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentPage = item.getAttribute('data-page');
+        updateContent();
+      });
+    });
+
+    // ========== IDIOMA ==========
+    function changeLanguage() {
+      currentLanguage = languageSelect.value;
+      updateContent();
+    }
+
+    // ========== EXEMPLO: Profile (contem a "KnowledgeList") ==========
+    async function fetchKnowledgeList() {
+      try {
+        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const txt = await resp.text();
+        return txt.split('\n').filter(line => line.trim() !== '');
+      } catch (err) {
+        console.error(err);
+        return ['Erro ao carregar KnowledgeList'];
+      }
+    }
+    async function populateKnowledgeList() {
+      knowledgeListDiv.innerHTML = '';
+      const lines = await fetchKnowledgeList();
+      lines.forEach(line => {
+        const p = document.createElement('p');
+        p.textContent = line;
+        knowledgeListDiv.appendChild(p);
+      });
+    }
+
+    // ========== CERTIFICADOS ==========
+    // LE E PROCESSA: "Certificados/certificado-xxxx.pdf - Titulo"
+    async function fetchCertificatesList() {
+      try {
+        const resp = await fetch('./Certificados/CertificadosList.txt');
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const text = await resp.text();
+        const lines = text.split('\n').filter(l => l.trim() !== '');
+
+        // Ex.: "Certificados/Certificado-10344-10494022.pdf - Curso de Pacote Office"
+        return lines.map(line => {
+          // Separa no primeiro " - "
+          const sep = ' - ';
+          const idx = line.indexOf(sep);
+          if (idx === -1) {
+            console.warn('Formato invalido:', line);
+            return { fullPath: '', pdfName: '', title: '' };
+          }
+          // Caminho completo do PDF (ex. "Certificados/Certificado-10344-10494022.pdf")
+          const fullPath = line.substring(0, idx).trim();
+          // Titulo (ex. "Curso de Pacote Office")
+          const title = line.substring(idx + sep.length).trim();
+
+          // Nome do PDF é tudo depois do ultimo '/', ex.: "Certificado-10344-10494022.pdf"
+          let pdfName = fullPath;
+          const lastSlash = fullPath.lastIndexOf('/');
+          if (lastSlash !== -1) {
+            pdfName = fullPath.substring(lastSlash + 1);
+          }
+
+          return { fullPath, pdfName, title };
+        });
+      } catch (err) {
+        console.error('Erro ao ler CertificadosList.txt:', err);
+        return [];
+      }
+    }
+
+    async function populateCertificatesList() {
+      knowledgeListDiv.innerHTML = '';
+      const list = await fetchCertificatesList();
+
+      list.forEach(cert => {
+        if (cert.fullPath) {
+          const container = document.createElement('div');
+          container.classList.add('certificate-container');
+
+          // iframe do PDF
+          const iframe = document.createElement('iframe');
+          iframe.src = cert.fullPath;  // caminho exato do TXT
+          container.appendChild(iframe);
+
+          // overlay
+          const overlay = document.createElement('div');
+          overlay.classList.add('certificate-overlay');
+          // exibe o titulo e tambem o path e o nome do pdf
+          overlay.innerHTML = `
+            <div class="title"><strong>Título:</strong> ${cert.title}</div>
+            <div class="pdfPath"><strong>Caminho:</strong> ${cert.fullPath}</div>
+            <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
+          `;
+          container.appendChild(overlay);
+
+          knowledgeListDiv.appendChild(container);
+        }
+      });
+    }
+
+    // ========== UPDATE CONTENT ==========
+    function updateContent() {
+      const dict = translations[currentLanguage];
+      pageTitle.textContent = dict[`${currentPage}Title`] || '';
+
+      if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
+        document.getElementById('pageContent').style.display = 'block';
+      } else {
+        document.getElementById('pageContent').style.display = 'none';
+      }
+
+      if (currentPage === 'profile') {
+        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
+        populateKnowledgeList();
+      } else if (currentPage === 'social') {
+        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
+        knowledgeListDiv.innerHTML = `
+          <p><a href="https://www.facebook.com" target="_blank" class="main-link">${dict.facebook}</a></p>
+          <p><a href="https://www.instagram.com" target="_blank" class="main-link">${dict.instagram}</a></p>
+        `;
+      } else if (currentPage === 'projects') {
+        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
+        knowledgeListDiv.innerHTML = `
+          <p><a href="#" class="main-link">${dict.blenderProjects}</a></p>
+          <p><a href="#" class="main-link">${dict.gimpProjects}</a></p>
+          <p><a href="#" class="main-link">${dict.blenderAnimations}</a></p>
+          <p><a href="#" class="main-link">${dict.animatedBackground}</a></p>
+        `;
+      } else if (currentPage === 'contact') {
+        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
+        knowledgeListDiv.innerHTML = `
+          <p>${dict.whatsapp}</p>
+          <p>${dict.email}</p>
+        `;
+      } else if (currentPage === 'certificates') {
+        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
+        populateCertificatesList();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      randomizeColors(); // Ajusta cor do texto
+      updateContent();   // Mostra a pagina atual
+    });
+  </script>
 </body>
 </html>
