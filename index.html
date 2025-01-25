@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Sério com Botões</title>
+  <title>Site Divertido com Botões Animados</title>
 
-  <!-- Google Fonts (Roboto + Montserrat) -->
+  <!-- Google Fonts (ex: Roboto + Monserrat) -->
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
     rel="stylesheet"
@@ -21,40 +21,46 @@
   />
 
   <style>
-    /* RESET BÁSICO */
+    /* RESET */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+    /* BACKGROUND TEXTURIZADO E CORES DIVERTIDAS */
     body {
       display: flex;
       min-height: 100vh;
-      font-family: "Roboto", sans-serif;
-      background-color: #111; 
-      color: #f0f0f0;
+      font-family: 'Roboto', sans-serif;
+      color: #fff;
+      background: url("assets/bg-texture.png") repeat; /* Ajuste a textura */
+      /* ou poderia ser um gradiente colorido, ex: 
+         background: linear-gradient(45deg, #f093fb, #f5576c);
+      */
       overflow-x: hidden;
     }
 
-    /* SIDEBAR */
+    /* SIDEBAR - cores mais vibrantes para um tema divertido */
     .sidebar {
       width: 250px;
-      background-color: #111;
+      background-color: rgba(0,0,0,0.5);
+      backdrop-filter: blur(5px);
       color: #fff;
       display: flex;
       flex-direction: column;
       transition: width 0.3s ease;
       position: relative;
-      font-family: "Montserrat", sans-serif;
+      font-family: 'Montserrat', sans-serif;
       z-index: 1000;
-      border-right: 1px solid #333;
+      border-right: 2px dashed #ffdf00; /* ex: linha divertida */
     }
+
     .toggle-btn {
       position: absolute;
       top: 20px;
       right: -25px;
-      background: #333;
+      background: #ff88aa;
       color: #fff;
       border: none;
       border-radius: 50%;
@@ -70,8 +76,8 @@
       overflow: visible;
     }
     .toggle-btn:hover {
-      background: #444;
-      transform: scale(1.05);
+      background: #ffaadd;
+      transform: scale(1.1);
     }
     .toggle-btn:active {
       transform: scale(0.95);
@@ -79,12 +85,13 @@
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
-    /* Efeito de linhas no hover (não-randômico) */
+
+    /* Pequen@s “linhas” no hover do botão (não-randômico) */
     .toggle-btn .line {
       position: absolute;
       width: 2px;
       height: 0;
-      background: #f06595;
+      background: #ffdf00; /* cor amarela */
       opacity: 0;
       transition: opacity 0.3s, height 0.5s;
     }
@@ -93,27 +100,24 @@
       left: 25px;
       transform-origin: top;
     }
-    .toggle-btn:hover .line1 {
+    .toggle-btn:hover .line {
       opacity: 1;
       height: 40px;
+    }
+    .toggle-btn:hover .line1 {
       transform: translate(-2px, -40px);
     }
     .toggle-btn:hover .line2 {
-      opacity: 1;
-      height: 40px;
       transform: rotate(60deg) translate(-2px, -40px);
     }
     .toggle-btn:hover .line3 {
-      opacity: 1;
-      height: 40px;
       transform: rotate(120deg) translate(-2px, -40px);
     }
     .toggle-btn:hover .line4 {
-      opacity: 1;
-      height: 40px;
       transform: rotate(180deg) translate(-2px, -40px);
     }
 
+    /* MENU */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -125,12 +129,12 @@
       padding: 15px 20px;
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease;
-      background: #111;
+      background: rgba(255,255,255,0.1);
       color: #fff;
-      border: 1px solid #333;
+      border: 1px solid rgba(255,255,255,0.2);
       font-size: 16px;
       font-weight: 500;
-      border-radius: 3px;
+      border-radius: 8px;
       margin: 5px 10px;
       display: flex;
       align-items: center;
@@ -138,14 +142,15 @@
       position: relative;
     }
     .menu li:hover {
-      background: #222;
+      background: rgba(255,255,255,0.2);
       transform: translateX(5px);
       box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     }
     .menu li.active {
-      background: #333;
+      background: rgba(255,255,255,0.3);
       font-weight: 700;
     }
+
     .sidebar.closed {
       width: 60px;
     }
@@ -153,7 +158,6 @@
       justify-content: center;
       padding: 15px 10px;
       font-size: 16px;
-      background: #111;
       margin: 5px 5px;
     }
     .sidebar.closed .menu li span {
@@ -173,9 +177,9 @@
     .language-selector {
       margin: 20px;
       padding: 10px 15px;
-      background: #222;
+      background: rgba(255,255,255,0.1);
       color: #fff;
-      border: 1px solid #333;
+      border: 1px solid rgba(255,255,255,0.2);
       border-radius: 25px;
       display: flex;
       align-items: center;
@@ -184,7 +188,7 @@
       transition: background 0.3s ease, box-shadow 0.3s ease;
     }
     .language-selector:hover {
-      background: #333;
+      background: rgba(255,255,255,0.2);
       box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
     }
     .language-selector select {
@@ -197,15 +201,16 @@
       appearance: none;
     }
 
-    /* MAIN CONTENT */
+    /* CONTEÚDO PRINCIPAL */
     .content {
       flex: 1;
       padding: 20px;
-      background-color: #111;
-      color: #f0f0f0;
+      background-color: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      color: #fff;
       font-size: 18px;
       line-height: 1.6;
-      border-left: 1px solid #333;
+      border-left: 2px dashed #ffdf00;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 1s ease-out, transform 1s ease-out;
@@ -217,12 +222,12 @@
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
-      border-bottom: 1px solid #333;
       padding-bottom: 5px;
       transition: color 0.3s ease;
+      border-bottom: 1px solid #ffdf00;
     }
     #pageTitle:hover {
-      color: #f06595;
+      color: #ffdf00;
     }
     #knowledgeListTitle {
       font-size: 22px;
@@ -230,31 +235,30 @@
       transition: color 0.3s ease;
     }
     #knowledgeListTitle:hover {
-      color: #f06595;
+      color: #ffdf00;
     }
 
-    /* BOTÕES (transformando links em botões) */
+    /* BOTÕES (substituindo links) */
     a.main-btn {
       display: inline-block;
-      background: #222;
+      background: #333;
       color: #fff;
       padding: 10px 15px;
-      border: 1px solid #444;
-      border-radius: 4px;
+      border: 2px solid #999;
+      border-radius: 8px;
       text-decoration: none;
-      font-weight: 500;
+      font-weight: 600;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
+      margin: 5px 0; /* pequeno espaçamento */
     }
+    /* HOVER => gera cor aleatória via JS => mas deixamos um fallback aqui */
     a.main-btn:hover {
-      background: #f06595;
-      color: #fff;
       transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(240, 101, 149, 0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
     a.main-btn:active {
       transform: scale(0.95);
-      box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
     }
 
     /* ANIMAÇÕES DE SCROLL */
@@ -272,10 +276,10 @@
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
-      border: 1px solid #333;
+      border: 2px solid #999;
       border-radius: 5px;
       overflow: hidden;
-      background: #2a2a2a;
+      background: rgba(0,0,0,0.2);
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
       transform: translateY(20px);
       opacity: 0;
@@ -310,7 +314,7 @@
     }
     .certificate-overlay:hover {
       background-color: rgba(0, 0, 0, 0.8);
-      color: #f06595;
+      color: #ffdf00;
     }
     .certificate-overlay .fullPath {
       font-size: 14px;
@@ -381,14 +385,11 @@
 </head>
 <body>
 
-  <!-- SVG Overlay para desenhar linhas -->
-  <svg id="svgOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999;"></svg>
-
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
+    <!-- Botão toggle -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
-      <!-- Quatro linhas fixas para efeito de hover (não-randômico) -->
       <div class="line line1"></div>
       <div class="line line2"></div>
       <div class="line line3"></div>
@@ -403,7 +404,7 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- Seletor de Idioma -->
+    <!-- Selector de Idioma -->
     <div class="language-selector">
       <select id="languageSelect" onchange="changeLanguage()">
         <option value="en">English</option>
@@ -419,24 +420,17 @@
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
-        <p>JavaScript</p>
-        <p>HTML & CSS</p>
-        <p>React</p>
-        <!-- Exemplo de uso de botões em vez de links: -->
-        <p>
-          <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
-            Visitar Repositório
-          </a>
-        </p>
+        <p class="animated-text">JavaScript</p>
+        <p class="animated-text">HTML & CSS</p>
+        <p class="animated-text">React</p>
+        <!-- Exemplo de Botão: -->
+        <a href="https://github.com" target="_blank" class="main-btn">Meu GitHub</a>
       </div>
     </div>
   </div>
 
-  <!-- Script Adicionado -->
   <script>
-    // =========================
-    //  REFERÊNCIAS
-    // =========================
+    /* -------------- REFERENCIAS -------------- */
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -445,11 +439,8 @@
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
-    const svgOverlay = document.getElementById('svgOverlay');
 
-    // =========================
-    //  TRADUÇÕES
-    // =========================
+    /* -------------- TRADUCOES -------------- */
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -490,9 +481,105 @@
     let currentLanguage = 'en'; 
     let currentPage = 'profile';
 
-    // =========================
-    //  TOGGLE SIDEBAR
-    // =========================
+    /* -------------- RANDOM HELPER -------------- */
+    function randomColor() {
+      // Gera cor aleatoria hex ex: #RRGGBB
+      const r = Math.floor(Math.random() * 256);
+      const g = Math.floor(Math.random() * 256);
+      const b = Math.floor(Math.random() * 256);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    /* -------------- APLICA RANDOM COLOR E LINHAS QUANDO HOVER BOTAO -------------- */
+    function addButtonHoverEffects(button) {
+      button.addEventListener('mouseenter', () => {
+        // Cor aleatoria para fundo
+        const col = randomColor();
+        button.style.backgroundColor = col;
+
+        // Cria "linhas" do border do botao ate pontos proximos
+        // Vamos criar 3 ou 4 "line" divs
+        for (let i = 0; i < 3; i++) {
+          const line = document.createElement('div');
+          line.style.position = 'absolute';
+          line.style.backgroundColor = randomColor();
+          line.style.opacity = '0.8';
+          line.style.width = '2px';
+          line.style.height = '0px';
+          
+          // Pega bounding do botao
+          const rect = button.getBoundingClientRect();
+          const containerX = rect.left;
+          const containerY = rect.top;
+          const w = rect.width;
+          const h = rect.height;
+
+          // Ponto inicial: alguma borda do botao
+          // Escolhemos random top/bottom ou left/right
+          let startX, startY;
+          const borderSide = Math.floor(Math.random() * 4);
+          switch (borderSide) {
+            case 0: // top
+              startX = Math.random() * w;
+              startY = 0;
+              break;
+            case 1: // bottom
+              startX = Math.random() * w;
+              startY = h;
+              break;
+            case 2: // left
+              startX = 0;
+              startY = Math.random() * h;
+              break;
+            default: // right
+              startX = w;
+              startY = Math.random() * h;
+              break;
+          }
+
+          // Ponto final (random near points)
+          const endX = startX + (Math.random() * 100 - 50); // +-50
+          const endY = startY + (Math.random() * 100 - 50);
+
+          // posiciona line
+          line.style.left = startX + 'px';
+          line.style.top = startY + 'px';
+          line.style.transition = 'height 0.4s ease, transform 0.4s ease';
+
+          // pos absoluta dentro do button
+          button.style.position = 'relative';
+          button.appendChild(line);
+
+          // Timeout => anima
+          setTimeout(() => {
+            // calcula angulo e comprimento
+            const dx = endX - startX;
+            const dy = endY - startY;
+            const length = Math.sqrt(dx*dx + dy*dy);
+
+            // rotacao
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+            line.style.height = length + 'px';
+            line.style.transformOrigin = 'top left';
+            line.style.transform = `rotate(${angle}deg)`;
+          }, 50);
+
+          // remove depois de uns 0.7s
+          setTimeout(() => {
+            if (line.parentNode) {
+              line.parentNode.removeChild(line);
+            }
+          }, 700);
+        }
+      });
+      button.addEventListener('mouseleave', () => {
+        // Restaura cor padrao
+        button.style.backgroundColor = '#333';
+      });
+    }
+
+    /* -------------- TOGGLE SIDEBAR -------------- */
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -506,9 +593,7 @@
       }
     });
 
-    // =========================
-    //  MENU
-    // =========================
+    /* -------------- MENU -------------- */
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -518,17 +603,13 @@
       });
     });
 
-    // =========================
-    //  IDIOMA
-    // =========================
+    /* -------------- IDIOMA -------------- */
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // =========================
-    //  PROFILE (KNOWLEDGE LIST)
-    // =========================
+    /* -------------- PROFILE -------------- */
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -549,11 +630,19 @@
         p.classList.add('animated-text');
         knowledgeListDiv.appendChild(p);
       });
+      // Adicionamos um botão de exemplo
+      const exBtn = document.createElement('a');
+      exBtn.href = 'https://github.com';
+      exBtn.target = '_blank';
+      exBtn.textContent = 'Exemplo de Botão';
+      exBtn.className = 'main-btn';
+      knowledgeListDiv.appendChild(exBtn);
+
+      // Adiciona efeito de cor aleatoria e linhas
+      addButtonHoverEffects(exBtn);
     }
 
-    // =========================
-    //  CERTIFICADOS
-    // =========================
+    /* -------------- CERTIFICADOS -------------- */
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -561,24 +650,21 @@
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
-        // "Certificados/Certificado-...pdf - Título"
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
           if (idx === -1) {
             console.warn('Formato inválido:', line);
-            return { fullPath: '', pdfName:'', title:'' };
+            return { fullPath:'', pdfName:'', title:'' };
           }
           const fullPath = line.substring(0, idx).trim();
           const title = line.substring(idx + sep.length).trim();
 
-          // Nome do PDF depois do último "/"
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if (lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash + 1);
           }
-
           return { fullPath, pdfName, title };
         });
       } catch (err) {
@@ -586,7 +672,6 @@
         return [];
       }
     }
-
     async function populateCertificatesList() {
       knowledgeListDiv.innerHTML = '';
       const list = await fetchCertificatesList();
@@ -596,12 +681,10 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container', 'animated-item');
 
-          // iframe
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
           container.appendChild(iframe);
 
-          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -610,21 +693,17 @@
             <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
           `;
           container.appendChild(overlay);
-
           knowledgeListDiv.appendChild(container);
         }
       });
 
-      // Animação de aparição
       setTimeout(() => {
         const animatedItems = document.querySelectorAll('.animated-item');
         animatedItems.forEach(item => item.classList.add('visible'));
       }, 100);
     }
 
-    // =========================
-    //  ATUALIZA CONTEÚDO
-    // =========================
+    /* -------------- UPDATE CONTENT -------------- */
     function updateContent() {
       const dict = translations[currentLanguage];
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
@@ -645,6 +724,9 @@
           <p><a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a></p>
           <p><a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a></p>
         `;
+        // Adiciona hover effects p/ cada btn
+        const btns = knowledgeListDiv.querySelectorAll('.main-btn');
+        btns.forEach(b => addButtonHoverEffects(b));
       } else if (currentPage === 'projects') {
         knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
@@ -653,6 +735,9 @@
           <p><a href="#" class="main-btn">${dict.blenderAnimations}</a></p>
           <p><a href="#" class="main-btn">${dict.animatedBackground}</a></p>
         `;
+        // Efeitos
+        const btns = knowledgeListDiv.querySelectorAll('.main-btn');
+        btns.forEach(b => addButtonHoverEffects(b));
       } else if (currentPage === 'contact') {
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
         knowledgeListDiv.innerHTML = `
@@ -664,15 +749,13 @@
         populateCertificatesList();
       }
 
-      // Animação fade-in no conteúdo principal
+      // Fade-in no content
       setTimeout(() => {
         content.classList.add('visible');
       }, 100);
     }
 
-    // =========================
-    //  SCROLL ANIMATIONS
-    // =========================
+    /* -------------- SCROLL ANIMATIONS -------------- */
     function handleScrollAnimations() {
       const animatedElements = document.querySelectorAll('.animated-text, .animated-item');
       animatedElements.forEach(el => {
@@ -684,63 +767,11 @@
     }
     window.addEventListener('scroll', handleScrollAnimations);
 
-    // =========================
-    //  FUNÇÃO PARA DESENHAR LINHAS
-    // =========================
-    function drawLinesFromButton(button) {
-      const rect = button.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-
-      const numberOfLines = 5; // Número de linhas por botão
-      const maxDistance = 100; // Distância máxima das linhas
-
-      for (let i = 0; i < numberOfLines; i++) {
-        // Gera pontos aleatórios dentro de um círculo
-        const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * maxDistance;
-
-        const endX = centerX + distance * Math.cos(angle);
-        const endY = centerY + distance * Math.sin(angle);
-
-        // Cria a linha SVG
-        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        line.setAttribute("x1", centerX);
-        line.setAttribute("y1", centerY);
-        line.setAttribute("x2", endX);
-        line.setAttribute("y2", endY);
-        line.classList.add('line');
-
-        svgOverlay.appendChild(line);
-
-        // Remove a linha após a animação
-        line.addEventListener('animationend', () => {
-          line.remove();
-        });
-      }
-    }
-
-    // =========================
-    //  ADICIONAR EVENTOS DE HOVER NOS BOTÕES
-    // =========================
-    function addHoverEffectsToButtons() {
-      const buttons = document.querySelectorAll('.main-btn');
-      buttons.forEach(button => {
-        button.addEventListener('mouseenter', () => {
-          drawLinesFromButton(button);
-        });
-      });
-    }
-
-    // =========================
-    //  INICIALIZAÇÃO
-    // =========================
+    /* -------------- INICIALIZAÇÃO -------------- */
     document.addEventListener('DOMContentLoaded', () => {
-      updateContent(); 
-      handleScrollAnimations(); 
-      addHoverEffectsToButtons(); // Adiciona os eventos de hover aos botões
+      updateContent();
+      handleScrollAnimations();
     });
   </script>
-
 </body>
 </html>
