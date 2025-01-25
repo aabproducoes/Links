@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Sério com Botões e Efeitos</title>
+  <title>Site Sério com Botões Animados</title>
 
   <!-- Google Fonts (Roboto + Montserrat) -->
   <link
@@ -11,7 +11,7 @@
     rel="stylesheet"
   />
   
-  <!-- Font Awesome (opcional) -->
+  <!-- Font Awesome para ícones (opcional) -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -37,6 +37,7 @@
       background-color: #111; 
       color: #f0f0f0;
       overflow-x: hidden;
+      position: relative;
     }
 
     /* ======================================
@@ -96,31 +97,31 @@
       height: 0;
       background: #f06595;
       opacity: 0;
-      transform-origin: top;
-      transition: all 0.5s ease-out;
+      transition: opacity 0.3s, height 0.5s;
     }
-
     .line1, .line2, .line3, .line4 {
       top: 25px;
       left: 25px;
       transform-origin: top;
     }
-
-    .toggle-btn:hover .line {
+    .toggle-btn:hover .line1 {
       opacity: 1;
       height: 40px;
-    }
-
-    .toggle-btn:hover .line1 {
       transform: translate(-2px, -40px);
     }
     .toggle-btn:hover .line2 {
+      opacity: 1;
+      height: 40px;
       transform: rotate(60deg) translate(-2px, -40px);
     }
     .toggle-btn:hover .line3 {
+      opacity: 1;
+      height: 40px;
       transform: rotate(120deg) translate(-2px, -40px);
     }
     .toggle-btn:hover .line4 {
+      opacity: 1;
+      height: 40px;
       transform: rotate(180deg) translate(-2px, -40px);
     }
 
@@ -132,7 +133,6 @@
       display: flex;
       flex-direction: column;
     }
-
     .menu li {
       padding: 15px 20px;
       cursor: pointer;
@@ -149,22 +149,58 @@
       gap: 10px;
       position: relative;
     }
-
     .menu li:hover {
       background: #222;
       transform: translateX(5px);
       box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     }
-
     .menu li.active {
       background: #333;
       font-weight: 700;
     }
 
+    /* ANIMAÇÃO PARA LINKS */
+    a.main-btn {
+      display: inline-block;
+      background: #222;
+      color: #fff;
+      padding: 10px 15px;
+      border: 1px solid #444;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+    a.main-btn:hover {
+      background: #f06595;
+      color: #fff;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(240, 101, 149, 0.4);
+    }
+    a.main-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
+    }
+
+    a.main-btn::after {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background-color: #f06595;
+      left: 0;
+      bottom: -3px;
+      transition: width 0.3s ease;
+    }
+    a.main-btn:hover::after {
+      width: 100%;
+    }
+
+    /* COLAPSO SIDEBAR */
     .sidebar.closed {
       width: 60px;
     }
-
     .sidebar.closed .menu li {
       justify-content: center;
       padding: 15px 10px;
@@ -172,18 +208,15 @@
       background: #111;
       margin: 5px 5px;
     }
-
     .sidebar.closed .menu li span {
       display: none;
     }
-
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
       font-size: 20px;
       display: inline-block;
       color: #fff;
     }
-
     .sidebar.closed .toggle-btn {
       transform: rotate(180deg);
     }
@@ -202,12 +235,10 @@
       box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
       transition: background 0.3s ease, box-shadow 0.3s ease;
     }
-
     .language-selector:hover {
       background: #333;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
     }
-
     .language-selector select {
       background: transparent;
       color: #fff;
@@ -230,13 +261,13 @@
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 1s ease-out, transform 1s ease-out;
+      position: relative;
+      overflow: hidden;
     }
-
     .content.visible {
       opacity: 1;
       transform: translateY(0);
     }
-
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
@@ -244,22 +275,19 @@
       padding-bottom: 5px;
       transition: color 0.3s ease;
     }
-
     #pageTitle:hover {
       color: #f06595;
     }
-
     #knowledgeListTitle {
       font-size: 22px;
       margin-bottom: 8px;
       transition: color 0.3s ease;
     }
-
     #knowledgeListTitle:hover {
       color: #f06595;
     }
 
-    /* BOTÕES */
+    /* BOTÕES ANIMADOS */
     a.main-btn {
       display: inline-block;
       background: #222;
@@ -271,31 +299,31 @@
       font-weight: 500;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      margin-top: 10px; /* Espaço entre os botões */
+      margin-top: 10px;
     }
-
     a.main-btn:hover {
       background: #f06595;
       color: #fff;
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(240, 101, 149, 0.4);
     }
-
     a.main-btn:active {
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
     }
 
-    /* ANIMAÇÕES DE SCROLL */
-    .animated-text, .animated-item {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease-out, transform 1s ease-out;
+    a.main-btn::after {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      background-color: #f06595;
+      left: 0;
+      bottom: -3px;
+      transition: width 0.3s ease;
     }
-
-    .animated-text.visible, .animated-item.visible {
-      opacity: 1;
-      transform: translateY(0);
+    a.main-btn:hover::after {
+      width: 100%;
     }
 
     /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
@@ -311,23 +339,19 @@
       opacity: 0;
       transition: opacity 1s ease-out, transform 1s ease-out;
     }
-
     .certificate-container.visible {
       transform: translateY(0);
       opacity: 1;
     }
-
     .certificate-container iframe {
       width: 100%;
       height: 500px;
       border: none;
       transition: transform 0.3s ease;
     }
-
     .certificate-container iframe:hover {
       transform: scale(1.02);
     }
-
     .certificate-overlay {
       position: absolute;
       top: 20px;
@@ -342,26 +366,22 @@
       word-wrap: break-word;
       transition: background-color 0.3s ease, color 0.3s ease;
     }
-
     .certificate-overlay:hover {
       background-color: rgba(0, 0, 0, 0.8);
       color: #f06595;
     }
-
     .certificate-overlay .fullPath {
       font-size: 14px;
       color: #ccc;
       margin-top: 4px;
       transition: color 0.3s ease;
     }
-
     .certificate-overlay .pdfName {
       font-size: 14px;
       color: #bbb;
       margin-top: 4px;
       transition: color 0.3s ease;
     }
-
     .certificate-overlay:hover .fullPath,
     .certificate-overlay:hover .pdfName {
       color: #fff;
@@ -393,7 +413,6 @@
         padding: 15px;
       }
     }
-
     @media (max-width: 480px) {
       .toggle-btn {
         width: 40px;
@@ -417,16 +436,37 @@
       }
     }
 
-    /* =========================
-       ESTILOS DAS LINHAS (CONTINUAÇÃO)
-    ========================= */
-    .line.fade-out {
-      transition: opacity 0.3s ease-out, height 0.3s ease-out;
+    /* ======================================
+       SVG OVERLAY PARA LINHAS ANIMADAS
+    ====================================== */
+    #lineOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .animated-line {
+      stroke: #f06595;
+      stroke-width: 2;
+      stroke-linecap: round;
       opacity: 0;
+      transition: opacity 0.5s ease, stroke-dashoffset 1s ease;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+    }
+    .animated-line.visible {
+      opacity: 1;
+      stroke-dashoffset: 0;
     }
   </style>
 </head>
 <body>
+
+  <!-- SVG OVERLAY PARA LINHAS -->
+  <svg id="lineOverlay"></svg>
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
@@ -463,104 +503,33 @@
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
-        <p>JavaScript</p>
-        <p>HTML & CSS</p>
-        <p>React</p>
-        <!-- Botões com contêiner -->
+        <p class="animated-text">JavaScript</p>
+        <p class="animated-text">HTML & CSS</p>
+        <p class="animated-text">React</p>
+        <!-- Exemplo de uso de botões em vez de links: -->
         <p>
-          <div class="btn-container">
-            <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
-              Visitar Repositório
-            </a>
-          </div>
+          <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
+            Visitar Repositório
+          </a>
         </p>
       </div>
     </div>
   </div>
 
   <script>
-    // Função para gerar um número aleatório dentro de um intervalo
-    function getRandom(min, max) {
-      return Math.random() * (max - min) + min;
-    }
+    // =========================
+    //  REFERÊNCIAS
+    // =========================
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const menuItems = document.querySelectorAll('.menu li');
+    const languageSelect = document.getElementById('languageSelect');
+    const pageTitle = document.getElementById('pageTitle');
+    const knowledgeListDiv = document.getElementById('knowledgeList');
+    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+    const content = document.getElementById('content');
+    const lineOverlay = document.getElementById('lineOverlay');
 
-    // Função para criar uma linha
-    function createLine(container) {
-      const line = document.createElement('div');
-      line.classList.add('line');
-
-      // Posição inicial (centro do botão)
-      const button = container.querySelector('.main-btn');
-      const buttonRect = button.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-
-      const centerX = button.offsetWidth / 2 - 1; // Ajuste para centralizar a linha
-      const centerY = button.offsetHeight / 2;
-
-      line.style.left = `${centerX}px`;
-      line.style.top = `${centerY}px`;
-
-      // Definir direção aleatória (ângulo)
-      const angle = getRandom(0, 2 * Math.PI); // Radianos
-      const length = getRandom(50, 100); // Comprimento da linha em pixels
-
-      // Calcular a posição final da linha
-      const endX = centerX + length * Math.cos(angle);
-      const endY = centerY + length * Math.sin(angle);
-
-      // Calcular a altura e rotação da linha
-      const height = Math.sqrt(endX * endX + endY * endY);
-      const degrees = angle * (180 / Math.PI);
-
-      line.style.height = '0px'; // Inicialmente zero
-      line.style.transform = `rotate(${degrees}deg)`;
-
-      container.appendChild(line);
-
-      // Forçar reflow para aplicar a transição
-      void line.offsetWidth;
-
-      // Iniciar animação de crescimento
-      line.classList.add('visible');
-      line.style.height = `${height}px`;
-
-      // Remover a linha após a animação
-      line.addEventListener('transitionend', () => {
-        setTimeout(() => {
-          line.classList.add('fade-out');
-          line.addEventListener('transitionend', () => {
-            line.remove();
-          }, { once: true });
-        }, 500); // Tempo antes de iniciar o fade-out
-      });
-
-      return line;
-    }
-
-    // Função para adicionar linhas em hover
-    function addHoverEffect(container) {
-      const mainBtn = container.querySelector('.main-btn');
-
-      mainBtn.addEventListener('mouseenter', () => {
-        // Gerar um número de linhas (por exemplo, 5)
-        const numLines = 5;
-        for (let i = 0; i < numLines; i++) {
-          createLine(container);
-        }
-      });
-
-      mainBtn.addEventListener('mouseleave', () => {
-        // As linhas já terão a transição de fade-out após a animação de crescimento
-        // Não é necessário fazer nada aqui
-      });
-    }
-
-    // Inicializar efeitos para todos os botões
-    document.querySelectorAll('.btn-container').forEach(container => {
-      addHoverEffect(container);
-    });
-
-    // Funções existentes para manipulação do conteúdo
     // =========================
     //  TRADUÇÕES
     // =========================
@@ -607,13 +576,10 @@
     // =========================
     //  TOGGLE SIDEBAR
     // =========================
-    const toggleBtnElement = document.getElementById('toggleBtn');
-    const sidebar = document.getElementById('sidebar');
-
-    toggleBtnElement.addEventListener('click', () => {
+    toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
-      const icon = toggleBtnElement.querySelector('i');
+      const icon = toggleBtn.querySelector('i');
       if (sidebar.classList.contains('closed')) {
         icon.classList.remove('fa-arrow-left');
         icon.classList.add('fa-arrow-right');
@@ -626,8 +592,6 @@
     // =========================
     //  MENU
     // =========================
-    const menuItems = document.querySelectorAll('.menu li');
-
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -640,8 +604,6 @@
     // =========================
     //  IDIOMA
     // =========================
-    const languageSelect = document.getElementById('languageSelect');
-
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
@@ -661,9 +623,7 @@
         return ['Erro ao carregar KnowledgeList'];
       }
     }
-
     async function populateKnowledgeList() {
-      const knowledgeListDiv = document.getElementById('knowledgeList');
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
       lines.forEach(line => {
@@ -711,7 +671,6 @@
     }
 
     async function populateCertificatesList() {
-      const knowledgeListDiv = document.getElementById('knowledgeList');
       knowledgeListDiv.innerHTML = '';
       const list = await fetchCertificatesList();
 
@@ -751,7 +710,6 @@
     // =========================
     function updateContent() {
       const dict = translations[currentLanguage];
-      const pageTitle = document.getElementById('pageTitle');
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
       const validPages = ['profile','social','projects','contact','certificates'];
@@ -762,78 +720,40 @@
       }
 
       if (currentPage === 'profile') {
-        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if (currentPage === 'social') {
-        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
         knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
-        const knowledgeListDiv = document.getElementById('knowledgeList');
         knowledgeListDiv.innerHTML = `
-          <p>
-            <div class="btn-container">
-              <a href="https://www.facebook.com" target="_blank" class="main-btn">Facebook</a>
-            </div>
-          </p>
-          <p>
-            <div class="btn-container">
-              <a href="https://www.instagram.com" target="_blank" class="main-btn">Instagram</a>
-            </div>
-          </p>
+          <p><a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a></p>
+          <p><a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a></p>
         `;
-        // Reaplicar os efeitos de hover aos novos botões
-        document.querySelectorAll('.btn-container').forEach(container => {
-          addHoverEffect(container);
-        });
       } else if (currentPage === 'projects') {
-        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
         knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
-        const knowledgeListDiv = document.getElementById('knowledgeList');
         knowledgeListDiv.innerHTML = `
-          <p>
-            <div class="btn-container">
-              <a href="#" class="main-btn">Blender Projects</a>
-            </div>
-          </p>
-          <p>
-            <div class="btn-container">
-              <a href="#" class="main-btn">Gimp Projects</a>
-            </div>
-          </p>
-          <p>
-            <div class="btn-container">
-              <a href="#" class="main-btn">Blender Animations</a>
-            </div>
-          </p>
-          <p>
-            <div class="btn-container">
-              <a href="#" class="main-btn">Animated Background</a>
-            </div>
-          </p>
+          <p><a href="#" class="main-btn">${dict.blenderProjects}</a></p>
+          <p><a href="#" class="main-btn">${dict.gimpProjects}</a></p>
+          <p><a href="#" class="main-btn">${dict.blenderAnimations}</a></p>
+          <p><a href="#" class="main-btn">${dict.animatedBackground}</a></p>
         `;
-        // Reaplicar os efeitos de hover aos novos botões
-        document.querySelectorAll('.btn-container').forEach(container => {
-          addHoverEffect(container);
-        });
       } else if (currentPage === 'contact') {
-        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        const knowledgeListDiv = document.getElementById('knowledgeList');
         knowledgeListDiv.innerHTML = `
           <p>${dict.whatsapp}</p>
           <p>${dict.email}</p>
         `;
       } else if (currentPage === 'certificates') {
-        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
 
       // Animação fade-in no conteúdo principal
-      const content = document.getElementById('content');
       setTimeout(() => {
         content.classList.add('visible');
       }, 100);
+
+      // Animações ao scroll
+      handleScrollAnimations();
     }
 
     // =========================
@@ -851,6 +771,48 @@
     window.addEventListener('scroll', handleScrollAnimations);
 
     // =========================
+    //  EFEITO DE LINHAS ANIMADAS NOS BOTÕES
+    // =========================
+    const buttons = document.querySelectorAll('.main-btn, .menu li');
+
+    buttons.forEach(button => {
+      button.addEventListener('mouseenter', (e) => {
+        const rect = button.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2;
+
+        const numLines = 5; // Número de linhas a serem desenhadas
+        for (let i = 0; i < numLines; i++) {
+          const angle = Math.random() * 2 * Math.PI;
+          const length = Math.random() * 100 + 50; // Comprimento aleatório entre 50 e 150 pixels
+          const endX = startX + Math.cos(angle) * length;
+          const endY = startY + Math.sin(angle) * length;
+
+          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute('x1', startX);
+          line.setAttribute('y1', startY);
+          line.setAttribute('x2', startX);
+          line.setAttribute('y2', startY);
+          line.classList.add('animated-line');
+          lineOverlay.appendChild(line);
+
+          // Força a reflow para que a transição ocorra
+          void line.offsetWidth;
+
+          // Define o ponto final
+          line.setAttribute('x2', endX);
+          line.setAttribute('y2', endY);
+          line.classList.add('visible');
+
+          // Remove a linha após a animação
+          line.addEventListener('transitionend', () => {
+            line.remove();
+          });
+        }
+      });
+    });
+
+    // =========================
     //  INICIALIZAÇÃO
     // =========================
     document.addEventListener('DOMContentLoaded', () => {
@@ -858,6 +820,5 @@
       handleScrollAnimations(); 
     });
   </script>
-
 </body>
 </html>
