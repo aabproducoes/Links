@@ -2,235 +2,25 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Sério com Botões</title>
-
-  <!-- Google Fonts (Roboto + Montserrat) -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
-    rel="stylesheet"
-  />
-  
-  <!-- Font Awesome (opcional) -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
+  <title>Botões com Linhas Aleatórias no Hover</title>
   <style>
-    /* RESET BÁSICO */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      display: flex;
-      min-height: 100vh;
-      font-family: "Roboto", sans-serif;
-      background-color: #111; 
-      color: #f0f0f0;
-      overflow-x: hidden;
-    }
-
-    /* SIDEBAR */
-    .sidebar {
-      width: 250px;
-      background-color: #111;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      transition: width 0.3s ease;
-      position: relative;
-      font-family: "Montserrat", sans-serif;
-      z-index: 1000;
-      border-right: 1px solid #333;
-    }
-    .toggle-btn {
-      position: absolute;
-      top: 20px;
-      right: -25px;
-      background: #333;
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      font-size: 18px;
-      overflow: visible;
-    }
-    .toggle-btn:hover {
-      background: #444;
-      transform: scale(1.05);
-    }
-    .toggle-btn:active {
-      transform: scale(0.95);
-    }
-    .toggle-btn i {
-      transition: transform 0.3s ease;
-    }
-    /* Efeito de linhas no hover (não-randômico) */
-    .toggle-btn .line {
-      position: absolute;
-      width: 2px;
-      height: 0;
-      background: #f06595;
-      opacity: 0;
-      transition: opacity 0.3s, height 0.5s;
-    }
-    .line1, .line2, .line3, .line4 {
-      top: 25px;
-      left: 25px;
-      transform-origin: top;
-    }
-    .toggle-btn:hover .line {
-      opacity: 1;
-      height: 40px;
-    }
-    .toggle-btn:hover .line1 {
-      transform: translate(-2px, -40px);
-    }
-    .toggle-btn:hover .line2 {
-      transform: rotate(60deg) translate(-2px, -40px);
-    }
-    .toggle-btn:hover .line3 {
-      transform: rotate(120deg) translate(-2px, -40px);
-    }
-    .toggle-btn:hover .line4 {
-      transform: rotate(180deg) translate(-2px, -40px);
-    }
-
-    .menu {
-      list-style: none;
-      padding: 80px 0 0 0;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .menu li {
-      padding: 15px 20px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
       background: #111;
       color: #fff;
-      border: 1px solid #333;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 3px;
-      margin: 5px 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      position: relative;
+      font-family: sans-serif;
+      padding: 2rem;
     }
-    .menu li:hover {
-      background: #222;
-      transform: translateX(5px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
-    }
-    .menu li.active {
-      background: #333;
-      font-weight: 700;
-    }
-    .sidebar.closed {
-      width: 60px;
-    }
-    .sidebar.closed .menu li {
-      justify-content: center;
-      padding: 15px 10px;
-      font-size: 16px;
-      background: #111;
-      margin: 5px 5px;
-    }
-    .sidebar.closed .menu li span {
-      display: none;
-    }
-    .sidebar.closed .menu li::before {
-      content: attr(data-icon);
-      font-size: 20px;
-      display: inline-block;
-      color: #fff;
-    }
-    .sidebar.closed .toggle-btn {
-      transform: rotate(180deg);
+    
+    /* Contêiner para cada botão (permite inserir linhas dentro dele) */
+    .btn-container {
+      position: relative; /* fundamental para posicionar linhas dentro */
+      display: inline-block; /* para agrupar o botão e as linhas */
+      margin: 1rem;
+      vertical-align: middle; /* opcional */
     }
 
-    /* LANGUAGE SELECTOR */
-    .language-selector {
-      margin: 20px;
-      padding: 10px 15px;
-      background: #222;
-      color: #fff;
-      border: 1px solid #333;
-      border-radius: 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-    .language-selector:hover {
-      background: #333;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
-    }
-    .language-selector select {
-      background: transparent;
-      color: #fff;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      cursor: pointer;
-      appearance: none;
-    }
-
-    /* MAIN CONTENT */
-    .content {
-      flex: 1;
-      padding: 20px;
-      background-color: #111;
-      color: #f0f0f0;
-      font-size: 18px;
-      line-height: 1.6;
-      border-left: 1px solid #333;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease-out, transform 1s ease-out;
-    }
-    .content.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    #pageTitle {
-      font-size: 28px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 5px;
-      transition: color 0.3s ease;
-    }
-    #pageTitle:hover {
-      color: #f06595;
-    }
-    #knowledgeListTitle {
-      font-size: 22px;
-      margin-bottom: 8px;
-      transition: color 0.3s ease;
-    }
-    #knowledgeListTitle:hover {
-      color: #f06595;
-    }
-
-    /* BOTÕES (transformando links em botões) */
-    a.main-btn {
+    /* O próprio botão */
+    .main-btn {
       display: inline-block;
       background: #222;
       color: #fff;
@@ -240,448 +30,138 @@
       text-decoration: none;
       font-weight: 500;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
+      position: relative; /* se quiser z-index acima das linhas */
+      z-index: 1;         /* garante que o botão fique acima das faíscas */
     }
-    a.main-btn:hover {
+    .main-btn:hover {
       background: #f06595;
       color: #fff;
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(240, 101, 149, 0.4);
     }
-    a.main-btn:active {
+    .main-btn:active {
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
     }
 
-    /* ANIMAÇÕES DE SCROLL */
-    .animated-text, .animated-item {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 1s ease-out, transform 1s ease-out;
-    }
-    .animated-text.visible, .animated-item.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
-    .certificate-container {
-      position: relative;
-      margin-bottom: 20px;
-      border: 1px solid #333;
-      border-radius: 5px;
-      overflow: hidden;
-      background: #2a2a2a;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      transform: translateY(20px);
-      opacity: 0;
-      transition: opacity 1s ease-out, transform 1s ease-out;
-    }
-    .certificate-container.visible {
-      transform: translateY(0);
-      opacity: 1;
-    }
-    .certificate-container iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      transition: transform 0.3s ease;
-    }
-    .certificate-container iframe:hover {
-      transform: scale(1.02);
-    }
-    .certificate-overlay {
+    /* Estilo padrão para as linhas faíscas */
+    .spark-line {
       position: absolute;
-      top: 20px;
-      left: 20px;
-      color: #fff;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
-      pointer-events: none;
-      max-width: 90%;
-      word-wrap: break-word;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      top: 50%;    /* vamos partir do meio do contêiner */
+      left: 50%;   /* idem */
+      width: 2px;  /* espessura da linha */
+      height: 0px; /* linha inicial com height = 0 (poderá animar) */
+      background: #f06595;
+      transform-origin: top center; /* para animar expandindo “de cima para baixo” */
+      opacity: 0;
+      transition: height 0.3s, opacity 0.3s;
+      /* Podemos animar com transition ou direto via JS. */
     }
-    .certificate-overlay:hover {
-      background-color: rgba(0, 0, 0, 0.8);
-      color: #f06595;
-    }
-    .certificate-overlay .fullPath {
-      font-size: 14px;
-      color: #ccc;
-      margin-top: 4px;
-      transition: color 0.3s ease;
-    }
-    .certificate-overlay .pdfName {
-      font-size: 14px;
-      color: #bbb;
-      margin-top: 4px;
-      transition: color 0.3s ease;
-    }
-    .certificate-overlay:hover .fullPath,
-    .certificate-overlay:hover .pdfName {
-      color: #fff;
-    }
-
-    /* RESPONSIVIDADE */
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 0;
-        height: 100%;
-        width: 250px;
-        transition: left 0.3s ease;
-      }
-      .sidebar.open {
-        left: 0;
-      }
-      .toggle-btn {
-        position: fixed;
-        top: 20px;
-        left: 250px;
-        z-index: 1100;
-      }
-      .sidebar.closed .toggle-btn {
-        left: 60px;
-      }
-      .content {
-        padding: 15px;
-      }
-    }
-    @media (max-width: 480px) {
-      .toggle-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-      .menu li {
-        font-size: 14px;
-        padding: 12px 15px;
-        margin: 3px 5px;
-      }
-      .certificate-container iframe {
-        height: 300px;
-      }
-      .certificate-overlay {
-        font-size: 14px;
-      }
-      .certificate-overlay .fullPath,
-      .certificate-overlay .pdfName {
-        font-size: 12px;
-      }
+    /* Ao adicionar a classe "active", podemos animar a aparição */
+    .spark-line.active {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
-
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-      <i class="fas fa-arrow-left"></i>
-      <!-- Quatro linhas fixas para efeito de hover (não-randômico) -->
-      <div class="line line1"></div>
-      <div class="line line2"></div>
-      <div class="line line3"></div>
-      <div class="line line4"></div>
-    </button>
-
-    <ul class="menu">
-      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
-      <li data-page="social" data-icon="🔗"><span>Social</span></li>
-      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
-      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
-      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
-    </ul>
-
-    <!-- Seletor de Idioma -->
-    <div class="language-selector">
-      <select id="languageSelect" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-      </select>
-    </div>
-    
+  
+  <h1>Exemplo de Linhas Aleatórias no Hover</h1>
+  
+  <div class="btn-container">
+    <a href="#" class="main-btn" data-sparks="6">
+      Botão 1
+    </a>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
-  <div class="content" id="content">
-    <h1 id="pageTitle">Profile</h1>
-    <div id="pageContent">
-      <h2 id="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList">
-        <p>JavaScript</p>
-        <p>HTML & CSS</p>
-        <p>React</p>
-        <!-- Exemplo de uso de botões em vez de links: -->
-        <p>
-          <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
-            Visitar Repositório
-          </a>
-        </p>
-      </div>
-    </div>
+  <div class="btn-container">
+    <a href="#" class="main-btn" data-sparks="4">
+      Botão 2
+    </a>
+  </div>
+
+  <div class="btn-container">
+    <a href="#" class="main-btn" data-sparks="8">
+      Botão 3
+    </a>
   </div>
 
   <script>
-    // =========================
-    //  REFERÊNCIAS
-    // =========================
-    const toggleBtn = document.getElementById('toggleBtn');
-    const sidebar = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.menu li');
-    const languageSelect = document.getElementById('languageSelect');
-    const pageTitle = document.getElementById('pageTitle');
-    const knowledgeListDiv = document.getElementById('knowledgeList');
-    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    const content = document.getElementById('content');
+    // Seleciona todos os contêineres de botões
+    const btnContainers = document.querySelectorAll('.btn-container');
 
-    // =========================
-    //  TRADUÇÕES
-    // =========================
-    const translations = {
-      en: {
-        profileTitle: 'Profile',
-        knowledgeListTitle: 'Knowledge List',
-        socialTitle: 'Social',
-        contactTitle: 'Contact',
-        certificatesTitle: 'Certificates',
-        
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        projectsTitle: 'Projects',
-        blenderProjects: 'Blender Projects',
-        gimpProjects: 'Gimp Projects',
-        blenderAnimations: 'Blender Animations',
-        animatedBackground: 'Animated Background',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-      },
-      pt: {
-        profileTitle: 'Perfil',
-        knowledgeListTitle: 'Lista de Conhecimento',
-        socialTitle: 'Social',
-        contactTitle: 'Contato',
-        certificatesTitle: 'Certificados',
-        
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        projectsTitle: 'Projetos',
-        blenderProjects: 'Projetos Blender',
-        gimpProjects: 'Projetos Gimp',
-        blenderAnimations: 'Animações Blender',
-        animatedBackground: 'Fundo Animado',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-      }
-    };
+    btnContainers.forEach(container => {
+      const btn = container.querySelector('.main-btn');
 
-    let currentLanguage = 'en'; 
-    let currentPage = 'profile';
+      // Ao entrar com o mouse (mouseover), geramos as linhas
+      btn.addEventListener('mouseenter', () => {
+        createSparkLines(container, btn);
+      });
 
-    // =========================
-    //  TOGGLE SIDEBAR
-    // =========================
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      sidebar.classList.toggle('open');
-      const icon = toggleBtn.querySelector('i');
-      if (sidebar.classList.contains('closed')) {
-        icon.classList.remove('fa-arrow-left');
-        icon.classList.add('fa-arrow-right');
-      } else {
-        icon.classList.remove('fa-arrow-right');
-        icon.classList.add('fa-arrow-left');
-      }
-    });
-
-    // =========================
-    //  MENU
-    // =========================
-    menuItems.forEach(item => {
-      item.addEventListener('click', () => {
-        menuItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        currentPage = item.getAttribute('data-page');
-        updateContent();
+      // Ao sair com o mouse (mouseleave), removemos as linhas
+      btn.addEventListener('mouseleave', () => {
+        removeSparkLines(container);
       });
     });
 
-    // =========================
-    //  IDIOMA
-    // =========================
-    function changeLanguage() {
-      currentLanguage = languageSelect.value;
-      updateContent();
-    }
+    function createSparkLines(container, btn) {
+      // Lê quantas faíscas (linhas) geraremos do atributo data-sparks ou usa 5 como default
+      const sparksCount = parseInt(btn.getAttribute('data-sparks')) || 5;
 
-    // =========================
-    //  PROFILE (KNOWLEDGE LIST)
-    // =========================
-    async function fetchKnowledgeList() {
-      try {
-        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
-        const txt = await resp.text();
-        return txt.split('\n').filter(line => line.trim() !== '');
-      } catch (err) {
-        console.error(err);
-        return ['Erro ao carregar KnowledgeList'];
-      }
-    }
-    async function populateKnowledgeList() {
-      knowledgeListDiv.innerHTML = '';
-      const lines = await fetchKnowledgeList();
-      lines.forEach(line => {
-        const p = document.createElement('p');
-        p.textContent = line;
-        p.classList.add('animated-text');
-        knowledgeListDiv.appendChild(p);
-      });
-    }
+      // Dimensões do contêiner (para saber a área “aleatória”)
+      const rect = container.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
 
-    // =========================
-    //  CERTIFICADOS
-    // =========================
-    async function fetchCertificatesList() {
-      try {
-        const r = await fetch('./Certificados/CertificadosList.txt');
-        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
-        const txt = await r.text();
-        const lines = txt.split('\n').filter(l => l.trim() !== '');
+      for (let i = 0; i < sparksCount; i++) {
+        // Cria a linha
+        const line = document.createElement('div');
+        line.classList.add('spark-line');
 
-        // "Certificados/Certificado-...pdf - Título"
-        return lines.map(line => {
-          const sep = ' - ';
-          const idx = line.indexOf(sep);
-          if (idx === -1) {
-            console.warn('Formato inválido:', line);
-            return { fullPath: '', pdfName:'', title:'' };
-          }
-          const fullPath = line.substring(0, idx).trim();
-          const title = line.substring(idx + sep.length).trim();
+        // Define um comprimento aleatório entre 30 e 70 px, por exemplo
+        const length = 30 + Math.random() * 40;
 
-          // Nome do PDF depois do último "/"
-          let pdfName = fullPath;
-          const lastSlash = fullPath.lastIndexOf('/');
-          if (lastSlash !== -1) {
-            pdfName = fullPath.substring(lastSlash + 1);
-          }
+        // Define um ângulo aleatório (0 a 360 graus)
+        const angle = Math.random() * 360;
 
-          return { fullPath, pdfName, title };
+        // Posiciona a linha no meio do contêiner
+        line.style.top = '50%';
+        line.style.left = '50%';
+
+        // Rotaciona e ajusta a altura
+        // Usamos transform: rotate(angledeg) para direcionar a linha
+        line.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+
+        // Inserimos a linha no contêiner
+        container.appendChild(line);
+
+        // Forçamos reflow para que a transição funcione
+        // (às vezes, precisamos de um pequeno delay)
+        requestAnimationFrame(() => {
+          // Agora definimos a altura final e ativamos a classe "active" (para fade-in)
+          line.style.height = `${length}px`;
+          line.classList.add('active');
         });
-      } catch (err) {
-        console.error('Erro ao ler CertificadosList.txt:', err);
-        return [];
       }
     }
 
-    async function populateCertificatesList() {
-      knowledgeListDiv.innerHTML = '';
-      const list = await fetchCertificatesList();
+    function removeSparkLines(container) {
+      // Seleciona todas as linhas criadas (.spark-line)
+      const lines = container.querySelectorAll('.spark-line');
 
-      list.forEach(cert => {
-        if (cert.fullPath) {
-          const container = document.createElement('div');
-          container.classList.add('certificate-container', 'animated-item');
+      lines.forEach(line => {
+        // Podemos animar o desaparecimento definindo height=0 e removendo .active
+        line.classList.remove('active');
+        line.style.height = '0px';
+        line.style.opacity = '0';
 
-          // iframe
-          const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath;
-          container.appendChild(iframe);
-
-          // overlay
-          const overlay = document.createElement('div');
-          overlay.classList.add('certificate-overlay');
-          overlay.innerHTML = `
-            <div><strong>Título:</strong> ${cert.title}</div>
-            <div class="fullPath"><strong>Caminho:</strong> ${cert.fullPath}</div>
-            <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
-          `;
-          container.appendChild(overlay);
-
-          knowledgeListDiv.appendChild(container);
-        }
-      });
-
-      // Animação de aparição
-      setTimeout(() => {
-        const animatedItems = document.querySelectorAll('.animated-item');
-        animatedItems.forEach(item => item.classList.add('visible'));
-      }, 100);
-    }
-
-    // =========================
-    //  ATUALIZA CONTEÚDO
-    // =========================
-    function updateContent() {
-      const dict = translations[currentLanguage];
-      pageTitle.textContent = dict[`${currentPage}Title`] || '';
-
-      const validPages = ['profile','social','projects','contact','certificates'];
-      if (validPages.includes(currentPage)) {
-        document.getElementById('pageContent').style.display = 'block';
-      } else {
-        document.getElementById('pageContent').style.display = 'none';
-      }
-
-      if (currentPage === 'profile') {
-        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
-        populateKnowledgeList();
-      } else if (currentPage === 'social') {
-        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
-        knowledgeListDiv.innerHTML = `
-          <p><a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a></p>
-          <p><a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a></p>
-        `;
-      } else if (currentPage === 'projects') {
-        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
-        knowledgeListDiv.innerHTML = `
-          <p><a href="#" class="main-btn">${dict.blenderProjects}</a></p>
-          <p><a href="#" class="main-btn">${dict.gimpProjects}</a></p>
-          <p><a href="#" class="main-btn">${dict.blenderAnimations}</a></p>
-          <p><a href="#" class="main-btn">${dict.animatedBackground}</a></p>
-        `;
-      } else if (currentPage === 'contact') {
-        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        knowledgeListDiv.innerHTML = `
-          <p>${dict.whatsapp}</p>
-          <p>${dict.email}</p>
-        `;
-      } else if (currentPage === 'certificates') {
-        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
-        populateCertificatesList();
-      }
-
-      // Animação fade-in no conteúdo
-      setTimeout(() => {
-        content.classList.add('visible');
-      }, 100);
-    }
-
-    // =========================
-    //  SCROLL ANIMATIONS
-    // =========================
-    function handleScrollAnimations() {
-      const animatedElements = document.querySelectorAll('.animated-text, .animated-item');
-      animatedElements.forEach(el => {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < window.innerHeight - 100) {
-          el.classList.add('visible');
-        }
+        // Depois de um pequeno delay, removemos o elemento do DOM
+        setTimeout(() => {
+          if (line.parentNode) {
+            line.parentNode.removeChild(line);
+          }
+        }, 300);
       });
     }
-    window.addEventListener('scroll', handleScrollAnimations);
-
-    // =========================
-    //  INICIALIZAÇÃO
-    // =========================
-    document.addEventListener('DOMContentLoaded', () => {
-      updateContent(); 
-      handleScrollAnimations(); 
-    });
   </script>
 </body>
 </html>
