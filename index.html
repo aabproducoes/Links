@@ -1,952 +1,671 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu Vertical com Tradução e Perfil</title>
-    <!-- Importação das Fontes do Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <!-- Importação do Font Awesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-            font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
-            background-color: #000; /* Fundo estático preto para a área de conteúdo */
-            color: #fff; /* Cor do texto principal ajustada para branco */
-        }
-
-        /* Sidebar com Cor Estática Preta */
-        .sidebar {
-            /* Definição de Cor Estática para a Barra Lateral */
-            --sidebar-bg-h: 0; /* Hue não importa, saturação e luminosidade ajustadas para preto */
-            --sidebar-bg-s: 0%;
-            --sidebar-bg-l: 0%;
-            --sidebar-text-h: 0;
-            --sidebar-text-s: 0%;
-            --sidebar-text-l: 100%; /* Texto branco */
-
-            --menu-gradient-start-h: 0; /* Preto */
-            --menu-gradient-start-s: 0%;
-            --menu-gradient-start-l: 0%;
-            --menu-gradient-end-h: 0; /* Preto */
-            --menu-gradient-end-s: 0%;
-            --menu-gradient-end-l: 0%;
-
-            width: 250px;
-            background-color: hsl(var(--sidebar-bg-h), var(--sidebar-bg-s), var(--sidebar-bg-l));
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
-            display: flex;
-            flex-direction: column;
-            transition: width 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-            position: relative;
-            font-family: 'Montserrat', sans-serif; /* Fonte para o menu */
-            z-index: 1000; /* Garantir que a barra lateral fique acima do conteúdo em dispositivos móveis */
-        }
-
-        /* Botão da seta */
-        .toggle-btn {
-            position: absolute;
-            top: 20px;
-            right: -25px; /* Ajuste para centralizar o botão quando fechado */
-            background: linear-gradient(45deg, #ff6b6b, #f06595);
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-            font-size: 18px; /* Aumenta o tamanho do ícone */
-        }
-
-        .toggle-btn:hover {
-            background: linear-gradient(45deg, #f06595, #ff6b6b);
-            transform: rotate(180deg);
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-        }
-
-        .toggle-btn:active {
-            transform: scale(0.95) rotate(180deg);
-            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
-        }
-
-        .toggle-btn i {
-            transition: transform 0.3s ease;
-        }
-
-        /* Itens do Menu */
-        .menu {
-            list-style: none;
-            padding: 80px 0 0 0; /* Espaço para o botão */
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .menu li {
-            padding: 15px 20px;
-            cursor: pointer;
-            transition: background 0.3s ease, color 0.3s ease;
-            background: linear-gradient(
-                to right, 
-                hsl(var(--menu-gradient-start-h), var(--menu-gradient-start-s), var(--menu-gradient-start-l)), 
-                hsl(var(--menu-gradient-end-h), var(--menu-gradient-end-s), var(--menu-gradient-end-l))
-            );
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Texto branco */
-            background-size: 200% 100%;
-            background-position: left;
-            border: 2px solid #fff; /* Borda branca */
-            font-size: 16px; /* Aumenta o tamanho da fonte */
-            font-weight: 500; /* Define peso médio para melhor legibilidade */
-            border-radius: 5px;
-            margin: 5px 10px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px; /* Espaço entre ícone e texto */
-        }
-
-        .menu li span {
-            display: inline-block;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-
-        .menu li:hover {
-            background-position: right;
-            /* Mantém a mesma cor do texto */
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
-        }
-
-        .menu li.active {
-            background-position: right;
-            /* Mantém a mesma cor do texto */
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
-            font-weight: 700; /* Peso mais forte para indicar a página ativa */
-            background: #333; /* Fundo mais escuro para o item ativo */
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Dropdown de idiomas */
-        .language-selector {
-            margin: 20px;
-            padding: 10px 15px;
-            background: linear-gradient(45deg, #ffafbd, #ffc3a0);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(255, 175, 189, 0.4);
-            transition: background 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .language-selector:hover {
-            background: linear-gradient(45deg, #ffc3a0, #ffafbd);
-            box-shadow: 0 6px 20px rgba(255, 175, 189, 0.6);
-        }
-
-        .language-selector select {
-            background: transparent;
-            color: #fff;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            font-family: 'Roboto', sans-serif;
-            cursor: pointer;
-            appearance: none; /* Remove a seta padrão do select */
-        }
-
-        .language-selector select::-ms-expand {
-            display: none; /* Remove a seta no IE */
-        }
-
-        .language-selector select option {
-            background: #ffafbd;
-            color: #000;
-        }
-
-        /* Conteúdo Principal com Cor Estática Preta */
-        .content {
-            --main-text-h: 0;
-            --main-text-s: 0%;
-            --main-text-l: 100%; /* Texto branco */
-
-            flex: 1;
-            padding: 20px;
-            background-color: #000; /* Cor de fundo estática preta */
-            color: hsl(var(--main-text-h), var(--main-text-s), var(--main-text-l));
-            transition: background-color 0.3s ease, color 0.3s ease;
-            font-family: 'Roboto', sans-serif; /* Fonte para o conteúdo principal */
-            font-size: 18px; /* Tamanho base da fonte */
-            line-height: 1.6; /* Espaçamento entre linhas para melhor legibilidade */
-        }
-
-        /* Esconder menu quando fechado */
-        .sidebar.closed {
-            width: 60px;
-        }
-
-        .sidebar.closed .menu li {
-            justify-content: center; /* Centraliza os ícones */
-            padding: 15px 10px;
-            font-size: 16px; /* Mantém a legibilidade */
-            background: linear-gradient(
-                to bottom, 
-                hsl(var(--menu-gradient-start-h), var(--menu-gradient-start-s), var(--menu-gradient-start-l)), 
-                hsl(var(--menu-gradient-end-h), var(--menu-gradient-end-s), var(--menu-gradient-end-l))
-            );
-            background-size: 200% 100%;
-            background-position: top;
-            border: 2px solid #fff; /* Borda branca */
-            border-radius: 5px;
-            margin: 5px 10px;
-            gap: 0; /* Remove o espaço entre ícone e texto */
-        }
-
-        .sidebar.closed .menu li span {
-            display: none; /* Esconde o texto */
-        }
-
-        .sidebar.closed .menu li::before {
-            content: attr(data-icon);
-            font-size: 20px;
-            display: inline-block;
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l)); /* Mantém a cor do texto */
-        }
-
-        .sidebar.closed .menu li:hover {
-            background-position: bottom;
-            /* Mantém a mesma cor do texto */
-            color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
-            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
-        }
-
-        .sidebar.closed .language-selector {
-            display: none; /* Esconder seletor de idioma quando o menu está fechado */
-        }
-
-        .sidebar.closed .toggle-btn {
-            transform: rotate(180deg);
-        }
-
-        /* Picker de Cores do Conteúdo Principal (Apenas Texto) */
-        .main-color-picker {
-            padding: 20px;
-            background-color: #222; /* Fundo escuro para distinguir */
-            border-top: 2px solid #fff;
-            border-radius: 5px; /* Bordas arredondadas */
-            margin-top: 20px; /* Espaçamento superior */
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .main-color-picker h3 {
-            color: #fff;
-            margin-bottom: 10px;
-            font-size: 18px;
-            text-align: center;
-        }
-
-        .color-control {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .color-control label {
-            display: block;
-            color: #fff;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        .color-control input[type="range"] {
-            width: 100%;
-            -webkit-appearance: none;
-            height: 8px;
-            border-radius: 5px;
-            background: #555;
-            outline: none;
-            transition: background 0.3s ease;
-        }
-
-        .color-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            box-shadow: 0 0 2px rgba(0,0,0,0.5);
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-
-        .color-control input[type="range"]::-webkit-slider-thumb:hover {
-            background: #ddd;
-            transform: scale(1.1);
-        }
-
-        .color-control input[type="range"]::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border: none;
-            border-radius: 50%;
-            background: #fff;
-            cursor: pointer;
-            box-shadow: 0 0 2px rgba(0,0,0,0.5);
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-
-        .color-control input[type="range"]::-moz-range-thumb:hover {
-            background: #ddd;
-            transform: scale(1.1);
-        }
-
-        .hsl-values {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 5px;
-            font-size: 12px;
-            color: #ccc;
-        }
-
-        /* Estilização do Botão de Reset */
-        .reset-btn {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-            color: #fff;
-            border: none;
-            border-radius: 25px;
-            padding: 12px 20px;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .reset-btn:hover {
-            background: linear-gradient(45deg, #2a5298, #1e3c72);
-            box-shadow: 0 6px 20px rgba(30, 60, 114, 0.6);
-            transform: translateY(-2px);
-        }
-
-        .reset-btn:active {
-            transform: scale(0.95) translateY(-2px);
-            box-shadow: 0 3px 10px rgba(30, 60, 114, 0.3);
-        }
-
-        .reset-btn i {
-            transition: transform 0.3s ease;
-        }
-
-        /* Estilização dos Botões na Área de Conteúdo Principal */
-        /* Estilos Globais para Botões */
-        button {
-            font-family: 'Roboto', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px; /* Espaço entre ícone e texto */
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            outline: none;
-        }
-
-        /* Botão Principal na Área de Conteúdo */
-        .main-btn {
-            background: linear-gradient(45deg, #ff7e5f, #feb47b);
-            color: #fff;
-            border-radius: 25px;
-            padding: 12px 25px;
-            font-size: 16px;
-            box-shadow: 0 4px 15px rgba(255, 126, 95, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-        }
-
-        .main-btn:hover {
-            background: linear-gradient(45deg, #feb47b, #ff7e5f);
-            box-shadow: 0 6px 20px rgba(255, 126, 95, 0.6);
-            transform: translateY(-3px);
-        }
-
-        .main-btn:active {
-            transform: scale(0.95) translateY(-1px);
-            box-shadow: 0 3px 10px rgba(255, 126, 95, 0.3);
-        }
-
-        .main-btn i {
-            transition: transform 0.3s ease;
-        }
-
-        .main-btn:hover i {
-            transform: rotate(360deg);
-        }
-
-        /* Estilos para Links na Área de Conteúdo Principal */
-        .main-link {
-            color: #00d2ff;
-            text-decoration: none;
-            position: relative;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .main-link::after {
-            content: '';
-            position: absolute;
-            width: 0%;
-            height: 2px;
-            display: block;
-            background: #00d2ff;
-            transition: width 0.3s ease;
-            left: 0;
-            bottom: -3px;
-        }
-
-        .main-link:hover {
-            color: #fff;
-        }
-
-        .main-link:hover::after {
-            width: 100%;
-        }
-
-        .main-link:focus {
-            outline: none;
-            color: #fff;
-        }
-
-        .main-link:focus::after {
-            width: 100%;
-        }
-
-        /* Responsividade para Botões */
-        @media (max-width: 768px) {
-            .main-btn {
-                padding: 10px 20px;
-                font-size: 14px;
-            }
-
-            .main-btn i {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .main-btn {
-                padding: 8px 16px;
-                font-size: 12px;
-                gap: 6px;
-            }
-
-            .main-btn i {
-                font-size: 14px;
-            }
-
-            .main-link {
-                font-size: 14px;
-            }
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -250px;
-                top: 0;
-                height: 100%;
-                width: 250px;
-                transition: left 0.3s ease;
-            }
-
-            .sidebar.open {
-                left: 0;
-            }
-
-            .toggle-btn {
-                position: fixed;
-                top: 20px;
-                left: 250px;
-                right: auto;
-                z-index: 1100;
-            }
-
-            .sidebar.closed .toggle-btn {
-                left: 60px;
-            }
-
-            .content {
-                padding: 15px;
-            }
-
-            .main-color-picker {
-                padding: 15px;
-                margin-top: 15px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .menu li {
-                font-size: 14px;
-                padding: 12px 15px;
-            }
-
-            .toggle-btn {
-                width: 40px;
-                height: 40px;
-                font-size: 16px;
-            }
-
-            .reset-btn {
-                padding: 10px 18px;
-                font-size: 14px;
-            }
-
-            .language-selector {
-                padding: 8px 12px;
-                font-size: 14px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu Vertical com Certificados</title>
+  
+  <!-- Fontes Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome para ícones (opcional) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+        integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      min-height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+    
+    /* Barra Lateral (sidebar) */
+    .sidebar {
+      --sidebar-bg-h: 0;
+      --sidebar-bg-s: 0%;
+      --sidebar-bg-l: 0%;
+      --sidebar-text-h: 0;
+      --sidebar-text-s: 0%;
+      --sidebar-text-l: 100%;
+      
+      width: 250px;
+      background-color: hsl(var(--sidebar-bg-h), var(--sidebar-bg-s), var(--sidebar-bg-l));
+      color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s ease;
+      position: relative;
+      font-family: 'Montserrat', sans-serif; /* para o menu */
+      z-index: 1000;
+    }
+
+    /* Botão Toggle para colapsar/expandir a barra lateral */
+    .toggle-btn {
+      position: absolute;
+      top: 20px;
+      right: -25px;
+      background: linear-gradient(45deg, #ff6b6b, #f06595);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      font-size: 18px;
+    }
+
+    .toggle-btn:hover {
+      background: linear-gradient(45deg, #f06595, #ff6b6b);
+      transform: rotate(180deg);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+    }
+
+    .toggle-btn:active {
+      transform: scale(0.95) rotate(180deg);
+      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+    }
+
+    /* Ícone do botão toggle */
+    .toggle-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    /* Lista de Itens do Menu */
+    .menu {
+      list-style: none;
+      padding: 80px 0 0 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu li {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background 0.3s ease, color 0.3s ease;
+      background: linear-gradient(to right, #000, #444);
+      color: #fff;
+      background-size: 200% 100%;
+      background-position: left;
+      border: 2px solid #fff;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 5px;
+      margin: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu li span {
+      display: inline-block;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .menu li:hover {
+      background-position: right;
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+    }
+
+    .menu li.active {
+      background-position: right;
+      color: #fff;
+      font-weight: 700;
+      background: #333;
+      box-shadow: 0 4px 8px rgba(255,255,255,0.3);
+    }
+
+    /* Colapsar a Barra Lateral */
+    .sidebar.closed {
+      width: 60px;
+    }
+
+    .sidebar.closed .menu li {
+      justify-content: center;
+      padding: 15px 10px;
+      font-size: 16px;
+      background: linear-gradient(to bottom, #000, #444);
+      gap: 0;
+    }
+    .sidebar.closed .menu li span {
+      display: none; /* Esconde o texto */
+    }
+    .sidebar.closed .menu li::before {
+      content: attr(data-icon);
+      font-size: 20px;
+      display: inline-block;
+      color: #fff;
+    }
+    .sidebar.closed .menu li:hover {
+      background-position: bottom;
+      color: #fff;
+      box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+    }
+    .sidebar.closed .toggle-btn {
+      transform: rotate(180deg);
+    }
+
+    /* Seletor de idioma */
+    .language-selector {
+      margin: 20px;
+      padding: 10px 15px;
+      background: linear-gradient(45deg, #ffafbd, #ffc3a0);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(255,175,189,0.4);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .language-selector:hover {
+      background: linear-gradient(45deg, #ffc3a0, #ffafbd);
+      box-shadow: 0 6px 20px rgba(255,175,189,0.6);
+    }
+    .language-selector select {
+      background: transparent;
+      color: #fff;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      appearance: none;
+    }
+    .language-selector select option {
+      background: #ffafbd;
+      color: #000;
+    }
+
+    /* Conteúdo Principal */
+    .content {
+      flex: 1;
+      padding: 20px;
+      background-color: #000;
+      color: #fff;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* Seção Principal de Título + Conteúdo */
+    #pageTitle {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    #knowledgeListTitle {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    /* Seletor de Cores do Texto (já existente no seu projeto) */
+    .main-color-picker {
+      padding: 20px;
+      background-color: #222;
+      border-top: 2px solid #fff;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .main-color-picker h3 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 18px;
+      text-align: center;
+    }
+    .color-control {
+      display: flex;
+      flex-direction: column;
+    }
+    .color-control label {
+      color: #fff;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    .color-control input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #555;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+    /* ... [Demais estilos de range slider omitidos para brevidade] ... */
+
+    .reset-btn {
+      background: linear-gradient(45deg, #1e3c72, #2a5298);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 20px;
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(30,60,114,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .reset-btn:hover {
+      background: linear-gradient(45deg, #2a5298, #1e3c72);
+      box-shadow: 0 6px 20px rgba(30,60,114,0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Responsividade do menu */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        width: 250px;
+        transition: left 0.3s ease;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .toggle-btn {
+        position: fixed;
+        top: 20px;
+        left: 250px;
+        z-index: 1100;
+      }
+      .sidebar.closed .toggle-btn {
+        left: 60px;
+      }
+      .content {
+        padding: 15px;
+      }
+      .main-color-picker {
+        padding: 15px;
+        margin-top: 15px;
+      }
+    }
+    @media (max-width: 480px) {
+      .toggle-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .menu li {
+        font-size: 14px;
+        padding: 12px 15px;
+      }
+      .reset-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+      }
+      .language-selector {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+
+    /* =====================================
+       CERTIFICADOS (PDF + TEXTO SOBREPOSTO)
+       ===================================== */
+    .certificate-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .certificate-container iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    .certificate-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 18px;
+      pointer-events: none; /* Para permitir clique no iframe */
+    }
+  </style>
 </head>
 <body>
 
-    <div class="sidebar" id="sidebar">
-        <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-        <ul class="menu">
-            <li class="active" data-page="profile" data-icon="👤" aria-label="Profile" title="Profile"><span>Profile</span></li>
-            <li data-page="social" data-icon="🔗" aria-label="Social" title="Social"><span>Social</span></li>
-            <li data-page="projects" data-icon="🖥️" aria-label="Projects" title="Projects"><span>Projects</span></li>
-            <li data-page="contact" data-icon="📞" aria-label="Contact" title="Contact"><span>Contact</span></li>
-            <!-- Novo Item de Menu para Certificates -->
-            <li data-page="certificates" data-icon="🎓" aria-label="Certificates" title="Certificates"><span>Certificates</span></li>
-        </ul>
-        <div class="language-selector">
-            <select id="languageSelect" onchange="changeLanguage()">
-                <option value="en">English</option>
-                <option value="pt">Português</option>
-            </select>
-        </div>
-        
-        <!-- Picker de Cores do Conteúdo Principal (Apenas Texto) -->
-        <div class="main-color-picker">
-            <h3>Customize Main Content</h3>
-            
-            <!-- Picker de Cor do Texto -->
-            <div class="color-control">
-                <label for="mainTextHue">Text Hue</label>
-                <input type="range" id="mainTextHue" name="mainTextHue" min="0" max="360" value="0">
-                <div class="hsl-values">
-                    <span>H: <span id="mainTextHValue">0</span></span>
-                    <span>S: <span id="mainTextSValue">0%</span></span>
-                    <span>L: <span id="mainTextLValue">100%</span></span>
-                </div>
-            </div>
-            
-            <div class="color-control">
-                <label for="mainTextSaturation">Text Saturation</label>
-                <input type="range" id="mainTextSaturation" name="mainTextSaturation" min="0" max="100" value="0">
-            </div>
-            
-            <div class="color-control">
-                <label for="mainTextLightness">Text Lightness</label>
-                <input type="range" id="mainTextLightness" name="mainTextLightness" min="0" max="100" value="100">
-            </div>
-            
-            <!-- Botão de Reset -->
-            <button id="resetMainColorsBtn" class="reset-btn">
-                <i class="fas fa-redo"></i> Reset Colors
-            </button>
-        </div>
+  <!-- Barra Lateral -->
+  <div class="sidebar" id="sidebar">
+    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+      <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <ul class="menu">
+      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
+      <li data-page="social" data-icon="🔗"><span>Social</span></li>
+      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
+      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
+      <!-- NOVO item no menu: Certificates -->
+      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
+    </ul>
+
+    <!-- Seletor de Idioma -->
+    <div class="language-selector">
+      <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+      </select>
     </div>
+    
+    <!-- Picker de Cores (apenas texto) -->
+    <div class="main-color-picker">
+      <h3>Customize Main Content</h3>
+      <div class="color-control">
+        <label for="mainTextHue">Text Hue</label>
+        <input type="range" id="mainTextHue" min="0" max="360" value="0">
+      </div>
+      <div class="color-control">
+        <label for="mainTextSaturation">Text Saturation</label>
+        <input type="range" id="mainTextSaturation" min="0" max="100" value="0">
+      </div>
+      <div class="color-control">
+        <label for="mainTextLightness">Text Lightness</label>
+        <input type="range" id="mainTextLightness" min="0" max="100" value="100">
+      </div>
 
-    <div class="content" id="content">
-        <h1 id="pageTitle">Profile</h1>
-        <div id="pageContent">
-            <h2 id="knowledgeListTitle">Knowledge List</h2>
-            <div id="knowledgeList">
-                <p>JavaScript</p>
-                <p>HTML & CSS</p>
-                <p>React</p>
-                <!-- Botão de Download do CV -->
-                <button class="main-btn">
-                    <i class="fas fa-download"></i> Download CV
-                </button>
-                <!-- Link para o Portfólio -->
-                <p>
-                    <a href="https://www.example.com" class="main-link">Visite meu Portfólio</a>
-                </p>
-            </div>
-        </div>
+      <!-- Botão de Reset -->
+      <button id="resetMainColorsBtn" class="reset-btn">
+        <i class="fas fa-redo"></i> Reset Colors
+      </button>
     </div>
+  </div>
 
-    <script>
-        // Referências aos Elementos
-        const toggleBtn = document.getElementById('toggleBtn');
-        const sidebar = document.getElementById('sidebar');
-        const menuItems = document.querySelectorAll('.menu li');
-        const languageSelect = document.getElementById('languageSelect');
-        const pageTitle = document.getElementById('pageTitle');
-        const knowledgeListDiv = document.getElementById('knowledgeList');
-        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-        const content = document.getElementById('content'); // Referência ao conteúdo principal
+  <!-- Área de Conteúdo Principal -->
+  <div class="content" id="content">
+    <h1 id="pageTitle">Profile</h1>
+    <div id="pageContent">
+      <h2 id="knowledgeListTitle">Knowledge List</h2>
+      <div id="knowledgeList">
+        <p>JavaScript</p>
+        <p>HTML & CSS</p>
+        <p>React</p>
+      </div>
+    </div>
+  </div>
 
-        const translations = {
-            en: {
-                profileTitle: 'Profile',
-                knowledgeListTitle: 'Knowledge List',
-                socialTitle: 'Social',
-                contactTitle: 'Contact',
-                certificatesTitle: 'Certificates', // Novo Título para Certificates
-                facebook: 'Facebook',
-                instagram: 'Instagram',
-                projectsTitle: 'Projects',
-                blenderProjects: 'Blender Projects',
-                gimpProjects: 'Gimp Projects',
-                blenderAnimations: 'Blender Animations',
-                animatedBackground: 'Animated Background',
-                whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-                email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-            },
-            pt: {
-                profileTitle: 'Perfil',
-                knowledgeListTitle: 'Lista de Conhecimento',
-                socialTitle: 'Social',
-                contactTitle: 'Contato',
-                certificatesTitle: 'Certificados', // Novo Título para Certificados
-                facebook: 'Facebook',
-                instagram: 'Instagram',
-                projectsTitle: 'Projetos',
-                blenderProjects: 'Projetos Blender',
-                gimpProjects: 'Projetos Gimp',
-                blenderAnimations: 'Animações Blender',
-                animatedBackground: 'Fundo Animado',
-                whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-                email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-            }
-        };
+  <script>
+    // Referências
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const menuItems = document.querySelectorAll('.menu li');
+    const languageSelect = document.getElementById('languageSelect');
+    const pageTitle = document.getElementById('pageTitle');
+    const knowledgeListDiv = document.getElementById('knowledgeList');
+    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+    const content = document.getElementById('content');
 
-        let currentLanguage = 'en'; // Idioma padrão
-        let currentPage = 'profile'; // Página padrão
-        let knowledgeListData = []; // Inicializa um array vazio
+    // Sliders de cores
+    const mainTextHue = document.getElementById('mainTextHue');
+    const mainTextSaturation = document.getElementById('mainTextSaturation');
+    const mainTextLightness = document.getElementById('mainTextLightness');
+    // Botão Reset
+    const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
 
-        // Referências aos Sliders de Cor do Texto do Conteúdo Principal
-        const mainTextHue = document.getElementById('mainTextHue');
-        const mainTextSaturation = document.getElementById('mainTextSaturation');
-        const mainTextLightness = document.getElementById('mainTextLightness');
+    // Traduções
+    const translations = {
+      en: {
+        profileTitle: 'Profile',
+        knowledgeListTitle: 'Knowledge List',
+        socialTitle: 'Social',
+        contactTitle: 'Contact',
+        certificatesTitle: 'Certificates', // Texto para a aba Certificates
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        projectsTitle: 'Projects',
+        blenderProjects: 'Blender Projects',
+        gimpProjects: 'Gimp Projects',
+        blenderAnimations: 'Blender Animations',
+        animatedBackground: 'Animated Background',
+        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+      },
+      pt: {
+        profileTitle: 'Perfil',
+        knowledgeListTitle: 'Lista de Conhecimento',
+        socialTitle: 'Social',
+        contactTitle: 'Contato',
+        certificatesTitle: 'Certificados', // Texto para a aba Certificados
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        projectsTitle: 'Projetos',
+        blenderProjects: 'Projetos Blender',
+        gimpProjects: 'Projetos Gimp',
+        blenderAnimations: 'Animações Blender',
+        animatedBackground: 'Fundo Animado',
+        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+      }
+    };
 
-        // Referências às Exibições dos Valores HSL para Texto
-        const mainTextHValue = document.getElementById('mainTextHValue');
-        const mainTextSValue = document.getElementById('mainTextSValue');
-        const mainTextLValue = document.getElementById('mainTextLValue');
+    let currentLanguage = 'en';
+    let currentPage = 'profile';
 
-        // Referência ao Botão de Reset
-        const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
+    // Função para gerar cor HSL aleatória clara (L>80%)
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function generateRandomLightHSL() {
+      const h = getRandomInt(0, 360);
+      const s = getRandomInt(50, 100);
+      const l = getRandomInt(80, 100);
+      return { h, s, l };
+    }
 
-        // Função para determinar a cor adequada do texto com base na luminosidade do fundo
-        function determineTextColor(l) {
-            return l < 50 ? { h: 0, s: '0%', l: '100%' } : { h: 0, s: '0%', l: '0%' };
-        }
+    // Aplica cor ao texto principal
+    function randomizeColors() {
+      const mainTextColor = generateRandomLightHSL();
 
-        // Função para gerar um número inteiro aleatório entre min e max (inclusive)
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min + 1)) + min;
-        }
+      content.style.setProperty('--main-text-h', mainTextColor.h);
+      content.style.setProperty('--main-text-s', mainTextColor.s + '%');
+      content.style.setProperty('--main-text-l', mainTextColor.l + '%');
 
-        // Função para gerar uma cor HSL aleatória clara (L > 80%)
-        function generateRandomLightHSL() {
-            const h = getRandomInt(0, 360);
-            const s = getRandomInt(50, 100);
-            const l = getRandomInt(80, 100); // Ajustado para maior luminosidade
-            return { h, s, l };
-        }
+      mainTextHue.value = mainTextColor.h;
+      mainTextSaturation.value = mainTextColor.s;
+      mainTextLightness.value = mainTextColor.l;
+    }
 
-        // Função para calcular uma cor HSL mais escura
-        function calculateDarkerHSL(h, s, l, decrease = 20) {
-            let newL = l - decrease;
-            if (newL < 20) newL = 20; // Garante luminosidade mínima
-            return { h, s, l: newL };
-        }
+    // Recalcular cores da sidebar (fixo para texto branco, se preferir)
+    function recalculateSidebarColors() {
+      // Exemplo simples: texto branco fixo
+      // Pode expandir se quiser outro cálculo dinâmico
+    }
 
-        // Função para randomizar as cores na carga da página
-        function randomizeColors() {
-            // Gera uma cor clara aleatória para o texto principal
-            const mainTextColor = generateRandomLightHSL();
+    function updateMainTextColor() {
+      const h = parseInt(mainTextHue.value);
+      const s = parseInt(mainTextSaturation.value);
+      const l = parseInt(mainTextLightness.value);
 
-            // Define as Variáveis CSS para o Texto Principal
-            content.style.setProperty('--main-text-h', mainTextColor.h);
-            content.style.setProperty('--main-text-s', `${mainTextColor.s}%`);
-            content.style.setProperty('--main-text-l', `${mainTextColor.l}%`);
+      content.style.setProperty('--main-text-h', h);
+      content.style.setProperty('--main-text-s', s + '%');
+      content.style.setProperty('--main-text-l', l + '%');
 
-            // Atualiza as Exibições dos Valores HSL para o Texto Principal
-            mainTextHValue.textContent = mainTextColor.h;
-            mainTextSValue.textContent = `${mainTextColor.s}%`;
-            mainTextLValue.textContent = `${mainTextColor.l}%`;
+      recalculateSidebarColors();
+    }
 
-            // Atualiza os Sliders para Refletir as Cores Randomizadas (Apenas Texto)
-            mainTextHue.value = mainTextColor.h;
-            mainTextSaturation.value = mainTextColor.s;
-            mainTextLightness.value = mainTextColor.l;
-        }
+    resetMainColorsBtn.addEventListener('click', randomizeColors);
+    mainTextHue.addEventListener('input', updateMainTextColor);
+    mainTextSaturation.addEventListener('input', updateMainTextColor);
+    mainTextLightness.addEventListener('input', updateMainTextColor);
 
-        // Função para recalcular as cores da barra lateral e do menu após alterações manuais
-        function recalculateSidebarColors() {
-            // Determina a cor do texto da barra lateral (fixa para branco)
-            const sidebarTextColor = { h: 0, s: '0%', l: '100%' };
+    // Ao clicar no Toggle
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      sidebar.classList.toggle('open');
 
-            // Define as Variáveis CSS para a Cor do Texto da Barra Lateral
-            sidebar.style.setProperty('--sidebar-text-h', sidebarTextColor.h);
-            sidebar.style.setProperty('--sidebar-text-s', sidebarTextColor.s);
-            sidebar.style.setProperty('--sidebar-text-l', sidebarTextColor.l);
+      const icon = toggleBtn.querySelector('i');
+      if (sidebar.classList.contains('closed')) {
+        icon.classList.remove('fa-arrow-left');
+        icon.classList.add('fa-arrow-right');
+      } else {
+        icon.classList.remove('fa-arrow-right');
+        icon.classList.add('fa-arrow-left');
+      }
+    });
 
-            // Define as Variáveis CSS para o Gradiente do Menu (preto para preto, sem gradiente)
-            sidebar.style.setProperty('--menu-gradient-start-h', 0); /* Preto */
-            sidebar.style.setProperty('--menu-gradient-start-s', '0%');
-            sidebar.style.setProperty('--menu-gradient-start-l', '0%');
+    // Click nos itens do menu
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentPage = item.getAttribute('data-page');
+        updateContent();
+      });
+    });
 
-            // Define a Cor Final do Gradiente do Menu (preto)
-            sidebar.style.setProperty('--menu-gradient-end-h', 0);
-            sidebar.style.setProperty('--menu-gradient-end-s', '0%');
-            sidebar.style.setProperty('--menu-gradient-end-l', '0%');
-        }
+    // Muda idioma
+    function changeLanguage() {
+      currentLanguage = languageSelect.value;
+      updateContent();
+    }
 
-        // Função para atualizar a cor do texto do conteúdo principal
-        function updateMainTextColor() {
-            const h = parseInt(mainTextHue.value);
-            const s = parseInt(mainTextSaturation.value);
-            const l = parseInt(mainTextLightness.value);
-            
-            // Atualiza as Variáveis CSS para o Texto Principal
-            content.style.setProperty('--main-text-h', h);
-            content.style.setProperty('--main-text-s', `${s}%`);
-            content.style.setProperty('--main-text-l', `${l}%`);
-            
-            // Atualiza as Exibições dos Valores HSL para o Texto Principal
-            mainTextHValue.textContent = h;
-            mainTextSValue.textContent = `${s}%`;
-            mainTextLValue.textContent = `${l}%`;
+    // Exemplo: ler e exibir KnowledgeList (já existente)
+    async function fetchKnowledgeList() {
+      try {
+        const response = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+        const text = await response.text();
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        // Exemplo simples, sem || ou parse
+        return lines;
+      } catch (err) {
+        console.error(err);
+        return ['Erro ao carregar KnowledgeList'];
+      }
+    }
+    async function populateKnowledgeList() {
+      const lines = await fetchKnowledgeList();
+      knowledgeListDiv.innerHTML = '';
+      lines.forEach(line => {
+        const p = document.createElement('p');
+        p.textContent = line;
+        knowledgeListDiv.appendChild(p);
+      });
+    }
 
-            // Recalcula as cores da barra lateral e do menu (texto branco)
-            recalculateSidebarColors();
-        }
-
-        // Função para resetar as cores para valores randomizados
-        function resetMainColors() {
-            randomizeColors();
-        }
-
-        // Listeners para os Sliders de Cor do Texto Principal
-        mainTextHue.addEventListener('input', updateMainTextColor);
-        mainTextSaturation.addEventListener('input', updateMainTextColor);
-        mainTextLightness.addEventListener('input', updateMainTextColor);
-
-        // Listener para o Botão de Reset
-        resetMainColorsBtn.addEventListener('click', resetMainColors);
-
-        // Função para alternar a barra lateral e o ícone do botão
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('closed');
-            sidebar.classList.toggle('open');
-
-            // Mudar o ícone conforme o estado da barra lateral
-            const icon = toggleBtn.querySelector('i');
-            if (sidebar.classList.contains('closed')) {
-                icon.classList.remove('fa-arrow-left');
-                icon.classList.add('fa-arrow-right');
-            } else {
-                icon.classList.remove('fa-arrow-right');
-                icon.classList.add('fa-arrow-left');
-            }
+    // Ler e exibir certificados
+    async function fetchCertificatesList() {
+      try {
+        const response = await fetch('./Certificados/CertificadosList.txt');
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+        const text = await response.text();
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        // ex: "arquivo.pdf - Título"
+        const arr = lines.map(line => {
+          const parts = line.split('-').map(part => part.trim());
+          if (parts.length < 2) {
+            console.warn(`Formato inválido: ${line}`);
+            return { pdf: '', title: 'Título não disponível' };
+          }
+          const pdfName = parts[0];
+          const title = parts.slice(1).join(' - ');
+          return { pdf: pdfName, title };
         });
+        return arr;
+      } catch (err) {
+        console.error(err);
+        return [{ pdf: '', title: 'Erro ao carregar certificados' }];
+      }
+    }
 
-        // Função para lidar com os cliques nos itens do menu
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                menuItems.forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
-                currentPage = item.getAttribute('data-page');
-                updateContent();
-            });
-        });
+    async function populateCertificatesList() {
+      knowledgeListDiv.innerHTML = '';
+      const certificates = await fetchCertificatesList();
 
-        // Função para mudar o idioma
-        function changeLanguage() {
-            currentLanguage = languageSelect.value;
-            updateContent();
-        }
+      certificates.forEach(cert => {
+        // Contêiner principal
+        const container = document.createElement('div');
+        container.classList.add('certificate-container');
 
-        // Função para buscar e parsear o arquivo KnowledgeList.txt
-        async function fetchKnowledgeList() {
-            try {
-                const response = await fetch('./KnowledgeList/KnowledgeList.txt');
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP! Status: ${response.status}`);
-                }
-                const text = await response.text();
-                const lines = text.split('\n').filter(line => line.trim() !== ''); // Divide em linhas não vazias
-                knowledgeListData = lines.map(line => {
-                    const parts = line.split('||').map(part => part.trim());
-                    if (parts.length !== 2) {
-                        console.warn(`Formato de linha inválido: "${line}". Esperado "English || Portuguese".`);
-                        return { en: 'N/A', pt: 'N/A' }; // Ou pular a entrada
-                    }
-                    const [en, pt] = parts;
-                    return { en, pt };
-                });
-                // Após buscar, atualiza o conteúdo se a página atual for perfil
-                if (currentPage === 'profile') {
-                    populateKnowledgeList();
-                }
-            } catch (error) {
-                console.error('Falha ao buscar KnowledgeList:', error);
-                knowledgeListDiv.innerHTML = `<p>Erro ao carregar a lista de conhecimento.</p>`;
-            }
-        }
+        // iFrame com PDF
+        const iframe = document.createElement('iframe');
+        iframe.src = `./Certificados/${cert.pdf}`;
+        iframe.width = '100%';
+        iframe.height = '500px';
+        iframe.style.border = 'none';
 
-        // Função para popular a lista de conhecimento
-        function populateKnowledgeList() {
-            // Se os dados ainda estiverem carregando
-            if (knowledgeListData.length === 0) {
-                knowledgeListDiv.innerHTML = `<p>Carregando...</p>`;
-                return;
-            }
+        // Título sobreposto
+        const overlay = document.createElement('div');
+        overlay.classList.add('certificate-overlay');
+        overlay.textContent = cert.title;
 
-            // Limpa o conteúdo existente
-            knowledgeListDiv.innerHTML = '';
+        container.appendChild(iframe);
+        container.appendChild(overlay);
+        knowledgeListDiv.appendChild(container);
+      });
+    }
 
-            // Popula a lista
-            knowledgeListData.forEach(item => {
-                const p = document.createElement('p');
-                p.textContent = item[currentLanguage] || 'Tradução não disponível';
-                knowledgeListDiv.appendChild(p);
-            });
-        }
+    // Update de conteúdo ao trocar de "página"
+    function updateContent() {
+      // Título principal
+      pageTitle.textContent = translations[currentLanguage][`${currentPage}Title`] || '';
 
-        // Função para popular a lista de certificados
-        async function fetchCertificatesList() {
-            try {
-                const response = await fetch('./Certificados/CertificadosList.txt');
-                if (!response.ok) {
-                    throw new Error(`Erro HTTP! Status: ${response.status}`);
-                }
-                const text = await response.text();
-                const lines = text.split('\n').filter(line => line.trim() !== ''); // Divide em linhas não vazias
-                // Processa cada linha para extrair o título após o "-"
-                const certificates = lines.map(line => {
-                    const parts = line.split('-').map(part => part.trim());
-                    if (parts.length < 2) {
-                        console.warn(`Formato de linha inválido: "${line}". Esperado "Algo - Título".`);
-                        return 'Título não disponível'; // Ou pular a entrada
-                    }
-                    return parts[1]; // Título após o "-"
-                });
-                return certificates;
-            } catch (error) {
-                console.error('Falha ao buscar CertificadosList:', error);
-                return ['Erro ao carregar os certificados.'];
-            }
-        }
+      // Se a página atual está entre as reconhecidas, exibimos
+      if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
+        document.getElementById('pageContent').style.display = 'block';
+      } else {
+        document.getElementById('pageContent').style.display = 'none';
+      }
 
-        // Função para popular a lista de certificados no conteúdo principal
-        async function populateCertificatesList() {
-            // Limpa o conteúdo existente
-            knowledgeListDiv.innerHTML = '';
+      // Conteúdo específico
+      if (currentPage === 'profile') {
+        knowledgeListTitle.textContent = translations[currentLanguage]['knowledgeListTitle'];
+        populateKnowledgeList();
+      } else if (currentPage === 'social') {
+        knowledgeListTitle.textContent = translations[currentLanguage]['socialTitle'];
+        knowledgeListDiv.innerHTML = `
+          <p><a href="https://www.facebook.com" target="_blank" class="main-link">${translations[currentLanguage].facebook}</a></p>
+          <p><a href="https://www.instagram.com" target="_blank" class="main-link">${translations[currentLanguage].instagram}</a></p>
+        `;
+      } else if (currentPage === 'projects') {
+        knowledgeListTitle.textContent = translations[currentLanguage]['projectsTitle'];
+        knowledgeListDiv.innerHTML = `
+          <p><a href="#" class="main-link">${translations[currentLanguage].blenderProjects}</a></p>
+          <p><a href="#" class="main-link">${translations[currentLanguage].gimpProjects}</a></p>
+          <p><a href="#" class="main-link">${translations[currentLanguage].blenderAnimations}</a></p>
+          <p><a href="#" class="main-link">${translations[currentLanguage].animatedBackground}</a></p>
+        `;
+      } else if (currentPage === 'contact') {
+        knowledgeListTitle.textContent = translations[currentLanguage]['contactTitle'];
+        knowledgeListDiv.innerHTML = `
+          <p>${translations[currentLanguage].whatsapp}</p>
+          <p>${translations[currentLanguage].email}</p>
+        `;
+      } else if (currentPage === 'certificates') {
+        knowledgeListTitle.textContent = translations[currentLanguage]['certificatesTitle'];
+        populateCertificatesList();
+      }
+    }
 
-            // Busca os certificados
-            const certificates = await fetchCertificatesList();
-
-            // Cria uma lista não ordenada para exibir os certificados
-            const ul = document.createElement('ul');
-            ul.style.listStyleType = 'disc';
-            ul.style.paddingLeft = '20px';
-
-            certificates.forEach(cert => {
-                const li = document.createElement('li');
-                li.textContent = cert;
-                ul.appendChild(li);
-            });
-
-            knowledgeListDiv.appendChild(ul);
-        }
-
-        // Função para atualizar o conteúdo com base na página atual e no idioma
-        function updateContent() {
-            // Atualiza o título da página
-            pageTitle.textContent = translations[currentLanguage][`${currentPage}Title`] || '';
-
-            // Mostra ou esconde o conteúdo da página
-            if (['profile', 'social', 'projects', 'contact', 'certificates'].includes(currentPage)) {
-                document.getElementById('pageContent').style.display = 'block';
-            } else {
-                document.getElementById('pageContent').style.display = 'none';
-            }
-
-            // Atualiza o conteúdo com base na página atual
-            if (currentPage === 'profile') {
-                knowledgeListTitle.textContent = translations[currentLanguage]['knowledgeListTitle'];
-                populateKnowledgeList();
-            } else if (currentPage === 'social') {
-                knowledgeListTitle.textContent = translations[currentLanguage]['socialTitle'];
-                knowledgeListDiv.innerHTML = `
-                    <p><a href="https://www.facebook.com/antonio.augusto.barbaro" class="main-link" target="_blank">${translations[currentLanguage].facebook}</a></p>
-                    <p><a href="https://www.instagram.com/aabproducoes/" class="main-link" target="_blank">${translations[currentLanguage].instagram}</a></p>
-                `;
-            } else if (currentPage === 'projects') {
-                knowledgeListTitle.textContent = translations[currentLanguage]['projectsTitle'];
-                knowledgeListDiv.innerHTML = `
-                    <p><a href="./blender-projects.html" class="main-link" target="_blank">${translations[currentLanguage].blenderProjects}</a></p>
-                    <p><a href="./gimpt-projects.html" class="main-link" target="_blank">${translations[currentLanguage].gimpProjects}</a></p>
-                    <p><a href="./blender-animations.html" class="main-link" target="_blank">${translations[currentLanguage].blenderAnimations}</a></p>
-                    <p><a href="./animated-background.html" class="main-link" target="_blank">${translations[currentLanguage].animatedBackground}</a></p>
-                `;
-            } else if (currentPage === 'contact') {
-                knowledgeListTitle.textContent = translations[currentLanguage]['contactTitle'];
-                knowledgeListDiv.innerHTML = `
-                    <p>${translations[currentLanguage].whatsapp}</p>
-                    <p>${translations[currentLanguage].email}</p>
-                `;
-            } else if (currentPage === 'certificates') {
-                knowledgeListTitle.textContent = translations[currentLanguage]['certificatesTitle'];
-                populateCertificatesList();
-            } else {
-                // Esconde o conteúdo para outras páginas
-                document.getElementById('pageContent').style.display = 'none';
-            }
-        }
-
-        // Inicializa as Cores ao Carregar a Página
-        document.addEventListener('DOMContentLoaded', () => {
-            randomizeColors(); // Realiza seleção aleatória de cores na carga (apenas texto)
-            fetchKnowledgeList(); // Função existente para buscar a lista de conhecimento
-            updateContent(); // Função existente para atualizar o conteúdo com base na página e idioma
-        });
-    </script>
-
+    // Inicialização ao carregar
+    document.addEventListener('DOMContentLoaded', () => {
+      randomizeColors();
+      fetchKnowledgeList(); // Carrega a KnowledgeList, caso vá usar no "profile"
+      updateContent();
+    });
+  </script>
 </body>
 </html>
