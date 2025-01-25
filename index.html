@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Divertido com Contato e PDF Primeiro Page</title>
+  <title>Site Divertido com KnowledgeList Bilíngue</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -142,7 +142,6 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(255,0,0,0.2);
     }
-
     .sidebar.closed {
       width: 60px;
     }
@@ -265,7 +264,7 @@
       opacity: 0.8;
     }
 
-    /* CERTIFICADOS - Apenas Primeira Página (#page=1) */
+    /* CERTIFICADOS - exibe apenas primeira página (#page=1) */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -380,9 +379,7 @@
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
-        <p>JavaScript</p>
-        <p>HTML & CSS</p>
-        <p>React</p>
+        <!-- Conteúdo carregado dinamicamente -->
       </div>
     </div>
   </div>
@@ -473,29 +470,41 @@
       updateContent();
     }
 
-    // ========== EXEMPLO: Profile (KnowledgeList) ==========
+    // ========== KnowledgeList BILÍNGUE (LINHAS COM " || ") ==========
     async function fetchKnowledgeList() {
       try {
-        const r = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
-        const txt = await r.text();
-        return txt.split('\n').filter(l => l.trim() !== '');
+        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const text = await resp.text();
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        return lines;
       } catch (err) {
         console.error(err);
-        return ['Erro ao carregar KnowledgeList'];
+        return [];
       }
     }
     async function populateKnowledgeList() {
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
+
       lines.forEach(line => {
+        // ex: "JavaScript || JavaScript (PT)"
+        const parts = line.split('||').map(p => p.trim());
+        let englishText = parts[0] || line; // se não houver split, usa a linha inteira
+        let portugueseText = parts[1] || line; // idem
         const p = document.createElement('p');
-        p.textContent = line;
+
+        if (currentLanguage === 'en') {
+          p.textContent = englishText;
+        } else {
+          p.textContent = portugueseText;
+        }
+
         knowledgeListDiv.appendChild(p);
       });
     }
 
-    // ========== CERTIFICADOS (Somente 1ª Página) ==========
+    // ========== CERTIFICADOS (Somente 1ª página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -520,7 +529,7 @@
             pdfName = fullPath.substring(lastSlash+1);
           }
 
-          // Adiciona '#page=1' p/ exibir só a primeira página
+          // Only first page
           const onlyFirstPagePath = fullPath + '#page=1';
 
           return { fullPath: onlyFirstPagePath, pdfName, title };
@@ -539,12 +548,10 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // IFRAME com #page=1
           const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath; 
+          iframe.src = cert.fullPath;
           container.appendChild(iframe);
 
-          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -565,7 +572,7 @@
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
       const validPages = ['profile','social','projects','contact','certificates'];
-      if(validPages.includes(currentPage)) {
+      if (validPages.includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
@@ -602,7 +609,7 @@
         `;
       } else if(currentPage === 'contact'){
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        /* Tornamos o WhatsApp e Email em BOTÕES */
+        /* Tornamos WhatsApp e Email botões */
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
@@ -616,7 +623,7 @@
         populateCertificatesList();
       }
 
-      // Após atualizar HTML, adicionamos eventos de hover
+      // Adiciona eventos de hover p/ cada .main-btn (linhas + cor aleatória)
       setTimeout(() => {
         const btns = document.querySelectorAll('.main-btn');
         btns.forEach(btn => {
@@ -656,12 +663,12 @@
         const lineDiv = document.createElement('div');
         lineDiv.classList.add('line-effect');
 
-        // Borda: 0 ou width, e 0 ou height
+        // Posição inicial (borda do botão)
         const edge = Math.floor(Math.random()*4);
         let x=0, y=0;
         switch(edge){
           case 0: // esq
-            x=0; y = Math.random()*btnRect.height;
+            x=0; y=Math.random()*btnRect.height;
             break;
           case 1: // dir
             x=btnRect.width; y=Math.random()*btnRect.height;
