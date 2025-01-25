@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Azul - Arrow Animada no Minimize Button</title>
+  <title>Tema Azul sem Linhas e sem Cores Aleatórias, Arrow Animada</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
 
-  <!-- Font Awesome para ícones -->
+  <!-- Font Awesome (opcional, para setas e ícones) -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -53,7 +50,7 @@
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
 
-    /* BOTÃO TOGGLE (com seta animada) */
+    /* BOTÃO TOGGLE DA SIDEBAR */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -71,29 +68,23 @@
       transition: all 0.3s ease;
       font-size: 18px;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
+      overflow: visible;
     }
+    /* Animação da seta ao passar o mouse */
+    .toggle-btn i {
+      transition: transform 0.3s ease;
+    }
+    .toggle-btn:hover i {
+      transform: rotate(180deg);
+    }
+
+    /* Hover do Botão Toggle */
     .toggle-btn:hover {
       background: #4b94e6;
       transform: scale(1.1);
     }
     .toggle-btn:active {
       transform: scale(0.95);
-    }
-
-    /* ANIMAÇÃO DA SETA */
-    .toggle-btn i {
-      transition: transform 0.3s ease;
-    }
-    .toggle-btn:hover i {
-      animation: arrowWiggle 0.6s infinite alternate; /* chama a keyframe abaixo */
-    }
-    @keyframes arrowWiggle {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-5px);
-      }
     }
 
     /* MENU LATERAL */
@@ -206,7 +197,7 @@
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
 
-    /* BOTÕES .main-btn (sem linhas, sem random color) */
+    /* BOTÕES .main-btn */
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -312,8 +303,9 @@
 </head>
 <body>
 
+  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- Botão Toggle sem linhas, mas com arrow animada no hover -->
+    <!-- BOTÃO TOGGLE (sem linhas, mas com ícone setinha) -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
     </button>
@@ -326,9 +318,11 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
+    <!-- BOTÃO DE IDIOMA -->
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
 
+  <!-- CONTEÚDO PRINCIPAL -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
@@ -338,16 +332,21 @@
   </div>
 
   <script>
-    /* LÓGICA PRINCIPAL (TRADUÇÃO, MENU, ETC.) */
-    const toggleBtn = document.getElementById('toggleBtn');
-    const sidebar   = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.menu li');
-    const languageBtn = document.getElementById('languageBtn');
-    const pageTitle = document.getElementById('pageTitle');
+    // =========================
+    //  REFERÊNCIAS
+    // =========================
+    const toggleBtn        = document.getElementById('toggleBtn');
+    const sidebar          = document.getElementById('sidebar');
+    const menuItems        = document.querySelectorAll('.menu li');
+    const languageBtn      = document.getElementById('languageBtn');
+    const pageTitle        = document.getElementById('pageTitle');
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    const content = document.getElementById('content');
+    const content          = document.getElementById('content');
 
+    // =========================
+    //  TRADUÇÕES
+    // =========================
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -386,23 +385,25 @@
     };
 
     let currentLanguage = 'en';
-    let currentPage = 'profile';
+    let currentPage     = 'profile';
 
-    /* Toggle Sidebar */
+    // ========== SIDEBAR TOGGLE ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
       const icon = toggleBtn.querySelector('i');
       if (sidebar.classList.contains('closed')) {
+        // Altera ícone para arrow-right
         icon.classList.remove('fa-arrow-left');
         icon.classList.add('fa-arrow-right');
       } else {
+        // Altera ícone para arrow-left
         icon.classList.remove('fa-arrow-right');
         icon.classList.add('fa-arrow-left');
       }
     });
 
-    /* Menu Lateral */
+    // ========== MENU LATERAL ==========
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -412,7 +413,7 @@
       });
     });
 
-    /* Botão de Idioma (EN <-> PT) */
+    // ========== BOTÃO DE IDIOMA ==========
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
@@ -421,7 +422,7 @@
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    /* Atualiza rótulos do menu */
+    // ========== ATUALIZA LABEL DO MENU ==========
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
@@ -435,7 +436,7 @@
       });
     }
 
-    /* KnowledgeList (split "||") */
+    // ========== KNOWLEDGE LIST (EN||PT) ==========
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -456,16 +457,12 @@
         const portugueseText = parts[1] || line;
 
         const p = document.createElement('p');
-        if (currentLanguage === 'en') {
-          p.textContent = englishText;
-        } else {
-          p.textContent = portugueseText;
-        }
+        p.textContent = (currentLanguage === 'en') ? englishText : portugueseText;
         knowledgeListDiv.appendChild(p);
       });
     }
 
-    /* Certificados (somente primeira página) */
+    // ========== CERTIFICADOS (Somente a primeira página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -522,18 +519,21 @@
       });
     }
 
-    /* UPDATE CONTENT */
+    // ========== UPDATE DE CONTEÚDO ==========
     function updateContent() {
+      // Botão idioma
       updateLanguageButtonLabel();
+      // Menu
       updateMenuLabels();
 
       const dict = translations[currentLanguage];
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
       const validPages = ['profile','social','projects','contact','certificates'];
-      document.getElementById('pageContent').style.display =
+      document.getElementById('pageContent').style.display = 
         validPages.includes(currentPage) ? 'block' : 'none';
 
+      // Conteúdo específico
       if(currentPage === 'profile'){
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -577,9 +577,12 @@
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
+
+      // Sem lines nem cores aleatórias
+      // Efeito de hover simples nos botões
     }
 
-    /* INICIALIZAÇÃO */
+    // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
