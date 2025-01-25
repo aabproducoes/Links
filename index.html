@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site com Tema Azul</title>
+  <title>Site Azul sem Linhas e sem Cor Aleatória</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -25,11 +25,11 @@
       box-sizing: border-box;
     }
 
-    /* TEMA AZUL: Fundo radial em tons de azul claro */
+    /* TEMA AZUL: Fundo radial */
     body {
       display: flex;
       min-height: 100vh;
-      font-family: "Comic Neue", cursive, sans-serif; 
+      font-family: "Comic Neue", cursive, sans-serif;
       background: radial-gradient(circle at center, #d0f0ff 0%, #a4d4ff 100%);
       color: #333;
       overflow-x: hidden;
@@ -38,7 +38,7 @@
     /* SIDEBAR */
     .sidebar {
       width: 250px;
-      background: rgba(255,255,255,0.3); /* Transparência sobre o tom azul */
+      background: rgba(255,255,255,0.3);
       backdrop-filter: blur(5px);
       color: #000;
       display: flex;
@@ -46,11 +46,11 @@
       transition: width 0.3s ease;
       position: relative;
       z-index: 1000;
-      border-right: 2px dashed #53a0ff; /* Bordas e destaques em azul mais forte */
+      border-right: 2px dashed #53a0ff;
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
 
-    /* BOTÃO TOGGLE DA SIDEBAR */
+    /* BOTÃO TOGGLE (sem linhas) */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -67,49 +67,17 @@
       justify-content: center;
       transition: all 0.3s ease;
       font-size: 18px;
-      overflow: visible;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
     }
     .toggle-btn:hover {
       background: #4b94e6;
-      transform: scale(1.1) rotate(15deg);
+      transform: scale(1.1);
     }
     .toggle-btn:active {
-      transform: scale(0.95) rotate(15deg);
+      transform: scale(0.95);
     }
     .toggle-btn i {
       transition: transform 0.3s ease;
-    }
-
-    /* EFEITO DE LINHAS NO HOVER DO BOTÃO TOGGLE */
-    .toggle-btn .line {
-      position: absolute;
-      width: 2px;
-      height: 0;
-      background: #006aff;
-      opacity: 0;
-      transition: opacity 0.3s, height 0.5s;
-    }
-    .line1, .line2, .line3, .line4 {
-      top: 25px;
-      left: 25px;
-      transform-origin: top;
-    }
-    .toggle-btn:hover .line {
-      opacity: 1;
-      height: 40px;
-    }
-    .toggle-btn:hover .line1 {
-      transform: translate(-2px, -40px);
-    }
-    .toggle-btn:hover .line2 {
-      transform: rotate(60deg) translate(-2px, -40px);
-    }
-    .toggle-btn:hover .line3 {
-      transform: rotate(120deg) translate(-2px, -40px);
-    }
-    .toggle-btn:hover .line4 {
-      transform: rotate(180deg) translate(-2px, -40px);
     }
 
     /* MENU LATERAL */
@@ -125,7 +93,7 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.3s ease;
       background: rgba(255,255,255,0.3);
-      color: #006aff; /* Tom de azul mais forte para o texto */
+      color: #006aff;
       font-size: 16px;
       font-weight: 700;
       margin: 5px 10px;
@@ -140,12 +108,12 @@
     }
     .menu li.active {
       background: rgba(255,255,255,0.8);
-      color: #004e99; 
+      color: #004e99;
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
 
-    /* SIDE BAR COLAPSADA */
+    /* SIDEBAR COLAPSADA */
     .sidebar.closed {
       width: 60px;
     }
@@ -169,7 +137,7 @@
       transform: rotate(180deg);
     }
 
-    /* BOTÃO DE IDIOMA (AZUL) */
+    /* BOTÃO DE IDIOMA */
     .language-btn {
       display: inline-block;
       margin: 20px auto;
@@ -182,7 +150,6 @@
       font-weight: 700;
       text-align: center;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-      overflow: hidden;
       cursor: pointer;
       width: 80%;
     }
@@ -211,7 +178,7 @@
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
-      color: #006aff; 
+      color: #006aff;
       text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
       border-bottom: 2px dashed #53a0ff;
       padding-bottom: 5px;
@@ -219,11 +186,11 @@
     #knowledgeListTitle {
       font-size: 22px;
       margin-bottom: 8px;
-      color: #0051b3; 
+      color: #0051b3;
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
 
-    /* BOTÕES .main-btn (AZUIS) */
+    /* BOTÕES .main-btn */
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -248,31 +215,7 @@
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
 
-    /* Linhas p/ hover do botão .main-btn (tema azul) */
-    .lines-container {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
-      border-radius: 50px;
-    }
-    .line-effect {
-      position: absolute;
-      width: 2px;
-      height: 0px;
-      background-color: #003c8f; /* tom de azul escuro */
-      transition: height 0.5s ease;
-      opacity: 0.8;
-      top: 50%;
-      left: 50%;
-      transform-origin: 0% 0%;
-    }
-
-    /* CERTIFICADOS (exibe só a primeira página) */
+    /* CERTIFICADOS (apenas primeira página) */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -355,14 +298,12 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
+    <!-- BOTÃO TOGGLE (sem linhas) -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
-      <div class="line line1"></div>
-      <div class="line line2"></div>
-      <div class="line line3"></div>
-      <div class="line line4"></div>
     </button>
 
+    <!-- MENU LATERAL -->
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -371,6 +312,7 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
+    <!-- BOTÃO DE IDIOMA -->
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
 
@@ -379,9 +321,7 @@
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList">
-        <!-- Dinâmico -->
-      </div>
+      <div id="knowledgeList"></div>
     </div>
   </div>
 
@@ -441,7 +381,7 @@
     let currentLanguage = 'en';
     let currentPage     = 'profile';
 
-    // ========== MENU SIDEBAR ==========
+    // ========== SIDEBAR TOGGLE ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -455,6 +395,7 @@
       }
     });
 
+    // ========== MENU LATERAL ==========
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -464,22 +405,20 @@
       });
     });
 
-    // ========== BOTÃO DE IDIOMA ==========
+    // ========== BOTÃO DE IDIOMA (cíclico en/pt) ==========
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
     });
-
     function updateLanguageButtonLabel() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    // ========== ATUALIZA LABEL DO MENU (TRADUCAO) ==========
+    // ========== ATUALIZA RÓTULOS DO MENU ==========
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
         const page = item.getAttribute('data-page');
-        // Ex: "profile" => "profileTitle"
         const labelKey = page + 'Title';
         const label = dict[labelKey] || page;
         const span = item.querySelector('span');
@@ -489,7 +428,7 @@
       });
     }
 
-    // ========== KNOWLEDGE LIST (EN||PT) ==========
+    // ========== KNOWLEDGE LIST (split "||") ==========
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -505,12 +444,12 @@
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
       lines.forEach(line => {
-        // "TextoEn || TextoPt"
+        // "Texto En || Texto Pt"
         const parts = line.split('||').map(p => p.trim());
         const englishText = parts[0] || line;
         const portugueseText = parts[1] || line;
-        const p = document.createElement('p');
 
+        const p = document.createElement('p');
         if (currentLanguage === 'en') {
           p.textContent = englishText;
         } else {
@@ -520,11 +459,11 @@
       });
     }
 
-    // ========== CERTIFICADOS (Somente 1ª página) ==========
+    // ========== CERTIFICADOS (Somente a primeira página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
-        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
@@ -543,9 +482,8 @@
           if(lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash+1);
           }
-          const onlyFirstPagePath = fullPath + '#page=1';
-
-          return { fullPath: onlyFirstPagePath, pdfName, title };
+          const onlyFirstPage = fullPath + '#page=1';
+          return { fullPath: onlyFirstPage, pdfName, title };
         });
       } catch(err) {
         console.error(err);
@@ -580,7 +518,9 @@
 
     // ========== UPDATE DE CONTEÚDO ==========
     function updateContent() {
+      // Atualiza o texto do botão de idioma
       updateLanguageButtonLabel();
+      // Atualiza os rótulos do menu lateral
       updateMenuLabels();
 
       const dict = translations[currentLanguage];
@@ -634,59 +574,8 @@
         populateCertificatesList();
       }
 
-      // Efeito de hover p/ botões
-      setTimeout(() => {
-        const btns = document.querySelectorAll('.main-btn');
-        btns.forEach(btn => {
-          btn.addEventListener('mouseenter', () => {
-            const c = randomColor();
-            btn.style.backgroundColor = c;
-            const lines = createRandomLines(btn, 8);
-          });
-          btn.addEventListener('mouseleave', () => {
-            btn.style.backgroundColor = '#88c7ff';
-            const linesContainer = btn.querySelector('.lines-container');
-            if(linesContainer){
-              btn.removeChild(linesContainer);
-            }
-          });
-        });
-      }, 50);
-    }
-
-    // ========== FUNÇÕES DE COR E LINHAS ALEATÓRIAS ==========
-    function randomColor() {
-      const r = Math.floor(Math.random()*256);
-      const g = Math.floor(Math.random()*256);
-      const b = Math.floor(Math.random()*256);
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-    function createRandomLines(button, count=8){
-      const linesContainer = document.createElement('div');
-      linesContainer.classList.add('lines-container');
-      button.appendChild(linesContainer);
-
-      for(let i=0; i<count; i++){
-        const lineDiv = document.createElement('div');
-        lineDiv.classList.add('line-effect');
-
-        // Ângulo aleatório
-        const angle = Math.random()*360;
-        lineDiv.style.transform = `rotate(${angle}deg)`;
-
-        // Cor aleatória
-        lineDiv.style.backgroundColor = '#003c8f'; // ou randomColor() se quiser cada raio uma cor
-
-        // Tamanho
-        const lineLength = 50 + Math.random()*50; 
-        setTimeout(()=> {
-          lineDiv.style.height = lineLength + 'px';
-        },0);
-
-        linesContainer.appendChild(lineDiv);
-      }
-
-      return linesContainer;
+      // Sem linhas e sem random color: hover simples
+      // Então não geramos 'lines-container' nem mudamos cor
     }
 
     // ========== INICIALIZAÇÃO ==========
