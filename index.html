@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Sério com Botões Animados</title>
+  <title>Site Sério com Botões e Efeitos</title>
 
   <!-- Google Fonts (Roboto + Montserrat) -->
   <link
@@ -11,7 +11,7 @@
     rel="stylesheet"
   />
   
-  <!-- Font Awesome para ícones (opcional) -->
+  <!-- Font Awesome (opcional) -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -37,7 +37,7 @@
       background-color: #111; 
       color: #f0f0f0;
       overflow-x: hidden;
-      position: relative;
+      position: relative; /* Para posicionar o SVG */
     }
 
     /* ======================================
@@ -74,7 +74,7 @@
       transition: all 0.3s ease;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       font-size: 18px;
-      overflow: visible;
+      overflow: visible; /* Para linhas */
     }
 
     .toggle-btn:hover {
@@ -90,7 +90,7 @@
       transition: transform 0.3s ease;
     }
 
-    /* EFEITO DE LINHAS NO HOVER DO BOTÃO */
+    /* Efeito de linhas no hover (não-randômico) */
     .toggle-btn .line {
       position: absolute;
       width: 2px;
@@ -99,11 +99,13 @@
       opacity: 0;
       transition: opacity 0.3s, height 0.5s;
     }
+
     .line1, .line2, .line3, .line4 {
       top: 25px;
       left: 25px;
       transform-origin: top;
     }
+
     .toggle-btn:hover .line1 {
       opacity: 1;
       height: 40px;
@@ -158,46 +160,6 @@
       background: #333;
       font-weight: 700;
     }
-
-    /* ANIMAÇÃO PARA LINKS */
-    a.main-btn {
-      display: inline-block;
-      background: #222;
-      color: #fff;
-      padding: 10px 15px;
-      border: 1px solid #444;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-    a.main-btn:hover {
-      background: #f06595;
-      color: #fff;
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(240, 101, 149, 0.4);
-    }
-    a.main-btn:active {
-      transform: scale(0.95);
-      box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
-    }
-
-    a.main-btn::after {
-      content: '';
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      background-color: #f06595;
-      left: 0;
-      bottom: -3px;
-      transition: width 0.3s ease;
-    }
-    a.main-btn:hover::after {
-      width: 100%;
-    }
-
-    /* COLAPSO SIDEBAR */
     .sidebar.closed {
       width: 60px;
     }
@@ -261,8 +223,7 @@
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 1s ease-out, transform 1s ease-out;
-      position: relative;
-      overflow: hidden;
+      position: relative; /* Para posicionar elementos internos */
     }
     .content.visible {
       opacity: 1;
@@ -287,7 +248,7 @@
       color: #f06595;
     }
 
-    /* BOTÕES ANIMADOS */
+    /* BOTÕES */
     a.main-btn {
       display: inline-block;
       background: #222;
@@ -299,7 +260,7 @@
       font-weight: 500;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      margin-top: 10px;
+      overflow: hidden; /* Para esconder as linhas que saem */
     }
     a.main-btn:hover {
       background: #f06595;
@@ -312,21 +273,18 @@
       box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
     }
 
-    a.main-btn::after {
-      content: '';
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      background-color: #f06595;
-      left: 0;
-      bottom: -3px;
-      transition: width 0.3s ease;
+    /* ANIMAÇÕES DE SCROLL */
+    .animated-text, .animated-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
     }
-    a.main-btn:hover::after {
-      width: 100%;
+    .animated-text.visible, .animated-item.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
+    /* CERTIFICADOS */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -387,6 +345,20 @@
       color: #fff;
     }
 
+    /* SVG Overlay para linhas */
+    #lineCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none; /* Ignora interações do mouse */
+      z-index: 500; /* Abaixo da sidebar */
+    }
+    .hover-line {
+      transition: x2 0.5s ease, y2 0.5s ease;
+    }
+
     /* RESPONSIVIDADE */
     @media (max-width: 768px) {
       .sidebar {
@@ -436,37 +408,12 @@
       }
     }
 
-    /* ======================================
-       SVG OVERLAY PARA LINHAS ANIMADAS
-    ====================================== */
-    #lineOverlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 999;
-    }
-    .animated-line {
-      stroke: #f06595;
-      stroke-width: 2;
-      stroke-linecap: round;
-      opacity: 0;
-      transition: opacity 0.5s ease, stroke-dashoffset 1s ease;
-      stroke-dasharray: 100;
-      stroke-dashoffset: 100;
-    }
-    .animated-line.visible {
-      opacity: 1;
-      stroke-dashoffset: 0;
-    }
   </style>
 </head>
 <body>
 
-  <!-- SVG OVERLAY PARA LINHAS -->
-  <svg id="lineOverlay"></svg>
+  <!-- SVG Overlay para desenhar linhas -->
+  <svg id="lineCanvas"></svg>
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
@@ -506,7 +453,7 @@
         <p class="animated-text">JavaScript</p>
         <p class="animated-text">HTML & CSS</p>
         <p class="animated-text">React</p>
-        <!-- Exemplo de uso de botões em vez de links: -->
+        <!-- Exemplos de botões: -->
         <p>
           <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
             Visitar Repositório
@@ -528,7 +475,9 @@
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
-    const lineOverlay = document.getElementById('lineOverlay');
+
+    // SVG Canvas
+    const svg = document.getElementById('lineCanvas');
 
     // =========================
     //  TRADUÇÕES
@@ -725,16 +674,16 @@
       } else if (currentPage === 'social') {
         knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
-          <p><a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a></p>
-          <p><a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a></p>
+          <p><a href="https://www.facebook.com" target="_blank" class="main-btn">Facebook</a></p>
+          <p><a href="https://www.instagram.com" target="_blank" class="main-btn">Instagram</a></p>
         `;
       } else if (currentPage === 'projects') {
         knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
-          <p><a href="#" class="main-btn">${dict.blenderProjects}</a></p>
-          <p><a href="#" class="main-btn">${dict.gimpProjects}</a></p>
-          <p><a href="#" class="main-btn">${dict.blenderAnimations}</a></p>
-          <p><a href="#" class="main-btn">${dict.animatedBackground}</a></p>
+          <p><a href="#" class="main-btn">Blender Projects</a></p>
+          <p><a href="#" class="main-btn">Gimp Projects</a></p>
+          <p><a href="#" class="main-btn">Blender Animations</a></p>
+          <p><a href="#" class="main-btn">Animated Background</a></p>
         `;
       } else if (currentPage === 'contact') {
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
@@ -751,9 +700,6 @@
       setTimeout(() => {
         content.classList.add('visible');
       }, 100);
-
-      // Animações ao scroll
-      handleScrollAnimations();
     }
 
     // =========================
@@ -771,46 +717,75 @@
     window.addEventListener('scroll', handleScrollAnimations);
 
     // =========================
-    //  EFEITO DE LINHAS ANIMADAS NOS BOTÕES
+    //  EFEITO DE LINHAS NO HOVER DOS BOTÕES
     // =========================
-    const buttons = document.querySelectorAll('.main-btn, .menu li');
+    const buttons = document.querySelectorAll('.main-btn');
 
     buttons.forEach(button => {
       button.addEventListener('mouseenter', (e) => {
-        const rect = button.getBoundingClientRect();
-        const startX = rect.left + rect.width / 2;
-        const startY = rect.top + rect.height / 2;
-
-        const numLines = 5; // Número de linhas a serem desenhadas
-        for (let i = 0; i < numLines; i++) {
-          const angle = Math.random() * 2 * Math.PI;
-          const length = Math.random() * 100 + 50; // Comprimento aleatório entre 50 e 150 pixels
-          const endX = startX + Math.cos(angle) * length;
-          const endY = startY + Math.sin(angle) * length;
-
-          const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          line.setAttribute('x1', startX);
-          line.setAttribute('y1', startY);
-          line.setAttribute('x2', startX);
-          line.setAttribute('y2', startY);
-          line.classList.add('animated-line');
-          lineOverlay.appendChild(line);
-
-          // Força a reflow para que a transição ocorra
-          void line.offsetWidth;
-
-          // Define o ponto final
-          line.setAttribute('x2', endX);
-          line.setAttribute('y2', endY);
-          line.classList.add('visible');
-
-          // Remove a linha após a animação
-          line.addEventListener('transitionend', () => {
-            line.remove();
-          });
-        }
+        createLines(e.currentTarget);
+      });
+      button.addEventListener('mouseleave', () => {
+        clearLines();
       });
     });
+
+    function createLines(button) {
+      // Limpa linhas existentes
+      clearLines();
+
+      // Posição do botão
+      const rect = button.getBoundingClientRect();
+      const buttonCenter = {
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2
+      };
+
+      // Número de linhas
+      const numLines = 5;
+
+      for (let i = 0; i < numLines; i++) {
+        // Gera pontos aleatórios próximos
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = 50 + Math.random() * 50; // distância entre 50 e 100px
+        const endX = buttonCenter.x + radius * Math.cos(angle);
+        const endY = buttonCenter.y + radius * Math.sin(angle);
+
+        // Cria uma linha SVG
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', buttonCenter.x);
+        line.setAttribute('y1', buttonCenter.y);
+        line.setAttribute('x2', buttonCenter.x);
+        line.setAttribute('y2', buttonCenter.y);
+        line.setAttribute('stroke', '#f06595');
+        line.setAttribute('stroke-width', '2');
+        line.setAttribute('stroke-linecap', 'round');
+        line.classList.add('hover-line');
+
+        svg.appendChild(line);
+
+        // Animação: aumentar x2 e y2 para o ponto final
+        setTimeout(() => {
+          line.setAttribute('x2', endX);
+          line.setAttribute('y2', endY);
+        }, 10); // atraso para que a transição aconteça
+
+      }
+    }
+
+    function clearLines() {
+      const lines = document.querySelectorAll('.hover-line');
+      lines.forEach(line => {
+        // Anima a linha de volta para o início
+        line.setAttribute('x2', line.getAttribute('x1'));
+        line.setAttribute('y2', line.getAttribute('y1'));
+
+        // Remove a linha após a animação
+        line.addEventListener('transitionend', () => {
+          line.remove();
+        }, { once: true });
+      });
+    }
 
     // =========================
     //  INICIALIZAÇÃO
@@ -820,5 +795,6 @@
       handleScrollAnimations(); 
     });
   </script>
+
 </body>
 </html>
