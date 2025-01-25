@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Sério com Botões Animados</title>
+  <title>Site Sério com Botões</title>
 
   <!-- Google Fonts (Roboto + Montserrat) -->
   <link
@@ -11,7 +11,7 @@
     rel="stylesheet"
   />
   
-  <!-- Font Awesome para ícones (opcional) -->
+  <!-- Font Awesome (opcional) -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -21,9 +21,7 @@
   />
 
   <style>
-    /* ======================================
-       RESET BÁSICO
-    ====================================== */
+    /* RESET BÁSICO */
     * {
       margin: 0;
       padding: 0;
@@ -34,18 +32,15 @@
       display: flex;
       min-height: 100vh;
       font-family: "Roboto", sans-serif;
-      background-color: #111; /* tom mais sóbrio (preto acinzentado) */
-      color: #f0f0f0;           /* texto mais claro */
-      overflow-x: hidden; /* evita rolagem horizontal */
-      position: relative; /* para posicionamento absoluto das linhas */
+      background-color: #111; 
+      color: #f0f0f0;
+      overflow-x: hidden;
     }
 
-    /* ======================================
-       SIDEBAR (MENU LATERAL) - Tom Sério
-    ====================================== */
+    /* SIDEBAR */
     .sidebar {
       width: 250px;
-      background-color: #111; /* tom sério, sem color picker */
+      background-color: #111;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -53,10 +48,8 @@
       position: relative;
       font-family: "Montserrat", sans-serif;
       z-index: 1000;
-      border-right: 1px solid #333; /* leve borda */
+      border-right: 1px solid #333;
     }
-
-    /* BOTÃO TOGGLE */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -74,60 +67,53 @@
       transition: all 0.3s ease;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       font-size: 18px;
-      overflow: visible; /* para linhas */
+      overflow: visible;
     }
-
     .toggle-btn:hover {
       background: #444;
       transform: scale(1.05);
     }
-
     .toggle-btn:active {
       transform: scale(0.95);
     }
-
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
-
-    /* EFEITO DE LINHAS NO HOVER DO BOTÃO */
+    /* Efeito de linhas no hover (não-randômico) */
     .toggle-btn .line {
       position: absolute;
       width: 2px;
       height: 0;
-      background: #f06595; /* cor da linha (rosa) */
+      background: #f06595;
       opacity: 0;
       transition: opacity 0.3s, height 0.5s;
     }
-
     .line1, .line2, .line3, .line4 {
-      top: 25px;  /* a metade do height do .toggle-btn (50/2) */
-      left: 25px; /* idem pro width */
+      top: 25px;
+      left: 25px;
       transform-origin: top;
     }
-
-    .toggle-btn:hover .line1,
-    .toggle-btn:hover .line2,
-    .toggle-btn:hover .line3,
-    .toggle-btn:hover .line4 {
-      opacity: 1;
-      height: 40px; /* "esticado" */
-    }
-
     .toggle-btn:hover .line1 {
-      transform: translate(-2px, -40px); /* linha indo pra cima */
+      opacity: 1;
+      height: 40px;
+      transform: translate(-2px, -40px);
     }
     .toggle-btn:hover .line2 {
+      opacity: 1;
+      height: 40px;
       transform: rotate(60deg) translate(-2px, -40px);
     }
     .toggle-btn:hover .line3 {
+      opacity: 1;
+      height: 40px;
       transform: rotate(120deg) translate(-2px, -40px);
     }
     .toggle-btn:hover .line4 {
+      opacity: 1;
+      height: 40px;
       transform: rotate(180deg) translate(-2px, -40px);
     }
 
-    /* LISTA MENU */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -160,7 +146,6 @@
       background: #333;
       font-weight: 700;
     }
-
     .sidebar.closed {
       width: 60px;
     }
@@ -224,7 +209,6 @@
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 1s ease-out, transform 1s ease-out;
-      position: relative; /* Para posicionamento absoluto das linhas */
     }
     .content.visible {
       opacity: 1;
@@ -261,7 +245,6 @@
       font-weight: 500;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      overflow: hidden; /* Para conter as linhas animadas */
     }
     a.main-btn:hover {
       background: #f06595;
@@ -272,6 +255,17 @@
     a.main-btn:active {
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
+    }
+
+    /* ANIMAÇÕES DE SCROLL */
+    .animated-text, .animated-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+    .animated-text.visible, .animated-item.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
@@ -383,29 +377,15 @@
         font-size: 12px;
       }
     }
-
-    /* ======================================
-       EFEITOS DE LINHAS ANIMADAS
-    ====================================== */
-    .animated-line {
-      position: absolute;
-      width: 2px;
-      background-color: #f06595;
-      opacity: 0;
-      transform-origin: top left;
-      transition: opacity 0.3s ease, transform 0.6s ease;
-    }
-    .animated-line.visible {
-      opacity: 1;
-      transform: scaleY(1);
-    }
   </style>
 </head>
 <body>
 
+  <!-- SVG Overlay para desenhar linhas -->
+  <svg id="svgOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999;"></svg>
+
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- Botão com efeito de linhas no Hover -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
       <!-- Quatro linhas fixas para efeito de hover (não-randômico) -->
@@ -439,9 +419,9 @@
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
-        <p class="animated-text">JavaScript</p>
-        <p class="animated-text">HTML & CSS</p>
-        <p class="animated-text">React</p>
+        <p>JavaScript</p>
+        <p>HTML & CSS</p>
+        <p>React</p>
         <!-- Exemplo de uso de botões em vez de links: -->
         <p>
           <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
@@ -452,6 +432,7 @@
     </div>
   </div>
 
+  <!-- Script Adicionado -->
   <script>
     // =========================
     //  REFERÊNCIAS
@@ -464,6 +445,7 @@
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
+    const svgOverlay = document.getElementById('svgOverlay');
 
     // =========================
     //  TRADUÇÕES
@@ -567,13 +549,6 @@
         p.classList.add('animated-text');
         knowledgeListDiv.appendChild(p);
       });
-
-      // Adiciona event listeners para botões
-      const buttons = knowledgeListDiv.querySelectorAll('.main-btn');
-      buttons.forEach(button => {
-        button.addEventListener('mouseenter', createLines);
-        button.addEventListener('mouseleave', removeLines);
-      });
     }
 
     // =========================
@@ -586,7 +561,7 @@
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
-        // Separa no primeiro " - "
+        // "Certificados/Certificado-...pdf - Título"
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
@@ -597,7 +572,7 @@
           const fullPath = line.substring(0, idx).trim();
           const title = line.substring(idx + sep.length).trim();
 
-          // Nome do PDF = tudo após o último "/"
+          // Nome do PDF depois do último "/"
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if (lastSlash !== -1) {
@@ -621,12 +596,12 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container', 'animated-item');
 
-          // IFRAME do PDF
+          // iframe
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
           container.appendChild(iframe);
 
-          // Overlay
+          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -640,7 +615,7 @@
         }
       });
 
-      // Adiciona animação após os certificados serem inseridos
+      // Animação de aparição
       setTimeout(() => {
         const animatedItems = document.querySelectorAll('.animated-item');
         animatedItems.forEach(item => item.classList.add('visible'));
@@ -670,12 +645,6 @@
           <p><a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a></p>
           <p><a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a></p>
         `;
-        // Adiciona event listeners para novos botões
-        const buttons = knowledgeListDiv.querySelectorAll('.main-btn');
-        buttons.forEach(button => {
-          button.addEventListener('mouseenter', createLines);
-          button.addEventListener('mouseleave', removeLines);
-        });
       } else if (currentPage === 'projects') {
         knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
@@ -684,12 +653,6 @@
           <p><a href="#" class="main-btn">${dict.blenderAnimations}</a></p>
           <p><a href="#" class="main-btn">${dict.animatedBackground}</a></p>
         `;
-        // Adiciona event listeners para novos botões
-        const buttons = knowledgeListDiv.querySelectorAll('.main-btn');
-        buttons.forEach(button => {
-          button.addEventListener('mouseenter', createLines);
-          button.addEventListener('mouseleave', removeLines);
-        });
       } else if (currentPage === 'contact') {
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
         knowledgeListDiv.innerHTML = `
@@ -708,7 +671,7 @@
     }
 
     // =========================
-    //  ANIMAÇÕES AO SCROLL
+    //  SCROLL ANIMATIONS
     // =========================
     function handleScrollAnimations() {
       const animatedElements = document.querySelectorAll('.animated-text, .animated-item');
@@ -722,54 +685,51 @@
     window.addEventListener('scroll', handleScrollAnimations);
 
     // =========================
-    //  CRIAÇÃO DE LINHAS ANIMADAS
+    //  FUNÇÃO PARA DESENHAR LINHAS
     // =========================
-    function createLines(event) {
-      const button = event.currentTarget;
+    function drawLinesFromButton(button) {
       const rect = button.getBoundingClientRect();
-      const buttonCenter = {
-        x: rect.left + rect.width / 2 + window.scrollX,
-        y: rect.top + rect.height / 2 + window.scrollY
-      };
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      const numberOfLines = 5; // Número de linhas a serem criadas
-      const maxDistance = 100;  // Distância máxima das linhas
+      const numberOfLines = 5; // Número de linhas por botão
+      const maxDistance = 100; // Distância máxima das linhas
 
       for (let i = 0; i < numberOfLines; i++) {
-        const angle = Math.random() * 2 * Math.PI; // Ângulo aleatório
-        const distance = Math.random() * maxDistance; // Distância aleatória
+        // Gera pontos aleatórios dentro de um círculo
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * maxDistance;
 
-        const endX = buttonCenter.x + distance * Math.cos(angle);
-        const endY = buttonCenter.y + distance * Math.sin(angle);
+        const endX = centerX + distance * Math.cos(angle);
+        const endY = centerY + distance * Math.sin(angle);
 
-        const deltaX = endX - buttonCenter.x;
-        const deltaY = endY - buttonCenter.y;
-        const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-        const angleDeg = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+        // Cria a linha SVG
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", centerX);
+        line.setAttribute("y1", centerY);
+        line.setAttribute("x2", endX);
+        line.setAttribute("y2", endY);
+        line.classList.add('line');
 
-        const line = document.createElement('div');
-        line.classList.add('animated-line');
-        line.style.left = `${buttonCenter.x}px`;
-        line.style.top = `${buttonCenter.y}px`;
-        line.style.height = `${length}px`;
-        line.style.transform = `rotate(${angleDeg}deg) scaleY(0)`;
+        svgOverlay.appendChild(line);
 
-        document.body.appendChild(line);
-
-        // Forçar reflow para aplicar a transição
-        void line.offsetWidth;
-
-        line.classList.add('visible');
-
-        // Remover a linha após a animação
-        line.addEventListener('transitionend', () => {
+        // Remove a linha após a animação
+        line.addEventListener('animationend', () => {
           line.remove();
         });
       }
     }
 
-    function removeLines(event) {
-      // Nenhuma ação necessária aqui, pois as linhas se removem automaticamente após a animação
+    // =========================
+    //  ADICIONAR EVENTOS DE HOVER NOS BOTÕES
+    // =========================
+    function addHoverEffectsToButtons() {
+      const buttons = document.querySelectorAll('.main-btn');
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+          drawLinesFromButton(button);
+        });
+      });
     }
 
     // =========================
@@ -778,6 +738,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       updateContent(); 
       handleScrollAnimations(); 
+      addHoverEffectsToButtons(); // Adiciona os eventos de hover aos botões
     });
   </script>
 
