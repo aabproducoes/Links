@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Leitura de CertificadosList.txt</title>
+  <title>Certificados</title>
   <style>
     body {
       background: #222;
@@ -33,44 +33,46 @@
       background: rgba(0,0,0,0.6);
       padding: 0.5rem 1rem;
       border-radius: 4px;
-      pointer-events: none; /* clique passa pro iframe */
+      pointer-events: none; /* Permite cliques no iframe */
     }
     .overlay .path {
       font-size: 12px;
       color: #ccc;
       margin-top: 4px;
-      word-break: break-all; /* se o caminho for longo */
+      word-break: break-all; /* Quebra linha se o caminho for longo */
     }
   </style>
 </head>
 <body>
 
-<h1>Exemplo: Ler CertificadosList.txt e Usar o Caminho EXATO</h1>
+<h1>Certificados</h1>
 <div id="certContainer">Carregando...</div>
 
 <script>
 async function fetchCertificates() {
   try {
-    // Lê o arquivo EXACTAMENTE, sem manipular paths
-    const resp = await fetch('./Certificados/CertificadosList.txt');
-    if (!resp.ok) throw new Error(`Erro HTTP: ${resp.status}`);
-    const text = await resp.text();
+    // Lê o arquivo CertificadosList.txt
+    const response = await fetch('./Certificados/CertificadosList.txt');
+    if (!response.ok) throw new Error(`Erro HTTP: ${response.status}`);
+    const text = await response.text();
     
     // Separa por linhas não vazias
-    const lines = text.split('\n').filter(l => l.trim() !== '');
+    const lines = text.split('\n').filter(line => line.trim() !== '');
     
-    // Cada linha: "Certificados/Certificado-xxx.pdf - Título do Certificado"
+    // Cada linha: "Certificados/Certificado-xxx.pdf - Título"
     return lines.map(line => {
-      // Divide por "-", pega caminho e título
-      const parts = line.split('-').map(p => p.trim());
-      if (parts.length < 2) {
+      // Separa apenas na primeira ocorrência de " - "
+      const separator = ' - ';
+      const separatorIndex = line.indexOf(separator);
+      
+      if (separatorIndex === -1) {
         console.warn('Formato inválido:', line);
-        return { pdfPath: '', title: '(Título ausente)' };
+        return { pdfPath: '', title: 'Título não disponível' };
       }
-      // pdfPath é tudo antes do primeiro "-"
-      // se tiver hifens extras, juntamos no título
-      const pdfPath = parts[0]; 
-      const title   = parts.slice(1).join(' - ');
+      
+      const pdfPath = line.substring(0, separatorIndex).trim(); // Antes do " - "
+      const title = line.substring(separatorIndex + separator.length).trim(); // Depois do " - "
+      
       return { pdfPath, title };
     });
   } catch (err) {
@@ -84,15 +86,15 @@ async function showCertificates() {
   container.innerHTML = 'Carregando...';
 
   const certs = await fetchCertificates();
-  container.innerHTML = ''; // limpa
+  container.innerHTML = ''; // Limpa o carregamento
 
   certs.forEach(cert => {
     if (cert.pdfPath) {
-      // Cria um container
+      // Cria um container para cada certificado
       const div = document.createElement('div');
       div.className = 'certificate';
       
-      // iFrame com o caminho EXACTO do txt
+      // IFRAME com o caminho EXATO do TXT
       const iframe = document.createElement('iframe');
       iframe.src = cert.pdfPath; 
       div.appendChild(iframe);
@@ -107,10 +109,16 @@ async function showCertificates() {
       div.appendChild(overlay);
 
       container.appendChild(div);
+    } else {
+      // Fallback caso não haja pdfPath
+      const p = document.createElement('p');
+      p.textContent = cert.title;
+      container.appendChild(p);
     }
   });
 }
 
+// Executa ao carregar a página
 document.addEventListener('DOMContentLoaded', showCertificates);
 </script>
 
