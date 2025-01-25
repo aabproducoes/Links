@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Divertido com Efeito Sol nos Botões</title>
+  <title>Site Divertido com Language Button</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -166,31 +166,31 @@
       transform: rotate(180deg);
     }
 
-    /* Seletor de Idioma */
-    .language-selector {
-      margin: 20px;
-      padding: 10px 15px;
-      background: rgba(255,255,255,0.4);
-      color: #444;
-      border: 1px solid #fa8;
-      border-radius: 25px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 5px rgba(255,255,255,0.6);
-    }
-    .language-selector:hover {
-      background: rgba(255,255,255,0.7);
-      box-shadow: inset 0 0 10px rgba(255,255,255,0.8);
-    }
-    .language-selector select {
-      background: transparent;
-      color: #444;
-      border: none;
-      outline: none;
-      font-size: 16px;
+    /* BOTÃO DE IDIOMA */
+    .language-btn {
+      display: inline-block;
+      margin: 20px auto;
+      background: #f8c;
+      color: #fff;
+      padding: 12px 20px;
+      border: 3px solid #f06;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      text-align: center;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
       cursor: pointer;
-      appearance: none;
+      width: 80%;
+    }
+    .language-btn:hover {
+      background: #f36;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(255, 51, 102, 0.4);
+    }
+    .language-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 3px 8px rgba(255, 51, 102, 0.3);
     }
 
     /* MAIN CONTENT */
@@ -226,17 +226,14 @@
       background: #f8c;
       color: #fff;
       padding: 12px 20px;
-      border: 3px solid #f06; /* Borda espessa para melhor efeito */
-      border-radius: 50px; /* Borda arredondada */
+      border: 3px solid #f06; 
+      border-radius: 50px; 
       text-decoration: none;
       font-weight: 700;
       margin: 10px;
-      transition: 
-        background 0.3s ease, 
-        transform 0.3s ease, 
-        box-shadow 0.3s ease;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      overflow: hidden; /* Esconde as linhas que excedem a borda */
+      overflow: hidden; 
     }
     a.main-btn:hover {
       background: #f36;
@@ -255,10 +252,10 @@
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
-      overflow: hidden; /* Garante que as linhas não excedam a borda */
+      overflow: hidden; 
       width: 100%;
       height: 100%;
-      border-radius: 50px; /* Mesma borda do botão */
+      border-radius: 50px;
     }
     .line-effect {
       position: absolute;
@@ -357,7 +354,6 @@
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
-      <!-- Quatro linhas fixas p/ hover -->
       <div class="line line1"></div>
       <div class="line line2"></div>
       <div class="line line3"></div>
@@ -372,13 +368,8 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- Seletor de Idioma -->
-    <div class="language-selector">
-      <select id="languageSelect" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-      </select>
-    </div>
+    <!-- Botão de Idioma, em vez de <select> -->
+    <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
@@ -387,7 +378,6 @@
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
-        <!-- Conteúdo carregado dinamicamente -->
       </div>
     </div>
   </div>
@@ -399,7 +389,7 @@
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
-    const languageSelect = document.getElementById('languageSelect');
+    const languageBtn = document.getElementById('languageBtn'); // Botão de idioma
     const pageTitle = document.getElementById('pageTitle');
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
@@ -445,7 +435,7 @@
       }
     };
 
-    let currentLanguage = 'en'; 
+    let currentLanguage = 'en'; // Padrão
     let currentPage = 'profile';
 
     // ========== BOTÃO TOGGLE SIDEBAR ==========
@@ -472,13 +462,18 @@
       });
     });
 
-    // ========== IDIOMA ==========
-    function changeLanguage() {
-      currentLanguage = languageSelect.value;
+    // ========== BOTÃO DE IDIOMA (Alterna EN <-> PT) ==========
+    languageBtn.addEventListener('click', () => {
+      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
+    });
+
+    // Atualiza o texto do botão para Lang: EN ou Lang: PT
+    function updateLanguageButtonLabel() {
+      languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    // ========== KnowledgeList BILÍNGUE (LINHAS COM " || ") ==========
+    // ========== KNOWLEDGE LIST BILÍNGUE (split "||") ==========
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -498,8 +493,8 @@
       lines.forEach(line => {
         // ex: "JavaScript || JavaScript (PT)"
         const parts = line.split('||').map(p => p.trim());
-        let englishText = parts[0] || line; // se não houver split, usa a linha inteira
-        let portugueseText = parts[1] || line; // idem
+        let englishText = parts[0] || line;
+        let portugueseText = parts[1] || line;
         const p = document.createElement('p');
 
         if (currentLanguage === 'en') {
@@ -523,21 +518,20 @@
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
-          if(idx === -1) {
+          if (idx === -1) {
             console.warn('Formato inválido:', line);
             return { fullPath:'', pdfName:'', title:'' };
           }
           const fullPath = line.substring(0, idx).trim();
           const title    = line.substring(idx+sep.length).trim();
 
-          // Pega nome do PDF depois do último "/"
+          // Nome PDF
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if(lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash+1);
           }
-
-          // Only first page
+          // #page=1
           const onlyFirstPagePath = fullPath + '#page=1';
 
           return { fullPath: onlyFirstPagePath, pdfName, title };
@@ -556,12 +550,10 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // IFRAME com #page=1
           const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath; 
+          iframe.src = cert.fullPath;
           container.appendChild(iframe);
 
-          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -578,9 +570,14 @@
 
     // ========== UPDATE DE CONTEÚDO ==========
     function updateContent() {
+      // Atualiza label do botão de idioma
+      updateLanguageButtonLabel();
+
       const dict = translations[currentLanguage];
+      // Título da página (Profile, Social, etc.)
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
+      // Mostra/esconde conteudo
       const validPages = ['profile','social','projects','contact','certificates'];
       if (validPages.includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
@@ -588,6 +585,7 @@
         document.getElementById('pageContent').style.display = 'none';
       }
 
+      // Conteúdo específico
       if(currentPage === 'profile'){
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -619,7 +617,6 @@
         `;
       } else if(currentPage === 'contact'){
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        /* Tornamos WhatsApp e Email botões */
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
@@ -633,24 +630,17 @@
         populateCertificatesList();
       }
 
-      // Adiciona eventos de hover p/ cada .main-btn (linhas + cor aleatória)
+      // Lógica p/ efeito de hover e linhas
       setTimeout(() => {
         const btns = document.querySelectorAll('.main-btn');
         btns.forEach(btn => {
           btn.addEventListener('mouseenter', () => {
-            // Gera cor aleatória p/ fundo
             const c = randomColor();
             btn.style.backgroundColor = c;
-            // Cria linhas
-            const lines = createRandomLines(btn, 8); // Aumentamos para 8 linhas para um efeito mais "solar"
+            const lines = createRandomLines(btn, 8);
           });
-        });
-
-        // Remover linhas ao mouse sair
-        const allButtons = document.querySelectorAll('.main-btn');
-        allButtons.forEach(btn => {
           btn.addEventListener('mouseleave', () => {
-            btn.style.backgroundColor = '#f8c'; // Restaura cor original
+            btn.style.backgroundColor = '#f8c';
             const linesContainer = btn.querySelector('.lines-container');
             if(linesContainer){
               btn.removeChild(linesContainer);
@@ -683,10 +673,9 @@
         // Cor aleatória
         lineDiv.style.backgroundColor = randomColor();
 
-        // Tamanho da linha
-        const lineLength = 50 + Math.random()*50; // 50~100px
+        // Tamanho
+        const lineLength = 50 + Math.random()*50; // 50~100
 
-        // Definindo altura após um pequeno delay para animar
         setTimeout(()=> {
           lineDiv.style.height = lineLength + 'px';
         },0);
