@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Azul sem Linhas e sem Cor Aleatória</title>
+  <title>Site Azul - Arrow Animada no Minimize Button</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
 
-  <!-- Font Awesome (opcional) -->
+  <!-- Font Awesome para ícones -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -50,7 +53,7 @@
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
 
-    /* BOTÃO TOGGLE (sem linhas) */
+    /* BOTÃO TOGGLE (com seta animada) */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -76,8 +79,21 @@
     .toggle-btn:active {
       transform: scale(0.95);
     }
+
+    /* ANIMAÇÃO DA SETA */
     .toggle-btn i {
       transition: transform 0.3s ease;
+    }
+    .toggle-btn:hover i {
+      animation: arrowWiggle 0.6s infinite alternate; /* chama a keyframe abaixo */
+    }
+    @keyframes arrowWiggle {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-5px);
+      }
     }
 
     /* MENU LATERAL */
@@ -190,7 +206,7 @@
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
 
-    /* BOTÕES .main-btn */
+    /* BOTÕES .main-btn (sem linhas, sem random color) */
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -296,14 +312,12 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- BOTÃO TOGGLE (sem linhas) -->
+    <!-- Botão Toggle sem linhas, mas com arrow animada no hover -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
     </button>
 
-    <!-- MENU LATERAL -->
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -312,11 +326,9 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- BOTÃO DE IDIOMA -->
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
@@ -326,21 +338,16 @@
   </div>
 
   <script>
-    // =========================
-    //  REFERÊNCIAS
-    // =========================
-    const toggleBtn        = document.getElementById('toggleBtn');
-    const sidebar          = document.getElementById('sidebar');
-    const menuItems        = document.querySelectorAll('.menu li');
-    const languageBtn      = document.getElementById('languageBtn');
-    const pageTitle        = document.getElementById('pageTitle');
+    /* LÓGICA PRINCIPAL (TRADUÇÃO, MENU, ETC.) */
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar   = document.getElementById('sidebar');
+    const menuItems = document.querySelectorAll('.menu li');
+    const languageBtn = document.getElementById('languageBtn');
+    const pageTitle = document.getElementById('pageTitle');
     const knowledgeListDiv = document.getElementById('knowledgeList');
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    const content          = document.getElementById('content');
+    const content = document.getElementById('content');
 
-    // =========================
-    //  TRADUÇÕES
-    // =========================
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -379,9 +386,9 @@
     };
 
     let currentLanguage = 'en';
-    let currentPage     = 'profile';
+    let currentPage = 'profile';
 
-    // ========== SIDEBAR TOGGLE ==========
+    /* Toggle Sidebar */
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -395,7 +402,7 @@
       }
     });
 
-    // ========== MENU LATERAL ==========
+    /* Menu Lateral */
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -405,7 +412,7 @@
       });
     });
 
-    // ========== BOTÃO DE IDIOMA (cíclico en/pt) ==========
+    /* Botão de Idioma (EN <-> PT) */
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
@@ -414,7 +421,7 @@
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    // ========== ATUALIZA RÓTULOS DO MENU ==========
+    /* Atualiza rótulos do menu */
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
@@ -428,7 +435,7 @@
       });
     }
 
-    // ========== KNOWLEDGE LIST (split "||") ==========
+    /* KnowledgeList (split "||") */
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -444,7 +451,6 @@
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
       lines.forEach(line => {
-        // "Texto En || Texto Pt"
         const parts = line.split('||').map(p => p.trim());
         const englishText = parts[0] || line;
         const portugueseText = parts[1] || line;
@@ -459,7 +465,7 @@
       });
     }
 
-    // ========== CERTIFICADOS (Somente a primeira página) ==========
+    /* Certificados (somente primeira página) */
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -516,18 +522,16 @@
       });
     }
 
-    // ========== UPDATE DE CONTEÚDO ==========
+    /* UPDATE CONTENT */
     function updateContent() {
-      // Atualiza o texto do botão de idioma
       updateLanguageButtonLabel();
-      // Atualiza os rótulos do menu lateral
       updateMenuLabels();
 
       const dict = translations[currentLanguage];
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
       const validPages = ['profile','social','projects','contact','certificates'];
-      document.getElementById('pageContent').style.display = 
+      document.getElementById('pageContent').style.display =
         validPages.includes(currentPage) ? 'block' : 'none';
 
       if(currentPage === 'profile'){
@@ -573,12 +577,9 @@
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
-
-      // Sem linhas e sem random color: hover simples
-      // Então não geramos 'lines-container' nem mudamos cor
     }
 
-    // ========== INICIALIZAÇÃO ==========
+    /* INICIALIZAÇÃO */
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
