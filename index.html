@@ -2,25 +2,265 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Botões com Linhas Aleatórias no Hover</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Site Sério com Botões e Efeitos</title>
+
+  <!-- Google Fonts (Roboto + Montserrat) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  
+  <!-- Font Awesome (opcional) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
   <style>
-    body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      padding: 2rem;
-    }
-    
-    /* Contêiner para cada botão (permite inserir linhas dentro dele) */
-    .btn-container {
-      position: relative; /* fundamental para posicionar linhas dentro */
-      display: inline-block; /* para agrupar o botão e as linhas */
-      margin: 1rem;
-      vertical-align: middle; /* opcional */
+    /* ======================================
+       RESET BÁSICO
+    ====================================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    /* O próprio botão */
-    .main-btn {
+    body {
+      display: flex;
+      min-height: 100vh;
+      font-family: "Roboto", sans-serif;
+      background-color: #111; 
+      color: #f0f0f0;
+      overflow-x: hidden;
+    }
+
+    /* ======================================
+       SIDEBAR (MENU LATERAL) - Tom Sério
+    ====================================== */
+    .sidebar {
+      width: 250px;
+      background-color: #111;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      transition: width 0.3s ease;
+      position: relative;
+      font-family: "Montserrat", sans-serif;
+      z-index: 1000;
+      border-right: 1px solid #333;
+    }
+
+    /* BOTÃO TOGGLE */
+    .toggle-btn {
+      position: absolute;
+      top: 20px;
+      right: -25px;
+      background: #333;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      font-size: 18px;
+      overflow: visible;
+    }
+
+    .toggle-btn:hover {
+      background: #444;
+      transform: scale(1.05);
+    }
+
+    .toggle-btn:active {
+      transform: scale(0.95);
+    }
+
+    .toggle-btn i {
+      transition: transform 0.3s ease;
+    }
+
+    /* EFEITO DE LINHAS NO HOVER DO BOTÃO */
+    .toggle-btn .line {
+      position: absolute;
+      width: 2px;
+      height: 0;
+      background: #f06595;
+      opacity: 0;
+      transform-origin: top;
+      transition: all 0.5s ease-out;
+    }
+
+    .line1, .line2, .line3, .line4 {
+      top: 25px;
+      left: 25px;
+      transform-origin: top;
+    }
+
+    .toggle-btn:hover .line {
+      opacity: 1;
+      height: 40px;
+    }
+
+    .toggle-btn:hover .line1 {
+      transform: translate(-2px, -40px);
+    }
+    .toggle-btn:hover .line2 {
+      transform: rotate(60deg) translate(-2px, -40px);
+    }
+    .toggle-btn:hover .line3 {
+      transform: rotate(120deg) translate(-2px, -40px);
+    }
+    .toggle-btn:hover .line4 {
+      transform: rotate(180deg) translate(-2px, -40px);
+    }
+
+    /* LISTA MENU */
+    .menu {
+      list-style: none;
+      padding: 80px 0 0 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu li {
+      padding: 15px 20px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+      background: #111;
+      color: #fff;
+      border: 1px solid #333;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 3px;
+      margin: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+    }
+
+    .menu li:hover {
+      background: #222;
+      transform: translateX(5px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+    }
+
+    .menu li.active {
+      background: #333;
+      font-weight: 700;
+    }
+
+    .sidebar.closed {
+      width: 60px;
+    }
+
+    .sidebar.closed .menu li {
+      justify-content: center;
+      padding: 15px 10px;
+      font-size: 16px;
+      background: #111;
+      margin: 5px 5px;
+    }
+
+    .sidebar.closed .menu li span {
+      display: none;
+    }
+
+    .sidebar.closed .menu li::before {
+      content: attr(data-icon);
+      font-size: 20px;
+      display: inline-block;
+      color: #fff;
+    }
+
+    .sidebar.closed .toggle-btn {
+      transform: rotate(180deg);
+    }
+
+    /* LANGUAGE SELECTOR */
+    .language-selector {
+      margin: 20px;
+      padding: 10px 15px;
+      background: #222;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .language-selector:hover {
+      background: #333;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+    }
+
+    .language-selector select {
+      background: transparent;
+      color: #fff;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      cursor: pointer;
+      appearance: none;
+    }
+
+    /* MAIN CONTENT */
+    .content {
+      flex: 1;
+      padding: 20px;
+      background-color: #111;
+      color: #f0f0f0;
+      font-size: 18px;
+      line-height: 1.6;
+      border-left: 1px solid #333;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .content.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #pageTitle {
+      font-size: 28px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
+      transition: color 0.3s ease;
+    }
+
+    #pageTitle:hover {
+      color: #f06595;
+    }
+
+    #knowledgeListTitle {
+      font-size: 22px;
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+
+    #knowledgeListTitle:hover {
+      color: #f06595;
+    }
+
+    /* BOTÕES */
+    a.main-btn {
       display: inline-block;
       background: #222;
       color: #fff;
@@ -30,138 +270,594 @@
       text-decoration: none;
       font-weight: 500;
       transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative; /* se quiser z-index acima das linhas */
-      z-index: 1;         /* garante que o botão fique acima das faíscas */
+      position: relative;
+      margin-top: 10px; /* Espaço entre os botões */
     }
-    .main-btn:hover {
+
+    a.main-btn:hover {
       background: #f06595;
       color: #fff;
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(240, 101, 149, 0.4);
     }
-    .main-btn:active {
+
+    a.main-btn:active {
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(240, 101, 149, 0.3);
     }
 
-    /* Estilo padrão para as linhas faíscas */
-    .spark-line {
-      position: absolute;
-      top: 50%;    /* vamos partir do meio do contêiner */
-      left: 50%;   /* idem */
-      width: 2px;  /* espessura da linha */
-      height: 0px; /* linha inicial com height = 0 (poderá animar) */
-      background: #f06595;
-      transform-origin: top center; /* para animar expandindo “de cima para baixo” */
+    /* ANIMAÇÕES DE SCROLL */
+    .animated-text, .animated-item {
       opacity: 0;
-      transition: height 0.3s, opacity 0.3s;
-      /* Podemos animar com transition ou direto via JS. */
+      transform: translateY(20px);
+      transition: opacity 1s ease-out, transform 1s ease-out;
     }
-    /* Ao adicionar a classe "active", podemos animar a aparição */
-    .spark-line.active {
+
+    .animated-text.visible, .animated-item.visible {
       opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
+    .certificate-container {
+      position: relative;
+      margin-bottom: 20px;
+      border: 1px solid #333;
+      border-radius: 5px;
+      overflow: hidden;
+      background: #2a2a2a;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      transform: translateY(20px);
+      opacity: 0;
+      transition: opacity 1s ease-out, transform 1s ease-out;
+    }
+
+    .certificate-container.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .certificate-container iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      transition: transform 0.3s ease;
+    }
+
+    .certificate-container iframe:hover {
+      transform: scale(1.02);
+    }
+
+    .certificate-overlay {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 15px;
+      border-radius: 5px;
+      font-size: 16px;
+      pointer-events: none;
+      max-width: 90%;
+      word-wrap: break-word;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .certificate-overlay:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #f06595;
+    }
+
+    .certificate-overlay .fullPath {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 4px;
+      transition: color 0.3s ease;
+    }
+
+    .certificate-overlay .pdfName {
+      font-size: 14px;
+      color: #bbb;
+      margin-top: 4px;
+      transition: color 0.3s ease;
+    }
+
+    .certificate-overlay:hover .fullPath,
+    .certificate-overlay:hover .pdfName {
+      color: #fff;
+    }
+
+    /* RESPONSIVIDADE */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -250px;
+        top: 0;
+        height: 100%;
+        width: 250px;
+        transition: left 0.3s ease;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .toggle-btn {
+        position: fixed;
+        top: 20px;
+        left: 250px;
+        z-index: 1100;
+      }
+      .sidebar.closed .toggle-btn {
+        left: 60px;
+      }
+      .content {
+        padding: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .toggle-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .menu li {
+        font-size: 14px;
+        padding: 12px 15px;
+        margin: 3px 5px;
+      }
+      .certificate-container iframe {
+        height: 300px;
+      }
+      .certificate-overlay {
+        font-size: 14px;
+      }
+      .certificate-overlay .fullPath,
+      .certificate-overlay .pdfName {
+        font-size: 12px;
+      }
+    }
+
+    /* =========================
+       ESTILOS DAS LINHAS (CONTINUAÇÃO)
+    ========================= */
+    .line.fade-out {
+      transition: opacity 0.3s ease-out, height 0.3s ease-out;
+      opacity: 0;
     }
   </style>
 </head>
 <body>
-  
-  <h1>Exemplo de Linhas Aleatórias no Hover</h1>
-  
-  <div class="btn-container">
-    <a href="#" class="main-btn" data-sparks="6">
-      Botão 1
-    </a>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+      <i class="fas fa-arrow-left"></i>
+      <!-- Quatro linhas fixas para efeito de hover (não-randômico) -->
+      <div class="line line1"></div>
+      <div class="line line2"></div>
+      <div class="line line3"></div>
+      <div class="line line4"></div>
+    </button>
+
+    <ul class="menu">
+      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
+      <li data-page="social" data-icon="🔗"><span>Social</span></li>
+      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
+      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
+      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
+    </ul>
+
+    <!-- Seletor de Idioma -->
+    <div class="language-selector">
+      <select id="languageSelect" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="pt">Português</option>
+      </select>
+    </div>
+    
   </div>
 
-  <div class="btn-container">
-    <a href="#" class="main-btn" data-sparks="4">
-      Botão 2
-    </a>
-  </div>
-
-  <div class="btn-container">
-    <a href="#" class="main-btn" data-sparks="8">
-      Botão 3
-    </a>
+  <!-- CONTEÚDO PRINCIPAL -->
+  <div class="content" id="content">
+    <h1 id="pageTitle">Profile</h1>
+    <div id="pageContent">
+      <h2 id="knowledgeListTitle">Knowledge List</h2>
+      <div id="knowledgeList">
+        <p>JavaScript</p>
+        <p>HTML & CSS</p>
+        <p>React</p>
+        <!-- Botões com contêiner -->
+        <p>
+          <div class="btn-container">
+            <a href="https://github.com/seuprojeto" target="_blank" class="main-btn">
+              Visitar Repositório
+            </a>
+          </div>
+        </p>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Seleciona todos os contêineres de botões
-    const btnContainers = document.querySelectorAll('.btn-container');
+    // Função para gerar um número aleatório dentro de um intervalo
+    function getRandom(min, max) {
+      return Math.random() * (max - min) + min;
+    }
 
-    btnContainers.forEach(container => {
-      const btn = container.querySelector('.main-btn');
+    // Função para criar uma linha
+    function createLine(container) {
+      const line = document.createElement('div');
+      line.classList.add('line');
 
-      // Ao entrar com o mouse (mouseover), geramos as linhas
-      btn.addEventListener('mouseenter', () => {
-        createSparkLines(container, btn);
+      // Posição inicial (centro do botão)
+      const button = container.querySelector('.main-btn');
+      const buttonRect = button.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+
+      const centerX = button.offsetWidth / 2 - 1; // Ajuste para centralizar a linha
+      const centerY = button.offsetHeight / 2;
+
+      line.style.left = `${centerX}px`;
+      line.style.top = `${centerY}px`;
+
+      // Definir direção aleatória (ângulo)
+      const angle = getRandom(0, 2 * Math.PI); // Radianos
+      const length = getRandom(50, 100); // Comprimento da linha em pixels
+
+      // Calcular a posição final da linha
+      const endX = centerX + length * Math.cos(angle);
+      const endY = centerY + length * Math.sin(angle);
+
+      // Calcular a altura e rotação da linha
+      const height = Math.sqrt(endX * endX + endY * endY);
+      const degrees = angle * (180 / Math.PI);
+
+      line.style.height = '0px'; // Inicialmente zero
+      line.style.transform = `rotate(${degrees}deg)`;
+
+      container.appendChild(line);
+
+      // Forçar reflow para aplicar a transição
+      void line.offsetWidth;
+
+      // Iniciar animação de crescimento
+      line.classList.add('visible');
+      line.style.height = `${height}px`;
+
+      // Remover a linha após a animação
+      line.addEventListener('transitionend', () => {
+        setTimeout(() => {
+          line.classList.add('fade-out');
+          line.addEventListener('transitionend', () => {
+            line.remove();
+          }, { once: true });
+        }, 500); // Tempo antes de iniciar o fade-out
       });
 
-      // Ao sair com o mouse (mouseleave), removemos as linhas
-      btn.addEventListener('mouseleave', () => {
-        removeSparkLines(container);
+      return line;
+    }
+
+    // Função para adicionar linhas em hover
+    function addHoverEffect(container) {
+      const mainBtn = container.querySelector('.main-btn');
+
+      mainBtn.addEventListener('mouseenter', () => {
+        // Gerar um número de linhas (por exemplo, 5)
+        const numLines = 5;
+        for (let i = 0; i < numLines; i++) {
+          createLine(container);
+        }
+      });
+
+      mainBtn.addEventListener('mouseleave', () => {
+        // As linhas já terão a transição de fade-out após a animação de crescimento
+        // Não é necessário fazer nada aqui
+      });
+    }
+
+    // Inicializar efeitos para todos os botões
+    document.querySelectorAll('.btn-container').forEach(container => {
+      addHoverEffect(container);
+    });
+
+    // Funções existentes para manipulação do conteúdo
+    // =========================
+    //  TRADUÇÕES
+    // =========================
+    const translations = {
+      en: {
+        profileTitle: 'Profile',
+        knowledgeListTitle: 'Knowledge List',
+        socialTitle: 'Social',
+        contactTitle: 'Contact',
+        certificatesTitle: 'Certificates',
+        
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        projectsTitle: 'Projects',
+        blenderProjects: 'Blender Projects',
+        gimpProjects: 'Gimp Projects',
+        blenderAnimations: 'Blender Animations',
+        animatedBackground: 'Animated Background',
+        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+      },
+      pt: {
+        profileTitle: 'Perfil',
+        knowledgeListTitle: 'Lista de Conhecimento',
+        socialTitle: 'Social',
+        contactTitle: 'Contato',
+        certificatesTitle: 'Certificados',
+        
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        projectsTitle: 'Projetos',
+        blenderProjects: 'Projetos Blender',
+        gimpProjects: 'Projetos Gimp',
+        blenderAnimations: 'Animações Blender',
+        animatedBackground: 'Fundo Animado',
+        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+      }
+    };
+
+    let currentLanguage = 'en'; 
+    let currentPage = 'profile';
+
+    // =========================
+    //  TOGGLE SIDEBAR
+    // =========================
+    const toggleBtnElement = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+
+    toggleBtnElement.addEventListener('click', () => {
+      sidebar.classList.toggle('closed');
+      sidebar.classList.toggle('open');
+      const icon = toggleBtnElement.querySelector('i');
+      if (sidebar.classList.contains('closed')) {
+        icon.classList.remove('fa-arrow-left');
+        icon.classList.add('fa-arrow-right');
+      } else {
+        icon.classList.remove('fa-arrow-right');
+        icon.classList.add('fa-arrow-left');
+      }
+    });
+
+    // =========================
+    //  MENU
+    // =========================
+    const menuItems = document.querySelectorAll('.menu li');
+
+    menuItems.forEach(item => {
+      item.addEventListener('click', () => {
+        menuItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentPage = item.getAttribute('data-page');
+        updateContent();
       });
     });
 
-    function createSparkLines(container, btn) {
-      // Lê quantas faíscas (linhas) geraremos do atributo data-sparks ou usa 5 como default
-      const sparksCount = parseInt(btn.getAttribute('data-sparks')) || 5;
+    // =========================
+    //  IDIOMA
+    // =========================
+    const languageSelect = document.getElementById('languageSelect');
 
-      // Dimensões do contêiner (para saber a área “aleatória”)
-      const rect = container.getBoundingClientRect();
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+    function changeLanguage() {
+      currentLanguage = languageSelect.value;
+      updateContent();
+    }
 
-      for (let i = 0; i < sparksCount; i++) {
-        // Cria a linha
-        const line = document.createElement('div');
-        line.classList.add('spark-line');
-
-        // Define um comprimento aleatório entre 30 e 70 px, por exemplo
-        const length = 30 + Math.random() * 40;
-
-        // Define um ângulo aleatório (0 a 360 graus)
-        const angle = Math.random() * 360;
-
-        // Posiciona a linha no meio do contêiner
-        line.style.top = '50%';
-        line.style.left = '50%';
-
-        // Rotaciona e ajusta a altura
-        // Usamos transform: rotate(angledeg) para direcionar a linha
-        line.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
-
-        // Inserimos a linha no contêiner
-        container.appendChild(line);
-
-        // Forçamos reflow para que a transição funcione
-        // (às vezes, precisamos de um pequeno delay)
-        requestAnimationFrame(() => {
-          // Agora definimos a altura final e ativamos a classe "active" (para fade-in)
-          line.style.height = `${length}px`;
-          line.classList.add('active');
-        });
+    // =========================
+    //  PROFILE (KNOWLEDGE LIST)
+    // =========================
+    async function fetchKnowledgeList() {
+      try {
+        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const txt = await resp.text();
+        return txt.split('\n').filter(line => line.trim() !== '');
+      } catch (err) {
+        console.error(err);
+        return ['Erro ao carregar KnowledgeList'];
       }
     }
 
-    function removeSparkLines(container) {
-      // Seleciona todas as linhas criadas (.spark-line)
-      const lines = container.querySelectorAll('.spark-line');
-
+    async function populateKnowledgeList() {
+      const knowledgeListDiv = document.getElementById('knowledgeList');
+      knowledgeListDiv.innerHTML = '';
+      const lines = await fetchKnowledgeList();
       lines.forEach(line => {
-        // Podemos animar o desaparecimento definindo height=0 e removendo .active
-        line.classList.remove('active');
-        line.style.height = '0px';
-        line.style.opacity = '0';
-
-        // Depois de um pequeno delay, removemos o elemento do DOM
-        setTimeout(() => {
-          if (line.parentNode) {
-            line.parentNode.removeChild(line);
-          }
-        }, 300);
+        const p = document.createElement('p');
+        p.textContent = line;
+        p.classList.add('animated-text');
+        knowledgeListDiv.appendChild(p);
       });
     }
+
+    // =========================
+    //  CERTIFICADOS
+    // =========================
+    async function fetchCertificatesList() {
+      try {
+        const r = await fetch('./Certificados/CertificadosList.txt');
+        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        const txt = await r.text();
+        const lines = txt.split('\n').filter(l => l.trim() !== '');
+
+        // "Certificados/Certificado-...pdf - Título"
+        return lines.map(line => {
+          const sep = ' - ';
+          const idx = line.indexOf(sep);
+          if (idx === -1) {
+            console.warn('Formato inválido:', line);
+            return { fullPath: '', pdfName:'', title:'' };
+          }
+          const fullPath = line.substring(0, idx).trim();
+          const title = line.substring(idx + sep.length).trim();
+
+          // Nome do PDF depois do último "/"
+          let pdfName = fullPath;
+          const lastSlash = fullPath.lastIndexOf('/');
+          if (lastSlash !== -1) {
+            pdfName = fullPath.substring(lastSlash + 1);
+          }
+
+          return { fullPath, pdfName, title };
+        });
+      } catch (err) {
+        console.error('Erro ao ler CertificadosList.txt:', err);
+        return [];
+      }
+    }
+
+    async function populateCertificatesList() {
+      const knowledgeListDiv = document.getElementById('knowledgeList');
+      knowledgeListDiv.innerHTML = '';
+      const list = await fetchCertificatesList();
+
+      list.forEach(cert => {
+        if (cert.fullPath) {
+          const container = document.createElement('div');
+          container.classList.add('certificate-container', 'animated-item');
+
+          // iframe
+          const iframe = document.createElement('iframe');
+          iframe.src = cert.fullPath;
+          container.appendChild(iframe);
+
+          // overlay
+          const overlay = document.createElement('div');
+          overlay.classList.add('certificate-overlay');
+          overlay.innerHTML = `
+            <div><strong>Título:</strong> ${cert.title}</div>
+            <div class="fullPath"><strong>Caminho:</strong> ${cert.fullPath}</div>
+            <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
+          `;
+          container.appendChild(overlay);
+
+          knowledgeListDiv.appendChild(container);
+        }
+      });
+
+      // Animação de aparição
+      setTimeout(() => {
+        const animatedItems = document.querySelectorAll('.animated-item');
+        animatedItems.forEach(item => item.classList.add('visible'));
+      }, 100);
+    }
+
+    // =========================
+    //  ATUALIZA CONTEÚDO
+    // =========================
+    function updateContent() {
+      const dict = translations[currentLanguage];
+      const pageTitle = document.getElementById('pageTitle');
+      pageTitle.textContent = dict[`${currentPage}Title`] || '';
+
+      const validPages = ['profile','social','projects','contact','certificates'];
+      if (validPages.includes(currentPage)) {
+        document.getElementById('pageContent').style.display = 'block';
+      } else {
+        document.getElementById('pageContent').style.display = 'none';
+      }
+
+      if (currentPage === 'profile') {
+        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
+        populateKnowledgeList();
+      } else if (currentPage === 'social') {
+        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
+        const knowledgeListDiv = document.getElementById('knowledgeList');
+        knowledgeListDiv.innerHTML = `
+          <p>
+            <div class="btn-container">
+              <a href="https://www.facebook.com" target="_blank" class="main-btn">Facebook</a>
+            </div>
+          </p>
+          <p>
+            <div class="btn-container">
+              <a href="https://www.instagram.com" target="_blank" class="main-btn">Instagram</a>
+            </div>
+          </p>
+        `;
+        // Reaplicar os efeitos de hover aos novos botões
+        document.querySelectorAll('.btn-container').forEach(container => {
+          addHoverEffect(container);
+        });
+      } else if (currentPage === 'projects') {
+        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
+        const knowledgeListDiv = document.getElementById('knowledgeList');
+        knowledgeListDiv.innerHTML = `
+          <p>
+            <div class="btn-container">
+              <a href="#" class="main-btn">Blender Projects</a>
+            </div>
+          </p>
+          <p>
+            <div class="btn-container">
+              <a href="#" class="main-btn">Gimp Projects</a>
+            </div>
+          </p>
+          <p>
+            <div class="btn-container">
+              <a href="#" class="main-btn">Blender Animations</a>
+            </div>
+          </p>
+          <p>
+            <div class="btn-container">
+              <a href="#" class="main-btn">Animated Background</a>
+            </div>
+          </p>
+        `;
+        // Reaplicar os efeitos de hover aos novos botões
+        document.querySelectorAll('.btn-container').forEach(container => {
+          addHoverEffect(container);
+        });
+      } else if (currentPage === 'contact') {
+        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
+        const knowledgeListDiv = document.getElementById('knowledgeList');
+        knowledgeListDiv.innerHTML = `
+          <p>${dict.whatsapp}</p>
+          <p>${dict.email}</p>
+        `;
+      } else if (currentPage === 'certificates') {
+        const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
+        populateCertificatesList();
+      }
+
+      // Animação fade-in no conteúdo principal
+      const content = document.getElementById('content');
+      setTimeout(() => {
+        content.classList.add('visible');
+      }, 100);
+    }
+
+    // =========================
+    //  SCROLL ANIMATIONS
+    // =========================
+    function handleScrollAnimations() {
+      const animatedElements = document.querySelectorAll('.animated-text, .animated-item');
+      animatedElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 100) {
+          el.classList.add('visible');
+        }
+      });
+    }
+    window.addEventListener('scroll', handleScrollAnimations);
+
+    // =========================
+    //  INICIALIZAÇÃO
+    // =========================
+    document.addEventListener('DOMContentLoaded', () => {
+      updateContent(); 
+      handleScrollAnimations(); 
+    });
   </script>
+
 </body>
 </html>
