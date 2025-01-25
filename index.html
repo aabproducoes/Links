@@ -1,20 +1,27 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Menu Vertical com Certificados</title>
-  
+
   <!-- Google Fonts (Roboto + Montserrat) -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
   <!-- Font Awesome para ícones (opcional) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
-        integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q==" 
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
   <style>
-    /* Reset básico */
+    /* Basic Reset */
     * {
       margin: 0;
       padding: 0;
@@ -24,25 +31,23 @@
     body {
       display: flex;
       min-height: 100vh;
-      font-family: 'Roboto', sans-serif;
+      font-family: "Roboto", sans-serif;
       background-color: #000;
       color: #fff;
     }
-    
-    /* ====== SIDEBAR ====== */
+
+    /* SIDEBAR */
     .sidebar {
       width: 250px;
-      background-color: #000; /* fixo em preto */
+      background-color: #000;
       color: #fff;
       display: flex;
       flex-direction: column;
       transition: width 0.3s ease;
       position: relative;
-      font-family: 'Montserrat', sans-serif; /* Fonte para o menu */
+      font-family: "Montserrat", sans-serif; /* menu font */
       z-index: 1000;
     }
-
-    /* Botão de Toggle */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -58,23 +63,22 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
       font-size: 18px;
     }
     .toggle-btn:hover {
       background: linear-gradient(45deg, #f06595, #ff6b6b);
       transform: rotate(180deg);
-      box-shadow: 0 6px 20px rgba(255,107,107,0.6);
+      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
     }
     .toggle-btn:active {
       transform: scale(0.95) rotate(180deg);
-      box-shadow: 0 3px 10px rgba(255,107,107,0.3);
+      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
     }
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
 
-    /* Lista de Itens do Menu */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -104,16 +108,15 @@
     }
     .menu li:hover {
       background-position: right;
-      box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
     }
     .menu li.active {
       background-position: right;
       font-weight: 700;
       background: #333;
-      box-shadow: 0 4px 8px rgba(255,255,255,0.3);
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
     }
 
-    /* Colapsar a Barra Lateral */
     .sidebar.closed {
       width: 60px;
     }
@@ -125,7 +128,7 @@
       gap: 0;
     }
     .sidebar.closed .menu li span {
-      display: none; /* Esconde o texto */
+      display: none;
     }
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
@@ -135,13 +138,12 @@
     }
     .sidebar.closed .menu li:hover {
       background-position: bottom;
-      box-shadow: 0 4px 8px rgba(255,255,255,0.2);
+      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
     }
     .sidebar.closed .toggle-btn {
       transform: rotate(180deg);
     }
 
-    /* Seletor de idioma */
     .language-selector {
       margin: 20px;
       padding: 10px 15px;
@@ -149,7 +151,7 @@
       color: #fff;
       border: none;
       border-radius: 25px;
-      box-shadow: 0 4px 15px rgba(255,175,189,0.4);
+      box-shadow: 0 4px 15px rgba(255, 175, 189, 0.4);
       transition: background 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       align-items: center;
@@ -157,7 +159,7 @@
     }
     .language-selector:hover {
       background: linear-gradient(45deg, #ffc3a0, #ffafbd);
-      box-shadow: 0 6px 20px rgba(255,175,189,0.6);
+      box-shadow: 0 6px 20px rgba(255, 175, 189, 0.6);
     }
     .language-selector select {
       background: transparent;
@@ -168,12 +170,8 @@
       cursor: pointer;
       appearance: none;
     }
-    .language-selector select option {
-      background: #ffafbd;
-      color: #000;
-    }
 
-    /* ====== CONTEÚDO PRINCIPAL ====== */
+    /* MAIN CONTENT */
     .content {
       flex: 1;
       padding: 20px;
@@ -192,7 +190,7 @@
       margin-bottom: 8px;
     }
 
-    /* Picker de Cores (texto) */
+    /* COLOR PICKER */
     .main-color-picker {
       padding: 20px;
       background-color: #222;
@@ -226,38 +224,7 @@
       outline: none;
       transition: background 0.3s ease;
     }
-    /* Estilos para o Slider Thumb */
-    .color-control input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .color-control input[type="range"]::-webkit-slider-thumb:hover {
-      background: #ddd;
-      transform: scale(1.1);
-    }
-    .color-control input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
-      border: none;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .color-control input[type="range"]::-moz-range-thumb:hover {
-      background: #ddd;
-      transform: scale(1.1);
-    }
 
-    /* Estilização do Botão de Reset */
     .reset-btn {
       background: linear-gradient(45deg, #1e3c72, #2a5298);
       color: #fff;
@@ -265,7 +232,7 @@
       border-radius: 25px;
       padding: 12px 20px;
       font-size: 16px;
-      box-shadow: 0 4px 15px rgba(30,60,114,0.4);
+      box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -275,15 +242,15 @@
     }
     .reset-btn:hover {
       background: linear-gradient(45deg, #2a5298, #1e3c72);
-      box-shadow: 0 6px 20px rgba(30,60,114,0.6);
+      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.6);
       transform: translateY(-2px);
     }
     .reset-btn:active {
       transform: scale(0.95) translateY(-2px);
-      box-shadow: 0 3px 10px rgba(30,60,114,0.3);
+      box-shadow: 0 3px 10px rgba(30, 60, 114, 0.3);
     }
 
-    /* ====== CERTIFICADOS (PDF + TEXTO SOBREPOSTO) ====== */
+    /* CERTIFICATES (PDF + TEXT OVERLAY) */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -302,18 +269,17 @@
       padding: 10px 15px;
       border-radius: 5px;
       font-size: 18px;
-      pointer-events: none; /* Para permitir clique no iframe */
+      pointer-events: none; /* let clicks pass to iframe */
       max-width: 90%;
       word-wrap: break-word;
     }
-    /* Estilo adicional para exibir o caminho do PDF */
     .certificate-overlay .path {
       font-size: 14px;
       color: #ccc;
       margin-top: 5px;
     }
 
-    /* ====== RESPONSIVIDADE ====== */
+    /* RESPONSIVITY */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -375,7 +341,7 @@
 </head>
 <body>
 
-  <!-- ====== SIDEBAR ====== -->
+  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
@@ -386,11 +352,11 @@
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
       <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
-      <!-- NOVO ITEM: Certificates -->
+      <!-- CERTIFICATES -->
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- Seletor de Idioma -->
+    <!-- Language Selector -->
     <div class="language-selector">
       <select id="languageSelect" onchange="changeLanguage()">
         <option value="en">English</option>
@@ -398,7 +364,7 @@
       </select>
     </div>
     
-    <!-- Picker de Cores (apenas texto) -->
+    <!-- Text Color Picker -->
     <div class="main-color-picker">
       <h3>Customize Main Content</h3>
       <div class="color-control">
@@ -414,14 +380,13 @@
         <input type="range" id="mainTextLightness" min="0" max="100" value="100">
       </div>
 
-      <!-- Botão de Reset -->
       <button id="resetMainColorsBtn" class="reset-btn">
         <i class="fas fa-redo"></i> Reset Colors
       </button>
     </div>
   </div>
 
-  <!-- ====== CONTEÚDO PRINCIPAL ====== -->
+  <!-- MAIN CONTENT AREA -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
@@ -435,7 +400,7 @@
   </div>
 
   <script>
-    // ====== REFERÊNCIAS ======
+    // References
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -445,13 +410,13 @@
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
 
-    // Sliders para cor do texto
+    // Color Sliders
     const mainTextHue = document.getElementById('mainTextHue');
     const mainTextSaturation = document.getElementById('mainTextSaturation');
     const mainTextLightness = document.getElementById('mainTextLightness');
     const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
 
-    // Traduções
+    // Translations
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -489,11 +454,11 @@
       }
     };
 
-    let currentLanguage = 'en'; // Padrão
+    let currentLanguage = 'en'; // default
     let currentPage = 'profile';
 
-    // ====== FUNÇÕES DE COR ======
-    // Gera cor HSL aleatória clara (L>80%)
+    // ========== TEXT COLOR FUNCTIONS ==========
+
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -504,7 +469,6 @@
       return { h, s, l };
     }
 
-    // Aplica cor ao texto principal
     function randomizeColors() {
       const mainTextColor = generateRandomLightHSL();
       content.style.setProperty('--main-text-h', mainTextColor.h);
@@ -520,7 +484,7 @@
       const h = parseInt(mainTextHue.value);
       const s = parseInt(mainTextSaturation.value);
       const l = parseInt(mainTextLightness.value);
-      
+
       content.style.setProperty('--main-text-h', h);
       content.style.setProperty('--main-text-s', s + '%');
       content.style.setProperty('--main-text-l', l + '%');
@@ -531,7 +495,7 @@
     mainTextSaturation.addEventListener('input', updateMainTextColor);
     mainTextLightness.addEventListener('input', updateMainTextColor);
 
-    // ====== TOGGLE SIDEBAR ======
+    // ========== TOGGLE SIDEBAR ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -546,23 +510,23 @@
       }
     });
 
-    // ====== MENU ======
-    menuItems.forEach(item => {
+    // ========== MENU ==========
+    menuItems.forEach((item) => {
       item.addEventListener('click', () => {
-        menuItems.forEach(i => i.classList.remove('active'));
+        menuItems.forEach((i) => i.classList.remove('active'));
         item.classList.add('active');
         currentPage = item.getAttribute('data-page');
         updateContent();
       });
     });
 
-    // ====== IDIOMA ======
+    // ========== LANGUAGE ==========
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // ====== KNOWLEDGE LIST (PROFILE) ======
+    // ========== KNOWLEDGE LIST (PROFILE) EXAMPLE ==========
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -571,7 +535,7 @@
         return text.split('\n').filter(line => line.trim() !== '');
       } catch (err) {
         console.error(err);
-        return ['Erro ao carregar KnowledgeList'];
+        return ['Error loading KnowledgeList'];
       }
     }
     async function populateKnowledgeList() {
@@ -584,8 +548,10 @@
       });
     }
 
-    // ====== CERTIFICADOS ======
-    // Função para buscar e parsear o arquivo CertificadosList.txt
+    // ========== CERTIFICATES ==========
+    // 1) read & parse CertificadosList.txt
+    //    line format: "Certificados/certificado-js.pdf - Certificado de JavaScript"
+    //    or any path + title
     async function fetchCertificatesList() {
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
@@ -593,58 +559,56 @@
         const text = await response.text();
         const lines = text.split('\n').filter(line => line.trim() !== '');
 
-        // "arquivo.pdf - Título"
+        // Example line: "Certificados/certificado-js.pdf - Certificado de JavaScript"
+        // We won't add or remove "Certificados/" ourselves. We'll just parse it.
         return lines.map(line => {
           const parts = line.split('-').map(part => part.trim());
           if (parts.length < 2) {
-            console.warn(`Formato inválido: "${line}"`);
-            return { pdf: '', title: 'Título não disponível', path: '' };
+            console.warn(`Invalid format: "${line}"`);
+            return { pdfPath: '', title: 'No Title', path: '' };
           }
-          // nome do PDF e título
-          const pdfName = parts[0]; // "certificado-js.pdf"
+          const pdfPath = parts[0];  // e.g. "Certificados/certificado-js.pdf"
           const title   = parts.slice(1).join(' - ');
-          
-          // Garante que apenas 1x "Certificados/" seja adicionado
-          const path    = `./Certificados/${pdfName}`;
-
-          return { pdf: pdfName, title, path };
+          // We don't add "Certificados/" ourselves, we use the path as is
+          return { pdfPath, title };
         });
       } catch (err) {
         console.error(err);
-        return [{ pdf: '', title: 'Erro ao carregar certificados', path: '' }];
+        return [{ pdfPath: '', title: 'Error loading certificates' }];
       }
     }
 
+    // 2) create iframes for each certificate
     async function populateCertificatesList() {
       knowledgeListDiv.innerHTML = '';
       const certificates = await fetchCertificatesList();
 
       certificates.forEach(cert => {
-        if (cert.pdf && cert.path) {
+        if (cert.pdfPath) {
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // iframe p/ exibir o PDF
+          // iFrame for the PDF
           const iframe = document.createElement('iframe');
-          iframe.src = cert.path;  // ex: "./Certificados/certificado-js.pdf"
+          iframe.src = cert.pdfPath;  // read path directly from the line
           iframe.width = '100%';
           iframe.height = '500px';
           iframe.style.border = 'none';
 
-          // div sobreposta com título + caminho
+          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
-          
+
           overlay.innerHTML = `
             <div class="title">${cert.title}</div>
-            <div class="path">${cert.path}</div>
+            <div class="path">${cert.pdfPath}</div>
           `;
 
           container.appendChild(iframe);
           container.appendChild(overlay);
           knowledgeListDiv.appendChild(container);
         } else {
-          // caso não haja PDF ou path
+          // fallback if no pdfPath
           const p = document.createElement('p');
           p.textContent = cert.title;
           knowledgeListDiv.appendChild(p);
@@ -652,21 +616,24 @@
       });
     }
 
-    // ====== UPDATE DE CONTEÚDO ======
+    // ========== UPDATE CONTENT ==========
     function updateContent() {
       const dict = translations[currentLanguage];
-
-      // Atualiza o título principal
+      // update main page title
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
-      // Exibe ou esconde a área principal dependendo da página
-      if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
+      // show/hide main area
+      if (
+        ['profile', 'social', 'projects', 'contact', 'certificates'].includes(
+          currentPage
+        )
+      ) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
       }
 
-      // Atualiza o conteúdo específico da página
+      // page-specific content
       if (currentPage === 'profile') {
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -696,10 +663,9 @@
       }
     }
 
-    // ====== INICIALIZAÇÃO ======
     document.addEventListener('DOMContentLoaded', () => {
-      randomizeColors();     // Ajusta cor do texto
-      updateContent();       // Atualiza o conteúdo baseado na página atual e idioma
+      randomizeColors(); // set text color
+      updateContent();   // show current page
     });
   </script>
 </body>
