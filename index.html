@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menu Vertical com Certificados</title>
   
-  <!-- Fontes Google Fonts -->
+  <!-- Google Fonts (Roboto + Montserrat) -->
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   
-  <!-- Font Awesome para ícones (opcional) -->
+  <!-- Font Awesome (opcional) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
         integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q==" 
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -29,18 +29,11 @@
       color: #fff;
     }
     
-    /* Barra Lateral (sidebar) */
+    /* ====== SIDEBAR ====== */
     .sidebar {
-      --sidebar-bg-h: 0;
-      --sidebar-bg-s: 0%;
-      --sidebar-bg-l: 0%;
-      --sidebar-text-h: 0;
-      --sidebar-text-s: 0%;
-      --sidebar-text-l: 100%;
-      
       width: 250px;
-      background-color: hsl(var(--sidebar-bg-h), var(--sidebar-bg-s), var(--sidebar-bg-l));
-      color: hsl(var(--sidebar-text-h), var(--sidebar-text-s), var(--sidebar-text-l));
+      background-color: #000; /* Fixo em preto, mas pode ajustar via variáveis */
+      color: #fff;
       display: flex;
       flex-direction: column;
       transition: width 0.3s ease;
@@ -49,7 +42,7 @@
       z-index: 1000;
     }
 
-    /* Botão Toggle para colapsar/expandir a barra lateral */
+    /* Botão de Toggle */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -65,19 +58,17 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 4px 15px rgba(255,107,107,0.4);
       font-size: 18px;
     }
-
     .toggle-btn:hover {
       background: linear-gradient(45deg, #f06595, #ff6b6b);
       transform: rotate(180deg);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+      box-shadow: 0 6px 20px rgba(255,107,107,0.6);
     }
-
     .toggle-btn:active {
       transform: scale(0.95) rotate(180deg);
-      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+      box-shadow: 0 3px 10px rgba(255,107,107,0.3);
     }
     .toggle-btn i {
       transition: transform 0.3s ease;
@@ -91,7 +82,6 @@
       display: flex;
       flex-direction: column;
     }
-
     .menu li {
       padding: 15px 20px;
       cursor: pointer;
@@ -110,17 +100,14 @@
       gap: 10px;
     }
     .menu li span {
-      display: inline-block;
       transition: opacity 0.3s ease, visibility 0.3s ease;
     }
     .menu li:hover {
       background-position: right;
-      color: #fff;
       box-shadow: 0 4px 8px rgba(255,255,255,0.2);
     }
     .menu li.active {
       background-position: right;
-      color: #fff;
       font-weight: 700;
       background: #333;
       box-shadow: 0 4px 8px rgba(255,255,255,0.3);
@@ -148,7 +135,6 @@
     }
     .sidebar.closed .menu li:hover {
       background-position: bottom;
-      color: #fff;
       box-shadow: 0 4px 8px rgba(255,255,255,0.2);
     }
     .sidebar.closed .toggle-btn {
@@ -193,8 +179,6 @@
       font-size: 18px;
       line-height: 1.6;
     }
-
-    /* Título e Subtítulo */
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
@@ -204,7 +188,64 @@
       margin-bottom: 8px;
     }
 
-    /* Responsividade do menu */
+    /* Picker de Cores (texto) */
+    .main-color-picker {
+      padding: 20px;
+      background-color: #222;
+      border-top: 2px solid #fff;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .main-color-picker h3 {
+      color: #fff;
+      margin-bottom: 10px;
+      font-size: 18px;
+      text-align: center;
+    }
+    .color-control {
+      display: flex;
+      flex-direction: column;
+    }
+    .color-control label {
+      color: #fff;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+    .color-control input[type="range"] {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: #555;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+    /* ... [Demais estilos de range omitidos para brevidade] ... */
+
+    .reset-btn {
+      background: linear-gradient(45deg, #1e3c72, #2a5298);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 12px 20px;
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(30,60,114,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .reset-btn:hover {
+      background: linear-gradient(45deg, #2a5298, #1e3c72);
+      box-shadow: 0 6px 20px rgba(30,60,114,0.6);
+      transform: translateY(-2px);
+    }
+
+    /* Responsividade */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -229,6 +270,10 @@
       .content {
         padding: 15px;
       }
+      .main-color-picker {
+        padding: 15px;
+        margin-top: 15px;
+      }
     }
     @media (max-width: 480px) {
       .toggle-btn {
@@ -240,15 +285,17 @@
         font-size: 14px;
         padding: 12px 15px;
       }
+      .reset-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+      }
       .language-selector {
         padding: 8px 12px;
         font-size: 14px;
       }
     }
 
-    /* =====================================
-       CERTIFICADOS (PDF + TEXTO SOBREPOSTO)
-       ===================================== */
+    /* ============= CERTIFICADOS (PDF + TEXTO SOBREPOSTO) ============= */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -263,7 +310,7 @@
       top: 20px;
       left: 20px;
       color: #fff;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0,0,0,0.5);
       padding: 10px 15px;
       border-radius: 5px;
       font-size: 18px;
@@ -273,7 +320,7 @@
 </head>
 <body>
 
-  <!-- Barra Lateral (Sem a parte "Customize Main Content") -->
+  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
@@ -284,25 +331,44 @@
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
       <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
+      <!-- NOVO ITEM: Certificates -->
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- Seletor de Idioma -->
     <div class="language-selector">
       <select id="languageSelect" onchange="changeLanguage()">
         <option value="en">English</option>
         <option value="pt">Português</option>
       </select>
     </div>
+    
+    <div class="main-color-picker">
+      <h3>Customize Main Content</h3>
+      <div class="color-control">
+        <label for="mainTextHue">Text Hue</label>
+        <input type="range" id="mainTextHue" min="0" max="360" value="0">
+      </div>
+      <div class="color-control">
+        <label for="mainTextSaturation">Text Saturation</label>
+        <input type="range" id="mainTextSaturation" min="0" max="100" value="0">
+      </div>
+      <div class="color-control">
+        <label for="mainTextLightness">Text Lightness</label>
+        <input type="range" id="mainTextLightness" min="0" max="100" value="100">
+      </div>
+
+      <button id="resetMainColorsBtn" class="reset-btn">
+        <i class="fas fa-redo"></i> Reset Colors
+      </button>
+    </div>
   </div>
 
-  <!-- Área de Conteúdo Principal -->
+  <!-- CONTEÚDO PRINCIPAL -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
-        <!-- Exemplo de conteúdo inicial -->
         <p>JavaScript</p>
         <p>HTML & CSS</p>
         <p>React</p>
@@ -311,7 +377,7 @@
   </div>
 
   <script>
-    // Referências
+    // Elementos
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -321,6 +387,12 @@
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
 
+    // Sliders para cor do texto
+    const mainTextHue = document.getElementById('mainTextHue');
+    const mainTextSaturation = document.getElementById('mainTextSaturation');
+    const mainTextLightness = document.getElementById('mainTextLightness');
+    const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
+
     // Traduções
     const translations = {
       en: {
@@ -329,6 +401,7 @@
         socialTitle: 'Social',
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
+        
         facebook: 'Facebook',
         instagram: 'Instagram',
         projectsTitle: 'Projects',
@@ -345,6 +418,7 @@
         socialTitle: 'Social',
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
+        
         facebook: 'Facebook',
         instagram: 'Instagram',
         projectsTitle: 'Projetos',
@@ -357,10 +431,45 @@
       }
     };
 
-    let currentLanguage = 'en';
+    let currentLanguage = 'en'; // Padrão
     let currentPage = 'profile';
 
-    // Ao clicar no Toggle (colapsar/expandir)
+    // ====== Muda cor do texto principal aleatoriamente ======
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function generateRandomLightHSL() {
+      const h = getRandomInt(0, 360);
+      const s = getRandomInt(50, 100);
+      const l = getRandomInt(80, 100);
+      return { h, s, l };
+    }
+    function randomizeColors() {
+      const mainTextColor = generateRandomLightHSL();
+      content.style.setProperty('--main-text-h', mainTextColor.h);
+      content.style.setProperty('--main-text-s', mainTextColor.s + '%');
+      content.style.setProperty('--main-text-l', mainTextColor.l + '%');
+
+      mainTextHue.value = mainTextColor.h;
+      mainTextSaturation.value = mainTextColor.s;
+      mainTextLightness.value = mainTextColor.l;
+    }
+    function updateMainTextColor() {
+      const h = parseInt(mainTextHue.value);
+      const s = parseInt(mainTextSaturation.value);
+      const l = parseInt(mainTextLightness.value);
+      
+      content.style.setProperty('--main-text-h', h);
+      content.style.setProperty('--main-text-s', s + '%');
+      content.style.setProperty('--main-text-l', l + '%');
+    }
+
+    resetMainColorsBtn.addEventListener('click', randomizeColors);
+    mainTextHue.addEventListener('input', updateMainTextColor);
+    mainTextSaturation.addEventListener('input', updateMainTextColor);
+    mainTextLightness.addEventListener('input', updateMainTextColor);
+
+    // Toggle sidebar
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -375,7 +484,7 @@
       }
     });
 
-    // Click nos itens do menu
+    // Menu
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -385,28 +494,29 @@
       });
     });
 
-    // Muda idioma
+    // Idioma
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // Exemplo: ler e exibir KnowledgeList
+    // =======================
+    // Exemplo: Knowledge List
+    // =======================
     async function fetchKnowledgeList() {
       try {
-        const response = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-        const text = await response.text();
-        const lines = text.split('\n').filter(line => line.trim() !== '');
-        return lines;
+        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const text = await resp.text();
+        return text.split('\n').filter(line => line.trim() !== '');
       } catch (err) {
         console.error(err);
         return ['Erro ao carregar KnowledgeList'];
       }
     }
     async function populateKnowledgeList() {
-      const lines = await fetchKnowledgeList();
       knowledgeListDiv.innerHTML = '';
+      const lines = await fetchKnowledgeList();
       lines.forEach(line => {
         const p = document.createElement('p');
         p.textContent = line;
@@ -414,24 +524,27 @@
       });
     }
 
-    // Ler e exibir certificados
+    // ===============================
+    // Leitura e Exibição de PDFs
+    // ===============================
     async function fetchCertificatesList() {
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
         if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
         const text = await response.text();
         const lines = text.split('\n').filter(line => line.trim() !== '');
-        const arr = lines.map(line => {
+
+        // "arquivo.pdf - Título"
+        return lines.map(line => {
           const parts = line.split('-').map(part => part.trim());
           if (parts.length < 2) {
-            console.warn(`Formato inválido: ${line}`);
+            console.warn(`Formato inválido: "${line}"`);
             return { pdf: '', title: 'Título não disponível' };
           }
           const pdfName = parts[0];
           const title = parts.slice(1).join(' - ');
           return { pdf: pdfName, title };
         });
-        return arr;
       } catch (err) {
         console.error(err);
         return [{ pdf: '', title: 'Erro ao carregar certificados' }];
@@ -443,11 +556,10 @@
       const certificates = await fetchCertificatesList();
 
       certificates.forEach(cert => {
-        // Contêiner do certificado
         const container = document.createElement('div');
         container.classList.add('certificate-container');
 
-        // iFrame com o PDF
+        // iframe do PDF
         const iframe = document.createElement('iframe');
         iframe.src = `./Certificados/${cert.pdf}`;
         iframe.width = '100%';
@@ -465,52 +577,60 @@
       });
     }
 
-    // Atualizar o conteúdo de acordo com a página
+    // ======================
+    // Update de Conteúdo
+    // ======================
     function updateContent() {
-      pageTitle.textContent = translations[currentLanguage][`${currentPage}Title`] || '';
+      const dict = translations[currentLanguage];
+
+      // Título principal
+      pageTitle.textContent = dict[`${currentPage}Title`] || '';
+
+      // Exibir area principal se a página estiver reconhecida
       if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
       }
 
+      // Sub-título e conteúdo
       if (currentPage === 'profile') {
-        knowledgeListTitle.textContent = translations[currentLanguage]['knowledgeListTitle'];
+        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if (currentPage === 'social') {
-        knowledgeListTitle.textContent = translations[currentLanguage]['socialTitle'];
+        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
-          <p><a href="https://www.facebook.com" target="_blank" class="main-link">
-            ${translations[currentLanguage].facebook}
-          </a></p>
-          <p><a href="https://www.instagram.com" target="_blank" class="main-link">
-            ${translations[currentLanguage].instagram}
-          </a></p>
+          <p><a href="#" class="main-link">${dict.facebook}</a></p>
+          <p><a href="#" class="main-link">${dict.instagram}</a></p>
         `;
       } else if (currentPage === 'projects') {
-        knowledgeListTitle.textContent = translations[currentLanguage]['projectsTitle'];
+        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
-          <p><a href="#" class="main-link">${translations[currentLanguage].blenderProjects}</a></p>
-          <p><a href="#" class="main-link">${translations[currentLanguage].gimpProjects}</a></p>
-          <p><a href="#" class="main-link">${translations[currentLanguage].blenderAnimations}</a></p>
-          <p><a href="#" class="main-link">${translations[currentLanguage].animatedBackground}</a></p>
+          <p><a href="#" class="main-link">${dict.blenderProjects}</a></p>
+          <p><a href="#" class="main-link">${dict.gimpProjects}</a></p>
+          <p><a href="#" class="main-link">${dict.blenderAnimations}</a></p>
+          <p><a href="#" class="main-link">${dict.animatedBackground}</a></p>
         `;
       } else if (currentPage === 'contact') {
-        knowledgeListTitle.textContent = translations[currentLanguage]['contactTitle'];
+        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
         knowledgeListDiv.innerHTML = `
-          <p>${translations[currentLanguage].whatsapp}</p>
-          <p>${translations[currentLanguage].email}</p>
+          <p>${dict.whatsapp}</p>
+          <p>${dict.email}</p>
         `;
       } else if (currentPage === 'certificates') {
-        knowledgeListTitle.textContent = translations[currentLanguage]['certificatesTitle'];
+        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
     }
 
+    // ====================
+    // Inicialização
+    // ====================
     document.addEventListener('DOMContentLoaded', () => {
-      updateContent(); // exibe a página inicial "profile"
+      randomizeColors();     // Ajusta cor do texto
+      fetchKnowledgeList();  // Para uso no "profile"
+      updateContent();
     });
   </script>
-
 </body>
 </html>
