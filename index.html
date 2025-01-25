@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Divertido com KnowledgeList Bilíngue</title>
+  <title>Site Divertido com Efeito Sol nos Botões</title>
 
   <!-- Fonte Comic Neue (similar a Comic Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -142,6 +142,7 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(255,0,0,0.2);
     }
+
     .sidebar.closed {
       width: 60px;
     }
@@ -224,18 +225,18 @@
       display: inline-block;
       background: #f8c;
       color: #fff;
-      padding: 8px 15px;
-      border: 1px solid #f06;
-      border-radius: 4px;
+      padding: 12px 20px;
+      border: 3px solid #f06; /* Borda espessa para melhor efeito */
+      border-radius: 50px; /* Borda arredondada */
       text-decoration: none;
       font-weight: 700;
-      margin-right: 10px;
+      margin: 10px;
       transition: 
         background 0.3s ease, 
         transform 0.3s ease, 
         box-shadow 0.3s ease;
       position: relative;
-      overflow: hidden;
+      overflow: hidden; /* Esconde as linhas que excedem a borda */
     }
     a.main-btn:hover {
       background: #f36;
@@ -250,10 +251,14 @@
     /* Linhas p/ hover do botão (geradas em JS) */
     .lines-container {
       position: absolute;
-      top: 0;
-      left: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       pointer-events: none;
-      overflow: visible;
+      overflow: hidden; /* Garante que as linhas não excedam a borda */
+      width: 100%;
+      height: 100%;
+      border-radius: 50px; /* Mesma borda do botão */
     }
     .line-effect {
       position: absolute;
@@ -262,6 +267,9 @@
       background-color: #000;
       transition: height 0.5s ease;
       opacity: 0.8;
+      top: 50%;
+      left: 50%;
+      transform-origin: 0% 0%;
     }
 
     /* CERTIFICADOS - exibe apenas primeira página (#page=1) */
@@ -508,7 +516,7 @@
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
-        if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
@@ -548,10 +556,12 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
+          // IFRAME com #page=1
           const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath;
+          iframe.src = cert.fullPath; 
           container.appendChild(iframe);
 
+          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -632,14 +642,19 @@
             const c = randomColor();
             btn.style.backgroundColor = c;
             // Cria linhas
-            const lines = createRandomLines(btn, 5);
-            btn.addEventListener('mouseleave', () => {
-              // restaura cor default
-              btn.style.backgroundColor = '#f8c';
-              if(lines && lines.parentNode){
-                lines.parentNode.removeChild(lines);
-              }
-            }, { once: true });
+            const lines = createRandomLines(btn, 8); // Aumentamos para 8 linhas para um efeito mais "solar"
+          });
+        });
+
+        // Remover linhas ao mouse sair
+        const allButtons = document.querySelectorAll('.main-btn');
+        allButtons.forEach(btn => {
+          btn.addEventListener('mouseleave', () => {
+            btn.style.backgroundColor = '#f8c'; // Restaura cor original
+            const linesContainer = btn.querySelector('.lines-container');
+            if(linesContainer){
+              btn.removeChild(linesContainer);
+            }
           });
         });
       }, 50);
@@ -652,41 +667,26 @@
       const b = Math.floor(Math.random()*256);
       return `rgb(${r}, ${g}, ${b})`;
     }
-    function createRandomLines(button, count=5){
+    function createRandomLines(button, count=8){
       const linesContainer = document.createElement('div');
       linesContainer.classList.add('lines-container');
-      const btnRect = button.getBoundingClientRect();
-      button.parentNode.style.position = 'relative';
-      button.parentNode.appendChild(linesContainer);
+      button.appendChild(linesContainer);
 
       for(let i=0; i<count; i++){
         const lineDiv = document.createElement('div');
         lineDiv.classList.add('line-effect');
 
-        // Posição inicial (borda do botão)
-        const edge = Math.floor(Math.random()*4);
-        let x=0, y=0;
-        switch(edge){
-          case 0: // esq
-            x=0; y=Math.random()*btnRect.height;
-            break;
-          case 1: // dir
-            x=btnRect.width; y=Math.random()*btnRect.height;
-            break;
-          case 2: // top
-            x=Math.random()*btnRect.width; y=0;
-            break;
-          case 3: // bottom
-            x=Math.random()*btnRect.width; y=btnRect.height;
-            break;
-        }
-        lineDiv.style.left = x + 'px';
-        lineDiv.style.top  = y + 'px';
-        lineDiv.style.backgroundColor = randomColor();
-        const lineLength = 30 + Math.random()*50;
+        // Ângulo aleatório
         const angle = Math.random()*360;
         lineDiv.style.transform = `rotate(${angle}deg)`;
 
+        // Cor aleatória
+        lineDiv.style.backgroundColor = randomColor();
+
+        // Tamanho da linha
+        const lineLength = 50 + Math.random()*50; // 50~100px
+
+        // Definindo altura após um pequeno delay para animar
         setTimeout(()=> {
           lineDiv.style.height = lineLength + 'px';
         },0);
