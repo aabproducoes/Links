@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Divertido com Botões Animados</title>
+  <title>Site Divertido com Contato e PDF Primeiro Page</title>
 
-  <!-- Fontes Google (Comic Sans é "Comic Neue", pois a original não está no GF) -->
+  <!-- Fonte Comic Neue (similar a Comic Sans) -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
-  
+
   <!-- Font Awesome (opcional) -->
   <link
     rel="stylesheet"
@@ -29,7 +29,7 @@
     body {
       display: flex;
       min-height: 100vh;
-      font-family: "Comic Neue", cursive, sans-serif; /* tom mais divertido */
+      font-family: "Comic Neue", cursive, sans-serif; 
       background: radial-gradient(circle at center, #ffefba 0%, #ffc9d7 100%);
       color: #333;
       overflow-x: hidden;
@@ -76,7 +76,6 @@
     .toggle-btn:active {
       transform: scale(0.95) rotate(15deg);
     }
-
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
@@ -143,6 +142,7 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(255,0,0,0.2);
     }
+
     .sidebar.closed {
       width: 60px;
     }
@@ -248,17 +248,11 @@
       box-shadow: 0 3px 8px rgba(255, 51, 102, 0.3);
     }
 
-    /* Efeito de linhas e cor aleatória no hover do botão */
-    .main-btn-container {
-      position: relative;
-      display: inline-block;
-    }
+    /* Linhas p/ hover do botão (geradas em JS) */
     .lines-container {
       position: absolute;
       top: 0;
       left: 0;
-      width: 0;
-      height: 0;
       pointer-events: none;
       overflow: visible;
     }
@@ -266,12 +260,12 @@
       position: absolute;
       width: 2px;
       height: 0px;
-      background-color: #000; /* default; JS vai setar cor e altura */
+      background-color: #000;
       transition: height 0.5s ease;
       opacity: 0.8;
     }
 
-    /* CERTIFICADOS */
+    /* CERTIFICADOS - Apenas Primeira Página (#page=1) */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -298,6 +292,7 @@
       max-width: 90%;
       word-wrap: break-word;
       border: 1px solid #f0f;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
     .certificate-overlay:hover {
       background-color: rgba(255,255,255,0.9);
@@ -355,7 +350,7 @@
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
-      <!-- Linhas fixas p/ hover -->
+      <!-- Quatro linhas fixas p/ hover -->
       <div class="line line1"></div>
       <div class="line line2"></div>
       <div class="line line3"></div>
@@ -388,18 +383,14 @@
         <p>JavaScript</p>
         <p>HTML & CSS</p>
         <p>React</p>
-        <!-- Exemplo: Botões no lugar de links -->
-        <div class="main-btn-container">
-          <a href="https://github.com/seuPerfil" target="_blank" class="main-btn" id="btnExample">
-            GitHub
-          </a>
-        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // REFERENCIAS
+    // =========================
+    //  REFERÊNCIAS
+    // =========================
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -409,6 +400,9 @@
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
 
+    // =========================
+    //  TRADUÇÕES
+    // =========================
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -416,10 +410,10 @@
         socialTitle: 'Social',
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
-        
+        projectsTitle: 'Projects',
+
         facebook: 'Facebook',
         instagram: 'Instagram',
-        projectsTitle: 'Projects',
         blenderProjects: 'Blender Projects',
         gimpProjects: 'Gimp Projects',
         blenderAnimations: 'Blender Animations',
@@ -433,10 +427,10 @@
         socialTitle: 'Social',
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
-        
+        projectsTitle: 'Projetos',
+
         facebook: 'Facebook',
         instagram: 'Instagram',
-        projectsTitle: 'Projetos',
         blenderProjects: 'Projetos Blender',
         gimpProjects: 'Projetos Gimp',
         blenderAnimations: 'Animações Blender',
@@ -448,58 +442,6 @@
 
     let currentLanguage = 'en'; 
     let currentPage = 'profile';
-
-    // ====== FUNÇÕES DE COR ALEATÓRIA E LINHAS ======
-    function randomColor() {
-      const r = Math.floor(Math.random() * 256);
-      const g = Math.floor(Math.random() * 256);
-      const b = Math.floor(Math.random() * 256);
-      return `rgb(${r}, ${g}, ${b})`;
-    }
-
-    function createRandomLines(button, count=5) {
-      // Container para as linhas
-      const linesContainer = document.createElement('div');
-      linesContainer.classList.add('lines-container');
-
-      // Posição relativa ao button
-      const btnRect = button.getBoundingClientRect();
-      linesContainer.style.left = '0';
-      linesContainer.style.top = '0';
-
-      // Adiciona as linhas
-      for(let i=0; i<count; i++){
-        const lineDiv = document.createElement('div');
-        lineDiv.classList.add('line-effect');
-
-        // Posição inicial: no contorno do botão
-        // Precisamos de coords relativos ao button
-        const xOrigin = Math.random() * btnRect.width; 
-        const yOrigin = Math.random() * btnRect.height;
-
-        lineDiv.style.left = `${xOrigin}px`;
-        lineDiv.style.top = `${yOrigin}px`;
-
-        // Cor
-        lineDiv.style.backgroundColor = randomColor();
-        // Tamanho
-        const lineLength = 50 + Math.random() * 50; // 50~100
-        // Ângulo
-        const angle = Math.random() * 360;
-        lineDiv.style.transform = `rotate(${angle}deg)`;
-
-        // Definimos a altura (height) pra "lineLength" => transição
-        setTimeout(() => {
-          lineDiv.style.height = lineLength + 'px';
-        }, 0);
-
-        linesContainer.appendChild(lineDiv);
-      }
-
-      // Coloca linesContainer dentro do buttonContainer
-      button.parentNode.appendChild(linesContainer);
-      return linesContainer;
-    }
 
     // ========== BOTÃO TOGGLE SIDEBAR ==========
     toggleBtn.addEventListener('click', () => {
@@ -531,7 +473,7 @@
       updateContent();
     }
 
-    // ========== EXEMPLO: Profile (Knowledge List) ==========
+    // ========== EXEMPLO: Profile (KnowledgeList) ==========
     async function fetchKnowledgeList() {
       try {
         const r = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -553,7 +495,7 @@
       });
     }
 
-    // ========== CERTIFICADOS ==========
+    // ========== CERTIFICADOS (Somente 1ª Página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -569,16 +511,21 @@
             return { fullPath:'', pdfName:'', title:'' };
           }
           const fullPath = line.substring(0, idx).trim();
-          const title = line.substring(idx+sep.length).trim();
-          // Nome do pdf
+          const title    = line.substring(idx+sep.length).trim();
+
+          // Pega nome do PDF depois do último "/"
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if(lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash+1);
           }
-          return { fullPath, pdfName, title };
+
+          // Adiciona '#page=1' p/ exibir só a primeira página
+          const onlyFirstPagePath = fullPath + '#page=1';
+
+          return { fullPath: onlyFirstPagePath, pdfName, title };
         });
-      } catch(err){
+      } catch(err) {
         console.error(err);
         return [];
       }
@@ -592,10 +539,12 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
+          // IFRAME com #page=1
           const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath;
+          iframe.src = cert.fullPath; 
           container.appendChild(iframe);
 
+          // overlay
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -610,13 +559,13 @@
       });
     }
 
-    // ========== ATUALIZA CONTEÚDO ==========
-    function updateContent(){
+    // ========== UPDATE DE CONTEÚDO ==========
+    function updateContent() {
       const dict = translations[currentLanguage];
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
       const validPages = ['profile','social','projects','contact','certificates'];
-      if(validPages.includes(currentPage)){
+      if(validPages.includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
@@ -629,10 +578,10 @@
         knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
-            <a href="https://www.facebook.com" target="_blank" class="main-btn"> ${dict.facebook}</a>
+            <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
           </div>
           <div class="main-btn-container">
-            <a href="https://www.instagram.com" target="_blank" class="main-btn"> ${dict.instagram}</a>
+            <a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a>
           </div>
         `;
       } else if(currentPage === 'projects'){
@@ -653,27 +602,32 @@
         `;
       } else if(currentPage === 'contact'){
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
+        /* Tornamos o WhatsApp e Email em BOTÕES */
         knowledgeListDiv.innerHTML = `
-          <p>${dict.whatsapp}</p>
-          <p>${dict.email}</p>
+          <div class="main-btn-container">
+            <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
+          </div>
+          <div class="main-btn-container">
+            <a href="mailto:aaugusto444@gmail.com" class="main-btn">Email</a>
+          </div>
         `;
       } else if(currentPage === 'certificates'){
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
 
-      // Adiciona comportamento de hover p/ cada main-btn
+      // Após atualizar HTML, adicionamos eventos de hover
       setTimeout(() => {
         const btns = document.querySelectorAll('.main-btn');
         btns.forEach(btn => {
-          btn.addEventListener('mouseenter', e => {
-            // Define cor aleatória no fundo
+          btn.addEventListener('mouseenter', () => {
+            // Gera cor aleatória p/ fundo
             const c = randomColor();
             btn.style.backgroundColor = c;
             // Cria linhas
             const lines = createRandomLines(btn, 5);
-            // Remover ao mouse sair
             btn.addEventListener('mouseleave', () => {
+              // restaura cor default
               btn.style.backgroundColor = '#f8c';
               if(lines && lines.parentNode){
                 lines.parentNode.removeChild(lines);
@@ -684,69 +638,61 @@
       }, 50);
     }
 
-    // ========== CRIA LINHAS ALEATÓRIAS p/ BOTÃO ==========
-    function createRandomLines(button, count=5) {
+    // ========== FUNÇÕES DE COR E LINHAS ALEATÓRIAS ==========
+    function randomColor() {
+      const r = Math.floor(Math.random()*256);
+      const g = Math.floor(Math.random()*256);
+      const b = Math.floor(Math.random()*256);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+    function createRandomLines(button, count=5){
       const linesContainer = document.createElement('div');
       linesContainer.classList.add('lines-container');
-
-      // Posicionar no container do button
       const btnRect = button.getBoundingClientRect();
-      // Hack: Precisamos offset relativo
-      linesContainer.style.left = 0;
-      linesContainer.style.top = 0;
-
-      button.parentNode.style.position = 'relative'; // garante container
+      button.parentNode.style.position = 'relative';
       button.parentNode.appendChild(linesContainer);
 
       for(let i=0; i<count; i++){
         const lineDiv = document.createElement('div');
         lineDiv.classList.add('line-effect');
 
-        // Posição inicial: na borda do botão
-        // Precisamos descobrir se top/left cai na borda
-        // Simples: pega x=0 ou x=btnRect.width, y random. E vice-versa.
-        const edge = Math.floor(Math.random() * 4); 
+        // Borda: 0 ou width, e 0 ou height
+        const edge = Math.floor(Math.random()*4);
         let x=0, y=0;
         switch(edge){
-          case 0: // borda esquerda
-            x = 0;
-            y = Math.random() * btnRect.height;
+          case 0: // esq
+            x=0; y = Math.random()*btnRect.height;
             break;
-          case 1: // borda direita
-            x = btnRect.width;
-            y = Math.random() * btnRect.height;
+          case 1: // dir
+            x=btnRect.width; y=Math.random()*btnRect.height;
             break;
-          case 2: // borda top
-            x = Math.random() * btnRect.width;
-            y = 0;
+          case 2: // top
+            x=Math.random()*btnRect.width; y=0;
             break;
-          case 3: // borda bottom
-            x = Math.random() * btnRect.width;
-            y = btnRect.height;
+          case 3: // bottom
+            x=Math.random()*btnRect.width; y=btnRect.height;
             break;
         }
         lineDiv.style.left = x + 'px';
-        lineDiv.style.top = y + 'px';
-
-        // cor e tamanho
+        lineDiv.style.top  = y + 'px';
         lineDiv.style.backgroundColor = randomColor();
         const lineLength = 30 + Math.random()*50;
         const angle = Math.random()*360;
         lineDiv.style.transform = `rotate(${angle}deg)`;
 
-        // Definimos height
         setTimeout(()=> {
           lineDiv.style.height = lineLength + 'px';
-        }, 0);
+        },0);
 
         linesContainer.appendChild(lineDiv);
       }
+
       return linesContainer;
     }
 
     // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
-      updateContent(); 
+      updateContent();
     });
   </script>
 </body>
