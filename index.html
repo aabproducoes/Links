@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site Sério com Certificados</title>
+  <title>Site Sério com Efeitos</title>
 
-  <!-- Google Fonts (Roboto + Montserrat) -->
+  <!-- Google Fonts (Montserrat + Roboto) -->
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
     rel="stylesheet"
   />
   
-  <!-- Font Awesome para ícones (opcional) -->
+  <!-- Font Awesome (opcional) -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -28,18 +28,30 @@
       box-sizing: border-box;
     }
 
+    /* BODY COM ANIMAÇÃO GRADIENTE SUTIL (FUNDO) */
     body {
       display: flex;
       min-height: 100vh;
       font-family: "Roboto", sans-serif;
-      background-color: #111; /* tom mais sóbrio (preto acinzentado) */
+      background: linear-gradient(135deg, #111 0%, #1a1a1a 100%);
+      background-size: 400% 400%;
+      animation: bgAnimation 20s infinite alternate ease-in-out;
       color: #fff;
+    }
+
+    @keyframes bgAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
     }
 
     /* SIDEBAR */
     .sidebar {
       width: 250px;
-      background-color: #111; /* tom sério, sem color picker */
+      background-color: #111;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -47,10 +59,10 @@
       position: relative;
       font-family: "Montserrat", sans-serif;
       z-index: 1000;
-      border-right: 1px solid #333; /* leve borda */
+      border-right: 1px solid #333;
     }
 
-    /* BOTÃO TOGGLE */
+    /* BOTÃO TOGGLE COM EFEITO DE LINHAS (no Hover) */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -68,53 +80,31 @@
       transition: all 0.3s ease;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       font-size: 18px;
-      overflow: visible; /* para linhas */
+      overflow: visible;
     }
-
     .toggle-btn:hover {
       background: #444;
     }
-
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
-
-    /* EFEITO DE LINHAS NO HOVER DO BOTÃO */
     .toggle-btn .line {
       position: absolute;
       width: 2px;
       height: 0;
-      background: #f06595; /* cor da linha (rosa) */
+      background: #f06595;
       opacity: 0;
       transition: opacity 0.3s, height 0.5s;
     }
-
-    /* Exemplo: 4 linhas fixas (não randômicas) partindo do centro do botão */
-    .line1 {
-      top: 25px;  /* a metade do height do .toggle-btn (50/2) */
-      left: 25px; /* idem pro width */
-      transform-origin: top;
-    }
-    .line2 {
+    .line1, .line2, .line3, .line4 {
       top: 25px;
       left: 25px;
       transform-origin: top;
     }
-    .line3 {
-      top: 25px;
-      left: 25px;
-      transform-origin: top;
-    }
-    .line4 {
-      top: 25px;
-      left: 25px;
-      transform-origin: top;
-    }
-
     .toggle-btn:hover .line1 {
       opacity: 1;
-      height: 40px; /* "esticado" */
-      transform: translate(-2px, -40px); /* linha indo pra cima */
+      height: 40px;
+      transform: translate(-2px, -40px);
     }
     .toggle-btn:hover .line2 {
       opacity: 1;
@@ -143,7 +133,7 @@
     .menu li {
       padding: 15px 20px;
       cursor: pointer;
-      transition: background 0.3s ease, color 0.3s ease;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
       background: #111;
       color: #fff;
       border: 1px solid #333;
@@ -157,13 +147,16 @@
     }
     .menu li:hover {
       background: #222;
+      transform: translateX(5px);
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
     }
     .menu li.active {
       background: #333;
       font-weight: 700;
+      box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
     }
 
-    /* COLAPSO SIDEBAR */
+    /* MENU COLAPSADO */
     .sidebar.closed {
       width: 60px;
     }
@@ -187,7 +180,7 @@
       transform: rotate(180deg);
     }
 
-    /* LANGUAGE SELECTOR */
+    /* SELETOR DE IDIOMA */
     .language-selector {
       margin: 20px;
       padding: 10px 15px;
@@ -213,11 +206,11 @@
       appearance: none;
     }
 
-    /* MAIN CONTENT */
+    /* CONTEÚDO PRINCIPAL */
     .content {
       flex: 1;
       padding: 20px;
-      background-color: #111;
+      background-color: transparent; /* gradient do BODY */
       color: #fff;
       font-size: 18px;
       line-height: 1.6;
@@ -234,11 +227,38 @@
       margin-bottom: 8px;
     }
 
-    /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
+    /* LINKS / BOTÕES NO CONTEÚDO COM EFEITO HOVER */
+    a.main-link {
+      color: #09f;
+      text-decoration: none;
+      position: relative;
+      transition: color 0.3s;
+    }
+    a.main-link::after {
+      content: "";
+      position: absolute;
+      height: 2px;
+      background: #09f;
+      left: 0;
+      bottom: -3px;
+      width: 0%;
+      transition: width 0.3s;
+    }
+    a.main-link:hover {
+      color: #0cf;
+    }
+    a.main-link:hover::after {
+      width: 100%;
+    }
+
+    /* CERTIFICADOS */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
       border: 1px solid #333;
+      border-radius: 3px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: hidden;
     }
     .certificate-container iframe {
       width: 100%;
@@ -252,8 +272,8 @@
       color: #fff;
       background-color: rgba(0, 0, 0, 0.5);
       padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 18px;
+      border-radius: 4px;
+      font-size: 16px;
       pointer-events: none;
       max-width: 90%;
       word-wrap: break-word;
@@ -269,7 +289,7 @@
       margin-top: 4px;
     }
 
-    /* RESPONSIVE */
+    /* RESPONSIVO */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -295,7 +315,6 @@
         padding: 15px;
       }
     }
-
     @media (max-width: 480px) {
       .toggle-btn {
         width: 40px;
@@ -311,7 +330,7 @@
         height: 300px;
       }
       .certificate-overlay {
-        font-size: 16px;
+        font-size: 14px;
       }
       .certificate-overlay .fullPath,
       .certificate-overlay .pdfName {
@@ -324,10 +343,10 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- Botão com efeito de linhas no Hover -->
+    <!-- BOTÃO TOGGLE (com linhas no hover) -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
-      <!-- Quatro linhas fixas para efeito de hover (não-randômico) -->
+      <!-- Linhas no hover -->
       <div class="line line1"></div>
       <div class="line line2"></div>
       <div class="line line3"></div>
@@ -352,23 +371,24 @@
     
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
+  <!-- MAIN CONTENT -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
       <h2 id="knowledgeListTitle">Knowledge List</h2>
       <div id="knowledgeList">
+        <!-- Exemplo inicial (depois substituído dinamicamente) -->
         <p>JavaScript</p>
         <p>HTML & CSS</p>
         <p>React</p>
+        <!-- Exemplo de link com hover animado -->
+        <p><a href="#" class="main-link">Meu link com efeito</a></p>
       </div>
     </div>
   </div>
 
   <script>
-    // =========================
-    //  REFERÊNCIAS
-    // =========================
+    // REFERENCIAS
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -378,9 +398,7 @@
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
 
-    // =========================
-    //  TRADUÇÕES
-    // =========================
+    // TRADUÇÕES
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -388,7 +406,7 @@
         socialTitle: 'Social',
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
-        
+
         facebook: 'Facebook',
         instagram: 'Instagram',
         projectsTitle: 'Projects',
@@ -405,7 +423,7 @@
         socialTitle: 'Social',
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
-        
+
         facebook: 'Facebook',
         instagram: 'Instagram',
         projectsTitle: 'Projetos',
@@ -418,12 +436,10 @@
       }
     };
 
-    let currentLanguage = 'en'; // Idioma default
+    let currentLanguage = 'en';
     let currentPage = 'profile';
 
-    // =========================
-    //  TOGGLE SIDEBAR
-    // =========================
+    // TOGGLE SIDEBAR
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -437,9 +453,7 @@
       }
     });
 
-    // =========================
-    //  MENU
-    // =========================
+    // MENU
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -449,28 +463,25 @@
       });
     });
 
-    // =========================
-    //  IDIOMA
-    // =========================
+    // IDIOMA
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // =========================
-    //  PROFILE (KNOWLEDGE LIST)
-    // =========================
+    // EXEMPLO: PROFILE (KNOWLEDGE LIST)
     async function fetchKnowledgeList() {
       try {
-        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
-        const txt = await resp.text();
-        return txt.split('\n').filter(line => line.trim() !== '');
+        const r = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        const t = await r.text();
+        return t.split('\n').filter(line => line.trim() !== '');
       } catch (err) {
         console.error(err);
         return ['Erro ao carregar KnowledgeList'];
       }
     }
+
     async function populateKnowledgeList() {
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
@@ -481,29 +492,26 @@
       });
     }
 
-    // =========================
-    //  CERTIFICATES
-    // =========================
-    // Exemplo: "Certificados/Certificado-10344-10494022.pdf - Curso de Pacote Office"
+    // CERTIFICADOS
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
         if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
-        const txt = await r.text();
-        const lines = txt.split('\n').filter(l => l.trim() !== '');
+        const text = await r.text();
+        const lines = text.split('\n').filter(l => l.trim() !== '');
 
-        // Separa no primeiro " - "
         return lines.map(line => {
+          // Separa no primeiro " - "
           const sep = ' - ';
           const idx = line.indexOf(sep);
           if (idx === -1) {
             console.warn('Formato inválido:', line);
             return { fullPath:'', pdfName:'', title:'' };
           }
-          const fullPath = line.substring(0, idx).trim(); // ex "Certificados/Certificado-10344-..."
-          const title = line.substring(idx + sep.length).trim(); // ex "Curso de Pacote Office"
+          const fullPath = line.substring(0, idx).trim();
+          const title = line.substring(idx + sep.length).trim();
 
-          // Nome do PDF = tudo após o último "/"
+          // Nome do PDF após o último "/"
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if (lastSlash !== -1) {
@@ -526,12 +534,12 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // IFRAME do PDF
+          // IFRAME
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
           container.appendChild(iframe);
 
-          // Overlay
+          // Overlay com título, caminho e nome do PDF
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -546,22 +554,19 @@
       });
     }
 
-    // =========================
-    //  ATUALIZA CONTEÚDO
-    // =========================
+    // ATUALIZA CONTEÚDO
     function updateContent() {
       const dict = translations[currentLanguage];
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
-      // Exibe ou esconde o conteudo
-      const validPages = ['profile','social','projects','contact','certificates'];
-      if (validPages.includes(currentPage)) {
+      // Páginas válidas
+      const valid = ['profile','social','projects','contact','certificates'];
+      if (valid.includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
       }
 
-      // Conteudo especifico
       if (currentPage === 'profile') {
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -591,14 +596,8 @@
       }
     }
 
-    // =========================
-    //  INICIALIZAÇÃO
-    // =========================
     document.addEventListener('DOMContentLoaded', () => {
-      // Removemos color pickers - ou seja, não chamamos randomizeColors etc.
-      // Aqui, só definimos um "tema" fixo, caso queira.
-      // Se quiser, pode usar "randomizeColors()" para colorir texto de outro jeito.
-      updateContent(); // exibe a página padrao
+      updateContent(); // inicia a página default
     });
   </script>
 </body>
