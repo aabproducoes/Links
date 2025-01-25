@@ -204,7 +204,7 @@
         .sidebar.closed .menu li {
             justify-content: center; /* Centraliza os ícones */
             padding: 15px 10px;
-            font-size: 16px; /* Ajuste para manter legibilidade */
+            font-size: 16px; /* Mantém a legibilidade */
             background: linear-gradient(
                 to bottom, 
                 hsl(var(--menu-gradient-start-h), var(--menu-gradient-start-s), var(--menu-gradient-start-l)), 
@@ -540,10 +540,10 @@
             <i class="fas fa-arrow-left"></i>
         </button>
         <ul class="menu">
-            <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
-            <li data-page="social" data-icon="🔗"><span>Social</span></li>
-            <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
-            <li data-page="contact" data-icon="📞"><span>Contact</span></li>
+            <li class="active" data-page="profile" data-icon="👤" aria-label="Profile" title="Profile"><span>Profile</span></li>
+            <li data-page="social" data-icon="🔗" aria-label="Social" title="Social"><span>Social</span></li>
+            <li data-page="projects" data-icon="🖥️" aria-label="Projects" title="Projects"><span>Projects</span></li>
+            <li data-page="contact" data-icon="📞" aria-label="Contact" title="Contact"><span>Contact</span></li>
         </ul>
         <div class="language-selector">
             <select id="languageSelect" onchange="changeLanguage()">
