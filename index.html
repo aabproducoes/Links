@@ -32,7 +32,7 @@
     /* ====== SIDEBAR ====== */
     .sidebar {
       width: 250px;
-      background-color: #000; /* Fixo em preto */
+      background-color: #000; /* fixo em preto */
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -600,9 +600,12 @@
             console.warn(`Formato inválido: "${line}"`);
             return { pdf: '', title: 'Título não disponível', path: '' };
           }
+          // nome do PDF e título
           const pdfName = parts[0]; // "certificado-js.pdf"
           const title   = parts.slice(1).join(' - ');
-          const path    = `./Certificados/${pdfName}`; // Concatena pasta + nome do PDF
+          
+          // Garante que apenas 1x "Certificados/" seja adicionado
+          const path    = `./Certificados/${pdfName}`;
 
           return { pdf: pdfName, title, path };
         });
@@ -617,23 +620,21 @@
       const certificates = await fetchCertificatesList();
 
       certificates.forEach(cert => {
-        // Verifica se o PDF está disponível
         if (cert.pdf && cert.path) {
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // iFrame para exibir o PDF
+          // iframe p/ exibir o PDF
           const iframe = document.createElement('iframe');
-          iframe.src = cert.path;  // ex: ./Certificados/certificado-js.pdf
+          iframe.src = cert.path;  // ex: "./Certificados/certificado-js.pdf"
           iframe.width = '100%';
           iframe.height = '500px';
           iframe.style.border = 'none';
 
-          // Div sobreposta com o título e caminho
+          // div sobreposta com título + caminho
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           
-          // Conteúdo do overlay com título e caminho
           overlay.innerHTML = `
             <div class="title">${cert.title}</div>
             <div class="path">${cert.path}</div>
@@ -643,7 +644,7 @@
           container.appendChild(overlay);
           knowledgeListDiv.appendChild(container);
         } else {
-          // Caso não haja PDF ou path
+          // caso não haja PDF ou path
           const p = document.createElement('p');
           p.textContent = cert.title;
           knowledgeListDiv.appendChild(p);
