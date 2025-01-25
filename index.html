@@ -544,6 +544,8 @@
             <li data-page="social" data-icon="🔗" aria-label="Social" title="Social"><span>Social</span></li>
             <li data-page="projects" data-icon="🖥️" aria-label="Projects" title="Projects"><span>Projects</span></li>
             <li data-page="contact" data-icon="📞" aria-label="Contact" title="Contact"><span>Contact</span></li>
+            <!-- Novo Item de Menu para Certificates -->
+            <li data-page="certificates" data-icon="🎓" aria-label="Certificates" title="Certificates"><span>Certificates</span></li>
         </ul>
         <div class="language-selector">
             <select id="languageSelect" onchange="changeLanguage()">
@@ -620,7 +622,8 @@
                 profileTitle: 'Profile',
                 knowledgeListTitle: 'Knowledge List',
                 socialTitle: 'Social',
-                contactTitle: 'Contact', // Renomeado para "Contact"
+                contactTitle: 'Contact',
+                certificatesTitle: 'Certificates', // Novo Título para Certificates
                 facebook: 'Facebook',
                 instagram: 'Instagram',
                 projectsTitle: 'Projects',
@@ -635,7 +638,8 @@
                 profileTitle: 'Perfil',
                 knowledgeListTitle: 'Lista de Conhecimento',
                 socialTitle: 'Social',
-                contactTitle: 'Contato', // Renomeado para "Contato"
+                contactTitle: 'Contato',
+                certificatesTitle: 'Certificados', // Novo Título para Certificados
                 facebook: 'Facebook',
                 instagram: 'Instagram',
                 projectsTitle: 'Projetos',
@@ -844,13 +848,60 @@
             });
         }
 
+        // Função para popular a lista de certificados
+        async function fetchCertificatesList() {
+            try {
+                const response = await fetch('./Certificados/CertificadosList.txt');
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP! Status: ${response.status}`);
+                }
+                const text = await response.text();
+                const lines = text.split('\n').filter(line => line.trim() !== ''); // Divide em linhas não vazias
+                // Processa cada linha para extrair o título após o "-"
+                const certificates = lines.map(line => {
+                    const parts = line.split('-').map(part => part.trim());
+                    if (parts.length < 2) {
+                        console.warn(`Formato de linha inválido: "${line}". Esperado "Algo - Título".`);
+                        return 'Título não disponível'; // Ou pular a entrada
+                    }
+                    return parts[1]; // Título após o "-"
+                });
+                return certificates;
+            } catch (error) {
+                console.error('Falha ao buscar CertificadosList:', error);
+                return ['Erro ao carregar os certificados.'];
+            }
+        }
+
+        // Função para popular a lista de certificados no conteúdo principal
+        async function populateCertificatesList() {
+            // Limpa o conteúdo existente
+            knowledgeListDiv.innerHTML = '';
+
+            // Busca os certificados
+            const certificates = await fetchCertificatesList();
+
+            // Cria uma lista não ordenada para exibir os certificados
+            const ul = document.createElement('ul');
+            ul.style.listStyleType = 'disc';
+            ul.style.paddingLeft = '20px';
+
+            certificates.forEach(cert => {
+                const li = document.createElement('li');
+                li.textContent = cert;
+                ul.appendChild(li);
+            });
+
+            knowledgeListDiv.appendChild(ul);
+        }
+
         // Função para atualizar o conteúdo com base na página atual e no idioma
         function updateContent() {
             // Atualiza o título da página
             pageTitle.textContent = translations[currentLanguage][`${currentPage}Title`] || '';
 
             // Mostra ou esconde o conteúdo da página
-            if (['profile', 'social', 'projects', 'contact'].includes(currentPage)) {
+            if (['profile', 'social', 'projects', 'contact', 'certificates'].includes(currentPage)) {
                 document.getElementById('pageContent').style.display = 'block';
             } else {
                 document.getElementById('pageContent').style.display = 'none';
@@ -861,11 +912,13 @@
                 knowledgeListTitle.textContent = translations[currentLanguage]['knowledgeListTitle'];
                 populateKnowledgeList();
             } else if (currentPage === 'social') {
+                knowledgeListTitle.textContent = translations[currentLanguage]['socialTitle'];
                 knowledgeListDiv.innerHTML = `
                     <p><a href="https://www.facebook.com/antonio.augusto.barbaro" class="main-link" target="_blank">${translations[currentLanguage].facebook}</a></p>
                     <p><a href="https://www.instagram.com/aabproducoes/" class="main-link" target="_blank">${translations[currentLanguage].instagram}</a></p>
                 `;
             } else if (currentPage === 'projects') {
+                knowledgeListTitle.textContent = translations[currentLanguage]['projectsTitle'];
                 knowledgeListDiv.innerHTML = `
                     <p><a href="./blender-projects.html" class="main-link" target="_blank">${translations[currentLanguage].blenderProjects}</a></p>
                     <p><a href="./gimpt-projects.html" class="main-link" target="_blank">${translations[currentLanguage].gimpProjects}</a></p>
@@ -873,10 +926,14 @@
                     <p><a href="./animated-background.html" class="main-link" target="_blank">${translations[currentLanguage].animatedBackground}</a></p>
                 `;
             } else if (currentPage === 'contact') {
+                knowledgeListTitle.textContent = translations[currentLanguage]['contactTitle'];
                 knowledgeListDiv.innerHTML = `
                     <p>${translations[currentLanguage].whatsapp}</p>
                     <p>${translations[currentLanguage].email}</p>
                 `;
+            } else if (currentPage === 'certificates') {
+                knowledgeListTitle.textContent = translations[currentLanguage]['certificatesTitle'];
+                populateCertificatesList();
             } else {
                 // Esconde o conteúdo para outras páginas
                 document.getElementById('pageContent').style.display = 'none';
