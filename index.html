@@ -232,12 +232,12 @@
       border-radius: 5px;
       background: rgba(255,255,255,0.4);
       backdrop-filter: blur(5px);
-      padding: 10px;
+      margin-top: 10px;
     }
-    .certificate-canvas {
+    .certificate-container iframe {
       width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
+      height: 1123px; /* Altura ajustada para exibir apenas a primeira página */
+      border: none;
     }
     .certificate-overlay {
       position: absolute;
@@ -282,6 +282,9 @@
       .content {
         padding: 15px;
       }
+      .certificate-container iframe {
+        height: 800px; /* Reduz a altura em telas menores */
+      }
     }
     @media (max-width: 480px) {
       .toggle-btn {
@@ -294,8 +297,8 @@
         padding: 12px 15px;
         margin: 3px 5px;
       }
-      .certificate-canvas {
-        height: 250px;
+      .certificate-container iframe {
+        height: 600px; /* Ajuste adicional para telas muito pequenas */
       }
       .certificate-overlay {
         font-size: 14px;
@@ -332,10 +335,6 @@
       <div id="knowledgeList"></div>
     </div>
   </div>
-
-  <!-- PDF.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js"></script>
 
   <script>
     // =========================
@@ -392,58 +391,23 @@
     let currentLanguage = 'en';
     let currentPage     = 'profile';
 
-    // =========================
-    //  PDF.js CONFIGURAÇÃO
-    // =========================
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.7.107/pdf.worker.min.js';
-
-    // =========================
-    //  FUNÇÕES PDF.js
-    // =========================
-    async function renderFirstPage(pdfUrl, canvasElement) {
-      try {
-        const loadingTask = pdfjsLib.getDocument(pdfUrl);
-        const pdf = await loadingTask.promise;
-        const page = await pdf.getPage(1); // Carrega a primeira página
-
-        const viewport = page.getViewport({ scale: 1.5 }); // Ajuste o scale conforme necessário
-        const context = canvasElement.getContext('2d');
-        canvasElement.height = viewport.height;
-        canvasElement.width = viewport.width;
-
-        const renderContext = {
-          canvasContext: context,
-          viewport: viewport
-        };
-
-        await page.render(renderContext).promise;
-      } catch (error) {
-        console.error('Erro ao carregar o PDF:', error);
-        canvasElement.parentElement.innerHTML = '<p>Erro ao carregar o certificado.</p>';
-      }
-    }
-
-    // =========================
-    //  SIDEBAR TOGGLE
-    // =========================
+    // ========== SIDEBAR TOGGLE ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
       const icon = toggleBtn.querySelector('i');
       if (sidebar.classList.contains('closed')) {
-        // Altera ícone para arrow-right
+        // Altera ícone para seta direita
         icon.classList.remove('fa-arrow-left');
         icon.classList.add('fa-arrow-right');
       } else {
-        // Altera ícone para arrow-left
+        // Altera ícone para seta esquerda
         icon.classList.remove('fa-arrow-right');
         icon.classList.add('fa-arrow-left');
       }
     });
 
-    // =========================
-    //  MENU LATERAL
-    // =========================
+    // ========== MENU LATERAL ==========
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -453,9 +417,7 @@
       });
     });
 
-    // =========================
-    //  BOTÃO DE IDIOMA
-    // =========================
+    // ========== BOTÃO DE IDIOMA ==========
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
@@ -464,9 +426,7 @@
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
 
-    // =========================
-    //  ATUALIZA RÓTULOS DO MENU
-    // =========================
+    // ========== ATUALIZA RÓTULOS DO MENU ==========
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
@@ -480,9 +440,7 @@
       });
     }
 
-    // =========================
-    //  KNOWLEDGE LIST (EN||PT)
-    // =========================
+    // ========== KNOWLEDGE LIST (EN||PT) ==========
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -509,13 +467,11 @@
       });
     }
 
-    // =========================
-    //  CERTIFICADOS (Somente 1ª página)
-    // =========================
+    // ========== CERTIFICADOS (Somente 1ª página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
-        if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
@@ -534,7 +490,7 @@
           if(lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash+1);
           }
-          // #page=1 para carregar apenas a primeira página
+          // Adiciona #page=1 para carregar apenas a primeira página
           const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
@@ -551,15 +507,10 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // Cria um elemento canvas para renderizar o PDF
-          const canvas = document.createElement('canvas');
-          canvas.classList.add('certificate-canvas');
-          container.appendChild(canvas);
+          const iframe = document.createElement('iframe');
+          iframe.src = cert.fullPath;
+          container.appendChild(iframe);
 
-          // Renderiza a primeira página do PDF no canvas
-          renderFirstPage(cert.fullPath, canvas);
-
-          // Adiciona a sobreposição de informações
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -574,9 +525,7 @@
       });
     }
 
-    // =========================
-    //  UPDATE DE CONTEÚDO
-    // =========================
+    // ========== UPDATE DE CONTEÚDO ==========
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
@@ -646,13 +595,10 @@
       }
     }
 
-    // =========================
-    //  INICIALIZAÇÃO
-    // =========================
+    // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
   </script>
 </body>
 </html>
- 
