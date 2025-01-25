@@ -21,7 +21,7 @@
   />
 
   <style>
-    /* Basic Reset */
+    /* Reset básico */
     * {
       margin: 0;
       padding: 0;
@@ -36,18 +36,20 @@
       color: #fff;
     }
 
-    /* SIDEBAR */
+    /* ====== SIDEBAR ====== */
     .sidebar {
       width: 250px;
-      background-color: #000;
+      background-color: #000; /* fixo em preto */
       color: #fff;
       display: flex;
       flex-direction: column;
       transition: width 0.3s ease;
       position: relative;
-      font-family: "Montserrat", sans-serif; /* menu font */
+      font-family: "Montserrat", sans-serif; /* Fonte para o menu */
       z-index: 1000;
     }
+
+    /* Botão de Toggle */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -79,6 +81,7 @@
       transition: transform 0.3s ease;
     }
 
+    /* Lista de Itens do Menu */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -117,6 +120,7 @@
       box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
     }
 
+    /* Colapsar a Barra Lateral */
     .sidebar.closed {
       width: 60px;
     }
@@ -128,7 +132,7 @@
       gap: 0;
     }
     .sidebar.closed .menu li span {
-      display: none;
+      display: none; /* Esconde o texto */
     }
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
@@ -144,6 +148,7 @@
       transform: rotate(180deg);
     }
 
+    /* Seletor de idioma */
     .language-selector {
       margin: 20px;
       padding: 10px 15px;
@@ -170,8 +175,12 @@
       cursor: pointer;
       appearance: none;
     }
+    .language-selector select option {
+      background: #ffafbd;
+      color: #000;
+    }
 
-    /* MAIN CONTENT */
+    /* ====== CONTEÚDO PRINCIPAL ====== */
     .content {
       flex: 1;
       padding: 20px;
@@ -190,7 +199,7 @@
       margin-bottom: 8px;
     }
 
-    /* COLOR PICKER */
+    /* Picker de Cores (texto) */
     .main-color-picker {
       padding: 20px;
       background-color: #222;
@@ -224,7 +233,38 @@
       outline: none;
       transition: background 0.3s ease;
     }
+    /* Estilos para o Slider Thumb */
+    .color-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .color-control input[type="range"]::-webkit-slider-thumb:hover {
+      background: #ddd;
+      transform: scale(1.1);
+    }
+    .color-control input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 2px rgba(0,0,0,0.5);
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .color-control input[type="range"]::-moz-range-thumb:hover {
+      background: #ddd;
+      transform: scale(1.1);
+    }
 
+    /* Estilização do Botão de Reset */
     .reset-btn {
       background: linear-gradient(45deg, #1e3c72, #2a5298);
       color: #fff;
@@ -232,7 +272,7 @@
       border-radius: 25px;
       padding: 12px 20px;
       font-size: 16px;
-      box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
+      box-shadow: 0 4px 15px rgba(30,60,114,0.4);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -242,15 +282,15 @@
     }
     .reset-btn:hover {
       background: linear-gradient(45deg, #2a5298, #1e3c72);
-      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.6);
+      box-shadow: 0 6px 20px rgba(30,60,114,0.6);
       transform: translateY(-2px);
     }
     .reset-btn:active {
       transform: scale(0.95) translateY(-2px);
-      box-shadow: 0 3px 10px rgba(30, 60, 114, 0.3);
+      box-shadow: 0 3px 10px rgba(30,60,114,0.3);
     }
 
-    /* CERTIFICATES (PDF + TEXT OVERLAY) */
+    /* ====== CERTIFICADOS (PDF + TEXTO SOBREPOSTO) ====== */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -269,17 +309,18 @@
       padding: 10px 15px;
       border-radius: 5px;
       font-size: 18px;
-      pointer-events: none; /* let clicks pass to iframe */
+      pointer-events: none; /* Para permitir clique no iframe */
       max-width: 90%;
       word-wrap: break-word;
     }
+    /* Estilo adicional para exibir o caminho do PDF */
     .certificate-overlay .path {
       font-size: 14px;
       color: #ccc;
       margin-top: 5px;
     }
 
-    /* RESPONSIVITY */
+    /* ====== RESPONSIVIDADE ====== */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -341,7 +382,7 @@
 </head>
 <body>
 
-  <!-- SIDEBAR -->
+  <!-- ====== SIDEBAR ====== -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
@@ -356,7 +397,7 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
 
-    <!-- Language Selector -->
+    <!-- Seletor de Idioma -->
     <div class="language-selector">
       <select id="languageSelect" onchange="changeLanguage()">
         <option value="en">English</option>
@@ -364,7 +405,7 @@
       </select>
     </div>
     
-    <!-- Text Color Picker -->
+    <!-- Picker de Cores (apenas texto) -->
     <div class="main-color-picker">
       <h3>Customize Main Content</h3>
       <div class="color-control">
@@ -380,13 +421,14 @@
         <input type="range" id="mainTextLightness" min="0" max="100" value="100">
       </div>
 
+      <!-- Botão de Reset -->
       <button id="resetMainColorsBtn" class="reset-btn">
         <i class="fas fa-redo"></i> Reset Colors
       </button>
     </div>
   </div>
 
-  <!-- MAIN CONTENT AREA -->
+  <!-- ====== CONTEÚDO PRINCIPAL ====== -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
@@ -400,7 +442,7 @@
   </div>
 
   <script>
-    // References
+    // ====== REFERÊNCIAS ======
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -410,13 +452,13 @@
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
 
-    // Color Sliders
+    // Sliders para cor do texto
     const mainTextHue = document.getElementById('mainTextHue');
     const mainTextSaturation = document.getElementById('mainTextSaturation');
     const mainTextLightness = document.getElementById('mainTextLightness');
     const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
 
-    // Translations
+    // Traduções
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -454,11 +496,11 @@
       }
     };
 
-    let currentLanguage = 'en'; // default
+    let currentLanguage = 'en'; // padrão
     let currentPage = 'profile';
 
-    // ========== TEXT COLOR FUNCTIONS ==========
-
+    // ====== FUNÇÕES DE COR ======
+    // Gera cor HSL aleatória clara (L>80%)
     function getRandomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
@@ -469,6 +511,7 @@
       return { h, s, l };
     }
 
+    // Aplica cor ao texto principal
     function randomizeColors() {
       const mainTextColor = generateRandomLightHSL();
       content.style.setProperty('--main-text-h', mainTextColor.h);
@@ -484,7 +527,7 @@
       const h = parseInt(mainTextHue.value);
       const s = parseInt(mainTextSaturation.value);
       const l = parseInt(mainTextLightness.value);
-
+      
       content.style.setProperty('--main-text-h', h);
       content.style.setProperty('--main-text-s', s + '%');
       content.style.setProperty('--main-text-l', l + '%');
@@ -495,7 +538,7 @@
     mainTextSaturation.addEventListener('input', updateMainTextColor);
     mainTextLightness.addEventListener('input', updateMainTextColor);
 
-    // ========== TOGGLE SIDEBAR ==========
+    // ====== TOGGLE SIDEBAR ======
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -510,23 +553,23 @@
       }
     });
 
-    // ========== MENU ==========
-    menuItems.forEach((item) => {
+    // ====== MENU ======
+    menuItems.forEach(item => {
       item.addEventListener('click', () => {
-        menuItems.forEach((i) => i.classList.remove('active'));
+        menuItems.forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         currentPage = item.getAttribute('data-page');
         updateContent();
       });
     });
 
-    // ========== LANGUAGE ==========
+    // ====== IDIOMA ======
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // ========== KNOWLEDGE LIST (PROFILE) EXAMPLE ==========
+    // ====== KNOWLEDGE LIST (PROFILE) ======
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -535,7 +578,7 @@
         return text.split('\n').filter(line => line.trim() !== '');
       } catch (err) {
         console.error(err);
-        return ['Error loading KnowledgeList'];
+        return ['Erro ao carregar KnowledgeList'];
       }
     }
     async function populateKnowledgeList() {
@@ -548,10 +591,8 @@
       });
     }
 
-    // ========== CERTIFICATES ==========
-    // 1) read & parse CertificadosList.txt
-    //    line format: "Certificados/certificado-js.pdf - Certificado de JavaScript"
-    //    or any path + title
+    // ====== CERTIFICADOS ======
+    // Função para buscar e parsear o arquivo CertificadosList.txt
     async function fetchCertificatesList() {
       try {
         const response = await fetch('./Certificados/CertificadosList.txt');
@@ -559,26 +600,24 @@
         const text = await response.text();
         const lines = text.split('\n').filter(line => line.trim() !== '');
 
-        // Example line: "Certificados/certificado-js.pdf - Certificado de JavaScript"
-        // We won't add or remove "Certificados/" ourselves. We'll just parse it.
+        // "Certificados/certificado-js.pdf - Certificado de JavaScript"
         return lines.map(line => {
           const parts = line.split('-').map(part => part.trim());
           if (parts.length < 2) {
-            console.warn(`Invalid format: "${line}"`);
-            return { pdfPath: '', title: 'No Title', path: '' };
+            console.warn(`Formato inválido: "${line}"`);
+            return { pdfPath: '', title: 'Título não disponível' };
           }
-          const pdfPath = parts[0];  // e.g. "Certificados/certificado-js.pdf"
+          const pdfPath = parts[0];  // ex: "Certificados/certificado-js.pdf"
           const title   = parts.slice(1).join(' - ');
-          // We don't add "Certificados/" ourselves, we use the path as is
+          // Usamos o caminho diretamente do arquivo
           return { pdfPath, title };
         });
       } catch (err) {
         console.error(err);
-        return [{ pdfPath: '', title: 'Error loading certificates' }];
+        return [{ pdfPath: '', title: 'Erro ao carregar certificados' }];
       }
     }
 
-    // 2) create iframes for each certificate
     async function populateCertificatesList() {
       knowledgeListDiv.innerHTML = '';
       const certificates = await fetchCertificatesList();
@@ -588,14 +627,14 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // iFrame for the PDF
+          // iframe para exibir o PDF
           const iframe = document.createElement('iframe');
-          iframe.src = cert.pdfPath;  // read path directly from the line
+          iframe.src = cert.pdfPath;  // caminho lido diretamente do TXT
           iframe.width = '100%';
           iframe.height = '500px';
           iframe.style.border = 'none';
 
-          // overlay
+          // overlay com título e caminho
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
 
@@ -608,7 +647,7 @@
           container.appendChild(overlay);
           knowledgeListDiv.appendChild(container);
         } else {
-          // fallback if no pdfPath
+          // fallback caso não haja pdfPath
           const p = document.createElement('p');
           p.textContent = cert.title;
           knowledgeListDiv.appendChild(p);
@@ -616,24 +655,21 @@
       });
     }
 
-    // ========== UPDATE CONTENT ==========
+    // ====== UPDATE DE CONTEÚDO ======
     function updateContent() {
       const dict = translations[currentLanguage];
-      // update main page title
+
+      // Atualiza o título principal
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
-      // show/hide main area
-      if (
-        ['profile', 'social', 'projects', 'contact', 'certificates'].includes(
-          currentPage
-        )
-      ) {
+      // Exibe ou esconde a área principal dependendo da página
+      if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
       }
 
-      // page-specific content
+      // Atualiza o conteúdo específico da página
       if (currentPage === 'profile') {
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -663,9 +699,10 @@
       }
     }
 
+    // ====== INICIALIZAÇÃO ======
     document.addEventListener('DOMContentLoaded', () => {
-      randomizeColors(); // set text color
-      updateContent();   // show current page
+      randomizeColors();     // Ajusta cor do texto
+      updateContent();       // Atualiza o conteúdo baseado na página atual e idioma
     });
   </script>
 </body>
