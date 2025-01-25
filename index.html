@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Meu Site Completo - Certificados</title>
-  
+  <title>Site Sério com Certificados</title>
+
   <!-- Google Fonts (Roboto + Montserrat) -->
   <link
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
@@ -21,9 +21,7 @@
   />
 
   <style>
-    /* ======================================
-       RESET BÁSICO
-    ====================================== */
+    /* RESET BÁSICO */
     * {
       margin: 0;
       padding: 0;
@@ -34,31 +32,30 @@
       display: flex;
       min-height: 100vh;
       font-family: "Roboto", sans-serif;
-      background-color: #000;
+      background-color: #111; /* tom mais sóbrio (preto acinzentado) */
       color: #fff;
     }
 
-    /* ======================================
-       SIDEBAR (MENU LATERAL)
-    ====================================== */
+    /* SIDEBAR */
     .sidebar {
       width: 250px;
-      background-color: #000; /* fixo em preto */
+      background-color: #111; /* tom sério, sem color picker */
       color: #fff;
       display: flex;
       flex-direction: column;
       transition: width 0.3s ease;
       position: relative;
-      font-family: "Montserrat", sans-serif; /* Fonte para o menu */
+      font-family: "Montserrat", sans-serif;
       z-index: 1000;
+      border-right: 1px solid #333; /* leve borda */
     }
 
-    /* Botão Toggle para expandir/colapsar a sidebar */
+    /* BOTÃO TOGGLE */
     .toggle-btn {
       position: absolute;
       top: 20px;
       right: -25px;
-      background: linear-gradient(45deg, #ff6b6b, #f06595);
+      background: #333;
       color: #fff;
       border: none;
       border-radius: 50%;
@@ -69,26 +66,73 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
       font-size: 18px;
+      overflow: visible; /* para linhas */
     }
 
     .toggle-btn:hover {
-      background: linear-gradient(45deg, #f06595, #ff6b6b);
-      transform: rotate(180deg);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-    }
-
-    .toggle-btn:active {
-      transform: scale(0.95) rotate(180deg);
-      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
+      background: #444;
     }
 
     .toggle-btn i {
       transition: transform 0.3s ease;
     }
 
-    /* Lista de itens no menu */
+    /* EFEITO DE LINHAS NO HOVER DO BOTÃO */
+    .toggle-btn .line {
+      position: absolute;
+      width: 2px;
+      height: 0;
+      background: #f06595; /* cor da linha (rosa) */
+      opacity: 0;
+      transition: opacity 0.3s, height 0.5s;
+    }
+
+    /* Exemplo: 4 linhas fixas (não randômicas) partindo do centro do botão */
+    .line1 {
+      top: 25px;  /* a metade do height do .toggle-btn (50/2) */
+      left: 25px; /* idem pro width */
+      transform-origin: top;
+    }
+    .line2 {
+      top: 25px;
+      left: 25px;
+      transform-origin: top;
+    }
+    .line3 {
+      top: 25px;
+      left: 25px;
+      transform-origin: top;
+    }
+    .line4 {
+      top: 25px;
+      left: 25px;
+      transform-origin: top;
+    }
+
+    .toggle-btn:hover .line1 {
+      opacity: 1;
+      height: 40px; /* "esticado" */
+      transform: translate(-2px, -40px); /* linha indo pra cima */
+    }
+    .toggle-btn:hover .line2 {
+      opacity: 1;
+      height: 40px;
+      transform: rotate(60deg) translate(-2px, -40px);
+    }
+    .toggle-btn:hover .line3 {
+      opacity: 1;
+      height: 40px;
+      transform: rotate(120deg) translate(-2px, -40px);
+    }
+    .toggle-btn:hover .line4 {
+      opacity: 1;
+      height: 40px;
+      transform: rotate(180deg) translate(-2px, -40px);
+    }
+
+    /* LISTA MENU */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -96,96 +140,69 @@
       display: flex;
       flex-direction: column;
     }
-
     .menu li {
       padding: 15px 20px;
       cursor: pointer;
       transition: background 0.3s ease, color 0.3s ease;
-      background: linear-gradient(to right, #000, #444);
+      background: #111;
       color: #fff;
-      background-size: 200% 100%;
-      background-position: left;
-      border: 2px solid #fff;
+      border: 1px solid #333;
       font-size: 16px;
       font-weight: 500;
-      border-radius: 5px;
+      border-radius: 3px;
       margin: 5px 10px;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
-    .menu li span {
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-
     .menu li:hover {
-      background-position: right;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+      background: #222;
     }
-
     .menu li.active {
-      background-position: right;
-      font-weight: 700;
       background: #333;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
+      font-weight: 700;
     }
 
-    /* Colapso da barra lateral */
+    /* COLAPSO SIDEBAR */
     .sidebar.closed {
       width: 60px;
     }
-
     .sidebar.closed .menu li {
       justify-content: center;
       padding: 15px 10px;
       font-size: 16px;
-      background: linear-gradient(to bottom, #000, #444);
-      gap: 0;
+      background: #111;
+      margin: 5px 5px;
     }
-
     .sidebar.closed .menu li span {
-      display: none; /* esconde texto */
+      display: none;
     }
-
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
       font-size: 20px;
       display: inline-block;
       color: #fff;
     }
-
-    .sidebar.closed .menu li:hover {
-      background-position: bottom;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
-    }
-
     .sidebar.closed .toggle-btn {
       transform: rotate(180deg);
     }
 
-    /* ======================================
-       LANGUAGE SELECTOR
-    ====================================== */
+    /* LANGUAGE SELECTOR */
     .language-selector {
       margin: 20px;
       padding: 10px 15px;
-      background: linear-gradient(45deg, #ffafbd, #ffc3a0);
+      background: #222;
       color: #fff;
-      border: none;
+      border: 1px solid #333;
       border-radius: 25px;
-      box-shadow: 0 4px 15px rgba(255, 175, 189, 0.4);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
     }
-
     .language-selector:hover {
-      background: linear-gradient(45deg, #ffc3a0, #ffafbd);
-      box-shadow: 0 6px 20px rgba(255, 175, 189, 0.6);
+      background: #333;
     }
-
     .language-selector select {
       background: transparent;
       color: #fff;
@@ -196,117 +213,38 @@
       appearance: none;
     }
 
-    .language-selector select option {
-      background: #ffafbd;
-      color: #000;
-    }
-
-    /* ======================================
-       MAIN CONTENT
-    ====================================== */
+    /* MAIN CONTENT */
     .content {
       flex: 1;
       padding: 20px;
-      background-color: #000;
+      background-color: #111;
       color: #fff;
-      transition: background-color 0.3s ease, color 0.3s ease;
       font-size: 18px;
       line-height: 1.6;
+      border-left: 1px solid #333;
     }
-
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 5px;
     }
-
     #knowledgeListTitle {
       font-size: 22px;
       margin-bottom: 8px;
     }
 
-    /* ======================================
-       COLOR PICKER (Texto)
-    ====================================== */
-    .main-color-picker {
-      padding: 20px;
-      background-color: #222;
-      border-top: 2px solid #fff;
-      border-radius: 5px;
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .main-color-picker h3 {
-      color: #fff;
-      margin-bottom: 10px;
-      font-size: 18px;
-      text-align: center;
-    }
-
-    .color-control {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .color-control label {
-      color: #fff;
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-
-    .color-control input[type="range"] {
-      width: 100%;
-      height: 8px;
-      border-radius: 5px;
-      background: #555;
-      outline: none;
-      transition: background 0.3s ease;
-    }
-
-    /* Botão Reset */
-    .reset-btn {
-      background: linear-gradient(45deg, #1e3c72, #2a5298);
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      padding: 12px 20px;
-      font-size: 16px;
-      box-shadow: 0 4px 15px rgba(30, 60, 114, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .reset-btn:hover {
-      background: linear-gradient(45deg, #2a5298, #1e3c72);
-      box-shadow: 0 6px 20px rgba(30, 60, 114, 0.6);
-      transform: translateY(-2px);
-    }
-
-    .reset-btn:active {
-      transform: scale(0.95) translateY(-2px);
-      box-shadow: 0 3px 10px rgba(30, 60, 114, 0.3);
-    }
-
-    /* ======================================
-       CERTIFICADOS (PDF + TEXTO SOBREPOSTO)
-    ====================================== */
+    /* CERTIFICADOS (PDF + TEXTO SOBREPOSTO) */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
+      border: 1px solid #333;
     }
-
     .certificate-container iframe {
       width: 100%;
       height: 500px;
       border: none;
     }
-
     .certificate-overlay {
       position: absolute;
       top: 20px;
@@ -316,26 +254,22 @@
       padding: 10px 15px;
       border-radius: 5px;
       font-size: 18px;
-      pointer-events: none; /* clique passa pro iframe */
+      pointer-events: none;
       max-width: 90%;
       word-wrap: break-word;
     }
-
     .certificate-overlay .fullPath {
       font-size: 14px;
       color: #ccc;
       margin-top: 4px;
     }
-
     .certificate-overlay .pdfName {
       font-size: 14px;
       color: #bbb;
       margin-top: 4px;
     }
 
-    /* ======================================
-       RESPONSIVIDADE
-    ====================================== */
+    /* RESPONSIVE */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -345,29 +279,20 @@
         width: 250px;
         transition: left 0.3s ease;
       }
-
       .sidebar.open {
         left: 0;
       }
-
       .toggle-btn {
         position: fixed;
         top: 20px;
         left: 250px;
         z-index: 1100;
       }
-
       .sidebar.closed .toggle-btn {
         left: 60px;
       }
-
       .content {
         padding: 15px;
-      }
-
-      .main-color-picker {
-        padding: 15px;
-        margin-top: 15px;
       }
     }
 
@@ -377,30 +302,17 @@
         height: 40px;
         font-size: 16px;
       }
-
       .menu li {
         font-size: 14px;
         padding: 12px 15px;
+        margin: 3px 5px;
       }
-
-      .reset-btn {
-        padding: 10px 18px;
-        font-size: 14px;
-      }
-
-      .language-selector {
-        padding: 8px 12px;
-        font-size: 14px;
-      }
-
       .certificate-container iframe {
         height: 300px;
       }
-
       .certificate-overlay {
         font-size: 16px;
       }
-
       .certificate-overlay .fullPath,
       .certificate-overlay .pdfName {
         font-size: 12px;
@@ -409,10 +321,17 @@
   </style>
 </head>
 <body>
+
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
+    <!-- Botão com efeito de linhas no Hover -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <i class="fas fa-arrow-left"></i>
+      <!-- Quatro linhas fixas para efeito de hover (não-randômico) -->
+      <div class="line line1"></div>
+      <div class="line line2"></div>
+      <div class="line line3"></div>
+      <div class="line line4"></div>
     </button>
 
     <ul class="menu">
@@ -431,26 +350,6 @@
       </select>
     </div>
     
-    <!-- Picker de Cores (Texto) -->
-    <div class="main-color-picker">
-      <h3>Customize Main Content</h3>
-      <div class="color-control">
-        <label for="mainTextHue">Text Hue</label>
-        <input type="range" id="mainTextHue" min="0" max="360" value="0">
-      </div>
-      <div class="color-control">
-        <label for="mainTextSaturation">Text Saturation</label>
-        <input type="range" id="mainTextSaturation" min="0" max="100" value="0">
-      </div>
-      <div class="color-control">
-        <label for="mainTextLightness">Text Lightness</label>
-        <input type="range" id="mainTextLightness" min="0" max="100" value="100">
-      </div>
-
-      <button id="resetMainColorsBtn" class="reset-btn">
-        <i class="fas fa-redo"></i> Reset Colors
-      </button>
-    </div>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
@@ -467,7 +366,9 @@
   </div>
 
   <script>
-    // ---- REFERENCIAS ----
+    // =========================
+    //  REFERÊNCIAS
+    // =========================
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     const menuItems = document.querySelectorAll('.menu li');
@@ -477,12 +378,9 @@
     const knowledgeListTitle = document.getElementById('knowledgeListTitle');
     const content = document.getElementById('content');
 
-    const mainTextHue = document.getElementById('mainTextHue');
-    const mainTextSaturation = document.getElementById('mainTextSaturation');
-    const mainTextLightness = document.getElementById('mainTextLightness');
-    const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
-
-    // Traducoes
+    // =========================
+    //  TRADUÇÕES
+    // =========================
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -520,43 +418,12 @@
       }
     };
 
-    let currentLanguage = 'en';
+    let currentLanguage = 'en'; // Idioma default
     let currentPage = 'profile';
 
-    // ========== FUNCOES DE COR DO TEXTO ==========
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    function generateRandomLightHSL() {
-      const h = getRandomInt(0, 360);
-      const s = getRandomInt(50, 100);
-      const l = getRandomInt(80, 100);
-      return { h, s, l };
-    }
-    function randomizeColors() {
-      const c = generateRandomLightHSL();
-      content.style.setProperty('--main-text-h', c.h);
-      content.style.setProperty('--main-text-s', c.s + '%');
-      content.style.setProperty('--main-text-l', c.l + '%');
-
-      mainTextHue.value = c.h;
-      mainTextSaturation.value = c.s;
-      mainTextLightness.value = c.l;
-    }
-    function updateMainTextColor() {
-      const h = parseInt(mainTextHue.value);
-      const s = parseInt(mainTextSaturation.value);
-      const l = parseInt(mainTextLightness.value);
-      content.style.setProperty('--main-text-h', h);
-      content.style.setProperty('--main-text-s', s + '%');
-      content.style.setProperty('--main-text-l', l + '%');
-    }
-    resetMainColorsBtn.addEventListener('click', randomizeColors);
-    mainTextHue.addEventListener('input', updateMainTextColor);
-    mainTextSaturation.addEventListener('input', updateMainTextColor);
-    mainTextLightness.addEventListener('input', updateMainTextColor);
-
-    // ========== TOGGLE SIDEBAR ==========
+    // =========================
+    //  TOGGLE SIDEBAR
+    // =========================
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
@@ -570,7 +437,9 @@
       }
     });
 
-    // ========== MENU ==========
+    // =========================
+    //  MENU
+    // =========================
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -580,19 +449,23 @@
       });
     });
 
-    // ========== IDIOMA ==========
+    // =========================
+    //  IDIOMA
+    // =========================
     function changeLanguage() {
       currentLanguage = languageSelect.value;
       updateContent();
     }
 
-    // ========== EXEMPLO: Profile (KnowledgeList) ==========
+    // =========================
+    //  PROFILE (KNOWLEDGE LIST)
+    // =========================
     async function fetchKnowledgeList() {
       try {
-        const r = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
-        const t = await r.text();
-        return t.split('\n').filter(line => line.trim() !== '');
+        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const txt = await resp.text();
+        return txt.split('\n').filter(line => line.trim() !== '');
       } catch (err) {
         console.error(err);
         return ['Erro ao carregar KnowledgeList'];
@@ -608,8 +481,10 @@
       });
     }
 
-    // ========== CERTIFICADOS (Le do TXT e exibe PDF) ==========
-    // ex: "Certificados/Certificado-10344-10494022.pdf - Curso de Pacote Office"
+    // =========================
+    //  CERTIFICATES
+    // =========================
+    // Exemplo: "Certificados/Certificado-10344-10494022.pdf - Curso de Pacote Office"
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -617,22 +492,22 @@
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
+        // Separa no primeiro " - "
         return lines.map(line => {
-          // Separa no primeiro " - "
           const sep = ' - ';
           const idx = line.indexOf(sep);
           if (idx === -1) {
             console.warn('Formato inválido:', line);
-            return { fullPath: '', pdfName:'', title: '' };
+            return { fullPath:'', pdfName:'', title:'' };
           }
-          const fullPath = line.substring(0, idx).trim();
-          const title    = line.substring(idx + sep.length).trim();
+          const fullPath = line.substring(0, idx).trim(); // ex "Certificados/Certificado-10344-..."
+          const title = line.substring(idx + sep.length).trim(); // ex "Curso de Pacote Office"
 
           // Nome do PDF = tudo após o último "/"
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if (lastSlash !== -1) {
-            pdfName = fullPath.substring(lastSlash + 1);
+            pdfName = fullPath.substring(lastSlash+1);
           }
           return { fullPath, pdfName, title };
         });
@@ -651,9 +526,9 @@
           const container = document.createElement('div');
           container.classList.add('certificate-container');
 
-          // IFRAME
+          // IFRAME do PDF
           const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath;  // ex.: "Certificados/Certificado-21053-10494022.pdf"
+          iframe.src = cert.fullPath;
           container.appendChild(iframe);
 
           // Overlay
@@ -661,8 +536,8 @@
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
             <div><strong>Título:</strong> ${cert.title}</div>
-            <div class="fullPath"><strong>Path:</strong> ${cert.fullPath}</div>
-            <div class="pdfName"><strong>PDF Name:</strong> ${cert.pdfName}</div>
+            <div class="fullPath"><strong>Caminho:</strong> ${cert.fullPath}</div>
+            <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
           `;
           container.appendChild(overlay);
 
@@ -671,19 +546,22 @@
       });
     }
 
-    // ========== ATUALIZA O CONTEÚDO DA PÁGINA ==========
+    // =========================
+    //  ATUALIZA CONTEÚDO
+    // =========================
     function updateContent() {
       const dict = translations[currentLanguage];
       pageTitle.textContent = dict[`${currentPage}Title`] || '';
 
-      // Exibe ou esconde o conteudo principal
-      if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
+      // Exibe ou esconde o conteudo
+      const validPages = ['profile','social','projects','contact','certificates'];
+      if (validPages.includes(currentPage)) {
         document.getElementById('pageContent').style.display = 'block';
       } else {
         document.getElementById('pageContent').style.display = 'none';
       }
 
-      // Conteúdo específico
+      // Conteudo especifico
       if (currentPage === 'profile') {
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -713,10 +591,14 @@
       }
     }
 
-    // ========== EVENTO DE INICIALIZACAO ==========
+    // =========================
+    //  INICIALIZAÇÃO
+    // =========================
     document.addEventListener('DOMContentLoaded', () => {
-      randomizeColors();  // Ajusta cor do texto
-      updateContent();    // Exibe a página atual
+      // Removemos color pickers - ou seja, não chamamos randomizeColors etc.
+      // Aqui, só definimos um "tema" fixo, caso queira.
+      // Se quiser, pode usar "randomizeColors()" para colorir texto de outro jeito.
+      updateContent(); // exibe a página padrao
     });
   </script>
 </body>
