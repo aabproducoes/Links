@@ -2,708 +2,117 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Menu Vertical com Certificados</title>
-
-  <!-- Google Fonts (Roboto + Montserrat) -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Roboto:wght@400;500&display=swap"
-    rel="stylesheet"
-  />
-
-  <!-- Font Awesome para ícones (opcional) -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
+  <title>Leitura de CertificadosList.txt</title>
   <style>
-    /* Reset básico */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      display: flex;
-      min-height: 100vh;
-      font-family: "Roboto", sans-serif;
-      background-color: #000;
+      background: #222;
       color: #fff;
+      font-family: sans-serif;
+      margin: 0; 
+      padding: 1rem;
     }
-
-    /* ====== SIDEBAR ====== */
-    .sidebar {
-      width: 250px;
-      background-color: #000; /* fixo em preto */
-      color: #fff;
+    #certContainer {
       display: flex;
       flex-direction: column;
-      transition: width 0.3s ease;
+      gap: 1rem;
+    }
+    .certificate {
       position: relative;
-      font-family: "Montserrat", sans-serif; /* Fonte para o menu */
-      z-index: 1000;
+      border: 1px solid #555;
     }
-
-    /* Botão de Toggle */
-    .toggle-btn {
-      position: absolute;
-      top: 20px;
-      right: -25px;
-      background: linear-gradient(45deg, #ff6b6b, #f06595);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-      font-size: 18px;
-    }
-    .toggle-btn:hover {
-      background: linear-gradient(45deg, #f06595, #ff6b6b);
-      transform: rotate(180deg);
-      box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-    }
-    .toggle-btn:active {
-      transform: scale(0.95) rotate(180deg);
-      box-shadow: 0 3px 10px rgba(255, 107, 107, 0.3);
-    }
-    .toggle-btn i {
-      transition: transform 0.3s ease;
-    }
-
-    /* Lista de Itens do Menu */
-    .menu {
-      list-style: none;
-      padding: 80px 0 0 0;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .menu li {
-      padding: 15px 20px;
-      cursor: pointer;
-      transition: background 0.3s ease, color 0.3s ease;
-      background: linear-gradient(to right, #000, #444);
-      color: #fff;
-      background-size: 200% 100%;
-      background-position: left;
-      border: 2px solid #fff;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 5px;
-      margin: 5px 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .menu li span {
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-    .menu li:hover {
-      background-position: right;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
-    }
-    .menu li.active {
-      background-position: right;
-      font-weight: 700;
-      background: #333;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.3);
-    }
-
-    /* Colapsar a Barra Lateral */
-    .sidebar.closed {
-      width: 60px;
-    }
-    .sidebar.closed .menu li {
-      justify-content: center;
-      padding: 15px 10px;
-      font-size: 16px;
-      background: linear-gradient(to bottom, #000, #444);
-      gap: 0;
-    }
-    .sidebar.closed .menu li span {
-      display: none; /* Esconde o texto */
-    }
-    .sidebar.closed .menu li::before {
-      content: attr(data-icon);
-      font-size: 20px;
-      display: inline-block;
-      color: #fff;
-    }
-    .sidebar.closed .menu li:hover {
-      background-position: bottom;
-      box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
-    }
-    .sidebar.closed .toggle-btn {
-      transform: rotate(180deg);
-    }
-
-    /* Seletor de idioma */
-    .language-selector {
-      margin: 20px;
-      padding: 10px 15px;
-      background: linear-gradient(45deg, #ffafbd, #ffc3a0);
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      box-shadow: 0 4px 15px rgba(255, 175, 189, 0.4);
-      transition: background 0.3s ease, box-shadow 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .language-selector:hover {
-      background: linear-gradient(45deg, #ffc3a0, #ffafbd);
-      box-shadow: 0 6px 20px rgba(255, 175, 189, 0.6);
-    }
-    .language-selector select {
-      background: transparent;
-      color: #fff;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      cursor: pointer;
-      appearance: none;
-    }
-    .language-selector select option {
-      background: #ffafbd;
-      color: #000;
-    }
-
-    /* ====== CONTEÚDO PRINCIPAL ====== */
-    .content {
-      flex: 1;
-      padding: 20px;
-      background-color: #000;
-      color: #fff;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-    #pageTitle {
-      font-size: 28px;
-      margin-bottom: 10px;
-    }
-    #knowledgeListTitle {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
-
-    /* Picker de Cores (texto) */
-    .main-color-picker {
-      padding: 20px;
-      background-color: #222;
-      border-top: 2px solid #fff;
-      border-radius: 5px;
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .main-color-picker h3 {
-      color: #fff;
-      margin-bottom: 10px;
-      font-size: 18px;
-      text-align: center;
-    }
-    .color-control {
-      display: flex;
-      flex-direction: column;
-    }
-    .color-control label {
-      color: #fff;
-      margin-bottom: 5px;
-      font-size: 14px;
-    }
-    .color-control input[type="range"] {
+    .certificate iframe {
       width: 100%;
-      height: 8px;
-      border-radius: 5px;
-      background: #555;
-      outline: none;
-      transition: background 0.3s ease;
-    }
-    /* Estilos para o Slider Thumb */
-    .color-control input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    .color-control input[type="range"]::-webkit-slider-thumb:hover {
-      background: #ddd;
-      transform: scale(1.1);
-    }
-    .color-control input[type="range"]::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      height: 400px;
       border: none;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 2px rgba(0,0,0,0.5);
-      transition: background 0.3s ease, transform 0.3s ease;
+      display: block;
     }
-    .color-control input[type="range"]::-moz-range-thumb:hover {
-      background: #ddd;
-      transform: scale(1.1);
-    }
-
-    /* Estilização do Botão de Reset */
-    .reset-btn {
-      background: linear-gradient(45deg, #1e3c72, #2a5298);
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      padding: 12px 20px;
-      font-size: 16px;
-      box-shadow: 0 4px 15px rgba(30,60,114,0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .reset-btn:hover {
-      background: linear-gradient(45deg, #2a5298, #1e3c72);
-      box-shadow: 0 6px 20px rgba(30,60,114,0.6);
-      transform: translateY(-2px);
-    }
-    .reset-btn:active {
-      transform: scale(0.95) translateY(-2px);
-      box-shadow: 0 3px 10px rgba(30,60,114,0.3);
-    }
-
-    /* ====== CERTIFICADOS (PDF + TEXTO SOBREPOSTO) ====== */
-    .certificate-container {
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .certificate-container iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-    }
-    .certificate-overlay {
+    .overlay {
       position: absolute;
-      top: 20px;
-      left: 20px;
-      color: #fff;
-      background-color: rgba(0, 0, 0, 0.5);
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 18px;
-      pointer-events: none; /* Para permitir clique no iframe */
-      max-width: 90%;
-      word-wrap: break-word;
+      top: 10px; 
+      left: 10px;
+      background: rgba(0,0,0,0.6);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      pointer-events: none; /* clique passa pro iframe */
     }
-    /* Estilo adicional para exibir o caminho do PDF */
-    .certificate-overlay .path {
-      font-size: 14px;
+    .overlay .path {
+      font-size: 12px;
       color: #ccc;
-      margin-top: 5px;
-    }
-
-    /* ====== RESPONSIVIDADE ====== */
-    @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 0;
-        height: 100%;
-        width: 250px;
-        transition: left 0.3s ease;
-      }
-      .sidebar.open {
-        left: 0;
-      }
-      .toggle-btn {
-        position: fixed;
-        top: 20px;
-        left: 250px;
-        z-index: 1100;
-      }
-      .sidebar.closed .toggle-btn {
-        left: 60px;
-      }
-      .content {
-        padding: 15px;
-      }
-      .main-color-picker {
-        padding: 15px;
-        margin-top: 15px;
-      }
-    }
-    @media (max-width: 480px) {
-      .toggle-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-      .menu li {
-        font-size: 14px;
-        padding: 12px 15px;
-      }
-      .reset-btn {
-        padding: 10px 18px;
-        font-size: 14px;
-      }
-      .language-selector {
-        padding: 8px 12px;
-        font-size: 14px;
-      }
-      .certificate-container iframe {
-        height: 300px;
-      }
-      .certificate-overlay {
-        font-size: 16px;
-      }
-      .certificate-overlay .path {
-        font-size: 12px;
-      }
+      margin-top: 4px;
+      word-break: break-all; /* se o caminho for longo */
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== SIDEBAR ====== -->
-  <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-      <i class="fas fa-arrow-left"></i>
-    </button>
+<h1>Exemplo: Ler CertificadosList.txt e Usar o Caminho EXATO</h1>
+<div id="certContainer">Carregando...</div>
 
-    <ul class="menu">
-      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
-      <li data-page="social" data-icon="🔗"><span>Social</span></li>
-      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
-      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
-      <!-- CERTIFICATES -->
-      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
-    </ul>
-
-    <!-- Seletor de Idioma -->
-    <div class="language-selector">
-      <select id="languageSelect" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="pt">Português</option>
-      </select>
-    </div>
+<script>
+async function fetchCertificates() {
+  try {
+    // Lê o arquivo EXACTAMENTE, sem manipular paths
+    const resp = await fetch('./Certificados/CertificadosList.txt');
+    if (!resp.ok) throw new Error(`Erro HTTP: ${resp.status}`);
+    const text = await resp.text();
     
-    <!-- Picker de Cores (apenas texto) -->
-    <div class="main-color-picker">
-      <h3>Customize Main Content</h3>
-      <div class="color-control">
-        <label for="mainTextHue">Text Hue</label>
-        <input type="range" id="mainTextHue" min="0" max="360" value="0">
-      </div>
-      <div class="color-control">
-        <label for="mainTextSaturation">Text Saturation</label>
-        <input type="range" id="mainTextSaturation" min="0" max="100" value="0">
-      </div>
-      <div class="color-control">
-        <label for="mainTextLightness">Text Lightness</label>
-        <input type="range" id="mainTextLightness" min="0" max="100" value="100">
-      </div>
-
-      <!-- Botão de Reset -->
-      <button id="resetMainColorsBtn" class="reset-btn">
-        <i class="fas fa-redo"></i> Reset Colors
-      </button>
-    </div>
-  </div>
-
-  <!-- ====== CONTEÚDO PRINCIPAL ====== -->
-  <div class="content" id="content">
-    <h1 id="pageTitle">Profile</h1>
-    <div id="pageContent">
-      <h2 id="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList">
-        <p>JavaScript</p>
-        <p>HTML & CSS</p>
-        <p>React</p>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // ====== REFERÊNCIAS ======
-    const toggleBtn = document.getElementById('toggleBtn');
-    const sidebar = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.menu li');
-    const languageSelect = document.getElementById('languageSelect');
-    const pageTitle = document.getElementById('pageTitle');
-    const knowledgeListDiv = document.getElementById('knowledgeList');
-    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    const content = document.getElementById('content');
-
-    // Sliders para cor do texto
-    const mainTextHue = document.getElementById('mainTextHue');
-    const mainTextSaturation = document.getElementById('mainTextSaturation');
-    const mainTextLightness = document.getElementById('mainTextLightness');
-    const resetMainColorsBtn = document.getElementById('resetMainColorsBtn');
-
-    // Traduções
-    const translations = {
-      en: {
-        profileTitle: 'Profile',
-        knowledgeListTitle: 'Knowledge List',
-        socialTitle: 'Social',
-        contactTitle: 'Contact',
-        certificatesTitle: 'Certificates',
-        
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        projectsTitle: 'Projects',
-        blenderProjects: 'Blender Projects',
-        gimpProjects: 'Gimp Projects',
-        blenderAnimations: 'Blender Animations',
-        animatedBackground: 'Animated Background',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-      },
-      pt: {
-        profileTitle: 'Perfil',
-        knowledgeListTitle: 'Lista de Conhecimento',
-        socialTitle: 'Social',
-        contactTitle: 'Contato',
-        certificatesTitle: 'Certificados',
-        
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        projectsTitle: 'Projetos',
-        blenderProjects: 'Projetos Blender',
-        gimpProjects: 'Projetos Gimp',
-        blenderAnimations: 'Animações Blender',
-        animatedBackground: 'Fundo Animado',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+    // Separa por linhas não vazias
+    const lines = text.split('\n').filter(l => l.trim() !== '');
+    
+    // Cada linha: "Certificados/Certificado-xxx.pdf - Título do Certificado"
+    return lines.map(line => {
+      // Divide por "-", pega caminho e título
+      const parts = line.split('-').map(p => p.trim());
+      if (parts.length < 2) {
+        console.warn('Formato inválido:', line);
+        return { pdfPath: '', title: '(Título ausente)' };
       }
-    };
+      // pdfPath é tudo antes do primeiro "-"
+      // se tiver hifens extras, juntamos no título
+      const pdfPath = parts[0]; 
+      const title   = parts.slice(1).join(' - ');
+      return { pdfPath, title };
+    });
+  } catch (err) {
+    console.error('Falha ao ler CertificadosList.txt:', err);
+    return [];
+  }
+}
 
-    let currentLanguage = 'en'; // padrão
-    let currentPage = 'profile';
+async function showCertificates() {
+  const container = document.getElementById('certContainer');
+  container.innerHTML = 'Carregando...';
 
-    // ====== FUNÇÕES DE COR ======
-    // Gera cor HSL aleatória clara (L>80%)
-    function getRandomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    function generateRandomLightHSL() {
-      const h = getRandomInt(0, 360);
-      const s = getRandomInt(50, 100);
-      const l = getRandomInt(80, 100);
-      return { h, s, l };
-    }
+  const certs = await fetchCertificates();
+  container.innerHTML = ''; // limpa
 
-    // Aplica cor ao texto principal
-    function randomizeColors() {
-      const mainTextColor = generateRandomLightHSL();
-      content.style.setProperty('--main-text-h', mainTextColor.h);
-      content.style.setProperty('--main-text-s', mainTextColor.s + '%');
-      content.style.setProperty('--main-text-l', mainTextColor.l + '%');
-
-      mainTextHue.value = mainTextColor.h;
-      mainTextSaturation.value = mainTextColor.s;
-      mainTextLightness.value = mainTextColor.l;
-    }
-
-    function updateMainTextColor() {
-      const h = parseInt(mainTextHue.value);
-      const s = parseInt(mainTextSaturation.value);
-      const l = parseInt(mainTextLightness.value);
+  certs.forEach(cert => {
+    if (cert.pdfPath) {
+      // Cria um container
+      const div = document.createElement('div');
+      div.className = 'certificate';
       
-      content.style.setProperty('--main-text-h', h);
-      content.style.setProperty('--main-text-s', s + '%');
-      content.style.setProperty('--main-text-l', l + '%');
+      // iFrame com o caminho EXACTO do txt
+      const iframe = document.createElement('iframe');
+      iframe.src = cert.pdfPath; 
+      div.appendChild(iframe);
+
+      // Overlay com título e caminho
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      overlay.innerHTML = `
+        <div class="title">${cert.title}</div>
+        <div class="path">${cert.pdfPath}</div>
+      `;
+      div.appendChild(overlay);
+
+      container.appendChild(div);
     }
+  });
+}
 
-    resetMainColorsBtn.addEventListener('click', randomizeColors);
-    mainTextHue.addEventListener('input', updateMainTextColor);
-    mainTextSaturation.addEventListener('input', updateMainTextColor);
-    mainTextLightness.addEventListener('input', updateMainTextColor);
+document.addEventListener('DOMContentLoaded', showCertificates);
+</script>
 
-    // ====== TOGGLE SIDEBAR ======
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      sidebar.classList.toggle('open');
-
-      const icon = toggleBtn.querySelector('i');
-      if (sidebar.classList.contains('closed')) {
-        icon.classList.remove('fa-arrow-left');
-        icon.classList.add('fa-arrow-right');
-      } else {
-        icon.classList.remove('fa-arrow-right');
-        icon.classList.add('fa-arrow-left');
-      }
-    });
-
-    // ====== MENU ======
-    menuItems.forEach(item => {
-      item.addEventListener('click', () => {
-        menuItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        currentPage = item.getAttribute('data-page');
-        updateContent();
-      });
-    });
-
-    // ====== IDIOMA ======
-    function changeLanguage() {
-      currentLanguage = languageSelect.value;
-      updateContent();
-    }
-
-    // ====== KNOWLEDGE LIST (PROFILE) ======
-    async function fetchKnowledgeList() {
-      try {
-        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
-        const text = await resp.text();
-        return text.split('\n').filter(line => line.trim() !== '');
-      } catch (err) {
-        console.error(err);
-        return ['Erro ao carregar KnowledgeList'];
-      }
-    }
-    async function populateKnowledgeList() {
-      knowledgeListDiv.innerHTML = '';
-      const lines = await fetchKnowledgeList();
-      lines.forEach(line => {
-        const p = document.createElement('p');
-        p.textContent = line;
-        knowledgeListDiv.appendChild(p);
-      });
-    }
-
-    // ====== CERTIFICADOS ======
-    // Função para buscar e parsear o arquivo CertificadosList.txt
-    async function fetchCertificatesList() {
-      try {
-        const response = await fetch('./Certificados/CertificadosList.txt');
-        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-        const text = await response.text();
-        const lines = text.split('\n').filter(line => line.trim() !== '');
-
-        // "Certificados/certificado-js.pdf - Certificado de JavaScript"
-        return lines.map(line => {
-          const parts = line.split('-').map(part => part.trim());
-          if (parts.length < 2) {
-            console.warn(`Formato inválido: "${line}"`);
-            return { pdfPath: '', title: 'Título não disponível' };
-          }
-          const pdfPath = parts[0];  // ex: "Certificados/certificado-js.pdf"
-          const title   = parts.slice(1).join(' - ');
-          // Usamos o caminho diretamente do arquivo
-          return { pdfPath, title };
-        });
-      } catch (err) {
-        console.error(err);
-        return [{ pdfPath: '', title: 'Erro ao carregar certificados' }];
-      }
-    }
-
-    async function populateCertificatesList() {
-      knowledgeListDiv.innerHTML = '';
-      const certificates = await fetchCertificatesList();
-
-      certificates.forEach(cert => {
-        if (cert.pdfPath) {
-          const container = document.createElement('div');
-          container.classList.add('certificate-container');
-
-          // iframe para exibir o PDF
-          const iframe = document.createElement('iframe');
-          iframe.src = cert.pdfPath;  // caminho lido diretamente do TXT
-          iframe.width = '100%';
-          iframe.height = '500px';
-          iframe.style.border = 'none';
-
-          // overlay com título e caminho
-          const overlay = document.createElement('div');
-          overlay.classList.add('certificate-overlay');
-
-          overlay.innerHTML = `
-            <div class="title">${cert.title}</div>
-            <div class="path">${cert.pdfPath}</div>
-          `;
-
-          container.appendChild(iframe);
-          container.appendChild(overlay);
-          knowledgeListDiv.appendChild(container);
-        } else {
-          // fallback caso não haja pdfPath
-          const p = document.createElement('p');
-          p.textContent = cert.title;
-          knowledgeListDiv.appendChild(p);
-        }
-      });
-    }
-
-    // ====== UPDATE DE CONTEÚDO ======
-    function updateContent() {
-      const dict = translations[currentLanguage];
-
-      // Atualiza o título principal
-      pageTitle.textContent = dict[`${currentPage}Title`] || '';
-
-      // Exibe ou esconde a área principal dependendo da página
-      if (['profile','social','projects','contact','certificates'].includes(currentPage)) {
-        document.getElementById('pageContent').style.display = 'block';
-      } else {
-        document.getElementById('pageContent').style.display = 'none';
-      }
-
-      // Atualiza o conteúdo específico da página
-      if (currentPage === 'profile') {
-        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
-        populateKnowledgeList();
-      } else if (currentPage === 'social') {
-        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
-        knowledgeListDiv.innerHTML = `
-          <p><a href="https://www.facebook.com" target="_blank" class="main-link">${dict.facebook}</a></p>
-          <p><a href="https://www.instagram.com" target="_blank" class="main-link">${dict.instagram}</a></p>
-        `;
-      } else if (currentPage === 'projects') {
-        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
-        knowledgeListDiv.innerHTML = `
-          <p><a href="#" class="main-link">${dict.blenderProjects}</a></p>
-          <p><a href="#" class="main-link">${dict.gimpProjects}</a></p>
-          <p><a href="#" class="main-link">${dict.blenderAnimations}</a></p>
-          <p><a href="#" class="main-link">${dict.animatedBackground}</a></p>
-        `;
-      } else if (currentPage === 'contact') {
-        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        knowledgeListDiv.innerHTML = `
-          <p>${dict.whatsapp}</p>
-          <p>${dict.email}</p>
-        `;
-      } else if (currentPage === 'certificates') {
-        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
-        populateCertificatesList();
-      }
-    }
-
-    // ====== INICIALIZAÇÃO ======
-    document.addEventListener('DOMContentLoaded', () => {
-      randomizeColors();     // Ajusta cor do texto
-      updateContent();       // Atualiza o conteúdo baseado na página atual e idioma
-    });
-  </script>
 </body>
 </html>
