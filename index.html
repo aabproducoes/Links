@@ -115,7 +115,13 @@
             margin: 5px 10px;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            gap: 10px; /* Espaço entre ícone e texto */
+        }
+
+        .menu li span {
+            display: inline-block;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .menu li:hover {
@@ -196,7 +202,7 @@
         }
 
         .sidebar.closed .menu li {
-            text-align: center;
+            justify-content: center; /* Centraliza os ícones */
             padding: 15px 10px;
             font-size: 16px; /* Ajuste para manter legibilidade */
             background: linear-gradient(
@@ -209,9 +215,11 @@
             border: 2px solid #fff; /* Borda branca */
             border-radius: 5px;
             margin: 5px 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            gap: 0; /* Remove o espaço entre ícone e texto */
+        }
+
+        .sidebar.closed .menu li span {
+            display: none; /* Esconde o texto */
         }
 
         .sidebar.closed .menu li::before {
@@ -399,40 +407,42 @@
         }
 
         /* Estilos para Links na Área de Conteúdo Principal */
-        /* Estilos para Links com Borda */
-.main-link {
-    color: #00d2ff;
-    text-decoration: none;
-    position: relative;
-    font-weight: 500;
-    padding: 5px 10px;
-    border: 2px solid transparent; /* Border invisible by default */
-    border-radius: 5px; /* Add rounded corners if desired */
-    transition: color 0.3s ease, border-color 0.3s ease;
-}
+        .main-link {
+            color: #00d2ff;
+            text-decoration: none;
+            position: relative;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
 
-.main-link:hover {
-    color: #fff; /* Change color when hovered */
-    border-color: #00d2ff; /* Visible border on hover */
-}
+        .main-link::after {
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            display: block;
+            background: #00d2ff;
+            transition: width 0.3s ease;
+            left: 0;
+            bottom: -3px;
+        }
 
-/* Underline effect on hover (Optional) */
-.main-link::after {
-    content: '';
-    position: absolute;
-    width: 0%;
-    height: 2px;
-    display: block;
-    background: #00d2ff;
-    transition: width 0.3s ease;
-    left: 0;
-    bottom: -3px;
-}
+        .main-link:hover {
+            color: #fff;
+        }
 
-.main-link:hover::after {
-    width: 100%; /* Underline expands on hover */
-}
+        .main-link:hover::after {
+            width: 100%;
+        }
 
+        .main-link:focus {
+            outline: none;
+            color: #fff;
+        }
+
+        .main-link:focus::after {
+            width: 100%;
+        }
 
         /* Responsividade para Botões */
         @media (max-width: 768px) {
@@ -530,10 +540,10 @@
             <i class="fas fa-arrow-left"></i>
         </button>
         <ul class="menu">
-            <li class="active" data-page="profile" data-icon="👤">Profile</li>
-            <li data-page="social" data-icon="🔗">Social</li>
-            <li data-page="projects" data-icon="🖥️">Projects</li> <!-- Nova aba de Projetos -->
-            <li data-page="contact" data-icon="📞">Contact</li> <!-- Renomeado de About para Contact -->
+            <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
+            <li data-page="social" data-icon="🔗"><span>Social</span></li>
+            <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
+            <li data-page="contact" data-icon="📞"><span>Contact</span></li>
         </ul>
         <div class="language-selector">
             <select id="languageSelect" onchange="changeLanguage()">
