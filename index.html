@@ -3,22 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Meu Site - Tema Azul, Sem Linhas, Seta no Toggle</title>
+  <title>Tema Azul com Arrow Animado (SVG)</title>
 
-  <!-- Fonte Comic Neue (similar a Comic Sans) -->
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" 
-    rel="stylesheet" 
-  />
-
-  <!-- Font Awesome para ícones (usamos a seta “fa-arrow-left” / “fa-arrow-right”) -->
-  <link 
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    integrity="sha512-pIVGvMvTpLBtGkRlQHtd1Zq8OZOcNxPjmm3KKM1hrpiHvYqK67LKUewBbKtGJ2+o3MElEAHwN3xyDU2H3GeX7Q=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
+  <!-- Fonte Comic Neue -->
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
     /* RESET BÁSICO */
@@ -74,13 +62,14 @@
       overflow: visible;
     }
     /* Animação da seta ao passar o mouse */
-    .toggle-btn i {
+    .toggle-btn svg {
       transition: transform 0.3s ease;
     }
-    .toggle-btn:hover i {
+    .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
     }
 
+    /* Hover do Botão Toggle */
     .toggle-btn:hover {
       background: #4b94e6;
       transform: scale(1.1);
@@ -141,9 +130,6 @@
       font-size: 20px;
       display: inline-block;
       color: #006aff;
-    }
-    .sidebar.closed .toggle-btn {
-      transform: rotate(180deg);
     }
 
     /* BOTÃO DE IDIOMA */
@@ -236,7 +222,7 @@
     }
     .certificate-container iframe {
       width: 100%;
-      height: 1123px; /* Altura ajustada para exibir apenas a primeira página */
+      height: 400px;
       border: none;
     }
     .certificate-overlay {
@@ -282,9 +268,6 @@
       .content {
         padding: 15px;
       }
-      .certificate-container iframe {
-        height: 800px; /* Reduz a altura em telas menores */
-      }
     }
     @media (max-width: 480px) {
       .toggle-btn {
@@ -298,7 +281,7 @@
         margin: 3px 5px;
       }
       .certificate-container iframe {
-        height: 600px; /* Ajuste adicional para telas muito pequenas */
+        height: 250px;
       }
       .certificate-overlay {
         font-size: 14px;
@@ -310,11 +293,15 @@
 
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- BOTÃO TOGGLE (ícone de seta) -->
+    <!-- BOTÃO TOGGLE COM SVG INLINE DE SETA -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-      <i class="fas fa-arrow-left"></i>
+      <!-- Seta SVG apontando para a esquerda -->
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+      </svg>
     </button>
 
+    <!-- MENU LATERAL -->
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -395,16 +382,7 @@
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
-      const icon = toggleBtn.querySelector('i');
-      if (sidebar.classList.contains('closed')) {
-        // Altera ícone para seta direita
-        icon.classList.remove('fa-arrow-left');
-        icon.classList.add('fa-arrow-right');
-      } else {
-        // Altera ícone para seta esquerda
-        icon.classList.remove('fa-arrow-right');
-        icon.classList.add('fa-arrow-left');
-      }
+      // A rotação do SVG é controlada via CSS (.sidebar.closed .toggle-btn svg)
     });
 
     // ========== MENU LATERAL ==========
@@ -456,7 +434,6 @@
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
       lines.forEach(line => {
-        // "Texto En || Texto Pt"
         const parts = line.split('||').map(p => p.trim());
         const englishText = parts[0] || line;
         const portugueseText = parts[1] || line;
@@ -467,11 +444,11 @@
       });
     }
 
-    // ========== CERTIFICADOS (Somente 1ª página) ==========
+    // ========== CERTIFICADOS (Somente a primeira página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
-        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
 
@@ -490,7 +467,7 @@
           if(lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash+1);
           }
-          // Adiciona #page=1 para carregar apenas a primeira página
+          // Garantir #page=1
           const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
@@ -531,13 +508,13 @@
       updateMenuLabels();
 
       const dict = translations[currentLanguage];
-      pageTitle.textContent = dict[`${currentPage}Title`] || '';
+      document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
 
       const validPages = ['profile','social','projects','contact','certificates'];
       document.getElementById('pageContent').style.display = 
         validPages.includes(currentPage) ? 'block' : 'none';
 
-      // Conteúdo específico de cada page
+      // Conteúdo de cada page
       if(currentPage === 'profile'){
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -545,14 +522,10 @@
         knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
-            <a href="https://www.facebook.com" target="_blank" class="main-btn">
-              ${dict.facebook}
-            </a>
+            <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
           </div>
           <div class="main-btn-container">
-            <a href="https://www.instagram.com" target="_blank" class="main-btn">
-              ${dict.instagram}
-            </a>
+            <a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a>
           </div>
         `;
       } else if(currentPage === 'projects'){
