@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul com Arrow Animado (SVG) – Paywall Demo</title>
+  <title>Tema Azul com Arrow Animado (SVG)</title>
 
   <!-- Fonte Comic Neue -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -24,9 +24,46 @@
       background: radial-gradient(circle at center, #d0f0ff 0%, #a4d4ff 100%);
       color: #333;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* SIDEBAR */
+    /* ------------------------------
+       ELEMENTOS NOVOS: FLUID SIMULATION & CLOCK
+       ------------------------------ */
+    /* Canvas para o efeito de onda */
+    #fluidCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Relógio central com design compatível */
+    #clock {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      border: 5px solid #53a0ff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: rgba(255,255,255,0.8);
+      color: #006aff;
+      box-shadow: 0 0 15px rgba(83,160,255,0.5);
+      pointer-events: none;
+      z-index: 500;
+    }
+
+    /* ------------------------------
+       EXISTENTE: SIDEBAR, BOTÕES, ETC.
+       ------------------------------ */
     .sidebar {
       width: 250px;
       background: rgba(255,255,255,0.3);
@@ -41,7 +78,6 @@
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
 
-    /* BOTÃO TOGGLE DA SIDEBAR */
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -61,15 +97,12 @@
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
       overflow: visible;
     }
-    /* Animação da seta ao passar o mouse */
     .toggle-btn svg {
       transition: transform 0.3s ease;
     }
     .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
     }
-
-    /* Hover do Botão Toggle */
     .toggle-btn:hover {
       background: #4b94e6;
       transform: scale(1.1);
@@ -78,7 +111,6 @@
       transform: scale(0.95);
     }
 
-    /* MENU LATERAL */
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -111,7 +143,6 @@
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
 
-    /* SIDEBAR COLAPSADA */
     .sidebar.closed {
       width: 60px;
     }
@@ -132,7 +163,6 @@
       color: #006aff;
     }
 
-    /* BOTÃO DE IDIOMA */
     .language-btn {
       display: inline-block;
       margin: 20px auto;
@@ -158,7 +188,6 @@
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
 
-    /* CONTEÚDO PRINCIPAL */
     .content {
       flex: 1;
       padding: 20px;
@@ -185,7 +214,6 @@
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
 
-    /* BOTÕES .main-btn */
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -210,7 +238,6 @@
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
 
-    /* CERTIFICADOS (apenas primeira página) */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -244,71 +271,6 @@
       color: #003c8f;
     }
 
-    /* MODAL PARA COMPRA */
-    .modal {
-      display: none; 
-      position: fixed;
-      z-index: 2000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-content {
-      background: #fff;
-      padding: 20px 30px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    }
-    .modal-content p {
-      margin-bottom: 20px;
-      font-size: 18px;
-      color: #333;
-    }
-    .modal-content button {
-      padding: 10px 20px;
-      margin: 0 10px;
-      font-size: 16px;
-      cursor: pointer;
-      border: none;
-      border-radius: 5px;
-      transition: background 0.3s ease;
-    }
-    .modal-content .buy-btn {
-      background: #53a0ff;
-      color: #fff;
-    }
-    .modal-content .buy-btn:hover {
-      background: #4b94e6;
-    }
-    .modal-content .cancel-btn {
-      background: #ccc;
-      color: #333;
-    }
-    .modal-content .cancel-btn:hover {
-      background: #bbb;
-    }
-
-    /* ANIMAÇÃO DE ENTRADA PARA O CONTEÚDO */
-    @keyframes slideIn {
-      from {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
-    .animate-in {
-      animation: slideIn 0.5s ease-out forwards;
-    }
-
-    /* RESPONSIVIDADE */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -355,17 +317,16 @@
 </head>
 <body>
 
+  <!-- FLUID SIMULATION CANVAS -->
+  <canvas id="fluidCanvas"></canvas>
+
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
-    <!-- BOTÃO TOGGLE COM SVG INLINE DE SETA -->
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-      <!-- Seta SVG apontando para a esquerda -->
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
       </svg>
     </button>
-
-    <!-- MENU LATERAL -->
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -373,8 +334,6 @@
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
-
-    <!-- BOTÃO DE IDIOMA -->
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
 
@@ -387,31 +346,20 @@
     </div>
   </div>
 
-  <!-- MODAL DE COMPRA -->
-  <div id="purchaseModal" class="modal">
-    <div class="modal-content">
-      <p id="purchaseMessage">Do you want to purchase this section?</p>
-      <button class="buy-btn" id="buyButton">Buy Section</button>
-      <button class="cancel-btn" id="cancelButton">Cancel</button>
-    </div>
-  </div>
+  <!-- CLOCK CENTRAL -->
+  <div id="clock"></div>
 
   <script>
     // =========================
-    //  REFERÊNCIAS
+    //  REFERÊNCIAS E CONFIGURAÇÃO INICIAL
     // =========================
-    const toggleBtn         = document.getElementById('toggleBtn');
-    const sidebar           = document.getElementById('sidebar');
-    const menuItems         = document.querySelectorAll('.menu li');
-    const languageBtn       = document.getElementById('languageBtn');
-    const pageTitle         = document.getElementById('pageTitle');
-    const knowledgeListDiv  = document.getElementById('knowledgeList');
-
-    // Modal references
-    const purchaseModal     = document.getElementById('purchaseModal');
-    const purchaseMessage   = document.getElementById('purchaseMessage');
-    const buyButton         = document.getElementById('buyButton');
-    const cancelButton      = document.getElementById('cancelButton');
+    const toggleBtn        = document.getElementById('toggleBtn');
+    const sidebar          = document.getElementById('sidebar');
+    const menuItems        = document.querySelectorAll('.menu li');
+    const languageBtn      = document.getElementById('languageBtn');
+    const pageTitle        = document.getElementById('pageTitle');
+    const knowledgeListDiv = document.getElementById('knowledgeList');
+    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
 
     // =========================
     //  TRADUÇÕES
@@ -456,37 +404,19 @@
     let currentLanguage = 'en';
     let currentPage     = 'profile';
 
-    // Keep track of purchased sections.
-    const purchasedSections = {
-      profile: false,
-      social: false,
-      projects: false,
-      contact: false,
-      certificates: false
-    };
-
     // ========== SIDEBAR TOGGLE ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
-      // Rotation of the SVG is controlled via CSS (.sidebar.closed .toggle-btn svg)
     });
 
     // ========== MENU LATERAL ==========
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
-        const page = item.getAttribute('data-page');
-        // If the section is not purchased yet, show the purchase modal.
-        if (!purchasedSections[page]) {
-          currentPage = page;
-          showPurchaseModal(page);
-        } else {
-          // If already purchased, update active classes and content with animation.
-          menuItems.forEach(i => i.classList.remove('active'));
-          item.classList.add('active');
-          currentPage = page;
-          updateContentWithAnimation();
-        }
+        menuItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        currentPage = item.getAttribute('data-page');
+        updateContent();
       });
     });
 
@@ -532,7 +462,6 @@
         const parts = line.split('||').map(p => p.trim());
         const englishText = parts[0] || line;
         const portugueseText = parts[1] || line;
-
         const p = document.createElement('p');
         p.textContent = (currentLanguage === 'en') ? englishText : portugueseText;
         knowledgeListDiv.appendChild(p);
@@ -546,7 +475,6 @@
         if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
-
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
@@ -556,13 +484,11 @@
           }
           const fullPath = line.substring(0, idx).trim();
           const title    = line.substring(idx+sep.length).trim();
-
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
           if(lastSlash !== -1) {
             pdfName = fullPath.substring(lastSlash+1);
           }
-          // Garantir #page=1
           const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
@@ -578,11 +504,9 @@
         if(cert.fullPath){
           const container = document.createElement('div');
           container.classList.add('certificate-container');
-
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
           container.appendChild(iframe);
-
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -591,7 +515,6 @@
             <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
           `;
           container.appendChild(overlay);
-
           knowledgeListDiv.appendChild(container);
         }
       });
@@ -601,20 +524,16 @@
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
-
       const dict = translations[currentLanguage];
       document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
-
       const validPages = ['profile','social','projects','contact','certificates'];
-      document.getElementById('pageContent').style.display = 
+      document.getElementById('pageContent').style.display =
         validPages.includes(currentPage) ? 'block' : 'none';
-
-      // Conteúdo de cada page
       if(currentPage === 'profile'){
-        document.getElementById('knowledgeListTitle').textContent = dict['knowledgeListTitle'] || '';
+        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if(currentPage === 'social'){
-        document.getElementById('knowledgeListTitle').textContent = dict['socialTitle'] || 'Social';
+        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
@@ -624,7 +543,7 @@
           </div>
         `;
       } else if(currentPage === 'projects'){
-        document.getElementById('knowledgeListTitle').textContent = dict['projectsTitle'] || 'Projects';
+        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="blender-projects.html" target="_blank" class="main-btn">
@@ -648,7 +567,7 @@
           </div>
         `;
       } else if(currentPage === 'contact'){
-        document.getElementById('knowledgeListTitle').textContent = dict['contactTitle'] || 'Contact';
+        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
@@ -658,55 +577,79 @@
           </div>
         `;
       } else if(currentPage === 'certificates'){
-        document.getElementById('knowledgeListTitle').textContent = dict['certificatesTitle'] || 'Certificates';
+        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
     }
-
-    // A helper function to update the content and trigger a slide-in animation.
-    function updateContentWithAnimation() {
-      updateContent();
-      const content = document.getElementById('content');
-      content.classList.remove('animate-in');
-      // Trigger reflow to restart the animation
-      void content.offsetWidth;
-      content.classList.add('animate-in');
-    }
-
-    // ========== MODAL FUNCTIONS ==========
-    function showPurchaseModal(page) {
-      // Customize the message – you could include a price here.
-      purchaseMessage.textContent = `Purchase the "${page}" section?`;
-      purchaseModal.style.display = 'flex';
-    }
-    function hidePurchaseModal() {
-      purchaseModal.style.display = 'none';
-    }
-
-    // When the Buy button is clicked in the modal:
-    buyButton.addEventListener('click', () => {
-      // Mark the section as purchased
-      purchasedSections[currentPage] = true;
-      // Update the active state in the menu
-      menuItems.forEach(item => {
-        if(item.getAttribute('data-page') === currentPage) {
-          item.classList.add('active');
-        } else {
-          item.classList.remove('active');
-        }
-      });
-      hidePurchaseModal();
-      updateContentWithAnimation();
-    });
-    // If the user cancels the purchase:
-    cancelButton.addEventListener('click', () => {
-      hidePurchaseModal();
-    });
 
     // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
+
+    // =========================
+    //  FLUID SIMULATION (RIPPLE EFFECT) CODE
+    // =========================
+    const canvas = document.getElementById('fluidCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    let ripples = [];
+    function createRipple(x, y) {
+      ripples.push({ x, y, radius: 0, opacity: 0.5 });
+    }
+
+    // Attach the mousemove listener to the document.
+    // Only create a ripple if the mouse is NOT over the sidebar.
+    document.addEventListener('mousemove', function(e) {
+      if(e.target.closest('.sidebar')) return;
+      createRipple(e.clientX, e.clientY);
+    });
+
+    function animateRipples() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < ripples.length; i++) {
+        let ripple = ripples[i];
+        ripple.radius += 2;
+        ripple.opacity -= 0.005;
+        if (ripple.opacity <= 0) {
+          ripples.splice(i, 1);
+          i--;
+          continue;
+        }
+        let gradient = ctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
+        gradient.addColorStop(0, `rgba(83,160,255,${ripple.opacity})`);
+        gradient.addColorStop(1, `rgba(255,255,255,0)`);
+        ctx.beginPath();
+        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+      requestAnimationFrame(animateRipples);
+    }
+    animateRipples();
+
+    // =========================
+    //  CLOCK CODE
+    // =========================
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      document.getElementById("clock").textContent = hours + ":" + minutes + ":" + seconds;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
   </script>
 </body>
 </html>
