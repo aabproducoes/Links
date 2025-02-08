@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul com Arrow Animado (SVG)</title>
+  <title>Tema Azul com Arrow Animado (SVG) – Paywall Demo</title>
 
   <!-- Fonte Comic Neue -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
@@ -244,6 +244,70 @@
       color: #003c8f;
     }
 
+    /* MODAL PARA COMPRA */
+    .modal {
+      display: none; 
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .modal-content p {
+      margin-bottom: 20px;
+      font-size: 18px;
+      color: #333;
+    }
+    .modal-content button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+    .modal-content .buy-btn {
+      background: #53a0ff;
+      color: #fff;
+    }
+    .modal-content .buy-btn:hover {
+      background: #4b94e6;
+    }
+    .modal-content .cancel-btn {
+      background: #ccc;
+      color: #333;
+    }
+    .modal-content .cancel-btn:hover {
+      background: #bbb;
+    }
+
+    /* ANIMAÇÃO DE ENTRADA PARA O CONTEÚDO */
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    .animate-in {
+      animation: slideIn 0.5s ease-out forwards;
+    }
+
     /* RESPONSIVIDADE */
     @media (max-width: 768px) {
       .sidebar {
@@ -323,17 +387,31 @@
     </div>
   </div>
 
+  <!-- MODAL DE COMPRA -->
+  <div id="purchaseModal" class="modal">
+    <div class="modal-content">
+      <p id="purchaseMessage">Do you want to purchase this section?</p>
+      <button class="buy-btn" id="buyButton">Buy Section</button>
+      <button class="cancel-btn" id="cancelButton">Cancel</button>
+    </div>
+  </div>
+
   <script>
     // =========================
     //  REFERÊNCIAS
     // =========================
-    const toggleBtn        = document.getElementById('toggleBtn');
-    const sidebar          = document.getElementById('sidebar');
-    const menuItems        = document.querySelectorAll('.menu li');
-    const languageBtn      = document.getElementById('languageBtn');
-    const pageTitle        = document.getElementById('pageTitle');
-    const knowledgeListDiv = document.getElementById('knowledgeList');
-    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+    const toggleBtn         = document.getElementById('toggleBtn');
+    const sidebar           = document.getElementById('sidebar');
+    const menuItems         = document.querySelectorAll('.menu li');
+    const languageBtn       = document.getElementById('languageBtn');
+    const pageTitle         = document.getElementById('pageTitle');
+    const knowledgeListDiv  = document.getElementById('knowledgeList');
+
+    // Modal references
+    const purchaseModal     = document.getElementById('purchaseModal');
+    const purchaseMessage   = document.getElementById('purchaseMessage');
+    const buyButton         = document.getElementById('buyButton');
+    const cancelButton      = document.getElementById('cancelButton');
 
     // =========================
     //  TRADUÇÕES
@@ -378,20 +456,37 @@
     let currentLanguage = 'en';
     let currentPage     = 'profile';
 
+    // Keep track of purchased sections.
+    const purchasedSections = {
+      profile: false,
+      social: false,
+      projects: false,
+      contact: false,
+      certificates: false
+    };
+
     // ========== SIDEBAR TOGGLE ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
-      // A rotação do SVG é controlada via CSS (.sidebar.closed .toggle-btn svg)
+      // Rotation of the SVG is controlled via CSS (.sidebar.closed .toggle-btn svg)
     });
 
     // ========== MENU LATERAL ==========
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
-        menuItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        currentPage = item.getAttribute('data-page');
-        updateContent();
+        const page = item.getAttribute('data-page');
+        // If the section is not purchased yet, show the purchase modal.
+        if (!purchasedSections[page]) {
+          currentPage = page;
+          showPurchaseModal(page);
+        } else {
+          // If already purchased, update active classes and content with animation.
+          menuItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          currentPage = page;
+          updateContentWithAnimation();
+        }
       });
     });
 
@@ -516,10 +611,10 @@
 
       // Conteúdo de cada page
       if(currentPage === 'profile'){
-        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
+        document.getElementById('knowledgeListTitle').textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if(currentPage === 'social'){
-        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
+        document.getElementById('knowledgeListTitle').textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
@@ -529,7 +624,7 @@
           </div>
         `;
       } else if(currentPage === 'projects'){
-        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
+        document.getElementById('knowledgeListTitle').textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="blender-projects.html" target="_blank" class="main-btn">
@@ -553,7 +648,7 @@
           </div>
         `;
       } else if(currentPage === 'contact'){
-        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
+        document.getElementById('knowledgeListTitle').textContent = dict['contactTitle'] || 'Contact';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
@@ -563,10 +658,50 @@
           </div>
         `;
       } else if(currentPage === 'certificates'){
-        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
+        document.getElementById('knowledgeListTitle').textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
     }
+
+    // A helper function to update the content and trigger a slide-in animation.
+    function updateContentWithAnimation() {
+      updateContent();
+      const content = document.getElementById('content');
+      content.classList.remove('animate-in');
+      // Trigger reflow to restart the animation
+      void content.offsetWidth;
+      content.classList.add('animate-in');
+    }
+
+    // ========== MODAL FUNCTIONS ==========
+    function showPurchaseModal(page) {
+      // Customize the message – you could include a price here.
+      purchaseMessage.textContent = `Purchase the "${page}" section?`;
+      purchaseModal.style.display = 'flex';
+    }
+    function hidePurchaseModal() {
+      purchaseModal.style.display = 'none';
+    }
+
+    // When the Buy button is clicked in the modal:
+    buyButton.addEventListener('click', () => {
+      // Mark the section as purchased
+      purchasedSections[currentPage] = true;
+      // Update the active state in the menu
+      menuItems.forEach(item => {
+        if(item.getAttribute('data-page') === currentPage) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      });
+      hidePurchaseModal();
+      updateContentWithAnimation();
+    });
+    // If the user cancels the purchase:
+    cancelButton.addEventListener('click', () => {
+      hidePurchaseModal();
+    });
 
     // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
