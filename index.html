@@ -40,25 +40,52 @@
       z-index: -1;
     }
 
-    /* Relógio central com design compatível */
+    /* CLOCK com efeito de página dobrada no canto inferior direito */
     #clock {
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      bottom: 20px;
+      right: 20px;
       width: 150px;
       height: 150px;
-      border: 5px solid #53a0ff;
-      border-radius: 50%;
+      background: #fff; /* Cor da "página" */
+      border: 1px solid #ccc;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      color: #006aff;
+      font-size: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
-      background: rgba(255,255,255,0.8);
-      color: #006aff;
-      box-shadow: 0 0 15px rgba(83,160,255,0.5);
-      pointer-events: none;
-      z-index: 500;
+      overflow: hidden;
+      /* Necessário para posicionar os pseudo-elementos */
+      position: relative;
+      /* Transition para um efeito suave ao interagir */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* Ao passar o mouse sobre o clock, ele se expande e se desloca um pouco */
+    #clock:hover {
+      transform: scale(1.05) translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    /* Pseudo-elemento que forma a parte dobrada (lado de trás da dobra) */
+    #clock::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-width: 0 40px 40px 0;  /* Tamanho da dobra (40px) */
+      border-style: solid;
+      border-color: transparent #f7f7f7 #f7f7f7 transparent;
+    }
+    /* Pseudo-elemento para adicionar uma sutil sombra/linha de dobra */
+    #clock::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-width: 0 40px 40px 0;
+      border-style: solid;
+      border-color: transparent rgba(0,0,0,0.1) rgba(0,0,0,0.1) transparent;
+      transform: translate(2px, 2px);
     }
 
     /* ------------------------------
@@ -92,23 +119,23 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
+      /* A transição usa um cubic-bezier para dar um efeito de "bounce" */
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 18px;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
       overflow: visible;
+    }
+    .toggle-btn:hover {
+      transform: scale(1.15);
+    }
+    .toggle-btn:active {
+      transform: scale(0.95);
     }
     .toggle-btn svg {
       transition: transform 0.3s ease;
     }
     .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
-    }
-    .toggle-btn:hover {
-      background: #4b94e6;
-      transform: scale(1.1);
-    }
-    .toggle-btn:active {
-      transform: scale(0.95);
     }
 
     .menu {
@@ -224,18 +251,17 @@
       text-decoration: none;
       font-weight: 700;
       margin: 10px;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      /* Transição e transformação para dar mais "juice" */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
     }
     a.main-btn:hover {
-      background: #4b94e6;
-      transform: scale(1.05);
+      transform: scale(1.05) translateY(-3px) rotate(1deg);
       box-shadow: 0 4px 10px rgba(75,148,230,0.4);
     }
     a.main-btn:active {
-      transform: scale(0.95);
-      box-shadow: 0 3px 8px rgba(75,148,230,0.3);
+      transform: scale(0.98);
     }
 
     .certificate-container {
@@ -346,20 +372,20 @@
     </div>
   </div>
 
-  <!-- CLOCK CENTRAL -->
+  <!-- CLOCK com efeito de página dobrada -->
   <div id="clock"></div>
 
   <script>
     // =========================
     //  REFERÊNCIAS E CONFIGURAÇÃO INICIAL
     // =========================
-    const toggleBtn        = document.getElementById('toggleBtn');
-    const sidebar          = document.getElementById('sidebar');
-    const menuItems        = document.querySelectorAll('.menu li');
-    const languageBtn      = document.getElementById('languageBtn');
-    const pageTitle        = document.getElementById('pageTitle');
-    const knowledgeListDiv = document.getElementById('knowledgeList');
-    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+    const toggleBtn         = document.getElementById('toggleBtn');
+    const sidebar           = document.getElementById('sidebar');
+    const menuItems         = document.querySelectorAll('.menu li');
+    const languageBtn       = document.getElementById('languageBtn');
+    const pageTitle         = document.getElementById('pageTitle');
+    const knowledgeListDiv  = document.getElementById('knowledgeList');
+    const knowledgeListTitle= document.getElementById('knowledgeListTitle');
 
     // =========================
     //  TRADUÇÕES
@@ -605,8 +631,7 @@
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
     }
 
-    // Attach the mousemove listener to the document.
-    // Only create a ripple if the mouse is NOT over the sidebar.
+    // Apenas cria a onda se o mouse não estiver sobre a sidebar.
     document.addEventListener('mousemove', function(e) {
       if(e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
@@ -616,8 +641,8 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < ripples.length; i++) {
         let ripple = ripples[i];
-        ripple.radius += 2;
-        ripple.opacity -= 0.005;
+        ripple.radius += 3;        // Increase speed for more dynamic growth
+        ripple.opacity -= 0.007;     // Slightly faster fade
         if (ripple.opacity <= 0) {
           ripples.splice(i, 1);
           i--;
