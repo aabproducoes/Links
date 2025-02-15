@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul com Arrow Animado (SVG)</title>
-
+  <title>Tema Azul sem Filtros</title>
   <!-- Fonte Comic Neue -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
-
   <style>
     /* RESET BÁSICO */
     * {
@@ -15,7 +13,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-
+    
     /* TEMA AZUL: Fundo radial */
     body {
       display: flex;
@@ -26,75 +24,33 @@
       overflow-x: hidden;
       position: relative;
     }
-
-    /* ------------------------------
-       ELEMENTOS NOVOS: FLUID SIMULATION & CLOCK
-       ------------------------------ */
-    /* Canvas para o efeito de onda */
+    
+    /* FLUID SIMULATION CANVAS */
     #fluidCanvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: -2;
+    }
+    
+    /* BOIDS SIMULATION CANVAS (SEM FILTROS) */
+    #boidsCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
       z-index: -1;
     }
-
-    /* CLOCK com efeito de página dobrada no canto inferior direito */
-    #clock {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 150px;
-      height: 150px;
-      background: #fff; /* Cor da "página" */
-      border: 1px solid #ccc;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      color: #006aff;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      /* Necessário para posicionar os pseudo-elementos */
-      position: relative;
-      /* Transition para um efeito suave ao interagir */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    /* Ao passar o mouse sobre o clock, ele se expande e se desloca um pouco */
-    #clock:hover {
-      transform: scale(1.05) translateY(-5px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    }
-    /* Pseudo-elemento que forma a parte dobrada (lado de trás da dobra) */
-    #clock::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      border-width: 0 40px 40px 0;  /* Tamanho da dobra (40px) */
-      border-style: solid;
-      border-color: transparent #f7f7f7 #f7f7f7 transparent;
-    }
-    /* Pseudo-elemento para adicionar uma sutil sombra/linha de dobra */
-    #clock::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      border-width: 0 40px 40px 0;
-      border-style: solid;
-      border-color: transparent rgba(0,0,0,0.1) rgba(0,0,0,0.1) transparent;
-      transform: translate(2px, 2px);
-    }
-
-    /* ------------------------------
-       EXISTENTE: SIDEBAR, BOTÕES, ETC.
-       ------------------------------ */
+    
+    /* SIDEBAR */
     .sidebar {
       width: 250px;
       background: rgba(255,255,255,0.3);
-      backdrop-filter: blur(5px);
+      /* Removed backdrop-filter */
       color: #000;
       display: flex;
       flex-direction: column;
@@ -104,7 +60,6 @@
       border-right: 2px dashed #53a0ff;
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
-
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -119,7 +74,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* A transição usa um cubic-bezier para dar um efeito de "bounce" */
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 18px;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
@@ -137,7 +91,6 @@
     .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
     }
-
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -169,7 +122,6 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
-
     .sidebar.closed {
       width: 60px;
     }
@@ -189,7 +141,6 @@
       display: inline-block;
       color: #006aff;
     }
-
     .language-btn {
       display: inline-block;
       margin: 20px auto;
@@ -214,12 +165,11 @@
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
-
     .content {
       flex: 1;
       padding: 20px;
       background: rgba(255,255,255,0.3);
-      backdrop-filter: blur(10px);
+      /* Removed backdrop-filter */
       position: relative;
       transition: background 0.3s ease;
     }
@@ -240,7 +190,6 @@
       color: #0051b3;
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
-
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -251,7 +200,6 @@
       text-decoration: none;
       font-weight: 700;
       margin: 10px;
-      /* Transição e transformação para dar mais "juice" */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -263,14 +211,13 @@
     a.main-btn:active {
       transform: scale(0.98);
     }
-
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
       border: 1px dashed #80bfff;
       border-radius: 5px;
       background: rgba(255,255,255,0.4);
-      backdrop-filter: blur(5px);
+      /* Removed backdrop-filter */
       margin-top: 10px;
     }
     .certificate-container iframe {
@@ -296,7 +243,7 @@
       background-color: rgba(255,255,255,0.9);
       color: #003c8f;
     }
-
+    
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -342,10 +289,12 @@
   </style>
 </head>
 <body>
-
   <!-- FLUID SIMULATION CANVAS -->
   <canvas id="fluidCanvas"></canvas>
-
+  
+  <!-- BOIDS SIMULATION CANVAS -->
+  <canvas id="boidsCanvas"></canvas>
+  
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
@@ -362,7 +311,7 @@
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
-
+  
   <!-- CONTEÚDO PRINCIPAL -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
@@ -371,14 +320,12 @@
       <div id="knowledgeList"></div>
     </div>
   </div>
-
-  <!-- CLOCK com efeito de página dobrada -->
+  
+  <!-- CLOCK -->
   <div id="clock"></div>
-
+  
   <script>
-    // =========================
-    //  REFERÊNCIAS E CONFIGURAÇÃO INICIAL
-    // =========================
+    // INITIAL REFERENCES & CONFIGURATION
     const toggleBtn         = document.getElementById('toggleBtn');
     const sidebar           = document.getElementById('sidebar');
     const menuItems         = document.querySelectorAll('.menu li');
@@ -386,10 +333,8 @@
     const pageTitle         = document.getElementById('pageTitle');
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
-
-    // =========================
-    //  TRADUÇÕES
-    // =========================
+    
+    // TRANSLATIONS
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -398,7 +343,6 @@
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
         knowledgeListTitle: 'Knowledge List',
-
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Blender Projects',
@@ -415,7 +359,6 @@
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
         knowledgeListTitle: 'Lista de Conhecimento',
-
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Projetos Blender',
@@ -426,17 +369,17 @@
         email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
       }
     };
-
+    
     let currentLanguage = 'en';
     let currentPage     = 'profile';
-
-    // ========== SIDEBAR TOGGLE ==========
+    
+    // SIDEBAR TOGGLE
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
     });
-
-    // ========== MENU LATERAL ==========
+    
+    // MENU INTERACTION
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -445,17 +388,18 @@
         updateContent();
       });
     });
-
-    // ========== BOTÃO DE IDIOMA ==========
+    
+    // LANGUAGE BUTTON
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
     });
+    
     function updateLanguageButtonLabel() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
-
-    // ========== ATUALIZA RÓTULOS DO MENU ==========
+    
+    // UPDATE MENU LABELS
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
@@ -468,8 +412,8 @@
         }
       });
     }
-
-    // ========== KNOWLEDGE LIST (EN||PT) ==========
+    
+    // KNOWLEDGE LIST
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -493,8 +437,8 @@
         knowledgeListDiv.appendChild(p);
       });
     }
-
-    // ========== CERTIFICADOS (Somente a primeira página) ==========
+    
+    // CERTIFICATES
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -545,8 +489,8 @@
         }
       });
     }
-
-    // ========== UPDATE DE CONTEÚDO ==========
+    
+    // UPDATE CONTENT
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
@@ -607,62 +551,57 @@
         populateCertificatesList();
       }
     }
-
-    // ========== INICIALIZAÇÃO ==========
+    
+    // INITIALIZE
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
-
-    // =========================
-    //  FLUID SIMULATION (RIPPLE EFFECT) CODE
-    // =========================
-    const canvas = document.getElementById('fluidCanvas');
-    const ctx = canvas.getContext('2d');
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    
+    // FLUID SIMULATION CODE
+    const fluidCanvas = document.getElementById('fluidCanvas');
+    const fctx = fluidCanvas.getContext('2d');
+    
+    function resizeFluidCanvas() {
+      fluidCanvas.width = window.innerWidth;
+      fluidCanvas.height = window.innerHeight;
     }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
+    resizeFluidCanvas();
+    window.addEventListener('resize', resizeFluidCanvas);
+    
     let ripples = [];
     function createRipple(x, y) {
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
     }
-
-    // Apenas cria a onda se o mouse não estiver sobre a sidebar.
+    
     document.addEventListener('mousemove', function(e) {
       if(e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
     });
-
+    
     function animateRipples() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fctx.clearRect(0, 0, fluidCanvas.width, fluidCanvas.height);
       for (let i = 0; i < ripples.length; i++) {
         let ripple = ripples[i];
-        ripple.radius += 3;        // Increase speed for more dynamic growth
-        ripple.opacity -= 0.007;     // Slightly faster fade
+        ripple.radius += 3;
+        ripple.opacity -= 0.007;
         if (ripple.opacity <= 0) {
           ripples.splice(i, 1);
           i--;
           continue;
         }
-        let gradient = ctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
+        let gradient = fctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
         gradient.addColorStop(0, `rgba(83,160,255,${ripple.opacity})`);
         gradient.addColorStop(1, `rgba(255,255,255,0)`);
-        ctx.beginPath();
-        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
+        fctx.beginPath();
+        fctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+        fctx.fillStyle = gradient;
+        fctx.fill();
       }
       requestAnimationFrame(animateRipples);
     }
     animateRipples();
-
-    // =========================
-    //  CLOCK CODE
-    // =========================
+    
+    // CLOCK CODE
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -675,6 +614,111 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+    
+    // BOIDS SIMULATION CODE
+    const boidsCanvas = document.getElementById('boidsCanvas');
+    const bctx = boidsCanvas.getContext('2d');
+    
+    function resizeBoidsCanvas() {
+      boidsCanvas.width = window.innerWidth;
+      boidsCanvas.height = window.innerHeight;
+    }
+    resizeBoidsCanvas();
+    window.addEventListener('resize', resizeBoidsCanvas);
+    
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+    
+    class Boid {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = (Math.random() * 2 - 1);
+        this.vy = (Math.random() * 2 - 1);
+        this.maxSpeed = 3;
+        this.perception = 50;
+      }
+      update() {
+        let dx = mouseX - this.x;
+        let dy = mouseY - this.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist > 0) {
+          const attractionStrength = 0.05;
+          this.vx += (dx / dist) * attractionStrength;
+          this.vy += (dy / dist) * attractionStrength;
+        }
+        let steerX = 0;
+        let steerY = 0;
+        let count = 0;
+        for (let other of boids) {
+          if (other !== this) {
+            let dx = this.x - other.x;
+            let dy = this.y - other.y;
+            let d = Math.hypot(dx, dy);
+            if (d < this.perception && d > 0) {
+              steerX += dx / d;
+              steerY += dy / d;
+              count++;
+            }
+          }
+        }
+        if (count > 0) {
+          const separationStrength = 0.05;
+          steerX /= count;
+          steerY /= count;
+          this.vx += steerX * separationStrength;
+          this.vy += steerY * separationStrength;
+        }
+        let speed = Math.hypot(this.vx, this.vy);
+        if (speed > this.maxSpeed) {
+          this.vx = (this.vx / speed) * this.maxSpeed;
+          this.vy = (this.vy / speed) * this.maxSpeed;
+        }
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0) this.x = boidsCanvas.width;
+        if (this.x > boidsCanvas.width) this.x = 0;
+        if (this.y < 0) this.y = boidsCanvas.height;
+        if (this.y > boidsCanvas.height) this.y = 0;
+      }
+      draw(ctx) {
+        let angle = Math.atan2(this.vy, this.vx);
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(angle);
+        ctx.beginPath();
+        ctx.moveTo(0, -5);
+        ctx.lineTo(10, 0);
+        ctx.lineTo(0, 5);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255,100,100,0.8)';
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(200,0,0,1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+    
+    const boids = [];
+    const numBoids = 30;
+    for (let i = 0; i < numBoids; i++) {
+      boids.push(new Boid(Math.random() * boidsCanvas.width, Math.random() * boidsCanvas.height));
+    }
+    
+    function animateBoids() {
+      bctx.clearRect(0, 0, boidsCanvas.width, boidsCanvas.height);
+      for (let boid of boids) {
+        boid.update();
+        boid.draw(bctx);
+      }
+      requestAnimationFrame(animateBoids);
+    }
+    animateBoids();
   </script>
 </body>
 </html>
