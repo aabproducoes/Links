@@ -35,17 +35,6 @@
       z-index: -2;
     }
     
-    /* BOIDS SIMULATION CANVAS (SEM FILTROS) */
-    #boidsCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-    
     /* SIDEBAR */
     .sidebar {
       width: 250px;
@@ -292,9 +281,6 @@
   <!-- FLUID SIMULATION CANVAS -->
   <canvas id="fluidCanvas"></canvas>
   
-  <!-- BOIDS SIMULATION CANVAS -->
-  <canvas id="boidsCanvas"></canvas>
-  
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
@@ -308,6 +294,7 @@
       <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
+      <li data-page="error404" data-icon="❌"><span>Error 404</span></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
@@ -350,7 +337,8 @@
         blenderAnimations: 'Blender Animations',
         animatedBackground: 'Animated Background',
         whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>',
+        error404: 'Error 404'
       },
       pt: {
         profileTitle: 'Perfil',
@@ -366,7 +354,8 @@
         blenderAnimations: 'Animações Blender',
         animatedBackground: 'Fundo Animado',
         whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>',
+        error404: 'Erro 404'
       }
     };
     
@@ -405,7 +394,8 @@
       menuItems.forEach(item => {
         const page = item.getAttribute('data-page');
         const labelKey = page + 'Title';
-        const label = dict[labelKey] || page;
+        // If no specific title key exists, fallback to the translation for the page itself
+        const label = dict[labelKey] || dict[page] || page;
         const span = item.querySelector('span');
         if (span) {
           span.textContent = label;
@@ -495,8 +485,8 @@
       updateLanguageButtonLabel();
       updateMenuLabels();
       const dict = translations[currentLanguage];
-      document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
-      const validPages = ['profile','social','projects','contact','certificates'];
+      document.getElementById('pageTitle').textContent = dict[currentPage + 'Title'] || '';
+      const validPages = ['profile','social','projects','contact','certificates','error404'];
       document.getElementById('pageContent').style.display =
         validPages.includes(currentPage) ? 'block' : 'none';
       if(currentPage === 'profile'){
@@ -549,6 +539,13 @@
       } else if(currentPage === 'certificates'){
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
+      } else if(currentPage === 'error404'){
+        knowledgeListTitle.textContent = dict['error404'] || 'Error 404';
+        knowledgeListDiv.innerHTML = `
+          <div class="main-btn-container">
+            <a href="Error404.html" target="_blank" class="main-btn">${dict.error404}</a>
+          </div>
+        `;
       }
     }
     
@@ -614,111 +611,6 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
-    
-    // BOIDS SIMULATION CODE
-    const boidsCanvas = document.getElementById('boidsCanvas');
-    const bctx = boidsCanvas.getContext('2d');
-    
-    function resizeBoidsCanvas() {
-      boidsCanvas.width = window.innerWidth;
-      boidsCanvas.height = window.innerHeight;
-    }
-    resizeBoidsCanvas();
-    window.addEventListener('resize', resizeBoidsCanvas);
-    
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    document.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
-    
-    class Boid {
-      constructor(x, y) {
-        this.x = x;
-        this.y = y;
-        this.vx = (Math.random() * 2 - 1);
-        this.vy = (Math.random() * 2 - 1);
-        this.maxSpeed = 3;
-        this.perception = 50;
-      }
-      update() {
-        let dx = mouseX - this.x;
-        let dy = mouseY - this.y;
-        let dist = Math.hypot(dx, dy);
-        if (dist > 0) {
-          const attractionStrength = 0.05;
-          this.vx += (dx / dist) * attractionStrength;
-          this.vy += (dy / dist) * attractionStrength;
-        }
-        let steerX = 0;
-        let steerY = 0;
-        let count = 0;
-        for (let other of boids) {
-          if (other !== this) {
-            let dx = this.x - other.x;
-            let dy = this.y - other.y;
-            let d = Math.hypot(dx, dy);
-            if (d < this.perception && d > 0) {
-              steerX += dx / d;
-              steerY += dy / d;
-              count++;
-            }
-          }
-        }
-        if (count > 0) {
-          const separationStrength = 0.05;
-          steerX /= count;
-          steerY /= count;
-          this.vx += steerX * separationStrength;
-          this.vy += steerY * separationStrength;
-        }
-        let speed = Math.hypot(this.vx, this.vy);
-        if (speed > this.maxSpeed) {
-          this.vx = (this.vx / speed) * this.maxSpeed;
-          this.vy = (this.vy / speed) * this.maxSpeed;
-        }
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0) this.x = boidsCanvas.width;
-        if (this.x > boidsCanvas.width) this.x = 0;
-        if (this.y < 0) this.y = boidsCanvas.height;
-        if (this.y > boidsCanvas.height) this.y = 0;
-      }
-      draw(ctx) {
-        let angle = Math.atan2(this.vy, this.vx);
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(angle);
-        ctx.beginPath();
-        ctx.moveTo(0, -5);
-        ctx.lineTo(10, 0);
-        ctx.lineTo(0, 5);
-        ctx.closePath();
-        ctx.fillStyle = 'rgba(255,100,100,0.8)';
-        ctx.fill();
-        ctx.strokeStyle = 'rgba(200,0,0,1)';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.restore();
-      }
-    }
-    
-    const boids = [];
-    const numBoids = 30;
-    for (let i = 0; i < numBoids; i++) {
-      boids.push(new Boid(Math.random() * boidsCanvas.width, Math.random() * boidsCanvas.height));
-    }
-    
-    function animateBoids() {
-      bctx.clearRect(0, 0, boidsCanvas.width, boidsCanvas.height);
-      for (let boid of boids) {
-        boid.update();
-        boid.draw(bctx);
-      }
-      requestAnimationFrame(animateBoids);
-    }
-    animateBoids();
   </script>
 </body>
 </html>
