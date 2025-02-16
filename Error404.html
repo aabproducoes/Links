@@ -1,668 +1,74 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul – Sticker with Curved Jump & Limited Horizontal Movement</title>
-  <!-- Fonte Comic Neue -->
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 Error - Page Not Found</title>
   <style>
-    /* RESET BÁSICO */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    /* TEMA AZUL: Fundo radial */
+    /* Basic styling for the page */
     body {
-      display: flex;
-      min-height: 100vh;
-      font-family: "Comic Neue", cursive, sans-serif;
-      background: radial-gradient(circle at center, #d0f0ff 0%, #a4d4ff 100%);
-      color: #333;
-      overflow-x: hidden;
-      position: relative;
-    }
-    /* FLUID SIMULATION CANVAS */
-    #fluidCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -2;
-    }
-    /* SIDEBAR */
-    .sidebar {
-      width: 250px;
-      background: rgba(255,255,255,0.3);
-      color: #000;
-      display: flex;
-      flex-direction: column;
-      transition: width 0.3s ease;
-      position: relative;
-      z-index: 1000;
-      border-right: 2px dashed #53a0ff;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.2);
-    }
-    .toggle-btn {
-      position: absolute;
-      top: 20px;
-      right: -25px;
-      background: #53a0ff;
+      margin: 0;
+      padding: 0;
+      background: #2d2d2d;
       color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 50px; height: 50px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      font-size: 18px;
-      box-shadow: 0 0 10px rgba(83,160,255,0.3);
-      overflow: visible;
-    }
-    .toggle-btn:hover { transform: scale(1.15); }
-    .toggle-btn:active { transform: scale(0.95); }
-    .toggle-btn svg { transition: transform 0.3s ease; }
-    .sidebar.closed .toggle-btn svg { transform: rotate(180deg); }
-    .menu {
-      list-style: none;
-      padding: 80px 0 0 0;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .menu li {
-      padding: 15px 20px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-      background: rgba(255,255,255,0.3);
-      color: #006aff;
-      font-size: 16px;
-      font-weight: 700;
-      margin: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #53a0ff;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
-    }
-    .menu li:hover {
-      background: rgba(255,255,255,0.6);
-      transform: translateX(5px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-    }
-    .menu li.active {
-      background: rgba(255,255,255,0.8);
-      color: #004e99;
-      transform: scale(1.05);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-    }
-    .sidebar.closed { width: 60px; }
-    .sidebar.closed .menu li {
-      justify-content: center;
-      padding: 15px 10px;
-      font-size: 16px;
-      margin: 5px;
-      text-align: center;
-    }
-    .sidebar.closed .menu li span { display: none; }
-    .sidebar.closed .menu li::before {
-      content: attr(data-icon);
-      font-size: 20px;
-      display: inline-block;
-      color: #006aff;
-    }
-    .language-btn {
-      display: inline-block;
-      margin: 20px auto;
-      background: #88c7ff;
-      color: #fff;
-      padding: 12px 20px;
-      border: 3px solid #4b94e6;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      text-align: center;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      width: 80%;
-    }
-    .language-btn:hover {
-      background: #4b94e6;
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(75,148,230,0.4);
-    }
-    .language-btn:active { transform: scale(0.95); box-shadow: 0 3px 8px rgba(75,148,230,0.3); }
-    .content {
-      flex: 1;
-      padding: 20px;
-      background: rgba(255,255,255,0.3);
-      position: relative;
-      transition: background 0.3s ease;
-    }
-    .content:hover { background: rgba(255,255,255,0.5); }
-    #pageTitle {
-      font-size: 28px;
-      margin-bottom: 10px;
-      color: #006aff;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
-      border-bottom: 2px dashed #53a0ff;
-      padding-bottom: 5px;
-    }
-    #knowledgeListTitle {
-      font-size: 22px;
-      margin-bottom: 8px;
-      color: #0051b3;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
-    }
-    a.main-btn {
-      display: inline-block;
-      background: #88c7ff;
-      color: #fff;
-      padding: 12px 20px;
-      border: 3px solid #4b94e6;
-      border-radius: 50px;
-      text-decoration: none;
-      font-weight: 700;
-      margin: 10px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
+      font-family: 'Arial', sans-serif;
       overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
-    a.main-btn:hover {
-      transform: scale(1.05) translateY(-3px) rotate(1deg);
-      box-shadow: 0 4px 10px rgba(75,148,230,0.4);
+    /* Container for the content */
+    .container {
+      text-align: center;
     }
-    a.main-btn:active { transform: scale(0.98); }
-    .certificate-container {
-      position: relative;
-      margin-bottom: 20px;
-      border: 1px dashed #80bfff;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.4);
-      margin-top: 10px;
+    /* Styling for the 404 digits */
+    .error-code {
+      font-size: 8rem;
+      letter-spacing: 20px;
     }
-    .certificate-container iframe {
-      width: 100%;
-      height: 400px;
-      border: none;
+    .error-code span {
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
     }
-    .certificate-overlay {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      color: #006aff;
-      background-color: rgba(255,255,255,0.7);
-      padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
-      max-width: 90%;
-      word-wrap: break-word;
-      border: 1px solid #80bfff;
-      transition: background-color 0.3s ease, color 0.3s ease;
+    /* Delay each digit's animation for a staggered effect */
+    .error-code span:nth-child(1) { animation-delay: 0s; }
+    .error-code span:nth-child(2) { animation-delay: 0.5s; }
+    .error-code span:nth-child(3) { animation-delay: 1s; }
+    
+    /* Keyframes for the floating animation */
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0); }
     }
-    .certificate-overlay:hover {
-      background-color: rgba(255,255,255,0.9);
-      color: #003c8f;
+    
+    /* Styling for the error message text */
+    .message {
+      font-size: 1.5rem;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeIn 2s forwards;
+      animation-delay: 1s;
     }
-    @media (max-width: 768px) {
-      .sidebar { position: fixed; left: -250px; top: 0; height: 100%; width: 250px; }
-      .sidebar.open { left: 0; }
-      .toggle-btn { position: fixed; top: 20px; left: 250px; z-index: 1100; }
-      .sidebar.closed .toggle-btn { left: 60px; }
-      .content { padding: 15px; }
-    }
-    @media (max-width: 480px) {
-      .toggle-btn { width: 40px; height: 40px; font-size: 16px; }
-      .menu li { font-size: 14px; padding: 12px 15px; margin: 3px 5px; }
-      .certificate-container iframe { height: 250px; }
-      .certificate-overlay { font-size: 14px; }
-    }
-    /* STICKER FIGURA – SVG */
-    #sticker {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;  /* we'll control horizontal position via JavaScript */
-      transform: translateX(-50%);
-      pointer-events: none;
-      transition: left 0.3s ease;
-      z-index: 100;
-    }
-    /* Smooth transitions for arms */
-    #leftArm, #rightArm { transition: all 0.2s ease; }
-    /* Jump animation with a curved trajectory, limited horizontal movement, and rotation */
-    #sticker.jump {
-      animation: jumpAnim 0.8s ease;
-    }
-    @keyframes jumpAnim {
-      0% {
-        transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
-      }
-      15% {
-        transform: translateX(-50%) translateY(0) rotate(-3deg) scale(1.1, 0.9);
-      }
-      40% {
-        transform: translateX(calc(-50% + 5px)) translateY(-300px) rotate(5deg) scale(0.9, 1.1);
-      }
-      60% {
-        transform: translateX(calc(-50% - 5px)) translateY(-260px) rotate(-3deg) scale(1.05, 0.95);
-      }
-      80% {
-        transform: translateX(-50%) translateY(-280px) rotate(1deg) scale(0.95, 1.05);
-      }
-      100% {
-        transform: translateX(-50%) translateY(0) rotate(0deg) scale(1);
-      }
-    }
-    /* PARTICLE EFFECTS */
-    .particle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: #53a0ff;
-      border-radius: 50%;
-      pointer-events: none;
-      animation: particleAnim 0.8s forwards;
-    }
-    @keyframes particleAnim {
-      0% { opacity: 1; transform: translate(0, 0) scale(1); }
-      100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.5); }
+    
+    /* Keyframes for fade in effect */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
 <body>
-  <!-- FLUID SIMULATION CANVAS -->
-  <canvas id="fluidCanvas"></canvas>
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
-      </svg>
-    </button>
-    <ul class="menu">
-      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
-      <li data-page="social" data-icon="🔗"><span>Social</span></li>
-      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
-      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
-      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
-    </ul>
-    <button class="language-btn" id="languageBtn">Lang: EN</button>
-  </div>
-  <!-- CONTEÚDO PRINCIPAL -->
-  <div class="content" id="content">
-    <h1 id="pageTitle">Profile</h1>
-    <div id="pageContent">
-      <h2 id="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList"></div>
+  <div class="container">
+    <div class="error-code">
+      <span>4</span>
+      <span>0</span>
+      <span>4</span>
+    </div>
+    <div class="message">
+      Oops! The page you're looking for doesn't exist.
     </div>
   </div>
-  <!-- CLOCK -->
-  <div id="clock"></div>
-  <!-- STICKER FIGURA: SVG -->
-  <div id="sticker">
-    <svg width="80" height="120" viewBox="0 0 80 120">
-      <!-- Cabeça -->
-      <circle cx="40" cy="20" r="15" stroke="black" stroke-width="2" fill="none" />
-      <!-- Corpo -->
-      <line x1="40" y1="35" x2="40" y2="75" stroke="black" stroke-width="2" />
-      <!-- Braços -->
-      <line id="leftArm" x1="40" y1="45" x2="20" y2="60" stroke="black" stroke-width="2" />
-      <line id="rightArm" x1="40" y1="45" x2="60" y2="60" stroke="black" stroke-width="2" />
-      <!-- Pernas -->
-      <line x1="40" y1="75" x2="25" y2="100" stroke="black" stroke-width="2" />
-      <line x1="40" y1="75" x2="55" y2="100" stroke="black" stroke-width="2" />
-    </svg>
-  </div>
-  <script>
-    /* PARTICLE SPAWNER FUNCTION */
-    function spawnParticles(x, y) {
-      const numParticles = 15;
-      for (let i = 0; i < numParticles; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        particle.style.left = x + 'px';
-        particle.style.top = y + 'px';
-        const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * 50;
-        const dx = Math.cos(angle) * distance;
-        const dy = Math.sin(angle) * distance;
-        particle.style.setProperty('--dx', dx + 'px');
-        particle.style.setProperty('--dy', dy + 'px');
-        document.body.appendChild(particle);
-        particle.addEventListener('animationend', () => particle.remove());
-      }
-    }
-    
-    // INITIAL REFERENCES
-    const toggleBtn = document.getElementById('toggleBtn');
-    const sidebar = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.menu li');
-    const languageBtn = document.getElementById('languageBtn');
-    const pageTitle = document.getElementById('pageTitle');
-    const knowledgeListDiv = document.getElementById('knowledgeList');
-    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    
-    // TRANSLATIONS
-    const translations = {
-      en: {
-        profileTitle: 'Profile',
-        socialTitle: 'Social',
-        projectsTitle: 'Projects',
-        contactTitle: 'Contact',
-        certificatesTitle: 'Certificates',
-        knowledgeListTitle: 'Knowledge List',
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        blenderProjects: 'Blender Projects',
-        gimpProjects: 'Gimp Projects',
-        blenderAnimations: 'Blender Animations',
-        animatedBackground: 'Animated Background',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-      },
-      pt: {
-        profileTitle: 'Perfil',
-        socialTitle: 'Social',
-        projectsTitle: 'Projetos',
-        contactTitle: 'Contato',
-        certificatesTitle: 'Certificados',
-        knowledgeListTitle: 'Lista de Conhecimento',
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        blenderProjects: 'Projetos Blender',
-        gimpProjects: 'Projetos Gimp',
-        blenderAnimations: 'Animações Blender',
-        animatedBackground: 'Fundo Animado',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
-      }
-    };
-    
-    let currentLanguage = 'en';
-    let currentPage = 'profile';
-    
-    // SIDEBAR TOGGLE
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('closed');
-      sidebar.classList.toggle('open');
-    });
-    
-    // MENU INTERACTION
-    menuItems.forEach(item => {
-      item.addEventListener('click', () => {
-        menuItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        currentPage = item.getAttribute('data-page');
-        updateContent();
-      });
-    });
-    
-    // LANGUAGE BUTTON
-    languageBtn.addEventListener('click', () => {
-      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
-      updateContent();
-    });
-    
-    function updateLanguageButtonLabel() {
-      languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
-    }
-    
-    // UPDATE MENU LABELS
-    function updateMenuLabels() {
-      const dict = translations[currentLanguage];
-      menuItems.forEach(item => {
-        const page = item.getAttribute('data-page');
-        const labelKey = page + 'Title';
-        const label = dict[labelKey] || page;
-        const span = item.querySelector('span');
-        if (span) { span.textContent = label; }
-      });
-    }
-    
-    // KNOWLEDGE LIST
-    async function fetchKnowledgeList() {
-      try {
-        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
-        const text = await resp.text();
-        return text.split('\n').filter(line => line.trim() !== '');
-      } catch (err) {
-        console.error(err);
-        return [];
-      }
-    }
-    async function populateKnowledgeList() {
-      knowledgeListDiv.innerHTML = '';
-      const lines = await fetchKnowledgeList();
-      lines.forEach(line => {
-        const parts = line.split('||').map(p => p.trim());
-        const englishText = parts[0] || line;
-        const portugueseText = parts[1] || line;
-        const p = document.createElement('p');
-        p.textContent = (currentLanguage === 'en') ? englishText : portugueseText;
-        knowledgeListDiv.appendChild(p);
-      });
-    }
-    
-    // CERTIFICATES
-    async function fetchCertificatesList() {
-      try {
-        const r = await fetch('./Certificados/CertificadosList.txt');
-        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
-        const txt = await r.text();
-        const lines = txt.split('\n').filter(l => l.trim() !== '');
-        return lines.map(line => {
-          const sep = ' - ';
-          const idx = line.indexOf(sep);
-          if (idx === -1) {
-            console.warn('Formato inválido:', line);
-            return { fullPath: '', pdfName: '', title: '' };
-          }
-          const fullPath = line.substring(0, idx).trim();
-          const title = line.substring(idx + sep.length).trim();
-          let pdfName = fullPath;
-          const lastSlash = fullPath.lastIndexOf('/');
-          if (lastSlash !== -1) { pdfName = fullPath.substring(lastSlash + 1); }
-          const onlyFirstPage = fullPath + '#page=1';
-          return { fullPath: onlyFirstPage, pdfName, title };
-        });
-      } catch (err) {
-        console.error(err);
-        return [];
-      }
-    }
-    async function populateCertificatesList() {
-      knowledgeListDiv.innerHTML = '';
-      const list = await fetchCertificatesList();
-      list.forEach(cert => {
-        if (cert.fullPath) {
-          const container = document.createElement('div');
-          container.classList.add('certificate-container');
-          const iframe = document.createElement('iframe');
-          iframe.src = cert.fullPath;
-          container.appendChild(iframe);
-          const overlay = document.createElement('div');
-          overlay.classList.add('certificate-overlay');
-          overlay.innerHTML = `
-            <div><strong>Título:</strong> ${cert.title}</div>
-            <div class="fullPath"><strong>Caminho:</strong> ${cert.fullPath}</div>
-            <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
-          `;
-          container.appendChild(overlay);
-          knowledgeListDiv.appendChild(container);
-        }
-      });
-    }
-    
-    // UPDATE CONTENT
-    function updateContent() {
-      updateLanguageButtonLabel();
-      updateMenuLabels();
-      const dict = translations[currentLanguage];
-      document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
-      const validPages = ['profile', 'social', 'projects', 'contact', 'certificates'];
-      document.getElementById('pageContent').style.display =
-        validPages.includes(currentPage) ? 'block' : 'none';
-      if (currentPage === 'profile') {
-        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
-        populateKnowledgeList();
-      } else if (currentPage === 'social') {
-        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
-          </div>
-          <div class="main-btn-container">
-            <a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a>
-          </div>
-        `;
-      } else if (currentPage === 'projects') {
-        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="blender-projects.html" target="_blank" class="main-btn">
-              ${dict.blenderProjects}
-            </a>
-          </div>
-          <div class="main-btn-container">
-            <a href="gimp-projects.html" target="_blank" class="main-btn">
-              ${dict.gimpProjects}
-            </a>
-          </div>
-          <div class="main-btn-container">
-            <a href="blender-animations.html" target="_blank" class="main-btn">
-              ${dict.blenderAnimations}
-            </a>
-          </div>
-          <div class="main-btn-container">
-            <a href="animated-background.html" target="_blank" class="main-btn">
-              ${dict.animatedBackground}
-            </a>
-          </div>
-        `;
-      } else if (currentPage === 'contact') {
-        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
-          </div>
-          <div class="main-btn-container">
-            <a href="mailto:aaugusto444@gmail.com" class="main-btn">Email</a>
-          </div>
-        `;
-      } else if (currentPage === 'certificates') {
-        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
-        populateCertificatesList();
-      }
-    }
-    
-    // INITIALIZE
-    document.addEventListener('DOMContentLoaded', () => { updateContent(); });
-    
-    // FLUID SIMULATION CODE
-    const fluidCanvas = document.getElementById('fluidCanvas');
-    const fctx = fluidCanvas.getContext('2d');
-    function resizeFluidCanvas() {
-      fluidCanvas.width = window.innerWidth;
-      fluidCanvas.height = window.innerHeight;
-    }
-    resizeFluidCanvas();
-    window.addEventListener('resize', resizeFluidCanvas);
-    
-    let ripples = [];
-    function createRipple(x, y) {
-      ripples.push({ x, y, radius: 0, opacity: 0.5 });
-    }
-    document.addEventListener('mousemove', function(e) {
-      if (e.target.closest('.sidebar')) return;
-      createRipple(e.clientX, e.clientY);
-    });
-    function animateRipples() {
-      fctx.clearRect(0, 0, fluidCanvas.width, fluidCanvas.height);
-      for (let i = 0; i < ripples.length; i++) {
-        let ripple = ripples[i];
-        ripple.radius += 3;
-        ripple.opacity -= 0.007;
-        if (ripple.opacity <= 0) { ripples.splice(i, 1); i--; continue; }
-        let gradient = fctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
-        gradient.addColorStop(0, `rgba(83,160,255,${ripple.opacity})`);
-        gradient.addColorStop(1, `rgba(255,255,255,0)`);
-        fctx.beginPath();
-        fctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-        fctx.fillStyle = gradient;
-        fctx.fill();
-      }
-      requestAnimationFrame(animateRipples);
-    }
-    animateRipples();
-    
-    // CLOCK CODE
-    function updateClock() {
-      const now = new Date();
-      let hours = now.getHours();
-      let minutes = now.getMinutes();
-      let seconds = now.getSeconds();
-      hours = hours < 10 ? "0" + hours : hours;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-      document.getElementById("clock").textContent = hours + ":" + minutes + ":" + seconds;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-    
-    // STICKER (FOLLOW & JUMP) & HANDS (GRAB) CODE
-    const sticker = document.getElementById('sticker');
-    const leftArm = document.getElementById('leftArm');
-    const rightArm = document.getElementById('rightArm');
-    let isJumping = false;
-    const jumpThreshold = 50;
-    
-    // Smooth horizontal follow: use a target and current x.
-    let targetX = window.innerWidth / 2;
-    let currentX = targetX;
-    
-    document.addEventListener('mousemove', (e) => {
-      targetX = e.clientX;
-      // If horizontal difference is small and not jumping, trigger jump.
-      if (!isJumping && Math.abs(targetX - currentX) < jumpThreshold) {
-        isJumping = true;
-        spawnParticles(e.clientX, e.clientY);
-        const stickerRect = sticker.getBoundingClientRect();
-        const mouseRelX = e.clientX - stickerRect.left;
-        const mouseRelY = e.clientY - stickerRect.top;
-        const shoulder = { x: 40, y: 45 };
-        let armDx = mouseRelX - shoulder.x;
-        let armDy = mouseRelY - shoulder.y;
-        const distArm = Math.sqrt(armDx * armDx + armDy * armDy);
-        const maxExtension = 35;
-        if (distArm > maxExtension) {
-          armDx = (armDx / distArm) * maxExtension;
-          armDy = (armDy / distArm) * maxExtension;
-        }
-        const leftTarget = { x: shoulder.x + armDx - 5, y: shoulder.y + armDy };
-        const rightTarget = { x: shoulder.x + armDx + 5, y: shoulder.y + armDy };
-        leftArm.setAttribute("x2", leftTarget.x);
-        leftArm.setAttribute("y2", leftTarget.y);
-        rightArm.setAttribute("x2", rightTarget.x);
-        rightArm.setAttribute("y2", rightTarget.y);
-        sticker.classList.add('jump');
-      }
-    });
-    
-    // Update sticker position only when not jumping.
-    function updateStickerPosition() {
-      if (!isJumping) {
-        currentX += (targetX - currentX) * 0.1;
-        sticker.style.left = currentX + "px";
-      }
-      requestAnimationFrame(updateStickerPosition);
-    }
-    updateStickerPosition();
-    
-    sticker.addEventListener('animationend', () => {
-      sticker.classList.remove('jump');
-      isJumping = false;
-      leftArm.setAttribute("x2", 20);
-      leftArm.setAttribute("y2", 60);
-      rightArm.setAttribute("x2", 60);
-      rightArm.setAttribute("y2", 60);
-    });
-  </script>
 </body>
 </html>
