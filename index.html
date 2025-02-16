@@ -394,7 +394,6 @@
       menuItems.forEach(item => {
         const page = item.getAttribute('data-page');
         const labelKey = page + 'Title';
-        // If no specific title key exists, fallback to the translation for the page itself
         const label = dict[labelKey] || dict[page] || page;
         const span = item.querySelector('span');
         if (span) {
@@ -485,16 +484,22 @@
       updateLanguageButtonLabel();
       updateMenuLabels();
       const dict = translations[currentLanguage];
-      document.getElementById('pageTitle').textContent = dict[currentPage + 'Title'] || '';
-      const validPages = ['profile','social','projects','contact','certificates','error404'];
-      document.getElementById('pageContent').style.display =
-        validPages.includes(currentPage) ? 'block' : 'none';
+      
+      // Reset the content container
+      const pageContent = document.getElementById('pageContent');
+      pageContent.style.display = 'block';
+      pageContent.innerHTML = `
+        <h2 id="knowledgeListTitle">${dict.knowledgeListTitle || ''}</h2>
+        <div id="knowledgeList"></div>
+      `;
+      // Also reset the page title if needed
+      pageTitle.textContent = dict[currentPage + 'Title'] || '';
+      
       if(currentPage === 'profile'){
-        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if(currentPage === 'social'){
-        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
-        knowledgeListDiv.innerHTML = `
+        document.getElementById('knowledgeListTitle').textContent = dict['socialTitle'] || 'Social';
+        document.getElementById('knowledgeList').innerHTML = `
           <div class="main-btn-container">
             <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
           </div>
@@ -503,8 +508,8 @@
           </div>
         `;
       } else if(currentPage === 'projects'){
-        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
-        knowledgeListDiv.innerHTML = `
+        document.getElementById('knowledgeListTitle').textContent = dict['projectsTitle'] || 'Projects';
+        document.getElementById('knowledgeList').innerHTML = `
           <div class="main-btn-container">
             <a href="blender-projects.html" target="_blank" class="main-btn">
               ${dict.blenderProjects}
@@ -527,8 +532,8 @@
           </div>
         `;
       } else if(currentPage === 'contact'){
-        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        knowledgeListDiv.innerHTML = `
+        document.getElementById('knowledgeListTitle').textContent = dict['contactTitle'] || 'Contact';
+        document.getElementById('knowledgeList').innerHTML = `
           <div class="main-btn-container">
             <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
           </div>
@@ -537,15 +542,89 @@
           </div>
         `;
       } else if(currentPage === 'certificates'){
-        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
+        document.getElementById('knowledgeListTitle').textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       } else if(currentPage === 'error404'){
-        knowledgeListTitle.textContent = dict['error404'] || 'Error 404';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="Error404.html" target="_blank" class="main-btn">${dict.error404}</a>
+        // For the Error 404 page, override the content with the provided full-page 404 code.
+        // We remove the header and button and insert the custom error content:
+        pageTitle.textContent = '';
+        pageContent.innerHTML = `
+          <style>
+            /* Basic reset and background for 404 */
+            .error404-body {
+              margin: 0;
+              padding: 0;
+              background: linear-gradient(135deg, #2b1055, #7597de);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+              overflow: hidden;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            
+            /* Container with perspective for 3D effect */
+            .error404-container {
+              text-align: center;
+              color: #fff;
+              perspective: 1000px;
+              transition: transform 0.2s ease-out;
+            }
+            
+            /* Animated 404 code */
+            .error404-code {
+              font-size: 12vw;
+              font-weight: bold;
+              letter-spacing: 0.1em;
+              animation: float 3s ease-in-out infinite;
+            }
+            
+            /* Floating animation for the error code */
+            @keyframes float {
+              0%   { transform: translateY(0); }
+              50%  { transform: translateY(-20px); }
+              100% { transform: translateY(0); }
+            }
+            
+            /* Page not found message styling */
+            .error404-message {
+              font-size: 2vw;
+              margin-top: 20px;
+              opacity: 0.9;
+            }
+            
+            /* On hover, add a subtle shake effect */
+            .error404-container:hover .error404-code {
+              animation: shake 0.5s infinite;
+            }
+            
+            /* Shake animation keyframes */
+            @keyframes shake {
+              0%   { transform: translate(0, 0) rotate(0deg); }
+              25%  { transform: translate(5px, -5px) rotate(2deg); }
+              50%  { transform: translate(-5px, 5px) rotate(-2deg); }
+              75%  { transform: translate(5px, 5px) rotate(2deg); }
+              100% { transform: translate(-5px, -5px) rotate(-2deg); }
+            }
+          </style>
+          <div class="error404-body">
+            <div class="error404-container" id="errorContainer">
+              <div class="error404-code">404</div>
+              <div class="error404-message">Oops! Page not found.</div>
+            </div>
           </div>
         `;
+        // Add the mouse-driven tilt effect for the error container:
+        const container = document.getElementById('errorContainer');
+        document.addEventListener('mousemove', (e) => {
+          const { innerWidth, innerHeight } = window;
+          const xOffset = (e.clientX - innerWidth / 2) / (innerWidth / 2);
+          const yOffset = (e.clientY - innerHeight / 2) / (innerHeight / 2);
+          container.style.transform = `rotateX(${yOffset * 10}deg) rotateY(${xOffset * 10}deg)`;
+        });
+        document.addEventListener('mouseleave', () => {
+          container.style.transform = 'rotateX(0deg) rotateY(0deg)';
+        });
       }
     }
     
