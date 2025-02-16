@@ -2,73 +2,129 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>404 Error - Page Not Found</title>
   <style>
-    /* Basic styling for the page */
-    body {
+    /* Basic reset and styling */
+    * {
       margin: 0;
       padding: 0;
-      background: #2d2d2d;
-      color: #fff;
-      font-family: 'Arial', sans-serif;
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
+      box-sizing: border-box;
     }
-    /* Container for the content */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #111;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
     .container {
       text-align: center;
+      position: relative;
+      transition: transform 0.1s ease-out;
     }
-    /* Styling for the 404 digits */
-    .error-code {
-      font-size: 8rem;
-      letter-spacing: 20px;
+    h1 {
+      font-size: 8em;
+      position: relative;
+      z-index: 1;
+      animation: glitch 2s infinite;
     }
-    .error-code span {
-      display: inline-block;
-      animation: float 3s ease-in-out infinite;
-    }
-    /* Delay each digit's animation for a staggered effect */
-    .error-code span:nth-child(1) { animation-delay: 0s; }
-    .error-code span:nth-child(2) { animation-delay: 0.5s; }
-    .error-code span:nth-child(3) { animation-delay: 1s; }
-    
-    /* Keyframes for the floating animation */
-    @keyframes float {
-      0% { transform: translateY(0); }
-      50% { transform: translateY(-20px); }
-      100% { transform: translateY(0); }
-    }
-    
-    /* Styling for the error message text */
-    .message {
-      font-size: 1.5rem;
+    p {
+      font-size: 1.5em;
       margin-top: 20px;
-      opacity: 0;
-      animation: fadeIn 2s forwards;
-      animation-delay: 1s;
+      position: relative;
+      z-index: 1;
     }
-    
-    /* Keyframes for fade in effect */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+
+    /* Glitch effect on the 404 text */
+    @keyframes glitch {
+      0%   { text-shadow: 2px 2px red; }
+      20%  { text-shadow: -2px -2px blue; }
+      40%  { text-shadow: 2px -2px lime; }
+      60%  { text-shadow: -2px 2px orange; }
+      80%  { text-shadow: 2px 2px purple; }
+      100% { text-shadow: -2px -2px red; }
+    }
+
+    /* Particle styles for extra animated background elements */
+    .particle {
+      position: absolute;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 5s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%   { transform: translateY(0px); opacity: 0.8; }
+      50%  { transform: translateY(-20px); opacity: 0.3; }
+      100% { transform: translateY(0px); opacity: 0.8; }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="error-code">
-      <span>4</span>
-      <span>0</span>
-      <span>4</span>
-    </div>
-    <div class="message">
-      Oops! The page you're looking for doesn't exist.
-    </div>
+    <h1>404</h1>
+    <p>Oops! The page you're looking for doesn't exist.</p>
   </div>
+
+  <script>
+    // Create animated particles in the background
+    const NUM_PARTICLES = 30;
+    const body = document.body;
+
+    for (let i = 0; i < NUM_PARTICLES; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 15 + 5;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      body.appendChild(particle);
+    }
+
+    // Add subtle container movement based on mouse position
+    document.addEventListener('mousemove', (e) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      const moveX = (e.clientX - centerX) / 50;
+      const moveY = (e.clientY - centerY) / 50;
+      document.querySelector('.container').style.transform =
+        `translate(${moveX}px, ${moveY}px)`;
+    });
+
+    // Add a "sparkle" effect on click for extra juice
+    document.addEventListener('click', (e) => {
+      const sparkle = document.createElement('div');
+      sparkle.style.position = 'absolute';
+      sparkle.style.width = '10px';
+      sparkle.style.height = '10px';
+      sparkle.style.borderRadius = '50%';
+      sparkle.style.background = 'rgba(255, 255, 255, 0.8)';
+      sparkle.style.top = e.clientY + 'px';
+      sparkle.style.left = e.clientX + 'px';
+      sparkle.style.pointerEvents = 'none';
+      sparkle.style.transition = 'all 0.5s ease-out';
+      body.appendChild(sparkle);
+
+      // Animate the sparkle
+      setTimeout(() => {
+        sparkle.style.transform = 'scale(3)';
+        sparkle.style.opacity = '0';
+      }, 0);
+
+      // Remove the sparkle element after the animation
+      setTimeout(() => {
+        sparkle.remove();
+      }, 500);
+    });
+  </script>
 </body>
 </html>
