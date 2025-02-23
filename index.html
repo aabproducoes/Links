@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul sem Filtros</title>
+  <title>Tema Azul com Arrow Animado (SVG)</title>
+
   <!-- Fonte Comic Neue -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+
   <style>
     /* RESET BÁSICO */
     * {
@@ -13,7 +15,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    
+
     /* TEMA AZUL: Fundo radial */
     body {
       display: flex;
@@ -24,22 +26,75 @@
       overflow-x: hidden;
       position: relative;
     }
-    
-    /* FLUID SIMULATION CANVAS */
+
+    /* ------------------------------
+       ELEMENTOS NOVOS: FLUID SIMULATION & CLOCK
+       ------------------------------ */
+    /* Canvas para o efeito de onda */
     #fluidCanvas {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: -2;
+      z-index: -1;
     }
-    
-    /* SIDEBAR */
+
+    /* CLOCK com efeito de página dobrada no canto inferior direito */
+    #clock {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 150px;
+      height: 150px;
+      background: #fff; /* Cor da "página" */
+      border: 1px solid #ccc;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      color: #006aff;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      /* Necessário para posicionar os pseudo-elementos */
+      position: relative;
+      /* Transition para um efeito suave ao interagir */
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    /* Ao passar o mouse sobre o clock, ele se expande e se desloca um pouco */
+    #clock:hover {
+      transform: scale(1.05) translateY(-5px);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+    /* Pseudo-elemento que forma a parte dobrada (lado de trás da dobra) */
+    #clock::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-width: 0 40px 40px 0;  /* Tamanho da dobra (40px) */
+      border-style: solid;
+      border-color: transparent #f7f7f7 #f7f7f7 transparent;
+    }
+    /* Pseudo-elemento para adicionar uma sutil sombra/linha de dobra */
+    #clock::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      border-width: 0 40px 40px 0;
+      border-style: solid;
+      border-color: transparent rgba(0,0,0,0.1) rgba(0,0,0,0.1) transparent;
+      transform: translate(2px, 2px);
+    }
+
+    /* ------------------------------
+       EXISTENTE: SIDEBAR, BOTÕES, ETC.
+       ------------------------------ */
     .sidebar {
       width: 250px;
       background: rgba(255,255,255,0.3);
-      /* Removed backdrop-filter */
+      backdrop-filter: blur(5px);
       color: #000;
       display: flex;
       flex-direction: column;
@@ -49,6 +104,7 @@
       border-right: 2px dashed #53a0ff;
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
     }
+
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -63,6 +119,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      /* A transição usa um cubic-bezier para dar um efeito de "bounce" */
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 18px;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
@@ -80,6 +137,7 @@
     .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
     }
+
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -111,6 +169,7 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
+
     .sidebar.closed {
       width: 60px;
     }
@@ -130,6 +189,7 @@
       display: inline-block;
       color: #006aff;
     }
+
     .language-btn {
       display: inline-block;
       margin: 20px auto;
@@ -154,11 +214,12 @@
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
+
     .content {
       flex: 1;
       padding: 20px;
       background: rgba(255,255,255,0.3);
-      /* Removed backdrop-filter */
+      backdrop-filter: blur(10px);
       position: relative;
       transition: background 0.3s ease;
     }
@@ -179,6 +240,7 @@
       color: #0051b3;
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
+
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -189,6 +251,7 @@
       text-decoration: none;
       font-weight: 700;
       margin: 10px;
+      /* Transição e transformação para dar mais "juice" */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -200,13 +263,14 @@
     a.main-btn:active {
       transform: scale(0.98);
     }
+
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
       border: 1px dashed #80bfff;
       border-radius: 5px;
       background: rgba(255,255,255,0.4);
-      /* Removed backdrop-filter */
+      backdrop-filter: blur(5px);
       margin-top: 10px;
     }
     .certificate-container iframe {
@@ -232,7 +296,7 @@
       background-color: rgba(255,255,255,0.9);
       color: #003c8f;
     }
-    
+
     @media (max-width: 768px) {
       .sidebar {
         position: fixed;
@@ -278,9 +342,10 @@
   </style>
 </head>
 <body>
+
   <!-- FLUID SIMULATION CANVAS -->
   <canvas id="fluidCanvas"></canvas>
-  
+
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
@@ -294,11 +359,10 @@
       <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
-      <li data-page="error404" data-icon="❌"><span>Error 404</span></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
   </div>
-  
+
   <!-- CONTEÚDO PRINCIPAL -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
@@ -307,12 +371,14 @@
       <div id="knowledgeList"></div>
     </div>
   </div>
-  
-  <!-- CLOCK -->
+
+  <!-- CLOCK com efeito de página dobrada -->
   <div id="clock"></div>
-  
+
   <script>
-    // INITIAL REFERENCES & CONFIGURATION
+    // =========================
+    //  REFERÊNCIAS E CONFIGURAÇÃO INICIAL
+    // =========================
     const toggleBtn         = document.getElementById('toggleBtn');
     const sidebar           = document.getElementById('sidebar');
     const menuItems         = document.querySelectorAll('.menu li');
@@ -320,8 +386,10 @@
     const pageTitle         = document.getElementById('pageTitle');
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
-    
-    // TRANSLATIONS
+
+    // =========================
+    //  TRADUÇÕES
+    // =========================
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -330,6 +398,7 @@
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
         knowledgeListTitle: 'Knowledge List',
+
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Blender Projects',
@@ -337,8 +406,7 @@
         blenderAnimations: 'Blender Animations',
         animatedBackground: 'Animated Background',
         whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>',
-        error404: 'Error 404'
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
       },
       pt: {
         profileTitle: 'Perfil',
@@ -347,6 +415,7 @@
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
         knowledgeListTitle: 'Lista de Conhecimento',
+
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Projetos Blender',
@@ -354,21 +423,20 @@
         blenderAnimations: 'Animações Blender',
         animatedBackground: 'Fundo Animado',
         whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>',
-        error404: 'Erro 404'
+        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
       }
     };
-    
+
     let currentLanguage = 'en';
     let currentPage     = 'profile';
-    
-    // SIDEBAR TOGGLE
+
+    // ========== SIDEBAR TOGGLE ==========
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
     });
-    
-    // MENU INTERACTION
+
+    // ========== MENU LATERAL ==========
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -377,32 +445,31 @@
         updateContent();
       });
     });
-    
-    // LANGUAGE BUTTON
+
+    // ========== BOTÃO DE IDIOMA ==========
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
     });
-    
     function updateLanguageButtonLabel() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
-    
-    // UPDATE MENU LABELS
+
+    // ========== ATUALIZA RÓTULOS DO MENU ==========
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
         const page = item.getAttribute('data-page');
         const labelKey = page + 'Title';
-        const label = dict[labelKey] || dict[page] || page;
+        const label = dict[labelKey] || page;
         const span = item.querySelector('span');
         if (span) {
           span.textContent = label;
         }
       });
     }
-    
-    // KNOWLEDGE LIST
+
+    // ========== KNOWLEDGE LIST (EN||PT) ==========
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -426,8 +493,8 @@
         knowledgeListDiv.appendChild(p);
       });
     }
-    
-    // CERTIFICATES
+
+    // ========== CERTIFICADOS (Somente a primeira página) ==========
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -478,28 +545,22 @@
         }
       });
     }
-    
-    // UPDATE CONTENT
+
+    // ========== UPDATE DE CONTEÚDO ==========
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
       const dict = translations[currentLanguage];
-      
-      // Reset the content container
-      const pageContent = document.getElementById('pageContent');
-      pageContent.style.display = 'block';
-      pageContent.innerHTML = `
-        <h2 id="knowledgeListTitle">${dict.knowledgeListTitle || ''}</h2>
-        <div id="knowledgeList"></div>
-      `;
-      // Also reset the page title if needed
-      pageTitle.textContent = dict[currentPage + 'Title'] || '';
-      
+      document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
+      const validPages = ['profile','social','projects','contact','certificates'];
+      document.getElementById('pageContent').style.display =
+        validPages.includes(currentPage) ? 'block' : 'none';
       if(currentPage === 'profile'){
+        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
       } else if(currentPage === 'social'){
-        document.getElementById('knowledgeListTitle').textContent = dict['socialTitle'] || 'Social';
-        document.getElementById('knowledgeList').innerHTML = `
+        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
+        knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
           </div>
@@ -508,8 +569,8 @@
           </div>
         `;
       } else if(currentPage === 'projects'){
-        document.getElementById('knowledgeListTitle').textContent = dict['projectsTitle'] || 'Projects';
-        document.getElementById('knowledgeList').innerHTML = `
+        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
+        knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="blender-projects.html" target="_blank" class="main-btn">
               ${dict.blenderProjects}
@@ -532,8 +593,8 @@
           </div>
         `;
       } else if(currentPage === 'contact'){
-        document.getElementById('knowledgeListTitle').textContent = dict['contactTitle'] || 'Contact';
-        document.getElementById('knowledgeList').innerHTML = `
+        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
+        knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
             <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
           </div>
@@ -542,142 +603,66 @@
           </div>
         `;
       } else if(currentPage === 'certificates'){
-        document.getElementById('knowledgeListTitle').textContent = dict['certificatesTitle'] || 'Certificates';
+        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
-      } else if(currentPage === 'error404'){
-        // For the Error 404 page, override the content with the provided full-page 404 code.
-        // We remove the header and button and insert the custom error content:
-        pageTitle.textContent = '';
-        pageContent.innerHTML = `
-          <style>
-            /* Basic reset and background for 404 */
-            .error404-body {
-              margin: 0;
-              padding: 0;
-              background: linear-gradient(135deg, #2b1055, #7597de);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              height: 100vh;
-              overflow: hidden;
-              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            }
-            
-            /* Container with perspective for 3D effect */
-            .error404-container {
-              text-align: center;
-              color: #fff;
-              perspective: 1000px;
-              transition: transform 0.2s ease-out;
-            }
-            
-            /* Animated 404 code */
-            .error404-code {
-              font-size: 12vw;
-              font-weight: bold;
-              letter-spacing: 0.1em;
-              animation: float 3s ease-in-out infinite;
-            }
-            
-            /* Floating animation for the error code */
-            @keyframes float {
-              0%   { transform: translateY(0); }
-              50%  { transform: translateY(-20px); }
-              100% { transform: translateY(0); }
-            }
-            
-            /* Page not found message styling */
-            .error404-message {
-              font-size: 2vw;
-              margin-top: 20px;
-              opacity: 0.9;
-            }
-            
-            /* On hover, add a subtle shake effect */
-            .error404-container:hover .error404-code {
-              animation: shake 0.5s infinite;
-            }
-            
-            /* Shake animation keyframes */
-            @keyframes shake {
-              0%   { transform: translate(0, 0) rotate(0deg); }
-              25%  { transform: translate(5px, -5px) rotate(2deg); }
-              50%  { transform: translate(-5px, 5px) rotate(-2deg); }
-              75%  { transform: translate(5px, 5px) rotate(2deg); }
-              100% { transform: translate(-5px, -5px) rotate(-2deg); }
-            }
-          </style>
-          <div class="error404-body">
-            <div class="error404-container" id="errorContainer">
-              <div class="error404-code">404</div>
-              <div class="error404-message">Oops! Page not found.</div>
-            </div>
-          </div>
-        `;
-        // Add the mouse-driven tilt effect for the error container:
-        const container = document.getElementById('errorContainer');
-        document.addEventListener('mousemove', (e) => {
-          const { innerWidth, innerHeight } = window;
-          const xOffset = (e.clientX - innerWidth / 2) / (innerWidth / 2);
-          const yOffset = (e.clientY - innerHeight / 2) / (innerHeight / 2);
-          container.style.transform = `rotateX(${yOffset * 10}deg) rotateY(${xOffset * 10}deg)`;
-        });
-        document.addEventListener('mouseleave', () => {
-          container.style.transform = 'rotateX(0deg) rotateY(0deg)';
-        });
       }
     }
-    
-    // INITIALIZE
+
+    // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
-    
-    // FLUID SIMULATION CODE
-    const fluidCanvas = document.getElementById('fluidCanvas');
-    const fctx = fluidCanvas.getContext('2d');
-    
-    function resizeFluidCanvas() {
-      fluidCanvas.width = window.innerWidth;
-      fluidCanvas.height = window.innerHeight;
+
+    // =========================
+    //  FLUID SIMULATION (RIPPLE EFFECT) CODE
+    // =========================
+    const canvas = document.getElementById('fluidCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-    resizeFluidCanvas();
-    window.addEventListener('resize', resizeFluidCanvas);
-    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
     let ripples = [];
     function createRipple(x, y) {
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
     }
-    
+
+    // Apenas cria a onda se o mouse não estiver sobre a sidebar.
     document.addEventListener('mousemove', function(e) {
       if(e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
     });
-    
+
     function animateRipples() {
-      fctx.clearRect(0, 0, fluidCanvas.width, fluidCanvas.height);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < ripples.length; i++) {
         let ripple = ripples[i];
-        ripple.radius += 3;
-        ripple.opacity -= 0.007;
+        ripple.radius += 3;        // Increase speed for more dynamic growth
+        ripple.opacity -= 0.007;     // Slightly faster fade
         if (ripple.opacity <= 0) {
           ripples.splice(i, 1);
           i--;
           continue;
         }
-        let gradient = fctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
+        let gradient = ctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
         gradient.addColorStop(0, `rgba(83,160,255,${ripple.opacity})`);
         gradient.addColorStop(1, `rgba(255,255,255,0)`);
-        fctx.beginPath();
-        fctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-        fctx.fillStyle = gradient;
-        fctx.fill();
+        ctx.beginPath();
+        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
       }
       requestAnimationFrame(animateRipples);
     }
     animateRipples();
-    
-    // CLOCK CODE
+
+    // =========================
+    //  CLOCK CODE
+    // =========================
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
