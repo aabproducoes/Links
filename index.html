@@ -16,7 +16,7 @@
       box-sizing: border-box;
     }
 
-    /* TEMA AZUL: Fundo radial */
+    /* TEMA AZUL: Fundo radial (a cor será substituída quando uma cor for selecionada) */
     body {
       display: flex;
       min-height: 100vh;
@@ -27,10 +27,7 @@
       position: relative;
     }
 
-    /* ------------------------------
-       ELEMENTOS NOVOS: FLUID SIMULATION & CLOCK
-       ------------------------------ */
-    /* Canvas para o efeito de onda */
+    /* FLUID SIMULATION CANVAS */
     #fluidCanvas {
       position: fixed;
       top: 0;
@@ -81,9 +78,7 @@
       transform: translate(2px, 2px);
     }
 
-    /* ------------------------------
-       EXISTENTE: SIDEBAR, BOTÕES, ETC.
-       ------------------------------ */
+    /* SIDEBAR */
     .sidebar {
       width: 250px;
       background: rgba(255,255,255,0.3);
@@ -96,8 +91,8 @@
       z-index: 1000;
       border-right: 2px dashed #53a0ff;
       box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+      padding-bottom: 20px;
     }
-
     .toggle-btn {
       position: absolute;
       top: 20px;
@@ -112,7 +107,6 @@
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 18px;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
-      overflow: visible;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -129,7 +123,6 @@
     .sidebar.closed .toggle-btn svg {
       transform: rotate(180deg);
     }
-
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -161,7 +154,6 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
-
     .sidebar.closed {
       width: 60px;
     }
@@ -181,7 +173,6 @@
       display: inline-block;
       color: #006aff;
     }
-
     .language-btn {
       display: inline-block;
       margin: 20px auto;
@@ -207,27 +198,27 @@
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
 
-    /* NEW: color picker container */
-    .color-picker-container {
-      margin: 10px auto 20px auto;
-      width: 80%;
-      text-align: center;
+    /* NEW: Color Grid Styles */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      padding: 10px;
     }
-    .color-picker-container label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 700;
-      color: #006aff;
-    }
-    .color-picker-container input[type="color"] {
-      cursor: pointer;
-      width: 100%;
+    .color-option {
+      width: 40px;
       height: 40px;
-      border: none;
-      padding: 0;
-      background: transparent;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      transition: transform 0.3s ease, border 0.3s ease;
+    }
+    .color-option:hover {
+      transform: scale(1.1);
+      border-color: #006aff;
     }
 
+    /* MAIN CONTENT */
     .content {
       flex: 1;
       padding: 20px;
@@ -253,7 +244,6 @@
       color: #0051b3;
       text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
     }
-
     a.main-btn {
       display: inline-block;
       background: #88c7ff;
@@ -275,7 +265,6 @@
     a.main-btn:active {
       transform: scale(0.98);
     }
-
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -351,6 +340,18 @@
         font-size: 14px;
       }
     }
+
+    /* Preview square for the animated swatch */
+    #colorPreview {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #fff;
+      border-radius: 4px;
+      z-index: 1500;
+    }
   </style>
 </head>
 <body>
@@ -377,14 +378,18 @@
 
     <button class="language-btn" id="languageBtn">Lang: EN</button>
 
-    <!-- NEW: Color picker to change background -->
-    <div class="color-picker-container">
-      <label for="bgColorPicker">Background Color:</label>
-      <input type="color" id="bgColorPicker" value="#a4d4ff" />
+    <!-- NEW: Preselected Color Grid -->
+    <div class="color-grid">
+      <div class="color-option" data-color="#d0f0ff" style="background-color: #d0f0ff;"></div>
+      <div class="color-option" data-color="#a4d4ff" style="background-color: #a4d4ff;"></div>
+      <div class="color-option" data-color="#ffcccb" style="background-color: #ffcccb;"></div>
+      <div class="color-option" data-color="#c0ffc0" style="background-color: #c0ffc0;"></div>
+      <div class="color-option" data-color="#ffffcc" style="background-color: #ffffcc;"></div>
+      <div class="color-option" data-color="#e0e0e0" style="background-color: #e0e0e0;"></div>
     </div>
   </div>
 
-  <!-- CONTEÚDO PRINCIPAL -->
+  <!-- MAIN CONTENT -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
     <div id="pageContent">
@@ -393,13 +398,14 @@
     </div>
   </div>
 
-  <!-- CLOCK com efeito de página dobrada -->
+  <!-- CLOCK -->
   <div id="clock"></div>
 
+  <!-- Preview container for animated swatch -->
+  <div id="colorPreview"></div>
+
   <script>
-    // =========================
-    //  REFERÊNCIAS E CONFIGURAÇÃO INICIAL
-    // =========================
+    // ======= ELEMENT REFERENCES =======
     const toggleBtn         = document.getElementById('toggleBtn');
     const sidebar           = document.getElementById('sidebar');
     const menuItems         = document.querySelectorAll('.menu li');
@@ -407,13 +413,10 @@
     const pageTitle         = document.getElementById('pageTitle');
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
+    const colorOptions      = document.querySelectorAll('.color-option');
+    const colorPreview      = document.getElementById('colorPreview');
 
-    // Color Picker for BG
-    const bgColorPicker     = document.getElementById('bgColorPicker');
-
-    // =========================
-    //  TRADUÇÕES
-    // =========================
+    // ======= TRANSLATIONS =======
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -454,13 +457,13 @@
     let currentLanguage = 'en';
     let currentPage     = 'profile';
 
-    // ========== SIDEBAR TOGGLE ==========
+    // ======= SIDEBAR TOGGLE =======
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
     });
 
-    // ========== MENU LATERAL ==========
+    // ======= MENU EVENT LISTENERS =======
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -470,7 +473,7 @@
       });
     });
 
-    // ========== BOTÃO DE IDIOMA ==========
+    // ======= LANGUAGE BUTTON =======
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
@@ -478,8 +481,6 @@
     function updateLanguageButtonLabel() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
-
-    // ========== ATUALIZA RÓTULOS DO MENU ==========
     function updateMenuLabels() {
       const dict = translations[currentLanguage];
       menuItems.forEach(item => {
@@ -493,7 +494,7 @@
       });
     }
 
-    // ========== KNOWLEDGE LIST (EN||PT) ==========
+    // ======= KNOWLEDGE LIST =======
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -518,7 +519,7 @@
       });
     }
 
-    // ========== CERTIFICADOS (Somente a primeira página) ==========
+    // ======= CERTIFICATES =======
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -571,7 +572,7 @@
       });
     }
 
-    // ========== UPDATE DE CONTEÚDO ==========
+    // ======= UPDATE CONTENT =======
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
@@ -634,25 +635,55 @@
       }
     }
 
-    // ========= COLOR PICKER EVENT =========
-    // This removes the radial gradient and applies a solid color instead.
-    // Feel free to adjust to keep a gradient if you prefer.
-    bgColorPicker.addEventListener('input', (e) => {
-      const color = e.target.value;
-      document.body.style.background = color;
+    // ======= COLOR SWATCH ANIMATION FUNCTION =======
+    function animateColorSwatch(swatch, target) {
+      // Get start and target positions
+      const startRect = swatch.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      
+      // Create a clone of the swatch
+      const clone = swatch.cloneNode(true);
+      clone.style.position = 'absolute';
+      clone.style.left = startRect.left + 'px';
+      clone.style.top = startRect.top + 'px';
+      clone.style.width = startRect.width + 'px';
+      clone.style.height = startRect.height + 'px';
+      clone.style.transition = 'all 0.5s ease-out';
+      clone.style.zIndex = '2000';
+      document.body.appendChild(clone);
+      
+      // Force reflow then animate to target
+      clone.getBoundingClientRect();
+      clone.style.left = targetRect.left + 'px';
+      clone.style.top = targetRect.top + 'px';
+      clone.style.width = targetRect.width + 'px';
+      clone.style.height = targetRect.height + 'px';
+      
+      // Remove clone after animation
+      clone.addEventListener('transitionend', () => {
+        clone.remove();
+      });
+    }
+
+    // ======= COLOR SWATCH SELECTION =======
+    colorOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const color = this.getAttribute('data-color');
+        // Update background color
+        document.body.style.background = color;
+        // Animate swatch to preview square
+        animateColorSwatch(this, colorPreview);
+      });
     });
 
-    // ========== INICIALIZAÇÃO ==========
+    // ======= INITIALIZE =======
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
 
-    // =========================
-    //  FLUID SIMULATION (RIPPLE EFFECT) CODE
-    // =========================
+    // ======= FLUID SIMULATION (Ripple Effect) =======
     const canvas = document.getElementById('fluidCanvas');
     const ctx = canvas.getContext('2d');
-
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -664,12 +695,10 @@
     function createRipple(x, y) {
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
     }
-
     document.addEventListener('mousemove', function(e) {
       if(e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
     });
-
     function animateRipples() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < ripples.length; i++) {
@@ -696,9 +725,7 @@
     }
     animateRipples();
 
-    // =========================
-    //  CLOCK CODE
-    // =========================
+    // ======= CLOCK =======
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
