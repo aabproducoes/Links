@@ -13,7 +13,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    /* Corpo e Fundo */
+    /* Corpo e fundo */
     body {
       display: flex;
       min-height: 100vh;
@@ -23,7 +23,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    /* Canvas para efeito de onda */
+    /* Canvas de efeito de onda */
     #fluidCanvas {
       position: fixed;
       top: 0;
@@ -105,10 +105,18 @@
       align-items: center;
       justify-content: center;
     }
-    .toggle-btn:hover { transform: scale(1.15); }
-    .toggle-btn:active { transform: scale(0.95); }
-    .toggle-btn svg { transition: transform 0.3s ease; }
-    .sidebar.closed .toggle-btn svg { transform: rotate(180deg); }
+    .toggle-btn:hover {
+      transform: scale(1.15);
+    }
+    .toggle-btn:active {
+      transform: scale(0.95);
+    }
+    .toggle-btn svg {
+      transition: transform 0.3s ease;
+    }
+    .sidebar.closed .toggle-btn svg {
+      transform: rotate(180deg);
+    }
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -140,7 +148,9 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
-    .sidebar.closed { width: 60px; }
+    .sidebar.closed {
+      width: 60px;
+    }
     .sidebar.closed .menu li {
       justify-content: center;
       padding: 15px 10px;
@@ -148,7 +158,9 @@
       margin: 5px;
       text-align: center;
     }
-    .sidebar.closed .menu li span { display: none; }
+    .sidebar.closed .menu li span {
+      display: none;
+    }
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
       font-size: 20px;
@@ -179,9 +191,27 @@
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
-    /* Removed the Color Grid (middle color section) */
-
-    /* Persistent Indicator on Right Side of Left Menu */
+    /* Color Grid Styles
+       REMOVED THE MIDDLE ROW. NOW 2 ROWS x 4 COLUMNS */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      padding: 10px;
+    }
+    .color-option {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      border-radius: 4px;
+      transition: transform 0.3s ease, border 0.3s ease;
+    }
+    .color-option:hover {
+      transform: scale(1.1);
+      border-color: #006aff;
+    }
+    /* Persistent indicator on the right side of the left menu */
     #colorIndicator {
       position: absolute;
       right: 5px;
@@ -193,7 +223,6 @@
       background-color: transparent;
       border: 2px solid #006aff;
       z-index: 1500;
-      cursor: pointer;
     }
     /* MAIN CONTENT */
     .content {
@@ -204,7 +233,9 @@
       position: relative;
       transition: background 0.3s ease;
     }
-    .content:hover { background: rgba(255,255,255,0.5); }
+    .content:hover {
+      background: rgba(255,255,255,0.5);
+    }
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
@@ -237,7 +268,9 @@
       transform: scale(1.05) translateY(-3px) rotate(1deg);
       box-shadow: 0 4px 10px rgba(75,148,230,0.4);
     }
-    a.main-btn:active { transform: scale(0.98); }
+    a.main-btn:active {
+      transform: scale(0.98);
+    }
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -278,34 +311,55 @@
         height: 100%;
         width: 250px;
       }
-      .sidebar.open { left: 0; }
+      .sidebar.open {
+        left: 0;
+      }
       .toggle-btn {
         position: fixed;
         top: 20px;
         left: 250px;
         z-index: 1100;
       }
-      .sidebar.closed .toggle-btn { left: 60px; }
-      .content { padding: 15px; }
+      .sidebar.closed .toggle-btn {
+        left: 60px;
+      }
+      .content {
+        padding: 15px;
+      }
     }
     @media (max-width: 480px) {
-      .toggle-btn { width: 40px; height: 40px; font-size: 16px; }
-      .menu li { font-size: 14px; padding: 12px 15px; margin: 3px 5px; }
-      .certificate-container iframe { height: 250px; }
-      .certificate-overlay { font-size: 14px; }
+      .toggle-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+      }
+      .menu li {
+        font-size: 14px;
+        padding: 12px 15px;
+        margin: 3px 5px;
+      }
+      .certificate-container iframe {
+        height: 250px;
+      }
+      .certificate-overlay {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
 <body>
   <!-- FLUID SIMULATION CANVAS -->
   <canvas id="fluidCanvas"></canvas>
+
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
+        <path fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
       </svg>
     </button>
+
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -313,10 +367,27 @@
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
+
     <button class="language-btn" id="languageBtn">Lang: EN</button>
-    <!-- Persistent Indicator on the Right Side -->
+
+    <!-- Preselected Color Grid (2 rows, 4 columns, no middle row) -->
+    <div class="color-grid">
+      <!-- Row 1 -->
+      <div class="color-option" data-color="#d0f0ff" style="background-color: #d0f0ff;"></div>
+      <div class="color-option" data-color="#a4d4ff" style="background-color: #a4d4ff;"></div>
+      <div class="color-option" data-color="#ffcccb" style="background-color: #ffcccb;"></div>
+      <div class="color-option" data-color="#c0ffc0" style="background-color: #c0ffc0;"></div>
+      <!-- Row 2 -->
+      <div class="color-option" data-color="#90ee90" style="background-color: #90ee90;"></div>
+      <div class="color-option" data-color="#ffb6c1" style="background-color: #ffb6c1;"></div>
+      <div class="color-option" data-color="#87cefa" style="background-color: #87cefa;"></div>
+      <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
+    </div>
+
+    <!-- Persistent indicator on the right side of the left menu -->
     <div id="colorIndicator"></div>
   </div>
+
   <!-- MAIN CONTENT -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
@@ -325,8 +396,10 @@
       <div id="knowledgeList"></div>
     </div>
   </div>
+
   <!-- CLOCK -->
   <div id="clock"></div>
+
   <script>
     // ======= ELEMENT REFERENCES =======
     const toggleBtn         = document.getElementById('toggleBtn');
@@ -336,15 +409,8 @@
     const pageTitle         = document.getElementById('pageTitle');
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
+    const colorOptions      = document.querySelectorAll('.color-option');
     const colorIndicator    = document.getElementById('colorIndicator');
-
-    // Preselected colors array and index
-    const preselectedColors = [
-      "#d0f0ff", "#a4d4ff", "#ffcccb", "#c0ffc0",
-      "#ffffcc", "#e0e0e0", "#f0e68c", "#dda0dd",
-      "#90ee90", "#ffb6c1", "#87cefa", "#ffc0cb"
-    ];
-    let currentColorIndex = 0;
 
     // ======= TRANSLATIONS =======
     const translations = {
@@ -416,11 +482,13 @@
         const labelKey = page + 'Title';
         const label = dict[labelKey] || page;
         const span = item.querySelector('span');
-        if (span) { span.textContent = label; }
+        if (span) {
+          span.textContent = label;
+        }
       });
     }
 
-    // ======= KNOWLEDGE LIST & CERTIFICATES (Unchanged) =======
+    // ======= KNOWLEDGE LIST =======
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -444,6 +512,8 @@
         knowledgeListDiv.appendChild(p);
       });
     }
+
+    // ======= CERTIFICATES =======
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -461,7 +531,9 @@
           const title    = line.substring(idx+sep.length).trim();
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
-          if(lastSlash !== -1) { pdfName = fullPath.substring(lastSlash+1); }
+          if(lastSlash !== -1) {
+            pdfName = fullPath.substring(lastSlash+1);
+          }
           const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
@@ -493,6 +565,7 @@
       });
     }
 
+    // ======= UPDATE CONTENT =======
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
@@ -555,61 +628,67 @@
       }
     }
 
-    // ======= INDICATOR CLICK: Cycle Colors with Horizontal Animation =======
-    colorIndicator.addEventListener('click', () => {
-      // Cycle to next color
-      currentColorIndex = (currentColorIndex + 1) % preselectedColors.length;
-      const newColor = preselectedColors[currentColorIndex];
+    // ======= ANIMATE SWATCH TO RIGHT SIDE OF LEFT MENU WITH LONGER DELAY =======
+    function animateColorSwatchToIndicator(swatch) {
+      // Get starting position of the swatch
+      const startRect = swatch.getBoundingClientRect();
+      // Get sidebar's bounding box
+      const sidebarRect = sidebar.getBoundingClientRect();
+      // Calculate target: move horizontally to the right edge (5px from the sidebar's right)
+      const targetLeft = sidebarRect.right - startRect.width - 5;
+      const targetTop = startRect.top;
 
-      // Get indicator's current bounding rectangle
-      const indicatorRect = colorIndicator.getBoundingClientRect();
-
-      // Define a starting point for the clone (e.g. 100px to the left of the indicator)
-      const startLeft = indicatorRect.left - 100;
-      const startTop = indicatorRect.top;
-
-      // Create a clone element based on the indicator
-      const clone = document.createElement('div');
+      // Create a clone of the swatch with the same background
+      const clone = swatch.cloneNode(true);
+      clone.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
       clone.style.position = 'absolute';
-      clone.style.left = startLeft + 'px';
-      clone.style.top = startTop + 'px';
-      clone.style.width = indicatorRect.width + 'px';
-      clone.style.height = indicatorRect.height + 'px';
-      clone.style.borderRadius = '4px';
-      clone.style.backgroundColor = newColor;
-      // Set a longer transition (1s) and a slight delay (0.2s)
-      clone.style.transition = 'left 1s ease-out 0.2s';
+      clone.style.left = startRect.left + 'px';
+      clone.style.top = startRect.top + 'px';
+      clone.style.width = startRect.width + 'px';
+      clone.style.height = startRect.height + 'px';
+      /* INCREASED TRANSITION DURATION HERE (1s) */
+      clone.style.transition = 'all 1s ease-out';
       clone.style.zIndex = '2000';
       document.body.appendChild(clone);
 
-      // Force reflow then animate clone horizontally to the indicator's left
+      // Force reflow, then animate horizontally
       clone.getBoundingClientRect();
-      clone.style.left = indicatorRect.left + 'px';
+      clone.style.left = targetLeft + 'px';
 
+      // When transition ends, update the persistent indicator and remove the clone
       clone.addEventListener('transitionend', () => {
-        // Once animation completes, update both the persistent indicator and the page background
-        colorIndicator.style.backgroundColor = newColor;
-        document.body.style.background = newColor;
+        colorIndicator.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
         clone.remove();
+      });
+    }
+
+    // ======= COLOR SWATCH SELECTION =======
+    colorOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        const color = this.getAttribute('data-color');
+        // Update the body's background immediately
+        document.body.style.background = color;
+        // Animate the swatch clone horizontally to the right side of the left menu
+        animateColorSwatchToIndicator(this);
       });
     });
 
     // ======= INITIALIZE =======
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
-      // Initialize the indicator with the first color
-      colorIndicator.style.backgroundColor = preselectedColors[currentColorIndex];
     });
 
     // ======= FLUID SIMULATION (Ripple Effect) =======
     const canvas = document.getElementById('fluidCanvas');
     const ctx = canvas.getContext('2d');
+
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+
     let ripples = [];
     function createRipple(x, y) {
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
@@ -618,12 +697,19 @@
       if(e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
     });
+
     function animateRipples() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       for (let i = 0; i < ripples.length; i++) {
         let ripple = ripples[i];
-        ripple.radius += 3;
-        ripple.opacity -= 0.007;
+        /* 
+           If you want to slow the ripple effect, 
+           lower radius increment or lower fade-out rate
+        */
+        ripple.radius += 3; 
+        ripple.opacity -= 0.007; 
+
         if (ripple.opacity <= 0) {
           ripples.splice(i, 1);
           i--;
