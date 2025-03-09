@@ -191,8 +191,7 @@
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
-    /* Color Grid Styles
-       REMOVED THE MIDDLE ROW. NOW 2 ROWS x 4 COLUMNS */
+    /* Color Grid Styles – 2 rows x 4 columns */
     .color-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -210,19 +209,6 @@
     .color-option:hover {
       transform: scale(1.1);
       border-color: #006aff;
-    }
-    /* Persistent indicator on the right side of the left menu */
-    #colorIndicator {
-      position: absolute;
-      right: 5px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 40px;
-      height: 40px;
-      border-radius: 4px;
-      background-color: transparent;
-      border: 2px solid #006aff;
-      z-index: 1500;
     }
     /* MAIN CONTENT */
     .content {
@@ -350,16 +336,13 @@
 <body>
   <!-- FLUID SIMULATION CANVAS -->
   <canvas id="fluidCanvas"></canvas>
-
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd"
-              d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
       </svg>
     </button>
-
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -367,10 +350,8 @@
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
-
     <button class="language-btn" id="languageBtn">Lang: EN</button>
-
-    <!-- Preselected Color Grid (2 rows, 4 columns, no middle row) -->
+    <!-- Preselected Color Grid (2 rows x 4 columns) -->
     <div class="color-grid">
       <!-- Row 1 -->
       <div class="color-option" data-color="#d0f0ff" style="background-color: #d0f0ff;"></div>
@@ -383,11 +364,7 @@
       <div class="color-option" data-color="#87cefa" style="background-color: #87cefa;"></div>
       <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
     </div>
-
-    <!-- Persistent indicator on the right side of the left menu -->
-    <div id="colorIndicator"></div>
   </div>
-
   <!-- MAIN CONTENT -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
@@ -396,21 +373,18 @@
       <div id="knowledgeList"></div>
     </div>
   </div>
-
   <!-- CLOCK -->
   <div id="clock"></div>
-
   <script>
     // ======= ELEMENT REFERENCES =======
-    const toggleBtn         = document.getElementById('toggleBtn');
-    const sidebar           = document.getElementById('sidebar');
-    const menuItems         = document.querySelectorAll('.menu li');
-    const languageBtn       = document.getElementById('languageBtn');
-    const pageTitle         = document.getElementById('pageTitle');
-    const knowledgeListDiv  = document.getElementById('knowledgeList');
-    const knowledgeListTitle= document.getElementById('knowledgeListTitle');
-    const colorOptions      = document.querySelectorAll('.color-option');
-    const colorIndicator    = document.getElementById('colorIndicator');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const menuItems = document.querySelectorAll('.menu li');
+    const languageBtn = document.getElementById('languageBtn');
+    const pageTitle = document.getElementById('pageTitle');
+    const knowledgeListDiv = document.getElementById('knowledgeList');
+    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
+    const colorOptions = document.querySelectorAll('.color-option');
 
     // ======= TRANSLATIONS =======
     const translations = {
@@ -449,15 +423,13 @@
     };
 
     let currentLanguage = 'en';
-    let currentPage     = 'profile';
+    let currentPage = 'profile';
 
-    // ======= SIDEBAR TOGGLE =======
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
     });
 
-    // ======= MENU EVENT LISTENERS =======
     menuItems.forEach(item => {
       item.addEventListener('click', () => {
         menuItems.forEach(i => i.classList.remove('active'));
@@ -467,7 +439,6 @@
       });
     });
 
-    // ======= LANGUAGE BUTTON =======
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateContent();
@@ -488,7 +459,6 @@
       });
     }
 
-    // ======= KNOWLEDGE LIST =======
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -513,11 +483,10 @@
       });
     }
 
-    // ======= CERTIFICATES =======
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
-        if(!r.ok) throw new Error(`HTTP Error: ${r.status}`);
+        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
@@ -525,19 +494,19 @@
           const idx = line.indexOf(sep);
           if (idx === -1) {
             console.warn('Formato inválido:', line);
-            return { fullPath:'', pdfName:'', title:'' };
+            return { fullPath: '', pdfName: '', title: '' };
           }
           const fullPath = line.substring(0, idx).trim();
-          const title    = line.substring(idx+sep.length).trim();
+          const title = line.substring(idx + sep.length).trim();
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
-          if(lastSlash !== -1) {
-            pdfName = fullPath.substring(lastSlash+1);
+          if (lastSlash !== -1) {
+            pdfName = fullPath.substring(lastSlash + 1);
           }
           const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
-      } catch(err) {
+      } catch (err) {
         console.error(err);
         return [];
       }
@@ -546,7 +515,7 @@
       knowledgeListDiv.innerHTML = '';
       const list = await fetchCertificatesList();
       list.forEach(cert => {
-        if(cert.fullPath){
+        if (cert.fullPath) {
           const container = document.createElement('div');
           container.classList.add('certificate-container');
           const iframe = document.createElement('iframe');
@@ -565,20 +534,19 @@
       });
     }
 
-    // ======= UPDATE CONTENT =======
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
       const dict = translations[currentLanguage];
       document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
-      const validPages = ['profile','social','projects','contact','certificates'];
+      const validPages = ['profile', 'social', 'projects', 'contact', 'certificates'];
       document.getElementById('pageContent').style.display =
         validPages.includes(currentPage) ? 'block' : 'none';
 
-      if(currentPage === 'profile'){
+      if (currentPage === 'profile') {
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
-      } else if(currentPage === 'social'){
+      } else if (currentPage === 'social') {
         knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
@@ -588,7 +556,7 @@
             <a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a>
           </div>
         `;
-      } else if(currentPage === 'projects'){
+      } else if (currentPage === 'projects') {
         knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
@@ -612,7 +580,7 @@
             </a>
           </div>
         `;
-      } else if(currentPage === 'contact'){
+      } else if (currentPage === 'contact') {
         knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
         knowledgeListDiv.innerHTML = `
           <div class="main-btn-container">
@@ -622,94 +590,46 @@
             <a href="mailto:aaugusto444@gmail.com" class="main-btn">Email</a>
           </div>
         `;
-      } else if(currentPage === 'certificates'){
+      } else if (currentPage === 'certificates') {
         knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
         populateCertificatesList();
       }
     }
 
-    // ======= ANIMATE SWATCH TO RIGHT SIDE OF LEFT MENU WITH LONGER DELAY =======
-    function animateColorSwatchToIndicator(swatch) {
-      // Get starting position of the swatch
-      const startRect = swatch.getBoundingClientRect();
-      // Get sidebar's bounding box
-      const sidebarRect = sidebar.getBoundingClientRect();
-      // Calculate target: move horizontally to the right edge (5px from the sidebar's right)
-      const targetLeft = sidebarRect.right - startRect.width - 5;
-      const targetTop = startRect.top;
-
-      // Create a clone of the swatch with the same background
-      const clone = swatch.cloneNode(true);
-      clone.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
-      clone.style.position = 'absolute';
-      clone.style.left = startRect.left + 'px';
-      clone.style.top = startRect.top + 'px';
-      clone.style.width = startRect.width + 'px';
-      clone.style.height = startRect.height + 'px';
-      /* INCREASED TRANSITION DURATION HERE (1s) */
-      clone.style.transition = 'all 1s ease-out';
-      clone.style.zIndex = '2000';
-      document.body.appendChild(clone);
-
-      // Force reflow, then animate horizontally
-      clone.getBoundingClientRect();
-      clone.style.left = targetLeft + 'px';
-
-      // When transition ends, update the persistent indicator and remove the clone
-      clone.addEventListener('transitionend', () => {
-        colorIndicator.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
-        clone.remove();
-      });
-    }
-
-    // ======= COLOR SWATCH SELECTION =======
+    // Remove all color animations; simply update background color on click.
     colorOptions.forEach(option => {
-      option.addEventListener('click', function() {
+      option.addEventListener('click', function () {
         const color = this.getAttribute('data-color');
-        // Update the body's background immediately
         document.body.style.background = color;
-        // Animate the swatch clone horizontally to the right side of the left menu
-        animateColorSwatchToIndicator(this);
       });
     });
 
-    // ======= INITIALIZE =======
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
     });
 
-    // ======= FLUID SIMULATION (Ripple Effect) =======
     const canvas = document.getElementById('fluidCanvas');
     const ctx = canvas.getContext('2d');
-
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
     let ripples = [];
     function createRipple(x, y) {
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
     }
-    document.addEventListener('mousemove', function(e) {
-      if(e.target.closest('.sidebar')) return;
+    document.addEventListener('mousemove', function (e) {
+      if (e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
     });
-
     function animateRipples() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
       for (let i = 0; i < ripples.length; i++) {
         let ripple = ripples[i];
-        /* 
-           If you want to slow the ripple effect, 
-           lower radius increment or lower fade-out rate
-        */
-        ripple.radius += 3; 
-        ripple.opacity -= 0.007; 
-
+        ripple.radius += 3;
+        ripple.opacity -= 0.007;
         if (ripple.opacity <= 0) {
           ripples.splice(i, 1);
           i--;
@@ -730,7 +650,6 @@
     }
     animateRipples();
 
-    // ======= CLOCK =======
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
