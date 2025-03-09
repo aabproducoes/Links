@@ -4,10 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tema Azul com Arrow Animado (SVG)</title>
-
   <!-- Fonte Comic Neue -->
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
-
   <style>
     /* RESET BÁSICO */
     * {
@@ -34,7 +32,7 @@
       height: 100%;
       z-index: -1;
     }
-    /* CLOCK com efeito de página dobrada no canto inferior direito */
+    /* CLOCK */
     #clock {
       position: fixed;
       bottom: 20px;
@@ -193,7 +191,7 @@
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
-    /* NEW: Color Grid Styles */
+    /* Color Grid Styles */
     .color-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -336,19 +334,15 @@
   </style>
 </head>
 <body>
-
   <!-- FLUID SIMULATION CANVAS -->
   <canvas id="fluidCanvas"></canvas>
-
   <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd"
-              d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
       </svg>
     </button>
-
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -356,10 +350,8 @@
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
-
     <button class="language-btn" id="languageBtn">Lang: EN</button>
-
-    <!-- NEW: Preselected Color Grid with More Colors -->
+    <!-- Preselected Color Grid -->
     <div class="color-grid">
       <div class="color-option" data-color="#d0f0ff" style="background-color: #d0f0ff;"></div>
       <div class="color-option" data-color="#a4d4ff" style="background-color: #a4d4ff;"></div>
@@ -375,7 +367,6 @@
       <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
     </div>
   </div>
-
   <!-- MAIN CONTENT -->
   <div class="content" id="content">
     <h1 id="pageTitle">Profile</h1>
@@ -384,10 +375,8 @@
       <div id="knowledgeList"></div>
     </div>
   </div>
-
   <!-- CLOCK -->
   <div id="clock"></div>
-
   <script>
     // ======= ELEMENT REFERENCES =======
     const toggleBtn         = document.getElementById('toggleBtn');
@@ -408,7 +397,6 @@
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
         knowledgeListTitle: 'Knowledge List',
-
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Blender Projects',
@@ -425,7 +413,6 @@
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
         knowledgeListTitle: 'Lista de Conhecimento',
-
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Projetos Blender',
@@ -541,7 +528,6 @@
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
           container.appendChild(iframe);
-
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -618,21 +604,24 @@
       }
     }
 
-    // ======= ANIMATE SWATCH TO MENU BORDER (Right Side of Sidebar) =======
+    // ======= ANIMATE SWATCH TO MENU BORDER =======
     function animateColorSwatchToMenuBorder(swatch) {
-      // Get swatch starting position and sidebar's position
+      // Get the swatch starting position
       const startRect = swatch.getBoundingClientRect();
-      const sidebarRect = sidebar.getBoundingClientRect();
-      // Animate to the right border inside the sidebar: 
-      // Place the clone near the right edge, vertically centered within the sidebar.
+      // Get the menu element and its position
+      const menu = document.querySelector('.menu');
+      if (!menu) return;
+      const menuRect = menu.getBoundingClientRect();
+      
+      // Set target coordinates: align to the right border of the menu (with a 5px padding)
       const targetRect = {
-        left: sidebarRect.right - startRect.width - 5,  // 5px padding from border
-        top: sidebarRect.top + (sidebarRect.height - startRect.height) / 2,
+        left: menuRect.right - startRect.width - 5,
+        top: menuRect.top + (menuRect.height - startRect.height) / 2,
         width: startRect.width,
         height: startRect.height
       };
-      
-      // Create clone and position it
+
+      // Create a clone of the swatch and position it at the starting position
       const clone = swatch.cloneNode(true);
       clone.style.position = 'absolute';
       clone.style.left = startRect.left + 'px';
@@ -642,14 +631,15 @@
       clone.style.transition = 'all 0.5s ease-out';
       clone.style.zIndex = '2000';
       document.body.appendChild(clone);
-      
-      // Force reflow then animate
+
+      // Force reflow then animate the clone to the target position
       clone.getBoundingClientRect();
       clone.style.left = targetRect.left + 'px';
       clone.style.top = targetRect.top + 'px';
       clone.style.width = targetRect.width + 'px';
       clone.style.height = targetRect.height + 'px';
-      
+
+      // Remove the clone once the transition is complete
       clone.addEventListener('transitionend', () => {
         clone.remove();
       });
@@ -661,7 +651,7 @@
         const color = this.getAttribute('data-color');
         // Update background color
         document.body.style.background = color;
-        // Animate the swatch to the right border of the menu (sidebar)
+        // Animate the swatch to the right border of the menu
         animateColorSwatchToMenuBorder(this);
       });
     });
@@ -680,7 +670,6 @@
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
-
     let ripples = [];
     function createRipple(x, y) {
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
