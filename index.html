@@ -210,6 +210,19 @@
       transform: scale(1.1);
       border-color: #006aff;
     }
+    /* Persistent Color Indicator inside the sidebar */
+    #colorIndicator {
+      position: absolute;
+      right: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      background-color: transparent;
+      border: 2px solid #006aff;
+      z-index: 1500;
+    }
     /* MAIN CONTENT */
     .content {
       flex: 1;
@@ -366,6 +379,8 @@
       <div class="color-option" data-color="#87cefa" style="background-color: #87cefa;"></div>
       <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
     </div>
+    <!-- Persistent color indicator (remains at the right border) -->
+    <div id="colorIndicator"></div>
   </div>
   <!-- MAIN CONTENT -->
   <div class="content" id="content">
@@ -387,6 +402,7 @@
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
     const colorOptions      = document.querySelectorAll('.color-option');
+    const colorIndicator    = document.getElementById('colorIndicator');
 
     // ======= TRANSLATIONS =======
     const translations = {
@@ -604,23 +620,15 @@
       }
     }
 
-    // ======= ANIMATE SWATCH TO RIGHT BORDER OF SIDEBAR =======
-    function animateColorSwatchToMenuBorder(swatch) {
+    // ======= ANIMATE SWATCH TO PERSISTENT INDICATOR =======
+    function animateColorSwatchToIndicator(swatch) {
       // Get starting position of swatch
       const startRect = swatch.getBoundingClientRect();
-      // Get sidebar bounding box to use its right border as target
-      const sidebarRect = sidebar.getBoundingClientRect();
-      // Set target: 5px inside the right edge of the sidebar and vertically centered within it
-      const targetRect = {
-        left: sidebarRect.right - startRect.width - 5,
-        top: sidebarRect.top + (sidebarRect.height - startRect.height) / 2,
-        width: startRect.width,
-        height: startRect.height
-      };
-
-      // Create a clone of the swatch
+      // Get the indicator's bounding box
+      const indicatorRect = colorIndicator.getBoundingClientRect();
+      
+      // Create a clone of the swatch and force its background color
       const clone = swatch.cloneNode(true);
-      // Ensure the clone's background is set (in case styles are computed)
       clone.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
       clone.style.position = 'absolute';
       clone.style.left = startRect.left + 'px';
@@ -630,16 +638,17 @@
       clone.style.transition = 'all 0.5s ease-out';
       clone.style.zIndex = '2000';
       document.body.appendChild(clone);
-
-      // Force reflow then animate the clone to the target position
+      
+      // Force reflow then animate the clone to the indicator's position
       clone.getBoundingClientRect();
-      clone.style.left = targetRect.left + 'px';
-      clone.style.top = targetRect.top + 'px';
-      clone.style.width = targetRect.width + 'px';
-      clone.style.height = targetRect.height + 'px';
-
-      // Remove the clone once the transition ends
+      clone.style.left = indicatorRect.left + 'px';
+      clone.style.top = indicatorRect.top + 'px';
+      clone.style.width = indicatorRect.width + 'px';
+      clone.style.height = indicatorRect.height + 'px';
+      
+      // When the transition ends, update the indicator's background and remove the clone
       clone.addEventListener('transitionend', () => {
+        colorIndicator.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
         clone.remove();
       });
     }
@@ -650,8 +659,8 @@
         const color = this.getAttribute('data-color');
         // Update background color immediately
         document.body.style.background = color;
-        // Animate the swatch clone to the right border of the sidebar
-        animateColorSwatchToMenuBorder(this);
+        // Animate the swatch clone to the persistent indicator
+        animateColorSwatchToIndicator(this);
       });
     });
 
