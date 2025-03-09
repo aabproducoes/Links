@@ -47,7 +47,7 @@
       right: 20px;
       width: 150px;
       height: 150px;
-      background: #fff; /* Cor da "página" */
+      background: #fff;
       border: 1px solid #ccc;
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
       color: #006aff;
@@ -55,28 +55,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      /* Necessário para posicionar os pseudo-elementos */
-      position: relative;
-      /* Transition para um efeito suave ao interagir */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    /* Ao passar o mouse sobre o clock, ele se expande e se desloca um pouco */
     #clock:hover {
       transform: scale(1.05) translateY(-5px);
       box-shadow: 0 5px 20px rgba(0,0,0,0.3);
     }
-    /* Pseudo-elemento que forma a parte dobrada (lado de trás da dobra) */
     #clock::before {
       content: "";
       position: absolute;
       bottom: 0;
       right: 0;
-      border-width: 0 40px 40px 0;  /* Tamanho da dobra (40px) */
+      border-width: 0 40px 40px 0;
       border-style: solid;
       border-color: transparent #f7f7f7 #f7f7f7 transparent;
     }
-    /* Pseudo-elemento para adicionar uma sutil sombra/linha de dobra */
     #clock::after {
       content: "";
       position: absolute;
@@ -116,14 +109,13 @@
       width: 50px;
       height: 50px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      /* A transição usa um cubic-bezier para dar um efeito de "bounce" */
       transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 18px;
       box-shadow: 0 0 10px rgba(83,160,255,0.3);
       overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .toggle-btn:hover {
       transform: scale(1.15);
@@ -215,6 +207,27 @@
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
 
+    /* NEW: color picker container */
+    .color-picker-container {
+      margin: 10px auto 20px auto;
+      width: 80%;
+      text-align: center;
+    }
+    .color-picker-container label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 700;
+      color: #006aff;
+    }
+    .color-picker-container input[type="color"] {
+      cursor: pointer;
+      width: 100%;
+      height: 40px;
+      border: none;
+      padding: 0;
+      background: transparent;
+    }
+
     .content {
       flex: 1;
       padding: 20px;
@@ -251,7 +264,6 @@
       text-decoration: none;
       font-weight: 700;
       margin: 10px;
-      /* Transição e transformação para dar mais "juice" */
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
       overflow: hidden;
@@ -350,9 +362,11 @@
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+        <path fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
       </svg>
     </button>
+
     <ul class="menu">
       <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
       <li data-page="social" data-icon="🔗"><span>Social</span></li>
@@ -360,7 +374,14 @@
       <li data-page="contact" data-icon="📞"><span>Contact</span></li>
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
+
     <button class="language-btn" id="languageBtn">Lang: EN</button>
+
+    <!-- NEW: Color picker to change background -->
+    <div class="color-picker-container">
+      <label for="bgColorPicker">Background Color:</label>
+      <input type="color" id="bgColorPicker" value="#a4d4ff" />
+    </div>
   </div>
 
   <!-- CONTEÚDO PRINCIPAL -->
@@ -386,6 +407,9 @@
     const pageTitle         = document.getElementById('pageTitle');
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
+
+    // Color Picker for BG
+    const bgColorPicker     = document.getElementById('bgColorPicker');
 
     // =========================
     //  TRADUÇÕES
@@ -533,6 +557,7 @@
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
           container.appendChild(iframe);
+
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
@@ -555,6 +580,7 @@
       const validPages = ['profile','social','projects','contact','certificates'];
       document.getElementById('pageContent').style.display =
         validPages.includes(currentPage) ? 'block' : 'none';
+
       if(currentPage === 'profile'){
         knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
         populateKnowledgeList();
@@ -608,6 +634,14 @@
       }
     }
 
+    // ========= COLOR PICKER EVENT =========
+    // This removes the radial gradient and applies a solid color instead.
+    // Feel free to adjust to keep a gradient if you prefer.
+    bgColorPicker.addEventListener('input', (e) => {
+      const color = e.target.value;
+      document.body.style.background = color;
+    });
+
     // ========== INICIALIZAÇÃO ==========
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
@@ -631,7 +665,6 @@
       ripples.push({ x, y, radius: 0, opacity: 0.5 });
     }
 
-    // Apenas cria a onda se o mouse não estiver sobre a sidebar.
     document.addEventListener('mousemove', function(e) {
       if(e.target.closest('.sidebar')) return;
       createRipple(e.clientX, e.clientY);
@@ -641,14 +674,17 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let i = 0; i < ripples.length; i++) {
         let ripple = ripples[i];
-        ripple.radius += 3;        // Increase speed for more dynamic growth
-        ripple.opacity -= 0.007;     // Slightly faster fade
+        ripple.radius += 3;
+        ripple.opacity -= 0.007;
         if (ripple.opacity <= 0) {
           ripples.splice(i, 1);
           i--;
           continue;
         }
-        let gradient = ctx.createRadialGradient(ripple.x, ripple.y, ripple.radius * 0.1, ripple.x, ripple.y, ripple.radius);
+        let gradient = ctx.createRadialGradient(
+          ripple.x, ripple.y, ripple.radius * 0.1,
+          ripple.x, ripple.y, ripple.radius
+        );
         gradient.addColorStop(0, `rgba(83,160,255,${ripple.opacity})`);
         gradient.addColorStop(1, `rgba(255,255,255,0)`);
         ctx.beginPath();
