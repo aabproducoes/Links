@@ -13,7 +13,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    /* Corpo e fundo */
+    /* Corpo e Fundo */
     body {
       display: flex;
       min-height: 100vh;
@@ -23,7 +23,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    /* Canvas de efeito de onda */
+    /* Canvas para efeito de onda */
     #fluidCanvas {
       position: fixed;
       top: 0;
@@ -179,26 +179,9 @@
       transform: scale(0.95);
       box-shadow: 0 3px 8px rgba(75,148,230,0.3);
     }
-    /* Color Grid Styles */
-    .color-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 5px;
-      padding: 10px;
-    }
-    .color-option {
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      border: 2px solid transparent;
-      border-radius: 4px;
-      transition: transform 0.3s ease, border 0.3s ease;
-    }
-    .color-option:hover {
-      transform: scale(1.1);
-      border-color: #006aff;
-    }
-    /* Persistent indicator on the right side of the left menu */
+    /* Removed the Color Grid (middle color section) */
+
+    /* Persistent Indicator on Right Side of Left Menu */
     #colorIndicator {
       position: absolute;
       right: 5px;
@@ -210,6 +193,7 @@
       background-color: transparent;
       border: 2px solid #006aff;
       z-index: 1500;
+      cursor: pointer;
     }
     /* MAIN CONTENT */
     .content {
@@ -330,22 +314,7 @@
       <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
-    <!-- Preselected Color Grid -->
-    <div class="color-grid">
-      <div class="color-option" data-color="#d0f0ff" style="background-color: #d0f0ff;"></div>
-      <div class="color-option" data-color="#a4d4ff" style="background-color: #a4d4ff;"></div>
-      <div class="color-option" data-color="#ffcccb" style="background-color: #ffcccb;"></div>
-      <div class="color-option" data-color="#c0ffc0" style="background-color: #c0ffc0;"></div>
-      <div class="color-option" data-color="#ffffcc" style="background-color: #ffffcc;"></div>
-      <div class="color-option" data-color="#e0e0e0" style="background-color: #e0e0e0;"></div>
-      <div class="color-option" data-color="#f0e68c" style="background-color: #f0e68c;"></div>
-      <div class="color-option" data-color="#dda0dd" style="background-color: #dda0dd;"></div>
-      <div class="color-option" data-color="#90ee90" style="background-color: #90ee90;"></div>
-      <div class="color-option" data-color="#ffb6c1" style="background-color: #ffb6c1;"></div>
-      <div class="color-option" data-color="#87cefa" style="background-color: #87cefa;"></div>
-      <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
-    </div>
-    <!-- Persistent indicator on the right side of the left menu -->
+    <!-- Persistent Indicator on the Right Side -->
     <div id="colorIndicator"></div>
   </div>
   <!-- MAIN CONTENT -->
@@ -367,8 +336,15 @@
     const pageTitle         = document.getElementById('pageTitle');
     const knowledgeListDiv  = document.getElementById('knowledgeList');
     const knowledgeListTitle= document.getElementById('knowledgeListTitle');
-    const colorOptions      = document.querySelectorAll('.color-option');
     const colorIndicator    = document.getElementById('colorIndicator');
+
+    // Preselected colors array and index
+    const preselectedColors = [
+      "#d0f0ff", "#a4d4ff", "#ffcccb", "#c0ffc0",
+      "#ffffcc", "#e0e0e0", "#f0e68c", "#dda0dd",
+      "#90ee90", "#ffb6c1", "#87cefa", "#ffc0cb"
+    ];
+    let currentColorIndex = 0;
 
     // ======= TRANSLATIONS =======
     const translations = {
@@ -440,13 +416,11 @@
         const labelKey = page + 'Title';
         const label = dict[labelKey] || page;
         const span = item.querySelector('span');
-        if (span) {
-          span.textContent = label;
-        }
+        if (span) { span.textContent = label; }
       });
     }
 
-    // ======= KNOWLEDGE LIST =======
+    // ======= KNOWLEDGE LIST & CERTIFICATES (Unchanged) =======
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -470,8 +444,6 @@
         knowledgeListDiv.appendChild(p);
       });
     }
-
-    // ======= CERTIFICATES =======
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -489,9 +461,7 @@
           const title    = line.substring(idx+sep.length).trim();
           let pdfName = fullPath;
           const lastSlash = fullPath.lastIndexOf('/');
-          if(lastSlash !== -1) {
-            pdfName = fullPath.substring(lastSlash+1);
-          }
+          if(lastSlash !== -1) { pdfName = fullPath.substring(lastSlash+1); }
           const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
@@ -523,7 +493,6 @@
       });
     }
 
-    // ======= UPDATE CONTENT =======
     function updateContent() {
       updateLanguageButtonLabel();
       updateMenuLabels();
@@ -586,53 +555,50 @@
       }
     }
 
-    // ======= ANIMATE SWATCH TO RIGHT SIDE OF LEFT MENU =======
-    function animateColorSwatchToIndicator(swatch) {
-      // Get starting position of the swatch
-      const startRect = swatch.getBoundingClientRect();
-      // Get sidebar's bounding box
-      const sidebarRect = sidebar.getBoundingClientRect();
-      // Calculate target: move horizontally to the right edge (5px from the sidebar's right) while keeping same top coordinate
-      const targetLeft = sidebarRect.right - startRect.width - 5;
-      const targetTop = startRect.top;
-      
-      // Create a clone of the swatch with the same background
-      const clone = swatch.cloneNode(true);
-      clone.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
+    // ======= INDICATOR CLICK: Cycle Colors with Horizontal Animation =======
+    colorIndicator.addEventListener('click', () => {
+      // Cycle to next color
+      currentColorIndex = (currentColorIndex + 1) % preselectedColors.length;
+      const newColor = preselectedColors[currentColorIndex];
+
+      // Get indicator's current bounding rectangle
+      const indicatorRect = colorIndicator.getBoundingClientRect();
+
+      // Define a starting point for the clone (e.g. 100px to the left of the indicator)
+      const startLeft = indicatorRect.left - 100;
+      const startTop = indicatorRect.top;
+
+      // Create a clone element based on the indicator
+      const clone = document.createElement('div');
       clone.style.position = 'absolute';
-      clone.style.left = startRect.left + 'px';
-      clone.style.top = startRect.top + 'px';
-      clone.style.width = startRect.width + 'px';
-      clone.style.height = startRect.height + 'px';
-      clone.style.transition = 'all 0.5s ease-out';
+      clone.style.left = startLeft + 'px';
+      clone.style.top = startTop + 'px';
+      clone.style.width = indicatorRect.width + 'px';
+      clone.style.height = indicatorRect.height + 'px';
+      clone.style.borderRadius = '4px';
+      clone.style.backgroundColor = newColor;
+      // Set a longer transition (1s) and a slight delay (0.2s)
+      clone.style.transition = 'left 1s ease-out 0.2s';
       clone.style.zIndex = '2000';
       document.body.appendChild(clone);
-      
-      // Force reflow, then animate horizontally
-      clone.getBoundingClientRect();
-      clone.style.left = targetLeft + 'px';
-      
-      // When the transition ends, update the persistent indicator and remove the clone
-      clone.addEventListener('transitionend', () => {
-        colorIndicator.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
-        clone.remove();
-      });
-    }
 
-    // ======= COLOR SWATCH SELECTION =======
-    colorOptions.forEach(option => {
-      option.addEventListener('click', function() {
-        const color = this.getAttribute('data-color');
-        // Update the body's background immediately
-        document.body.style.background = color;
-        // Animate the swatch clone to the right side of the left menu
-        animateColorSwatchToIndicator(this);
+      // Force reflow then animate clone horizontally to the indicator's left
+      clone.getBoundingClientRect();
+      clone.style.left = indicatorRect.left + 'px';
+
+      clone.addEventListener('transitionend', () => {
+        // Once animation completes, update both the persistent indicator and the page background
+        colorIndicator.style.backgroundColor = newColor;
+        document.body.style.background = newColor;
+        clone.remove();
       });
     });
 
     // ======= INITIALIZE =======
     document.addEventListener('DOMContentLoaded', () => {
       updateContent();
+      // Initialize the indicator with the first color
+      colorIndicator.style.backgroundColor = preselectedColors[currentColorIndex];
     });
 
     // ======= FLUID SIMULATION (Ripple Effect) =======
