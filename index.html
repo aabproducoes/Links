@@ -604,25 +604,24 @@
       }
     }
 
-    // ======= ANIMATE SWATCH TO MENU BORDER =======
+    // ======= ANIMATE SWATCH TO RIGHT BORDER OF SIDEBAR =======
     function animateColorSwatchToMenuBorder(swatch) {
-      // Get the swatch starting position
+      // Get starting position of swatch
       const startRect = swatch.getBoundingClientRect();
-      // Get the menu element and its position
-      const menu = document.querySelector('.menu');
-      if (!menu) return;
-      const menuRect = menu.getBoundingClientRect();
-      
-      // Set target coordinates: align to the right border of the menu (with a 5px padding)
+      // Get sidebar bounding box to use its right border as target
+      const sidebarRect = sidebar.getBoundingClientRect();
+      // Set target: 5px inside the right edge of the sidebar and vertically centered within it
       const targetRect = {
-        left: menuRect.right - startRect.width - 5,
-        top: menuRect.top + (menuRect.height - startRect.height) / 2,
+        left: sidebarRect.right - startRect.width - 5,
+        top: sidebarRect.top + (sidebarRect.height - startRect.height) / 2,
         width: startRect.width,
         height: startRect.height
       };
 
-      // Create a clone of the swatch and position it at the starting position
+      // Create a clone of the swatch
       const clone = swatch.cloneNode(true);
+      // Ensure the clone's background is set (in case styles are computed)
+      clone.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
       clone.style.position = 'absolute';
       clone.style.left = startRect.left + 'px';
       clone.style.top = startRect.top + 'px';
@@ -639,7 +638,7 @@
       clone.style.width = targetRect.width + 'px';
       clone.style.height = targetRect.height + 'px';
 
-      // Remove the clone once the transition is complete
+      // Remove the clone once the transition ends
       clone.addEventListener('transitionend', () => {
         clone.remove();
       });
@@ -649,9 +648,9 @@
     colorOptions.forEach(option => {
       option.addEventListener('click', function() {
         const color = this.getAttribute('data-color');
-        // Update background color
+        // Update background color immediately
         document.body.style.background = color;
-        // Animate the swatch to the right border of the menu
+        // Animate the swatch clone to the right border of the sidebar
         animateColorSwatchToMenuBorder(this);
       });
     });
