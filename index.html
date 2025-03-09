@@ -13,7 +13,7 @@
       padding: 0;
       box-sizing: border-box;
     }
-    /* TEMA AZUL: Fundo radial (a cor será substituída quando uma cor for selecionada) */
+    /* Corpo e fundo */
     body {
       display: flex;
       min-height: 100vh;
@@ -23,7 +23,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    /* FLUID SIMULATION CANVAS */
+    /* Canvas de efeito de onda */
     #fluidCanvas {
       position: fixed;
       top: 0;
@@ -105,18 +105,10 @@
       align-items: center;
       justify-content: center;
     }
-    .toggle-btn:hover {
-      transform: scale(1.15);
-    }
-    .toggle-btn:active {
-      transform: scale(0.95);
-    }
-    .toggle-btn svg {
-      transition: transform 0.3s ease;
-    }
-    .sidebar.closed .toggle-btn svg {
-      transform: rotate(180deg);
-    }
+    .toggle-btn:hover { transform: scale(1.15); }
+    .toggle-btn:active { transform: scale(0.95); }
+    .toggle-btn svg { transition: transform 0.3s ease; }
+    .sidebar.closed .toggle-btn svg { transform: rotate(180deg); }
     .menu {
       list-style: none;
       padding: 80px 0 0 0;
@@ -148,9 +140,7 @@
       transform: scale(1.05);
       box-shadow: 0 3px 8px rgba(0,0,0,0.2);
     }
-    .sidebar.closed {
-      width: 60px;
-    }
+    .sidebar.closed { width: 60px; }
     .sidebar.closed .menu li {
       justify-content: center;
       padding: 15px 10px;
@@ -158,9 +148,7 @@
       margin: 5px;
       text-align: center;
     }
-    .sidebar.closed .menu li span {
-      display: none;
-    }
+    .sidebar.closed .menu li span { display: none; }
     .sidebar.closed .menu li::before {
       content: attr(data-icon);
       font-size: 20px;
@@ -210,7 +198,7 @@
       transform: scale(1.1);
       border-color: #006aff;
     }
-    /* Persistent Color Indicator inside the sidebar */
+    /* Persistent indicator on the right side of the left menu */
     #colorIndicator {
       position: absolute;
       right: 5px;
@@ -232,9 +220,7 @@
       position: relative;
       transition: background 0.3s ease;
     }
-    .content:hover {
-      background: rgba(255,255,255,0.5);
-    }
+    .content:hover { background: rgba(255,255,255,0.5); }
     #pageTitle {
       font-size: 28px;
       margin-bottom: 10px;
@@ -267,9 +253,7 @@
       transform: scale(1.05) translateY(-3px) rotate(1deg);
       box-shadow: 0 4px 10px rgba(75,148,230,0.4);
     }
-    a.main-btn:active {
-      transform: scale(0.98);
-    }
+    a.main-btn:active { transform: scale(0.98); }
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
@@ -310,39 +294,21 @@
         height: 100%;
         width: 250px;
       }
-      .sidebar.open {
-        left: 0;
-      }
+      .sidebar.open { left: 0; }
       .toggle-btn {
         position: fixed;
         top: 20px;
         left: 250px;
         z-index: 1100;
       }
-      .sidebar.closed .toggle-btn {
-        left: 60px;
-      }
-      .content {
-        padding: 15px;
-      }
+      .sidebar.closed .toggle-btn { left: 60px; }
+      .content { padding: 15px; }
     }
     @media (max-width: 480px) {
-      .toggle-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-      .menu li {
-        font-size: 14px;
-        padding: 12px 15px;
-        margin: 3px 5px;
-      }
-      .certificate-container iframe {
-        height: 250px;
-      }
-      .certificate-overlay {
-        font-size: 14px;
-      }
+      .toggle-btn { width: 40px; height: 40px; font-size: 16px; }
+      .menu li { font-size: 14px; padding: 12px 15px; margin: 3px 5px; }
+      .certificate-container iframe { height: 250px; }
+      .certificate-overlay { font-size: 14px; }
     }
   </style>
 </head>
@@ -379,7 +345,7 @@
       <div class="color-option" data-color="#87cefa" style="background-color: #87cefa;"></div>
       <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
     </div>
-    <!-- Persistent color indicator (remains at the right border) -->
+    <!-- Persistent indicator on the right side of the left menu -->
     <div id="colorIndicator"></div>
   </div>
   <!-- MAIN CONTENT -->
@@ -620,14 +586,17 @@
       }
     }
 
-    // ======= ANIMATE SWATCH TO PERSISTENT INDICATOR =======
+    // ======= ANIMATE SWATCH TO RIGHT SIDE OF LEFT MENU =======
     function animateColorSwatchToIndicator(swatch) {
-      // Get starting position of swatch
+      // Get starting position of the swatch
       const startRect = swatch.getBoundingClientRect();
-      // Get the indicator's bounding box
-      const indicatorRect = colorIndicator.getBoundingClientRect();
+      // Get sidebar's bounding box
+      const sidebarRect = sidebar.getBoundingClientRect();
+      // Calculate target: move horizontally to the right edge (5px from the sidebar's right) while keeping same top coordinate
+      const targetLeft = sidebarRect.right - startRect.width - 5;
+      const targetTop = startRect.top;
       
-      // Create a clone of the swatch and force its background color
+      // Create a clone of the swatch with the same background
       const clone = swatch.cloneNode(true);
       clone.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
       clone.style.position = 'absolute';
@@ -639,14 +608,11 @@
       clone.style.zIndex = '2000';
       document.body.appendChild(clone);
       
-      // Force reflow then animate the clone to the indicator's position
+      // Force reflow, then animate horizontally
       clone.getBoundingClientRect();
-      clone.style.left = indicatorRect.left + 'px';
-      clone.style.top = indicatorRect.top + 'px';
-      clone.style.width = indicatorRect.width + 'px';
-      clone.style.height = indicatorRect.height + 'px';
+      clone.style.left = targetLeft + 'px';
       
-      // When the transition ends, update the indicator's background and remove the clone
+      // When the transition ends, update the persistent indicator and remove the clone
       clone.addEventListener('transitionend', () => {
         colorIndicator.style.backgroundColor = window.getComputedStyle(swatch).backgroundColor;
         clone.remove();
@@ -657,9 +623,9 @@
     colorOptions.forEach(option => {
       option.addEventListener('click', function() {
         const color = this.getAttribute('data-color');
-        // Update background color immediately
+        // Update the body's background immediately
         document.body.style.background = color;
-        // Animate the swatch clone to the persistent indicator
+        // Animate the swatch clone to the right side of the left menu
         animateColorSwatchToIndicator(this);
       });
     });
