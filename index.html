@@ -3,110 +3,84 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tema Azul com Arrow Animado (SVG)</title>
-  <!-- Fonte Comic Neue -->
-  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+  <title>One-Page - Tema Sério com Presets</title>
+  <!-- Fonte Roboto -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    /* RESET BÁSICO */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* ================================
+       RESET E VARIÁVEIS DE CORES
+    ================================ */
+    :root {
+      /* Tema "Default" (mais sóbrio) */
+      --bg-color: #2c2c2c;          /* Fundo cinza-escuro */
+      --gradient-dark: #1a1a1a;     /* Tom ainda mais escuro p/ gradiente */
+      --menu-color: #4caf50;        /* Verde escuro para bordas/indicadores */
+      --menu-color-alt: #607d8b;    /* Azul acinzentado para hovers e botões */
+      --primary-font: 'Roboto', sans-serif;
+
+      --section-bg: rgba(255,255,255,0.03);
+      --section-hover-bg: rgba(255,255,255,0.06);
+      --border-clock: #666;         /* Borda leve no relógio */
     }
-    /* Corpo e fundo */
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+      scroll-behavior: smooth; /* Rolagem suave */
+    }
     body {
-      display: flex;
       min-height: 100vh;
-      font-family: "Comic Neue", cursive, sans-serif;
-      background: radial-gradient(circle at center, #d0f0ff 0%, #a4d4ff 100%);
-      color: #333;
+      font-family: var(--primary-font), sans-serif;
+      background: linear-gradient(160deg, var(--bg-color) 0%, var(--gradient-dark) 100%);
+      color: #e0e0e0;
       overflow-x: hidden;
       position: relative;
     }
-    /* Canvas de efeito de onda */
-    #fluidCanvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-    /* CLOCK */
-    #clock {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 150px;
-      height: 150px;
-      background: #fff;
-      border: 1px solid #ccc;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      color: #006aff;
-      font-size: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    #clock:hover {
-      transform: scale(1.05) translateY(-5px);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    }
-    #clock::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      border-width: 0 40px 40px 0;
-      border-style: solid;
-      border-color: transparent #f7f7f7 #f7f7f7 transparent;
-    }
-    #clock::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      border-width: 0 40px 40px 0;
-      border-style: solid;
-      border-color: transparent rgba(0,0,0,0.1) rgba(0,0,0,0.1) transparent;
-      transform: translate(2px, 2px);
-    }
-    /* SIDEBAR */
+
+    /* ==================================
+       SIDEBAR - FORMATO, INDICADORES, ETC
+    =================================== */
     .sidebar {
-      width: 250px;
-      background: rgba(255,255,255,0.3);
+      width: 280px;
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(5px);
-      color: #000;
-      display: flex;
+      color: #fff;
+      display: flex; 
       flex-direction: column;
       transition: width 0.3s ease;
-      position: relative;
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      bottom: 0;
+      border-right: 2px solid var(--menu-color);
+      box-shadow: 4px 0 10px rgba(0,0,0,0.6);
       z-index: 1000;
-      border-right: 2px dashed #53a0ff;
-      box-shadow: 2px 0 8px rgba(0,0,0,0.2);
       padding-bottom: 20px;
     }
     .toggle-btn {
-      position: absolute;
-      top: 20px;
+      position: absolute; 
+      top: 20px; 
       right: -25px;
-      background: #53a0ff;
-      color: #fff;
+      background: var(--menu-color);
+      color: #000;
       border: none;
       border-radius: 50%;
-      width: 50px;
+      width: 50px; 
       height: 50px;
       cursor: pointer;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: transform 0.2s;
       font-size: 18px;
-      box-shadow: 0 0 10px rgba(83,160,255,0.3);
-      display: flex;
-      align-items: center;
+      box-shadow: 0 0 10px rgba(76,175,80,0.3);
+      display: flex; 
+      align-items: center; 
       justify-content: center;
+      z-index: 1100;
     }
     .toggle-btn:hover {
-      transform: scale(1.15);
+      transform: scale(1.1);
     }
     .toggle-btn:active {
       transform: scale(0.95);
@@ -114,66 +88,60 @@
     .toggle-btn svg {
       transition: transform 0.3s ease;
     }
-    .sidebar.closed .toggle-btn svg {
-      transform: rotate(180deg);
-    }
+
     .menu {
       list-style: none;
-      padding: 80px 0 0 0;
-      flex: 1;
-      display: flex;
+      padding: 100px 0 0;
+      flex: 1; 
+      display: flex; 
       flex-direction: column;
     }
+
+    /* Botões do menu - formato retangular/cantos arredondados */
     .menu li {
-      padding: 15px 20px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-      background: rgba(255,255,255,0.3);
-      color: #006aff;
+      position: relative;
+      margin: 8px 15px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    .menu li a {
+      display: block;
+      color: #212121;
+      text-decoration: none;
       font-size: 16px;
       font-weight: 700;
-      margin: 5px 10px;
-      border-radius: 4px;
-      border: 1px solid #53a0ff;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 15px 20px;
     }
     .menu li:hover {
-      background: rgba(255,255,255,0.6);
+      background: var(--menu-color-alt);
+      color: #000;
       transform: translateX(5px);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
     }
+
+    /* Item ativo - linha verde à esquerda */
     .menu li.active {
-      background: rgba(255,255,255,0.8);
-      color: #004e99;
-      transform: scale(1.05);
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+      background: #fff;
+      transform: translateX(10px);
+      border-left: 5px solid var(--menu-color);
+      box-shadow: 0 0 10px var(--menu-color);
     }
+
     .sidebar.closed {
-      width: 60px;
+      width: 70px;
     }
-    .sidebar.closed .menu li {
-      justify-content: center;
-      padding: 15px 10px;
-      font-size: 16px;
-      margin: 5px;
-      text-align: center;
-    }
-    .sidebar.closed .menu li span {
-      display: none;
-    }
-    .sidebar.closed .menu li::before {
-      content: attr(data-icon);
-      font-size: 20px;
-      display: inline-block;
-      color: #006aff;
-    }
+
+    /* BOTÕES DE LÍNGUA / TEMAS / GRID DE COR */
     .language-btn {
       display: inline-block;
       margin: 20px auto;
-      background: #88c7ff;
+      background: var(--menu-color-alt);
       color: #fff;
       padding: 12px 20px;
-      border: 3px solid #4b94e6;
+      border: 2px solid #455a64;
       border-radius: 50px;
       text-decoration: none;
       font-weight: 700;
@@ -183,23 +151,24 @@
       width: 80%;
     }
     .language-btn:hover {
-      background: #4b94e6;
+      background: var(--menu-color);
+      color: #000;
       transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(75,148,230,0.4);
+      box-shadow: 0 4px 10px rgba(76,175,80,0.4);
     }
     .language-btn:active {
       transform: scale(0.95);
-      box-shadow: 0 3px 8px rgba(75,148,230,0.3);
+      box-shadow: 0 3px 8px rgba(76,175,80,0.3);
     }
-    /* Color Grid Styles – 2 rows x 4 columns */
     .color-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 5px;
       padding: 10px;
+      margin-bottom: 10px;
     }
     .color-option {
-      width: 40px;
+      width: 40px; 
       height: 40px;
       cursor: pointer;
       border: 2px solid transparent;
@@ -208,61 +177,110 @@
     }
     .color-option:hover {
       transform: scale(1.1);
-      border-color: #006aff;
+      border-color: var(--menu-color);
     }
-    /* MAIN CONTENT */
-    .content {
-      flex: 1;
+
+    /* BLOCOS DE PRESETS DE TEMA */
+    .preset-themes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+      padding: 0 10px;
+      text-align: center;
+    }
+    .preset-themes h4 {
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: #fff;
+    }
+    .theme-btn {
+      margin: 2px 0;
+      width: 80%;
+      border: none;
+      border-radius: 30px;
+      padding: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .theme-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    /* ================================
+       MAIN CONTAINER & SECTIONS
+    ================================ */
+    .main-container {
+      margin-left: 280px;
       padding: 20px;
-      background: rgba(255,255,255,0.3);
-      backdrop-filter: blur(10px);
-      position: relative;
-      transition: background 0.3s ease;
+      transition: margin-left 0.3s ease;
     }
-    .content:hover {
-      background: rgba(255,255,255,0.5);
+    section {
+      padding: 40px 20px;
+      margin-bottom: 40px;
+      border-radius: 6px;
+      background: var(--section-bg);
+      backdrop-filter: blur(5px);
+      opacity: 0; /* Para animação fade in */
+      transform: translateY(30px);
+      transition: all 0.6s ease;
+      min-height: 60vh;
     }
-    #pageTitle {
-      font-size: 28px;
-      margin-bottom: 10px;
-      color: #006aff;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
-      border-bottom: 2px dashed #53a0ff;
-      padding-bottom: 5px;
+    section.in-view {
+      opacity: 1;
+      transform: translateY(0);
     }
-    #knowledgeListTitle {
-      font-size: 22px;
-      margin-bottom: 8px;
-      color: #0051b3;
-      text-shadow: 1px 1px 0 rgba(255,255,255,0.6);
+    section:hover {
+      background: var(--section-hover-bg);
     }
+
+    /* TÍTULOS E BOTÕES */
+    h1, h2 {
+      color: #cfd8dc;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      border-bottom: 2px solid var(--menu-color);
+      padding-bottom: 8px;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 20px;
+      color: #b0bec5;
+      font-weight: 500;
+    }
+
     a.main-btn {
       display: inline-block;
-      background: #88c7ff;
+      background: var(--menu-color-alt);
       color: #fff;
       padding: 12px 20px;
-      border: 3px solid #4b94e6;
-      border-radius: 50px;
+      border: 2px solid #607d8b;
+      border-radius: 30px;
       text-decoration: none;
-      font-weight: 700;
+      font-weight: 500;
       margin: 10px;
+      font-size: 16px;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      overflow: hidden;
     }
     a.main-btn:hover {
-      transform: scale(1.05) translateY(-3px) rotate(1deg);
-      box-shadow: 0 4px 10px rgba(75,148,230,0.4);
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(96,125,139,0.4);
     }
     a.main-btn:active {
       transform: scale(0.98);
     }
+
+    /* CERTIFICADOS */
     .certificate-container {
       position: relative;
       margin-bottom: 20px;
-      border: 1px dashed #80bfff;
-      border-radius: 5px;
-      background: rgba(255,255,255,0.4);
+      border: 1px dashed #607d8b;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.04);
       backdrop-filter: blur(5px);
       margin-top: 10px;
     }
@@ -273,120 +291,183 @@
     }
     .certificate-overlay {
       position: absolute;
-      top: 20px;
+      top: 20px; 
       left: 20px;
-      color: #006aff;
-      background-color: rgba(255,255,255,0.7);
+      color: #cfd8dc;
+      background-color: rgba(0,0,0,0.7);
       padding: 10px 15px;
-      border-radius: 5px;
-      font-size: 16px;
+      border-radius: 4px;
+      font-size: 14px;
       max-width: 90%;
       word-wrap: break-word;
-      border: 1px solid #80bfff;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      border: 1px solid #607d8b;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s;
     }
     .certificate-overlay:hover {
-      background-color: rgba(255,255,255,0.9);
-      color: #003c8f;
+      background-color: rgba(0,0,0,0.85);
+      color: #fff;
+      transform: scale(1.03);
     }
+
+    /* ================================
+       CLOCK
+    ================================ */
+    #clock {
+      position: fixed;
+      bottom: 20px; 
+      right: 20px;
+      width: 130px; 
+      height: 130px;
+      background: #222;
+      border: 1px solid var(--border-clock);
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      color: var(--menu-color);
+      font-size: 22px;
+      font-weight: 700;
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 8px;
+    }
+    #clock:hover {
+      transform: scale(1.05) translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+    }
+
+    /* ================================
+       RESPONSIVO
+    ================================ */
     @media (max-width: 768px) {
-      .sidebar {
-        position: fixed;
-        left: -250px;
-        top: 0;
-        height: 100%;
-        width: 250px;
-      }
-      .sidebar.open {
-        left: 0;
-      }
+      .sidebar { width: 200px; }
+      .main-container { margin-left: 200px; }
       .toggle-btn {
-        position: fixed;
-        top: 20px;
-        left: 250px;
-        z-index: 1100;
-      }
-      .sidebar.closed .toggle-btn {
-        left: 60px;
-      }
-      .content {
-        padding: 15px;
+        top: 15px; 
+        right: -20px;
       }
     }
     @media (max-width: 480px) {
       .toggle-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-      }
-      .menu li {
+        width: 40px; 
+        height: 40px; 
         font-size: 14px;
-        padding: 12px 15px;
-        margin: 3px 5px;
       }
-      .certificate-container iframe {
-        height: 250px;
+      .menu li a { 
+        font-size: 14px; 
+        padding: 12px; 
       }
-      .certificate-overlay {
-        font-size: 14px;
+      .certificate-container iframe { 
+        height: 250px; 
+      }
+      .certificate-overlay { 
+        font-size: 13px; 
+      }
+      #clock {
+        width: 100px;
+        height: 100px;
+        font-size: 18px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- FLUID SIMULATION CANVAS -->
-  <canvas id="fluidCanvas"></canvas>
-  <!-- SIDEBAR -->
+
+  <!-- SIDEBAR (fixa) -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z" />
+        <path fill-rule="evenodd"
+          d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
       </svg>
     </button>
-    <ul class="menu">
-      <li class="active" data-page="profile" data-icon="👤"><span>Profile</span></li>
-      <li data-page="social" data-icon="🔗"><span>Social</span></li>
-      <li data-page="projects" data-icon="🖥️"><span>Projects</span></li>
-      <li data-page="contact" data-icon="📞"><span>Contact</span></li>
-      <li data-page="certificates" data-icon="🎓"><span>Certificates</span></li>
+    <ul class="menu" id="menuList">
+      <!-- Cada link aponta para uma section via #id -->
+      <li class="active"><a href="#profile" data-locale="profileTitle">Profile</a></li>
+      <li><a href="#social" data-locale="socialTitle">Social</a></li>
+      <li><a href="#projects" data-locale="projectsTitle">Projects</a></li>
+      <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
+      <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
-    <!-- Preselected Color Grid (2 rows x 4 columns) -->
-    <div class="color-grid">
-      <!-- Row 1 -->
-      <div class="color-option" data-color="#d0f0ff" style="background-color: #d0f0ff;"></div>
-      <div class="color-option" data-color="#a4d4ff" style="background-color: #a4d4ff;"></div>
-      <div class="color-option" data-color="#ffcccb" style="background-color: #ffcccb;"></div>
-      <div class="color-option" data-color="#c0ffc0" style="background-color: #c0ffc0;"></div>
-      <!-- Row 2 -->
-      <div class="color-option" data-color="#90ee90" style="background-color: #90ee90;"></div>
-      <div class="color-option" data-color="#ffb6c1" style="background-color: #ffb6c1;"></div>
-      <div class="color-option" data-color="#87cefa" style="background-color: #87cefa;"></div>
-      <div class="color-option" data-color="#ffc0cb" style="background-color: #ffc0cb;"></div>
-    </div>
-  </div>
-  <!-- MAIN CONTENT -->
-  <div class="content" id="content">
-    <h1 id="pageTitle">Profile</h1>
-    <div id="pageContent">
-      <h2 id="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList"></div>
-    </div>
-  </div>
-  <!-- CLOCK -->
-  <div id="clock"></div>
-  <script>
-    // ======= ELEMENT REFERENCES =======
-    const toggleBtn = document.getElementById('toggleBtn');
-    const sidebar = document.getElementById('sidebar');
-    const menuItems = document.querySelectorAll('.menu li');
-    const languageBtn = document.getElementById('languageBtn');
-    const pageTitle = document.getElementById('pageTitle');
-    const knowledgeListDiv = document.getElementById('knowledgeList');
-    const knowledgeListTitle = document.getElementById('knowledgeListTitle');
-    const colorOptions = document.querySelectorAll('.color-option');
 
-    // ======= TRANSLATIONS =======
+    <!-- Preselected Color Grid -->
+    <div class="color-grid">
+      <!-- Row 1: cores para o gradiente -->
+      <div class="color-option" data-color="#2c2c2c" style="background-color: #2c2c2c;"></div>
+      <div class="color-option" data-color="#455a64" style="background-color: #455a64;"></div>
+      <div class="color-option" data-color="#1a1a1a" style="background-color: #1a1a1a;"></div>
+      <div class="color-option" data-color="#37474f" style="background-color: #37474f;"></div>
+      <!-- Row 2 -->
+      <div class="color-option" data-color="#222222" style="background-color: #222222;"></div>
+      <div class="color-option" data-color="#263238" style="background-color: #263238;"></div>
+      <div class="color-option" data-color="#3e2723" style="background-color: #3e2723;"></div>
+      <div class="color-option" data-color="#0d0d0d" style="background-color: #0d0d0d;"></div>
+    </div>
+
+    <!-- Preset Themes -->
+    <div class="preset-themes">
+      <h4>Theme Presets</h4>
+      <button class="theme-btn" style="background:#4caf50; color:#fff;" data-theme="default">Default</button>
+      <button class="theme-btn" style="background:#0d47a1; color:#fff;" data-theme="blue">Blue</button>
+      <button class="theme-btn" style="background:#757575; color:#fff;" data-theme="gray">Gray</button>
+      <button class="theme-btn" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER (para rolar verticalmente) -->
+  <div class="main-container" id="mainContainer">
+
+    <!-- SECTION: PROFILE -->
+    <section id="profile">
+      <h1 data-locale="profileTitle">Profile</h1>
+      <h2 data-locale="knowledgeListTitle">Knowledge List</h2>
+      <div id="knowledgeList"></div>
+    </section>
+
+    <!-- SECTION: SOCIAL -->
+    <section id="social">
+      <h1 data-locale="socialTitle">Social</h1>
+      <div>
+        <a href="https://www.facebook.com" target="_blank" class="main-btn" data-locale="facebook">Facebook</a>
+        <a href="https://www.instagram.com" target="_blank" class="main-btn" data-locale="instagram">Instagram</a>
+      </div>
+    </section>
+
+    <!-- SECTION: PROJECTS -->
+    <section id="projects">
+      <h1 data-locale="projectsTitle">Projects</h1>
+      <div>
+        <a href="blender-projects.html" target="_blank" class="main-btn" data-locale="blenderProjects">Blender Projects</a>
+        <a href="gimp-projects.html" target="_blank" class="main-btn" data-locale="gimpProjects">Gimp Projects</a>
+        <a href="blender-animations.html" target="_blank" class="main-btn" data-locale="blenderAnimations">Blender Animations</a>
+        <a href="animated-background.html" target="_blank" class="main-btn" data-locale="animatedBackground">Animated Background</a>
+      </div>
+    </section>
+
+    <!-- SECTION: CONTACT -->
+    <section id="contact">
+      <h1 data-locale="contactTitle">Contact</h1>
+      <div>
+        <a href="https://wa.me/54984181968" target="_blank" class="main-btn" data-locale="whatsapp">WhatsApp</a>
+        <a href="mailto:aaugusto444@gmail.com" class="main-btn" data-locale="email">Email</a>
+      </div>
+    </section>
+
+    <!-- SECTION: CERTIFICATES -->
+    <section id="certificates">
+      <h1 data-locale="certificatesTitle">Certificates</h1>
+      <div id="certificatesList"></div>
+    </section>
+
+  </div>
+
+  <!-- CLOCK FIXO -->
+  <div id="clock"></div>
+
+  <script>
+    // ========================
+    // TRANSLATIONS (EN / PT)
+    // ========================
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -401,8 +482,8 @@
         gimpProjects: 'Gimp Projects',
         blenderAnimations: 'Blender Animations',
         animatedBackground: 'Animated Background',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+        whatsapp: 'WhatsApp',
+        email: 'Email'
       },
       pt: {
         profileTitle: 'Perfil',
@@ -417,48 +498,87 @@
         gimpProjects: 'Projetos Gimp',
         blenderAnimations: 'Animações Blender',
         animatedBackground: 'Fundo Animado',
-        whatsapp: 'WhatsApp: <a href="https://wa.me/54984181968" target="_blank">54984181968</a>',
-        email: 'Email: <a href="mailto:aaugusto444@gmail.com" target="_blank">aaugusto444@gmail.com</a>'
+        whatsapp: 'WhatsApp',
+        email: 'Email'
+      }
+    };
+    let currentLanguage = 'en';
+
+    // ========================
+    // OBJETOS DE TEMA (PRESETS)
+    // ========================
+    const themePresets = {
+      default: {
+        '--bg-color': '#2c2c2c',
+        '--gradient-dark': '#1a1a1a',
+        '--menu-color': '#4caf50',
+        '--menu-color-alt': '#607d8b'
+      },
+      blue: {
+        '--bg-color': '#00193d',
+        '--gradient-dark': '#00061a',
+        '--menu-color': '#005eff',
+        '--menu-color-alt': '#00d4ff'
+      },
+      gray: {
+        '--bg-color': '#3a3a3a',
+        '--gradient-dark': '#1b1b1b',
+        '--menu-color': '#727272',
+        '--menu-color-alt': '#9e9e9e'
+      },
+      teal: {
+        '--bg-color': '#004f4f',
+        '--gradient-dark': '#002b2b',
+        '--menu-color': '#00b7b7',
+        '--menu-color-alt': '#007777'
       }
     };
 
-    let currentLanguage = 'en';
-    let currentPage = 'profile';
+    // ========================
+    // ELEMENTOS E EVENTOS
+    // ========================
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const languageBtn = document.getElementById('languageBtn');
+    const colorOptions = document.querySelectorAll('.color-option');
+    const themeBtns = document.querySelectorAll('.theme-btn');
 
+    // Botão que recolhe/expande a sidebar
     toggleBtn.addEventListener('click', () => {
       sidebar.classList.toggle('closed');
       sidebar.classList.toggle('open');
+      const svgIcon = toggleBtn.querySelector('svg');
+      if (sidebar.classList.contains('closed')) {
+        sidebar.style.width = '70px';
+        document.getElementById('mainContainer').style.marginLeft = '70px';
+        svgIcon.style.transform = 'rotate(180deg)';
+      } else {
+        sidebar.style.width = '280px';
+        document.getElementById('mainContainer').style.marginLeft = '280px';
+        svgIcon.style.transform = 'rotate(0deg)';
+      }
     });
 
-    menuItems.forEach(item => {
-      item.addEventListener('click', () => {
-        menuItems.forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
-        currentPage = item.getAttribute('data-page');
-        updateContent();
-      });
-    });
-
+    // Botão de idioma
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
-      updateContent();
+      updateLanguage();
     });
-    function updateLanguageButtonLabel() {
+
+    // Atualiza os textos para o idioma escolhido
+    function updateLanguage() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
-    }
-    function updateMenuLabels() {
-      const dict = translations[currentLanguage];
-      menuItems.forEach(item => {
-        const page = item.getAttribute('data-page');
-        const labelKey = page + 'Title';
-        const label = dict[labelKey] || page;
-        const span = item.querySelector('span');
-        if (span) {
-          span.textContent = label;
+      document.querySelectorAll('[data-locale]').forEach(el => {
+        const key = el.getAttribute('data-locale');
+        if (translations[currentLanguage][key]) {
+          el.textContent = translations[currentLanguage][key];
         }
       });
     }
 
+    // ========================
+    // CARREGAR LISTA DE CONHECIMENTOS
+    // ========================
     async function fetchKnowledgeList() {
       try {
         const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
@@ -471,18 +591,24 @@
       }
     }
     async function populateKnowledgeList() {
+      const knowledgeListDiv = document.getElementById('knowledgeList');
       knowledgeListDiv.innerHTML = '';
       const lines = await fetchKnowledgeList();
       lines.forEach(line => {
+        // Formato: EN || PT
         const parts = line.split('||').map(p => p.trim());
         const englishText = parts[0] || line;
         const portugueseText = parts[1] || line;
         const p = document.createElement('p');
+        p.style.marginBottom = '8px';
         p.textContent = (currentLanguage === 'en') ? englishText : portugueseText;
         knowledgeListDiv.appendChild(p);
       });
     }
 
+    // ========================
+    // CARREGAR LISTA DE CERTIFICADOS
+    // ========================
     async function fetchCertificatesList() {
       try {
         const r = await fetch('./Certificados/CertificadosList.txt');
@@ -512,144 +638,32 @@
       }
     }
     async function populateCertificatesList() {
-      knowledgeListDiv.innerHTML = '';
+      const container = document.getElementById('certificatesList');
+      container.innerHTML = '';
       const list = await fetchCertificatesList();
       list.forEach(cert => {
         if (cert.fullPath) {
-          const container = document.createElement('div');
-          container.classList.add('certificate-container');
+          const certDiv = document.createElement('div');
+          certDiv.classList.add('certificate-container');
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
-          container.appendChild(iframe);
+          certDiv.appendChild(iframe);
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
           overlay.innerHTML = `
             <div><strong>Título:</strong> ${cert.title}</div>
-            <div class="fullPath"><strong>Caminho:</strong> ${cert.fullPath}</div>
+            <div class="fullPath"><strong>Link:</strong> ${cert.fullPath}</div>
             <div class="pdfName"><strong>Nome PDF:</strong> ${cert.pdfName}</div>
           `;
-          container.appendChild(overlay);
-          knowledgeListDiv.appendChild(container);
+          certDiv.appendChild(overlay);
+          container.appendChild(certDiv);
         }
       });
     }
 
-    function updateContent() {
-      updateLanguageButtonLabel();
-      updateMenuLabels();
-      const dict = translations[currentLanguage];
-      document.getElementById('pageTitle').textContent = dict[`${currentPage}Title`] || '';
-      const validPages = ['profile', 'social', 'projects', 'contact', 'certificates'];
-      document.getElementById('pageContent').style.display =
-        validPages.includes(currentPage) ? 'block' : 'none';
-
-      if (currentPage === 'profile') {
-        knowledgeListTitle.textContent = dict['knowledgeListTitle'] || '';
-        populateKnowledgeList();
-      } else if (currentPage === 'social') {
-        knowledgeListTitle.textContent = dict['socialTitle'] || 'Social';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="https://www.facebook.com" target="_blank" class="main-btn">${dict.facebook}</a>
-          </div>
-          <div class="main-btn-container">
-            <a href="https://www.instagram.com" target="_blank" class="main-btn">${dict.instagram}</a>
-          </div>
-        `;
-      } else if (currentPage === 'projects') {
-        knowledgeListTitle.textContent = dict['projectsTitle'] || 'Projects';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="blender-projects.html" target="_blank" class="main-btn">
-              ${dict.blenderProjects}
-            </a>
-          </div>
-          <div class="main-btn-container">
-            <a href="gimp-projects.html" target="_blank" class="main-btn">
-              ${dict.gimpProjects}
-            </a>
-          </div>
-          <div class="main-btn-container">
-            <a href="blender-animations.html" target="_blank" class="main-btn">
-              ${dict.blenderAnimations}
-            </a>
-          </div>
-          <div class="main-btn-container">
-            <a href="animated-background.html" target="_blank" class="main-btn">
-              ${dict.animatedBackground}
-            </a>
-          </div>
-        `;
-      } else if (currentPage === 'contact') {
-        knowledgeListTitle.textContent = dict['contactTitle'] || 'Contact';
-        knowledgeListDiv.innerHTML = `
-          <div class="main-btn-container">
-            <a href="https://wa.me/54984181968" target="_blank" class="main-btn">WhatsApp</a>
-          </div>
-          <div class="main-btn-container">
-            <a href="mailto:aaugusto444@gmail.com" class="main-btn">Email</a>
-          </div>
-        `;
-      } else if (currentPage === 'certificates') {
-        knowledgeListTitle.textContent = dict['certificatesTitle'] || 'Certificates';
-        populateCertificatesList();
-      }
-    }
-
-    // Remove all color animations; simply update background color on click.
-    colorOptions.forEach(option => {
-      option.addEventListener('click', function () {
-        const color = this.getAttribute('data-color');
-        document.body.style.background = color;
-      });
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-      updateContent();
-    });
-
-    const canvas = document.getElementById('fluidCanvas');
-    const ctx = canvas.getContext('2d');
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    let ripples = [];
-    function createRipple(x, y) {
-      ripples.push({ x, y, radius: 0, opacity: 0.5 });
-    }
-    document.addEventListener('mousemove', function (e) {
-      if (e.target.closest('.sidebar')) return;
-      createRipple(e.clientX, e.clientY);
-    });
-    function animateRipples() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let i = 0; i < ripples.length; i++) {
-        let ripple = ripples[i];
-        ripple.radius += 3;
-        ripple.opacity -= 0.007;
-        if (ripple.opacity <= 0) {
-          ripples.splice(i, 1);
-          i--;
-          continue;
-        }
-        let gradient = ctx.createRadialGradient(
-          ripple.x, ripple.y, ripple.radius * 0.1,
-          ripple.x, ripple.y, ripple.radius
-        );
-        gradient.addColorStop(0, `rgba(83,160,255,${ripple.opacity})`);
-        gradient.addColorStop(1, `rgba(255,255,255,0)`);
-        ctx.beginPath();
-        ctx.arc(ripple.x, ripple.y, ripple.radius, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-      }
-      requestAnimationFrame(animateRipples);
-    }
-    animateRipples();
-
+    // ========================
+    // CLOCK
+    // ========================
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
@@ -662,6 +676,91 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // ========================
+    // MUDAR COR DE FUNDO (GRID)
+    // ========================
+    const gradientDark = getComputedStyle(document.documentElement)
+      .getPropertyValue('--gradient-dark').trim();
+    colorOptions.forEach(option => {
+      option.addEventListener('click', function () {
+        const color = this.getAttribute('data-color');
+        document.body.style.background = `linear-gradient(160deg, ${color} 0%, ${gradientDark} 100%)`;
+      });
+    });
+
+    // ========================
+    // APLICAR TEMA PRESET
+    // ========================
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const themeName = btn.getAttribute('data-theme');
+        const selectedTheme = themePresets[themeName];
+        if (!selectedTheme) return;
+        // Aplica cada variável do preset
+        for (let varName in selectedTheme) {
+          document.documentElement.style.setProperty(varName, selectedTheme[varName]);
+        }
+        // Ajusta o gradiente do body também
+        document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
+      });
+    });
+
+    // ========================
+    // SCROLL SPY + ANIMAÇÕES
+    // ========================
+    const sections = document.querySelectorAll('section');
+    const navLi = document.querySelectorAll('.menu li');
+    const observerOptions = {
+      threshold: 0.2 /* quando 20% da seção estiver visível */
+    };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+    sections.forEach(section => observer.observe(section));
+
+    function activateMenuOnScroll() {
+      let currentSection = '';
+
+      // Verifica se chegou ao final da página
+      if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 2) {
+        currentSection = sections[sections.length - 1].getAttribute('id');
+      } else {
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 120;
+          const sectionHeight = section.clientHeight;
+          if (
+            window.pageYOffset >= sectionTop &&
+            window.pageYOffset < (sectionTop + sectionHeight)
+          ) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+      }
+
+      navLi.forEach(li => {
+        li.classList.remove('active');
+        const a = li.querySelector('a');
+        if (a && a.getAttribute('href') === `#${currentSection}`) {
+          li.classList.add('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', activateMenuOnScroll);
+
+    // ========================
+    // INICIALIZAÇÃO
+    // ========================
+    document.addEventListener('DOMContentLoaded', async () => {
+      updateLanguage();
+      await populateKnowledgeList();
+      await populateCertificatesList();
+      activateMenuOnScroll(); // Marca o item correto no load
+    });
   </script>
 </body>
 </html>
