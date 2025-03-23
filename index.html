@@ -370,7 +370,6 @@
         height: 100px;
         font-size: 18px;
       }
-      /* Stack the knowledge list and Who Am I vertically on small screens */
       .knowledge-wrapper {
         flex-direction: column;
       }
@@ -492,6 +491,20 @@
   <div id="clock"></div>
 
   <script>
+    // ========================================================
+    //  Helper function to always fetch text as UTF-8
+    // ========================================================
+    async function fetchUTF8Text(url) {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error(`HTTP Error: ${resp.status}`);
+      }
+      // Force decode as UTF-8, in case server headers aren't set
+      const arrayBuffer = await resp.arrayBuffer();
+      const text = new TextDecoder('utf-8').decode(arrayBuffer);
+      return text;
+    }
+
     // ========================
     // TRANSLATIONS (EN / PT)
     // ========================
@@ -610,9 +623,7 @@
     // ========================
     async function fetchKnowledgeList() {
       try {
-        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
-        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
-        const text = await resp.text();
+        const text = await fetchUTF8Text('./KnowledgeList/KnowledgeList.txt');
         return text.split('\n').filter(line => line.trim() !== '');
       } catch (err) {
         console.error(err);
@@ -636,15 +647,13 @@
     }
 
     // ========================
-    // CARREGAR TEXTO "WHO AM I" (ADIÇÃO)
+    // CARREGAR TEXTO "WHO AM I"
     // ========================
     async function populateWhoImI() {
       const whoImIContainer = document.getElementById('whoImIContainer');
-      let filePath = `./translations/whoImI_${currentLanguage}.txt`;
+      const filePath = `./translations/whoImI_${currentLanguage}.txt`;
       try {
-        const resp = await fetch(filePath);
-        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
-        const text = await resp.text();
+        const text = await fetchUTF8Text(filePath);
         whoImIContainer.textContent = text;
       } catch (err) {
         console.error(err);
@@ -657,9 +666,7 @@
     // ========================
     async function fetchCertificatesList() {
       try {
-        const r = await fetch('./Certificados/CertificadosList.txt');
-        if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
-        const txt = await r.text();
+        const txt = await fetchUTF8Text('./Certificados/CertificadosList.txt');
         const lines = txt.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
           const sep = ' - ';
