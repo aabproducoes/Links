@@ -581,6 +581,7 @@
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateLanguage();
       populateWhoImIText();
+      populateKnowledgeList(); // Re-populate knowledge list in the correct language
     });
 
     // Atualiza os textos para o idioma escolhido
@@ -630,10 +631,11 @@
     // ========================
     async function fetchWhoImIText() {
       try {
-        const resp = await fetch(`./translations/whoImI_${currentLanguage}.json`);
+        // Adjusted path for JSON files in the same folder as KnowledgeList.txt
+        const resp = await fetch(`./KnowledgeList/whoImI_${currentLanguage}.json`);
         if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
         const data = await resp.json();
-        // Assumindo que o JSON tenha uma propriedade "text" contendo o conteúdo desejado
+        // Assuming that the JSON has a property "text" containing the content.
         return data.text;
       } catch (err) {
         console.error(err);
