@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>One-Page - Tema Sério com Presets</title>
+  <meta name="description" content="A single-page portfolio featuring profile, social links, projects, and certificates." />
   <!-- Fonte Roboto -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-    rel="stylesheet"
-  />
+  <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+  <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     /* ================================
        RESET E VARIÁVEIS DE CORES
@@ -96,7 +96,6 @@
       display: flex; 
       flex-direction: column;
     }
-
     /* Botões do menu - formato retangular/cantos arredondados */
     .menu li {
       position: relative;
@@ -121,7 +120,6 @@
       transform: translateX(5px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.4);
     }
-
     /* Item ativo - linha verde à esquerda */
     .menu li.active {
       background: #fff;
@@ -129,7 +127,6 @@
       border-left: 5px solid var(--menu-color);
       box-shadow: 0 0 10px var(--menu-color);
     }
-
     .sidebar.closed {
       width: 70px;
     }
@@ -368,6 +365,19 @@
         font-size: 18px;
       }
     }
+    
+    /* ================================
+       PROFILE CONTAINER (Knowledge List + WhoAmI)
+    ================================ */
+    #profileContainer {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    #knowledgeList, #whoImIText {
+      flex: 1;
+      min-width: 280px;
+    }
   </style>
 </head>
 <body>
@@ -380,7 +390,7 @@
           d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
       </svg>
     </button>
-    <ul class="menu" id="menuList">
+    <ul class="menu" id="menuList" role="navigation" aria-label="Sidebar Menu">
       <!-- Cada link aponta para uma section via #id -->
       <li class="active"><a href="#profile" data-locale="profileTitle">Profile</a></li>
       <li><a href="#social" data-locale="socialTitle">Social</a></li>
@@ -420,8 +430,15 @@
     <!-- SECTION: PROFILE -->
     <section id="profile">
       <h1 data-locale="profileTitle">Profile</h1>
-      <h2 data-locale="knowledgeListTitle">Knowledge List</h2>
-      <div id="knowledgeList"></div>
+      <div id="profileContainer">
+        <div id="knowledgeList">
+          <h2 data-locale="knowledgeListTitle">Knowledge List</h2>
+          <!-- Knowledge items will be populated here -->
+        </div>
+        <div id="whoImIText">
+          <!-- The "Who I Am" text (from JSON) will appear here -->
+        </div>
+      </div>
     </section>
 
     <!-- SECTION: SOCIAL -->
@@ -563,6 +580,7 @@
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateLanguage();
+      populateWhoImIText();
     });
 
     // Atualiza os textos para o idioma escolhido
@@ -592,7 +610,8 @@
     }
     async function populateKnowledgeList() {
       const knowledgeListDiv = document.getElementById('knowledgeList');
-      knowledgeListDiv.innerHTML = '';
+      // Clear previous content (if any)
+      knowledgeListDiv.innerHTML = `<h2 data-locale="knowledgeListTitle">${translations[currentLanguage].knowledgeListTitle}</h2>`;
       const lines = await fetchKnowledgeList();
       lines.forEach(line => {
         // Formato: EN || PT
@@ -604,6 +623,27 @@
         p.textContent = (currentLanguage === 'en') ? englishText : portugueseText;
         knowledgeListDiv.appendChild(p);
       });
+    }
+
+    // ========================
+    // CARREGAR TEXTO "WHO I AM" (via JSON)
+    // ========================
+    async function fetchWhoImIText() {
+      try {
+        const resp = await fetch(`./translations/whoImI_${currentLanguage}.json`);
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const data = await resp.json();
+        // Assumindo que o JSON tenha uma propriedade "text" contendo o conteúdo desejado
+        return data.text;
+      } catch (err) {
+        console.error(err);
+        return "Failed to load text.";
+      }
+    }
+    async function populateWhoImIText() {
+      const whoImITextDiv = document.getElementById('whoImIText');
+      const text = await fetchWhoImIText();
+      whoImITextDiv.innerHTML = text;
     }
 
     // ========================
@@ -759,6 +799,7 @@
       updateLanguage();
       await populateKnowledgeList();
       await populateCertificatesList();
+      await populateWhoImIText();
       activateMenuOnScroll(); // Marca o item correto no load
     });
   </script>
