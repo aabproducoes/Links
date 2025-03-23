@@ -370,6 +370,7 @@
         height: 100px;
         font-size: 18px;
       }
+      /* Stack the knowledge list and Who Am I vertically on small screens */
       .knowledge-wrapper {
         flex-direction: column;
       }
@@ -491,20 +492,6 @@
   <div id="clock"></div>
 
   <script>
-    // ========================================================
-    //  Helper function to always fetch text as UTF-8
-    // ========================================================
-    async function fetchUTF8Text(url) {
-      const resp = await fetch(url);
-      if (!resp.ok) {
-        throw new Error(`HTTP Error: ${resp.status}`);
-      }
-      // Force decode as UTF-8, in case server headers aren't set
-      const arrayBuffer = await resp.arrayBuffer();
-      const text = new TextDecoder('utf-8').decode(arrayBuffer);
-      return text;
-    }
-
     // ========================
     // TRANSLATIONS (EN / PT)
     // ========================
@@ -575,6 +562,22 @@
     };
 
     // ========================
+    // HELPER: Fetch a text file as UTF-8
+    // ========================
+    async function fetchTextFile(filePath) {
+      try {
+        const resp = await fetch(filePath);
+        if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
+        const buffer = await resp.arrayBuffer();
+        const decoder = new TextDecoder('utf-8');
+        return decoder.decode(buffer);
+      } catch (err) {
+        console.error(err);
+        return "";
+      }
+    }
+
+    // ========================
     // ELEMENTOS E EVENTOS
     // ========================
     const toggleBtn = document.getElementById('toggleBtn');
@@ -622,13 +625,8 @@
     // CARREGAR LISTA DE CONHECIMENTOS
     // ========================
     async function fetchKnowledgeList() {
-      try {
-        const text = await fetchUTF8Text('./KnowledgeList/KnowledgeList.txt');
-        return text.split('\n').filter(line => line.trim() !== '');
-      } catch (err) {
-        console.error(err);
-        return [];
-      }
+      const text = await fetchTextFile('./KnowledgeList/KnowledgeList.txt');
+      return text.split('\n').filter(line => line.trim() !== '');
     }
     async function populateKnowledgeList() {
       const knowledgeListDiv = document.getElementById('knowledgeList');
@@ -647,18 +645,13 @@
     }
 
     // ========================
-    // CARREGAR TEXTO "WHO AM I"
+    // CARREGAR TEXTO "WHO AM I" (ADIÇÃO)
     // ========================
     async function populateWhoImI() {
       const whoImIContainer = document.getElementById('whoImIContainer');
-      const filePath = `./translations/whoImI_${currentLanguage}.txt`;
-      try {
-        const text = await fetchUTF8Text(filePath);
-        whoImIContainer.textContent = text;
-      } catch (err) {
-        console.error(err);
-        whoImIContainer.textContent = "Content unavailable.";
-      }
+      let filePath = `./translations/whoImI_${currentLanguage}.txt`;
+      const text = await fetchTextFile(filePath);
+      whoImIContainer.textContent = text || "Content unavailable.";
     }
 
     // ========================
@@ -666,8 +659,8 @@
     // ========================
     async function fetchCertificatesList() {
       try {
-        const txt = await fetchUTF8Text('./Certificados/CertificadosList.txt');
-        const lines = txt.split('\n').filter(l => l.trim() !== '');
+        const r = await fetchTextFile('./Certificados/CertificadosList.txt');
+        const lines = r.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
