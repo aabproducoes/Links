@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>One-Page - Tema Sério com Presets</title>
   <meta name="description" content="A single-page portfolio featuring profile, social links, projects, and certificates." />
-  <!-- Fonte Roboto -->
+  <!-- Google Fonts (Roboto) -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+
   <style>
     /* ================================
        RESET E VARIÁVEIS DE CORES
@@ -361,10 +362,8 @@
         font-size: 18px;
       }
     }
-    
-    /* ================================
-       PROFILE CONTAINER (Knowledge List + WhoAmI)
-    ================================ */
+
+    /* PROFILE - Two columns (knowledge list + whoImI) */
     #profileContainer {
       display: flex;
       gap: 20px;
@@ -376,9 +375,9 @@
     }
   </style>
 </head>
-<body>
 
-  <!-- SIDEBAR (fixa) -->
+<body>
+  <!-- SIDEBAR -->
   <div class="sidebar" id="sidebar">
     <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -386,6 +385,7 @@
           d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
       </svg>
     </button>
+
     <ul class="menu" id="menuList" role="navigation" aria-label="Sidebar Menu">
       <li class="active"><a href="#profile" data-locale="profileTitle">Profile</a></li>
       <li><a href="#social" data-locale="socialTitle">Social</a></li>
@@ -393,10 +393,11 @@
       <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
       <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
     </ul>
+
     <button class="language-btn" id="languageBtn">Lang: EN</button>
 
-    <!-- Preselected Color Grid -->
     <div class="color-grid">
+      <!-- 8 example color squares -->
       <div class="color-option" data-color="#2c2c2c" style="background-color: #2c2c2c;"></div>
       <div class="color-option" data-color="#455a64" style="background-color: #455a64;"></div>
       <div class="color-option" data-color="#1a1a1a" style="background-color: #1a1a1a;"></div>
@@ -407,7 +408,6 @@
       <div class="color-option" data-color="#0d0d0d" style="background-color: #0d0d0d;"></div>
     </div>
 
-    <!-- Preset Themes -->
     <div class="preset-themes">
       <h4>Theme Presets</h4>
       <button class="theme-btn" style="background:#4caf50; color:#fff;" data-theme="default">Default</button>
@@ -424,12 +424,14 @@
     <section id="profile">
       <h1 data-locale="profileTitle">Profile</h1>
       <div id="profileContainer">
+        <!-- Left: knowledge list -->
         <div id="knowledgeList">
           <h2 data-locale="knowledgeListTitle">Knowledge List</h2>
-          <!-- Knowledge items will be populated here -->
+          <!-- Lines from KnowledgeList.txt appear here -->
         </div>
+        <!-- Right: "Who I Am" text -->
         <div id="whoImIText">
-          <!-- The "Who I Am" text (from .txt) will appear here -->
+          <!-- whoImI_en.txt or whoImI_pt.txt content appears here -->
         </div>
       </div>
     </section>
@@ -470,7 +472,7 @@
     </section>
   </div>
 
-  <!-- CLOCK FIXO -->
+  <!-- CLOCK -->
   <div id="clock"></div>
 
   <script>
@@ -514,7 +516,7 @@
     let currentLanguage = 'en';
 
     // ========================
-    // OBJETOS DE TEMA (PRESETS)
+    // THEME PRESETS
     // ========================
     const themePresets = {
       default: {
@@ -543,7 +545,9 @@
       }
     };
 
+    // ========================
     // SIDEBAR TOGGLE
+    // ========================
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     toggleBtn.addEventListener('click', () => {
@@ -561,15 +565,16 @@
       }
     });
 
+    // ========================
     // LANGUAGE TOGGLE
+    // ========================
     const languageBtn = document.getElementById('languageBtn');
     languageBtn.addEventListener('click', () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateLanguage();
-      populateWhoImIText();      // Re-populate "Who I Am" text
-      populateKnowledgeList();   // Re-populate knowledge list in the correct language
+      populateKnowledgeList();
+      populateWhoImIText();
     });
-
     function updateLanguage() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
       document.querySelectorAll('[data-locale]').forEach(el => {
@@ -585,7 +590,8 @@
     // ========================
     async function fetchKnowledgeList() {
       try {
-        const resp = await fetch('./KnowledgeList/KnowledgeList.txt');
+        // Because index.html is in Links/, we go one level up (..), then to KnowledgeList
+        const resp = await fetch('../KnowledgeList/KnowledgeList.txt');
         if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
         const text = await resp.text();
         return text.split('\n').filter(line => line.trim() !== '');
@@ -596,7 +602,6 @@
     }
     async function populateKnowledgeList() {
       const knowledgeListDiv = document.getElementById('knowledgeList');
-      // Reset header
       knowledgeListDiv.innerHTML = `<h2 data-locale="knowledgeListTitle">${translations[currentLanguage].knowledgeListTitle}</h2>`;
       
       const lines = await fetchKnowledgeList();
@@ -617,11 +622,11 @@
     // ========================
     async function fetchWhoImIText() {
       try {
-        // e.g. whoImI_en.txt or whoImI_pt.txt in the same "KnowledgeList" folder
-        const resp = await fetch(`./KnowledgeList/whoImI_${currentLanguage}.txt`);
+        // whoImI_en.txt or whoImI_pt.txt in KnowledgeList/ (one folder up from Links/)
+        const resp = await fetch(`../KnowledgeList/whoImI_${currentLanguage}.txt`);
         if (!resp.ok) throw new Error(`HTTP Error: ${resp.status}`);
         const text = await resp.text();
-        return text; // plain text
+        return text;
       } catch (err) {
         console.error(err);
         return "Failed to load text.";
@@ -638,7 +643,9 @@
     // ========================
     async function fetchCertificatesList() {
       try {
-        const r = await fetch('./Certificados/CertificadosList.txt');
+        // Similarly, if CertificadosList.txt is also in a folder up from "Links",
+        // you might do '../Certificados/CertificadosList.txt'
+        const r = await fetch('../Certificados/CertificadosList.txt');
         if (!r.ok) throw new Error(`HTTP Error: ${r.status}`);
         const txt = await r.text();
         const lines = txt.split('\n').filter(l => l.trim() !== '');
@@ -705,7 +712,7 @@
     updateClock();
 
     // ========================
-    // COR DE FUNDO (GRID)
+    // COLOR GRID
     // ========================
     const colorOptions = document.querySelectorAll('.color-option');
     const gradientDark = getComputedStyle(document.documentElement)
@@ -718,7 +725,7 @@
     });
 
     // ========================
-    // TEMA PRESET
+    // THEME PRESETS
     // ========================
     const themeBtns = document.querySelectorAll('.theme-btn');
     themeBtns.forEach(btn => {
@@ -750,6 +757,7 @@
 
     function activateMenuOnScroll() {
       let currentSection = '';
+      // If scrolled near bottom, highlight last section
       if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 2) {
         currentSection = sections[sections.length - 1].getAttribute('id');
       } else {
@@ -764,7 +772,7 @@
           }
         });
       }
-
+      // Update menu item .active
       navLi.forEach(li => {
         li.classList.remove('active');
         const a = li.querySelector('a');
@@ -776,13 +784,13 @@
     window.addEventListener('scroll', activateMenuOnScroll);
 
     // ========================
-    // INICIALIZAÇÃO
+    // ON DOM CONTENT LOADED
     // ========================
     document.addEventListener('DOMContentLoaded', async () => {
-      updateLanguage();
+      updateLanguage();          // Set initial language texts
       await populateKnowledgeList();
-      await populateCertificatesList();
       await populateWhoImIText();
+      await populateCertificatesList();
       activateMenuOnScroll();
     });
   </script>
