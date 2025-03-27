@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ASCII Rain Scene with Speed Control, Water Flow, Thunder & Big Trees</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #1a2b1a;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        /* Static ASCII scene (sky, small trees, ground) */
+        #scene {
+            font-family: monospace;
+            font-size: 16px;
+            color: #4CAF50;
+            white-space: pre;
+            line-height: 1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 1;
+        }
+        
+        /* Container for continuously spawned rain drops */
+        #rainContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        /* Thunder overlay */
+        #thunder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+        .flash {
+            animation: thunderFlash 0.3s ease-in-out;
+        }
+        @keyframes thunderFlash {
+            0% { opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; }
+        }
+        
+        /* Container for water flows on the ground */
+        #waterFlow {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            z-index: 4;
+        }
+        
+        /* Container for big trees */
+        #bigTreesContainer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+        
+        /* Individual rain drop styling */
+        .rain-drop {
+            position: absolute;
+            color: #87CEEB;
+            animation: fall linear forwards;
+            will-change: transform;
+        }
+        @keyframes fall {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(110vh); opacity: 0.5; }
+        }
+        
+        /* Water flow styling */
+        .water {
+            position: absolute;
+            font-family: monospace;
+            color: #4FC3F7;
+            animation: flow linear forwards;
+            white-space: pre;
+        }
+        @keyframes flow {
+            0% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0.5; transform: translateX(50px); }
+        }
+        
+        /* Hover effects for small trees, ground, and sky */
+        .tree:hover {
+            color: #8BC34A;
+            transform: scale(1.1);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .ground:hover {
+            color: #795548;
+            transition: all 0.2s ease;
+        }
+        .sky:hover {
+            color: #87CEEB;
+            transition: all 0.2s ease;
+        }
+        
+        /* Styling for big trees */
+        .big-tree {
+            position: absolute;
+            font-family: monospace;
+            font-size: 24px;
+            color: #4CAF50;
+            white-space: pre;
+            pointer-events: auto;
+            transition: transform 0.2s ease;
+        }
+        .big-tree:hover {
+            transform: scale(1.1);
+            color: #8BC34A;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="scene"></div>
+    <div id="rainContainer"></div>
+    <div id="thunder"></div>
+    <div id="waterFlow"></div>
+    <div id="bigTreesContainer"></div>
+
+    <script>
+        // Global multiplier to adjust rain speed; lower value = faster rain, higher value = slower rain.
+        let rainSpeedMultiplier = 1; // Default speed
+        
+        // Multi-line ASCII art for a big tree
+        const bigTreeArt = 
+`   /\\  
+  /  \\ 
+ /____\\
+   ||`;
+
+        // Generate the static ASCII scene (sky, small trees, ground)
+        function generateScene() {
+            const width = Math.floor(window.innerWidth / 8);
+            const height = Math.floor(window.innerHeight / 16);
+            let scene = '';
+            // Sky with stars (rain is handled separately)
+            for (let i = 0; i < height / 3; i++) {
+                let row = '';
+                for (let j = 0; j < width; j++) {
+                    row += (Math.random() > 0.98) ? `<span class="sky">*</span>` : `<span class="sky"> </span>`;
+                }
+                scene += row + '\n';
+            }
+            // Small trees in the scene
+            for (let i = 0; i < height / 2; i++) {
+                let row = '';
+                for (let j = 0; j < width; j++) {
+                    row += (Math.random() > 0.6) ? `<span class="tree">${getTreeChar()}</span>` : `<span class="tree"> </span>`;
+                }
+                scene += row + '\n';
+            }
+            // Ground with static splashes for effect
+            for (let i = 0; i < height / 6; i++) {
+                let row = '';
+                for (let j = 0; j < width; j++) {
+                    row += (Math.random() > 0.9) ? `<span class="ground">.</span>` : `<span class="ground">${getGroundChar()}</span>`;
+                }
+                scene += row + '\n';
+            }
+            document.getElementById('scene').innerHTML = scene;
+        }
+        
+        function getTreeChar() {
+            const treeChars = ['^', 'A', 'T', 'Y', '/\\', '||'];
+            return treeChars[Math.floor(Math.random() * treeChars.length)];
+        }
+        
+        function getGroundChar() {
+            const groundChars = ['~', '=', '-', '_', '.'];
+            return groundChars[Math.floor(Math.random() * groundChars.length)];
+        }
+        
+        // Generate big trees as multi-line ASCII art and position them near the bottom.
+        function generateBigTrees() {
+            const container = document.getElementById('bigTreesContainer');
+            container.innerHTML = ''; // Clear previous trees
+            const numTrees = 3; // Number of big trees to display
+            for (let i = 0; i < numTrees; i++) {
+                const tree = document.createElement('div');
+                tree.className = 'big-tree';
+                tree.innerText = bigTreeArt;
+                // Random horizontal position with some margin to prevent overflow
+                const xPos = Math.random() * (window.innerWidth - 100);
+                tree.style.left = xPos + 'px';
+                tree.style.bottom = '0px';
+                container.appendChild(tree);
+            }
+        }
+        
+        // Generate the scene and big trees on load and on resize
+        window.onload = () => {
+            generateScene();
+            generateBigTrees();
+        };
+        window.onresize = () => {
+            generateScene();
+            generateBigTrees();
+        };
+        
+        // Continuous rain effect: Spawn a new rain drop at random horizontal positions.
+        function spawnRainDrop() {
+            const drop = document.createElement('span');
+            drop.className = 'rain-drop';
+            drop.innerText = '.';
+            // Set a random horizontal position
+            const xPos = Math.random() * window.innerWidth;
+            drop.style.left = xPos + 'px';
+            // Randomize base duration (between 1500ms and 3000ms) then adjust with speed multiplier
+            const baseDuration = 1500 + Math.random() * 1500;
+            const duration = baseDuration * rainSpeedMultiplier;
+            drop.style.animationDuration = duration + 'ms';
+            document.getElementById('rainContainer').appendChild(drop);
+            // When the drop "hits" the floor, remove it and spawn a water flow effect.
+            setTimeout(() => {
+                drop.remove();
+                spawnWaterFlow(xPos);
+            }, duration);
+        }
+        // Spawn rain drops frequently (every 50ms)
+        setInterval(spawnRainDrop, 50);
+        
+        // Water flow effect: Spawn a water splash on the ground that flows horizontally.
+        function spawnWaterFlow(xPos) {
+            const water = document.createElement('span');
+            water.className = 'water';
+            water.innerText = '~';
+            water.style.left = xPos + 'px';
+            water.style.bottom = '0px';
+            // Randomize flow animation duration (between 2000ms and 3000ms)
+            const duration = 2000 + Math.random() * 1000;
+            water.style.animationDuration = duration + 'ms';
+            document.getElementById('waterFlow').appendChild(water);
+            // Remove water element after animation finishes.
+            setTimeout(() => {
+                water.remove();
+            }, duration);
+        }
+        
+        // Thunder effect: Flash a white overlay briefly.
+        function triggerThunder() {
+            const thunder = document.getElementById('thunder');
+            thunder.classList.add('flash');
+            setTimeout(() => {
+                thunder.classList.remove('flash');
+            }, 300);
+        }
+        // Randomly trigger thunder flashes every second (adjust probability as desired)
+        setInterval(() => {
+            if (Math.random() > 0.97) {
+                triggerThunder();
+            }
+        }, 1000);
+        
+        // Control rain speed using the mouse wheel.
+        document.addEventListener('wheel', (e) => {
+            // Scroll up (deltaY negative) to speed up: decrease multiplier (min 0.5)
+            if (e.deltaY < 0) {
+                rainSpeedMultiplier = Math.max(0.5, rainSpeedMultiplier - 0.1);
+            } else { // Scroll down to slow down: increase multiplier (max 2)
+                rainSpeedMultiplier = Math.min(2, rainSpeedMultiplier + 0.1);
+            }
+            console.log("Rain speed multiplier:", rainSpeedMultiplier);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>3x3 Phone Unlock Pattern (Allow Repeats)</title>
+  <style>
+    body {
+      margin: 30px;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pattern-lock-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin-bottom: 20px;
+    }
+
+    /* The 3x3 grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 1px solid #ccc;
+      user-select: none;
+    }
+    
+    /* We'll use an absolutely positioned SVG to draw the lines on top */
+    #pattern-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 300px;
+      pointer-events: none; /* So the mouse can pass through to the cells */
+    }
+
+    /* Output area */
+    #pattern-output {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>3x3 Pattern Lock (Repeats Allowed)</h1>
+
+<div class="pattern-lock-container">
+  <!-- SVG for lines -->
+  <svg id="pattern-svg"></svg>
+  
+  <!-- The grid of cells -->
+  <div class="grid">
+    <!-- You can randomize these if desired. This example uses 1-9. -->
+    <div class="cell" data-num="1">1</div>
+    <div class="cell" data-num="2">2</div>
+    <div class="cell" data-num="3">3</div>
+    <div class="cell" data-num="4">4</div>
+    <div class="cell" data-num="5">5</div>
+    <div class="cell" data-num="6">6</div>
+    <div class="cell" data-num="7">7</div>
+    <div class="cell" data-num="8">8</div>
+    <div class="cell" data-num="9">9</div>
+  </div>
+</div>
+
+<div id="pattern-output">Pattern: </div>
+
+<script>
+  // We will track:
+  // 1) Is the mouse currently pressed?
+  // 2) The sequence of visited cells (and their coordinates).
+  // 3) How many times each cell has been visited (for color changes).
+  // 4) Lines to draw.
+
+  const grid = document.querySelector('.grid');
+  const cells = document.querySelectorAll('.cell');
+  const svg = document.getElementById('pattern-svg');
+  const output = document.getElementById('pattern-output');
+
+  let isMouseDown = false;
+  let visited = [];        // Store { cell: element, x: number, y: number }
+  let visitedCount = {};   // Key: cell's data-num, Value: number of visits
+
+  // Helper: get center coordinates of a cell
+  function getCenterCoordinates(cell) {
+    const rect = cell.getBoundingClientRect();
+    const containerRect = grid.getBoundingClientRect();
+    return {
+      x: rect.left - containerRect.left + rect.width / 2,
+      y: rect.top - containerRect.top + rect.height / 2
+    };
+  }
+
+  // Start the pattern
+  function startPattern(e) {
+    e.preventDefault();
+    isMouseDown = true;
+    visited = [];
+    visitedCount = {};
+    clearSVG();
+
+    // If the user started directly on a cell
+    const cell = e.target.closest('.cell');
+    if (cell) {
+      addToPattern(cell);
+    }
+  }
+
+  // Continue the pattern
+  function movePattern(e) {
+    if (!isMouseDown) return;
+    e.preventDefault();
+    
+    // Identify which cell we're over
+    const cell = document.elementFromPoint(e.clientX, e.clientY)?.closest('.cell');
+    if (!cell) return;
+
+    // Check if it's different from our *immediate* last visited cell
+    const last = visited[visited.length - 1];
+    if (!last || last.cell !== cell) {
+      // Draw line from the last cell to the new cell (if we do have a last cell)
+      if (last) {
+        drawConnection(last.cell, cell);
+      }
+      addToPattern(cell);
+    }
+  }
+
+  // End the pattern
+  function endPattern(e) {
+    isMouseDown = false;
+    displayPattern();
+  }
+
+  // Add the current cell to visited
+  function addToPattern(cell) {
+    const center = getCenterCoordinates(cell);
+    visited.push({ cell: cell, x: center.x, y: center.y });
+    
+    const num = cell.dataset.num;
+    visitedCount[num] = (visitedCount[num] || 0) + 1;
+  }
+
+  // Draw line between two cells
+  function drawConnection(cellA, cellB) {
+    const { x: x1, y: y1 } = getCenterCoordinates(cellA);
+    const { x: x2, y: y2 } = getCenterCoordinates(cellB);
+
+    // Decide color: if the new cell has been visited before, line = red; else black.
+    const numB = cellB.dataset.num;
+    let lineColor = visitedCount[numB] > 0 ? 'red' : 'black';
+    // (It will be > 0 if we've visited it *before* drawing this new line.)
+
+    drawLine(x1, y1, x2, y2, lineColor);
+  }
+
+  // Actually draw the line on the SVG
+  function drawLine(x1, y1, x2, y2, color) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1', x1);
+    line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2);
+    line.setAttribute('y2', y2);
+    line.setAttribute('stroke', color);
+    line.setAttribute('stroke-width', '2');
+    svg.appendChild(line);
+  }
+
+  // Clear the SVG lines
+  function clearSVG() {
+    while (svg.firstChild) {
+      svg.removeChild(svg.firstChild);
+    }
+  }
+
+  // Show pattern in the output
+  function displayPattern() {
+    const numbers = visited.map(item => item.cell.dataset.num).join('');
+    output.textContent = 'Pattern: ' + numbers;
+  }
+
+  // Mouse events
+  grid.addEventListener('mousedown', startPattern);
+  grid.addEventListener('mousemove', movePattern);
+  document.addEventListener('mouseup', endPattern);
+
+  // Touch events for mobile
+  grid.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    const targetCell = document.elementFromPoint(touch.clientX, touch.clientY)?.closest('.cell');
+    if (targetCell) {
+      startPattern({ target: targetCell, preventDefault: () => {} });
+    }
+  }, { passive: false });
+
+  grid.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    movePattern({
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+      preventDefault: () => {}
+    });
+  }, { passive: false });
+
+  grid.addEventListener('touchend', endPattern, { passive: false });
+</script>
+</body>
+</html>

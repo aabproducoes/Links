@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Polygon Tower Defense - Level Up Edition</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background: #333;
+      color: #eee;
+    }
+    #gameContainer {
+      position: relative;
+      width: 800px;
+      height: 600px;
+      margin: 20px auto;
+      border: 2px solid #555;
+      background: #222;
+    }
+    /* Canvas for the game area */
+    #gameCanvas {
+      background: #111;
+      display: block;
+      width: 800px;
+      height: 600px;
+    }
+    /* In-game GUI overlay */
+    #guiOverlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 4px;
+      width: 100%;
+      color: #fff;
+      pointer-events: none;
+      z-index: 1000; /* Under main menu */
+    }
+    #guiOverlay .stats, #guiOverlay .shortcuts {
+      pointer-events: none;
+      margin-bottom: 4px;
+    }
+    #guiOverlay .stats div, #guiOverlay .shortcuts div {
+      margin: 4px 0;
+    }
+    /* Main Menu overlay - always on top */
+    #mainMenu {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 800px;
+      height: 600px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999; /* Very high z-index */
+    }
+    #mainMenu button {
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    /* Shop / Tower selection area */
+    #towerShop {
+      position: absolute;
+      top: 150px;
+      right: 0;
+      width: 120px;
+      background: #444;
+      padding: 8px;
+      border-left: 2px solid #555;
+      z-index: 1000;
+    }
+    #towerShop h3 {
+      margin: 0 0 8px 0;
+      text-align: center;
+    }
+    .towerOption {
+      width: 100px;
+      height: 50px;
+      background: #555;
+      margin-bottom: 8px;
+      text-align: center;
+      line-height: 50px;
+      cursor: grab;
+    }
+    /* Tower info panel (for upgrade/remove) */
+    #towerPanel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 250px;
+      background: #444;
+      padding: 8px;
+      border-top: 2px solid #555;
+      display: none;
+      z-index: 1000;
+    }
+    #towerPanel button {
+      cursor: pointer;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <!-- Canvas where the game is drawn -->
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <!-- In-game GUI (stats, wave, etc.) -->
+    <div id="guiOverlay">
+      <div class="stats">
+        <div>Lives: <span id="livesDisplay">20</span></div>
+        <div>Money: <span id="moneyDisplay">100</span></div>
+        <div>Wave: <span id="waveDisplay">1</span></div>
+        <div>Level: <span id="levelDisplay">1</span></div>
+      </div>
+      <div class="shortcuts">
+        <div><strong>Shortcuts:</strong></div>
+        <div>1: Basic, 2: Ice, 3: Fire</div>
+      </div>
+    </div>
+    <!-- Main Menu (always over all game elements) -->
+    <div id="mainMenu">
+      <h1>Polygon Tower Defense</h1>
+      <button id="startGameBtn">Start Game</button>
+    </div>
+    <!-- Tower Shop (drag and drop or click to select) -->
+    <div id="towerShop">
+      <h3>Shop</h3>
+      <div class="towerOption" draggable="true" data-tower-type="basic">Basic</div>
+      <div class="towerOption" draggable="true" data-tower-type="ice">Ice</div>
+      <div class="towerOption" draggable="true" data-tower-type="fire">Fire</div>
+    </div>
+    <!-- Tower Info Panel (for upgrade/remove) -->
+    <div id="towerPanel">
+      <p>Selected Tower</p>
+      <p id="towerInfo"></p>
+      <button id="upgradeTowerBtn">Upgrade</button>
+      <button id="removeTowerBtn">Remove</button>
+    </div>
+  </div>
+
+  <!-- Sound placeholders -->
+  <audio id="towerPlaceSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3" preload="auto"></audio>
+  <audio id="enemyDestroyedSound" src="https://www.soundjay.com/explosion/sounds/explosion-05.mp3" preload="auto"></audio>
+  <audio id="bgMusic" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" preload="auto" loop></audio>
+
+  <script>
+    // Global variables and game state
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const livesDisplay = document.getElementById('livesDisplay');
+    const moneyDisplay = document.getElementById('moneyDisplay');
+    const waveDisplay = document.getElementById('waveDisplay');
+    const levelDisplay = document.getElementById('levelDisplay');
+
+    const mainMenu = document.getElementById('mainMenu');
+    const startGameBtn = document.getElementById('startGameBtn');
+
+    const towerShop = document.getElementById('towerShop');
+    const towerOptions = document.querySelectorAll('.towerOption');
+
+    const towerPanel = document.getElementById('towerPanel');
+    const towerInfo = document.getElementById('towerInfo');
+    const upgradeTowerBtn = document.getElementById('upgradeTowerBtn');
+    const removeTowerBtn = document.getElementById('removeTowerBtn');
+
+    const towerPlaceSound = document.getElementById('towerPlaceSound');
+    const enemyDestroyedSound = document.getElementById('enemyDestroyedSound');
+    const bgMusic = document.getElementById('bgMusic');
+
+    let gameRunning = false;
+    let playerLives = 20;
+    let playerMoney = 100;
+    let currentWaveIndex = 0;
+    let currentLevel = 1;
+
+    // Flag to track if a wave is still spawning enemies.
+    let isSpawningWave = false;
+
+    // Ghost tower for shortcut placement
+    let ghostTowerType = null;  // e.g. 'basic', 'ice', 'fire'
+    // Global mouse position
+    let mousePos = {x: 0, y: 0};
+    // For drag-and-drop tower shop (when dragging, this holds the tower type)
+    let draggingTowerType = null;
+    // Tower currently selected (for upgrade/remove)
+    let hoveredTower = null;
+
+    // Placement indicator (for green/red blink)
+    let placementIndicator = { x: null, y: null, color: null, timer: 0 };
+
+    // The enemy path (a list of waypoints)
+    let pathPoints = [
+      {x: 0, y: 300},
+      {x: 150, y: 300},
+      {x: 150, y: 150},
+      {x: 400, y: 150},
+      {x: 400, y: 400},
+      {x: 700, y: 400},
+      {x: 800, y: 400}
+    ];
+
+    // Predefined waves for the current level.
+    let waves = generateWaves(currentLevel);
+
+    // Arrays to hold towers and enemies
+    let towers = [];
+    let enemies = [];
+
+    // Tower class
+    class Tower {
+      constructor(x, y, type) {
+        this.x = x;
+        this.y = y;
+        this.type = type;
+        this.level = 1;
+        this.baseCost = 50;
+        this.range = 80;
+        this.damage = 10;
+        this.sides = 3; // polygon sides (triangle start)
+      }
+      get costToPlace() {
+        let costMap = { 'basic': 50, 'ice': 70, 'fire': 90 };
+        return costMap[this.type] || 50;
+      }
+      get upgradeCost() {
+        return Math.floor(this.costToPlace * this.level * 0.5);
+      }
+      upgrade() {
+        this.level++;
+        this.sides++;
+        this.range += 10;
+        this.damage += 5;
+      }
+      draw(ctx) {
+        // Draw the tower polygon
+        const radius = 15 + this.level * 3;
+        ctx.beginPath();
+        for (let i = 0; i < this.sides; i++) {
+          let angle = (i / this.sides) * 2 * Math.PI;
+          let px = this.x + radius * Math.cos(angle);
+          let py = this.y + radius * Math.sin(angle);
+          if (i === 0) {
+            ctx.moveTo(px, py);
+          } else {
+            ctx.lineTo(px, py);
+          }
+        }
+        ctx.closePath();
+        if (this.type === 'basic') {
+          ctx.fillStyle = '#888';
+        } else if (this.type === 'ice') {
+          ctx.fillStyle = '#00f';
+        } else if (this.type === 'fire') {
+          ctx.fillStyle = '#f00';
+        }
+        ctx.fill();
+        // Draw the range indicator (faint)
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.range, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+        ctx.stroke();
+      }
+    }
+
+    // Enemy class
+    class Enemy {
+      constructor(hp, speed, isBoss = false) {
+        this.x = pathPoints[0].x;
+        this.y = pathPoints[0].y;
+        this.hp = hp;
+        this.speed = speed;
+        this.pathIndex = 0;
+        this.isBoss = isBoss;
+        this.alive = true;
+      }
+      update() {
+        let target = pathPoints[this.pathIndex + 1];
+        if (!target) {
+          this.alive = false;
+          playerLives--;
+          updateGUI();
+          return;
+        }
+        let dx = target.x - this.x;
+        let dy = target.y - this.y;
+        let dist = Math.hypot(dx, dy);
+        if (dist < this.speed) {
+          this.x = target.x;
+          this.y = target.y;
+          this.pathIndex++;
+        } else {
+          this.x += (dx / dist) * this.speed;
+          this.y += (dy / dist) * this.speed;
+        }
+      }
+      takeDamage(dmg) {
+        this.hp -= dmg;
+        if (this.hp <= 0) {
+          this.alive = false;
+          playerMoney += 5;
+          enemyDestroyedSound.currentTime = 0;
+          enemyDestroyedSound.play();
+          updateGUI();
+        }
+      }
+      draw(ctx) {
+        ctx.beginPath();
+        if (this.isBoss) {
+          ctx.fillStyle = '#ff0';
+          ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
+        } else {
+          ctx.fillStyle = '#0f0';
+          ctx.arc(this.x, this.y, 8, 0, 2 * Math.PI);
+        }
+        ctx.fill();
+        // Draw HP bar
+        ctx.fillStyle = '#f00';
+        let barWidth = this.isBoss ? 30 : 16;
+        let barHeight = 4;
+        let hpMax = this.isBoss ? (200 + (currentLevel - 1) * 20) : (25 + (currentLevel - 1) * 5);
+        let hpRatio = Math.max(this.hp / hpMax, 0);
+        ctx.fillRect(this.x - barWidth / 2, this.y - 16, barWidth * hpRatio, barHeight);
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(this.x - barWidth / 2, this.y - 16, barWidth, barHeight);
+      }
+    }
+
+    // Generate waves based on level difficulty
+    function generateWaves(level) {
+      return [
+        { count: 5 + level * 2, hp: 20 + level * 5, speed: 1.0 + level * 0.1, isBoss: false },
+        { count: 8 + level * 2, hp: 25 + level * 5, speed: 1.2 + level * 0.1, isBoss: false },
+        { count: 1, hp: 200 + level * 20, speed: 0.8, isBoss: true }
+      ];
+    }
+
+    // Initialize event listeners
+    startGameBtn.addEventListener('click', () => {
+      mainMenu.style.display = 'none';
+      startGame();
+    });
+
+    // Drag & drop from tower shop
+    towerOptions.forEach(opt => {
+      opt.addEventListener('dragstart', (e) => {
+        draggingTowerType = e.target.getAttribute('data-tower-type');
+      });
+    });
+
+    // Canvas as drop zone
+    canvas.addEventListener('dragover', (e) => {
+      e.preventDefault();
+    });
+    canvas.addEventListener('drop', (e) => {
+      e.preventDefault();
+      let rect = canvas.getBoundingClientRect();
+      let dropX = e.clientX - rect.left;
+      let dropY = e.clientY - rect.top;
+      placeTower(dropX, dropY, draggingTowerType);
+      draggingTowerType = null;
+    });
+
+    // Mouse events for ghost tower and selection
+    canvas.addEventListener('mousemove', (e) => {
+      let rect = canvas.getBoundingClientRect();
+      mousePos.x = e.clientX - rect.left;
+      mousePos.y = e.clientY - rect.top;
+    });
+    canvas.addEventListener('click', (e) => {
+      let clicked = getTowerAtMouse();
+      if (clicked) {
+        hoveredTower = clicked;
+        towerInfo.textContent = `Type: ${clicked.type}, Level: ${clicked.level}`;
+        towerPanel.style.display = 'block';
+      } else {
+        towerPanel.style.display = 'none';
+        hoveredTower = null;
+        // If ghost tower is active from shortcut, try to place it
+        if (ghostTowerType) {
+          placeTower(mousePos.x, mousePos.y, ghostTowerType);
+        }
+      }
+    });
+
+    // Keyboard shortcuts to set ghost tower type
+    document.addEventListener('keydown', (e) => {
+      if (e.key === '1') {
+        ghostTowerType = 'basic';
+      } else if (e.key === '2') {
+        ghostTowerType = 'ice';
+      } else if (e.key === '3') {
+        ghostTowerType = 'fire';
+      }
+    });
+    // Cancel ghost tower placement with Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        ghostTowerType = null;
+      }
+    });
+
+    // Tower panel upgrade/remove
+    upgradeTowerBtn.addEventListener('click', () => {
+      if (!hoveredTower) return;
+      let cost = hoveredTower.upgradeCost;
+      if (playerMoney >= cost) {
+        playerMoney -= cost;
+        hoveredTower.upgrade();
+        updateGUI();
+        towerInfo.textContent = `Type: ${hoveredTower.type}, Level: ${hoveredTower.level}`;
+      }
+    });
+    removeTowerBtn.addEventListener('click', () => {
+      if (!hoveredTower) return;
+      towers = towers.filter(t => t !== hoveredTower);
+      hoveredTower = null;
+      towerPanel.style.display = 'none';
+    });
+
+    // Start game/reset game state
+    function startGame() {
+      resetGame();
+      gameRunning = true;
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+      nextWave();
+      gameLoop();
+    }
+
+    function resetGame() {
+      playerLives = 20;
+      playerMoney = 100;
+      currentWaveIndex = 0;
+      currentLevel = 1;
+      towers = [];
+      enemies = [];
+      waves = generateWaves(currentLevel);
+      ghostTowerType = null;
+      isSpawningWave = false;
+      updateGUI();
+    }
+
+    function updateGUI() {
+      livesDisplay.textContent = playerLives;
+      moneyDisplay.textContent = playerMoney;
+      // Display wave number as currentWaveIndex (within the current level)
+      waveDisplay.textContent = Math.min(currentWaveIndex, waves.length);
+      levelDisplay.textContent = currentLevel;
+    }
+
+    // When current level's waves are finished, level up and regenerate waves
+    function nextWave() {
+      if (currentWaveIndex >= waves.length) {
+        currentLevel++;
+        waves = generateWaves(currentLevel);
+        currentWaveIndex = 0;
+      }
+      isSpawningWave = true;
+      let waveData = waves[currentWaveIndex];
+      let spawnCount = 0;
+      const spawnDelay = 1500; // spawn an enemy every 1500ms
+      let spawnInterval = setInterval(() => {
+        let enemy = new Enemy(waveData.hp, waveData.speed, waveData.isBoss);
+        enemies.push(enemy);
+        spawnCount++;
+        if (spawnCount >= waveData.count) {
+          clearInterval(spawnInterval);
+          isSpawningWave = false;
+        }
+      }, spawnDelay);
+      currentWaveIndex++;
+      updateGUI();
+    }
+
+    function gameLoop() {
+      if (!gameRunning) return;
+      updateEnemies();
+      handleTowerAttacks();
+      // Only start next wave if we're not in the middle of spawning one
+      if (!isSpawningWave && enemies.filter(e => e.alive).length === 0) {
+        nextWave();
+      }
+      drawGame();
+      if (playerLives <= 0) {
+        gameRunning = false;
+        resetGame();
+        bgMusic.pause();
+        mainMenu.style.display = 'flex';
+        return;
+      }
+      requestAnimationFrame(gameLoop);
+    }
+
+    function updateEnemies() {
+      enemies.forEach(enemy => {
+        if (enemy.alive) {
+          enemy.update();
+        }
+      });
+      enemies = enemies.filter(e => e.alive);
+    }
+
+    function handleTowerAttacks() {
+      towers.forEach(tower => {
+        let target = findEnemyInRange(tower.x, tower.y, tower.range);
+        if (target) {
+          target.takeDamage(tower.damage);
+        }
+      });
+    }
+
+    function findEnemyInRange(x, y, range) {
+      let inRange = enemies.filter(enemy => {
+        let dist = Math.hypot(enemy.x - x, enemy.y - y);
+        return dist <= range;
+      });
+      return inRange[0] || null;
+    }
+
+    function drawGame() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Draw path
+      ctx.strokeStyle = '#444';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+      for (let i = 1; i < pathPoints.length; i++) {
+        ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+      }
+      ctx.stroke();
+      // Draw towers
+      towers.forEach(tower => {
+        tower.draw(ctx);
+      });
+      // Draw enemies
+      enemies.forEach(enemy => {
+        enemy.draw(ctx);
+      });
+      // Draw ghost tower (if selected via shortcut)
+      if (ghostTowerType) {
+        drawGhostTower(mousePos.x, mousePos.y, ghostTowerType);
+      }
+      // If dragging from shop, show ghost tower as well
+      if (draggingTowerType) {
+        drawGhostTower(mousePos.x, mousePos.y, draggingTowerType);
+      }
+      // Draw placement indicator if active
+      if (placementIndicator.timer > 0) {
+        ctx.beginPath();
+        ctx.arc(placementIndicator.x, placementIndicator.y, 20, 0, 2 * Math.PI);
+        ctx.strokeStyle = placementIndicator.color;
+        ctx.lineWidth = 4;
+        ctx.stroke();
+        placementIndicator.timer -= 1;
+      }
+    }
+
+    function drawGhostTower(x, y, type) {
+      ctx.save();
+      ctx.globalAlpha = 0.5;
+      let tempTower = new Tower(x, y, type);
+      tempTower.draw(ctx);
+      ctx.restore();
+    }
+
+    function placeTower(x, y, towerType) {
+      if (!towerType) return;
+      let newTower = new Tower(x, y, towerType);
+      let cost = newTower.costToPlace;
+      if (playerMoney >= cost) {
+        towers.push(newTower);
+        playerMoney -= cost;
+        towerPlaceSound.currentTime = 0;
+        towerPlaceSound.play();
+        blinkIndicator(x, y, 'green');
+      } else {
+        blinkIndicator(x, y, 'red');
+      }
+      updateGUI();
+    }
+
+    function blinkIndicator(x, y, color) {
+      placementIndicator.x = x;
+      placementIndicator.y = y;
+      placementIndicator.color = color;
+      placementIndicator.timer = 20; // frames to show blink
+    }
+
+    function getTowerAtMouse() {
+      return towers.find(t => {
+        let dx = t.x - mousePos.x;
+        let dy = t.y - mousePos.y;
+        let dist = Math.hypot(dx, dy);
+        return dist < 30;
+      });
+    }
+  </script>
+</body>
+</html>

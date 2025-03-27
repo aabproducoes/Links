@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Match-3 with Labels and Grayed-Out Non-Selected</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #222;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: start;
+    }
+
+    h1 {
+      margin-top: 20px;
+    }
+
+    /**************************************************************
+     * BOARD + LABELS LAYOUT
+     **************************************************************/
+    .board-container {
+      /* This container holds both the board & the row/col labels. */
+      position: relative;
+      width: 480px; /* 450 for the board + ~30px for row labels */
+      height: 330px; /* 300 for the board + ~30px for column labels */
+      margin-top: 20px;
+    }
+
+    .board {
+      position: absolute;
+      top: 0;
+      left: 30px;    /* leave space for row labels on the left */
+      width: 450px;  /* 9 columns * 50px */
+      height: 300px; /* 6 rows * 50px */
+      background: #444; 
+      overflow: hidden;
+    }
+
+    .row-labels {
+      /* Positions the row labels along the left side of the board */
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 30px;    /* just enough space for single- or double-digit */
+      height: 300px;  /* same height as the board */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between; /* space out from top to bottom */
+      align-items: center;
+      padding: 5px 0;
+    }
+
+    .col-labels {
+      /* Positions the column labels along the bottom of the board */
+      position: absolute;
+      bottom: 0;
+      left: 30px;     /* align with the board, skipping row label space */
+      width: 450px;   /* same width as the board */
+      height: 30px;
+      display: flex;
+      justify-content: space-between; /* space out from left to right */
+      align-items: center;
+      padding: 0 5px;
+    }
+
+    /**************************************************************
+     * GEM STYLING & ANIMATIONS
+     **************************************************************/
+    .gem {
+      position: absolute;
+      width: 48px;      
+      height: 48px;
+      box-sizing: border-box;
+      border: 1px solid #222;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2em;
+      user-select: none;
+
+      /* Bouncier transform transitions + fade for opacity changes */
+      transition:
+        transform 0.35s cubic-bezier(0.28, 0.84, 0.42, 1),
+        opacity 0.4s ease;
+    }
+
+    /* Different gem colors */
+    .type-0 { background-color: #ec5252; } /* Red */
+    .type-1 { background-color: #ffa600; } /* Orange */
+    .type-2 { background-color: #ffe300; } /* Yellow */
+    .type-3 { background-color: #0fd64f; } /* Green */
+    .type-4 { background-color: #0087ff; } /* Blue */
+    .type-5 { background-color: #b14fe8; } /* Purple */
+
+    /* For 3+ matched gems fading out */
+    @keyframes fadeOut {
+      0%   { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .fade-out {
+      animation: fadeOut 0.4s forwards;
+    }
+
+    /* (Optional) pop-in for newly created gems 
+    @keyframes spawnEffect {
+      0%   { transform: scale(0.7); }
+      100% { transform: scale(1);   }
+    }
+    .spawn {
+      animation: spawnEffect 0.3s ease-out;
+    }
+    */
+
+    /**************************************************************
+     * HIGHLIGHT + GRAYED-OUT
+     **************************************************************/
+    /* Highlight with a pulsing glow (for selected row, column, or cell) */
+    .highlight {
+      animation: highlightPulse 1.2s infinite alternate;
+    }
+    @keyframes highlightPulse {
+      0%   { box-shadow: 0 0 6px #fff; }
+      100% { box-shadow: 0 0 15px #fff; }
+    }
+
+    /* Extra pulse for the single selected cell */
+    .selected-cell {
+      z-index: 3;
+      animation: selectedPulse 0.8s infinite alternate;
+    }
+    @keyframes selectedPulse {
+      0%   { filter: brightness(1) saturate(1); }
+      100% { filter: brightness(1.8) saturate(1.3); }
+    }
+
+    /* Non-selected rows/columns are grayed out */
+/* Non-selected rows/columns are grayed out */
+
+
+    /**************************************************************
+     * ARROW INDICATORS
+     **************************************************************/
+    .arrow-indicators {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; 
+      height: 100%;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .arrow-indicators .arrow {
+      position: absolute;
+      color: #fff;
+      font-weight: bold;
+    }
+    .arrow.up    { top: 0; left: 50%; transform: translate(-50%, -50%); }
+    .arrow.down  { bottom: 0; left: 50%; transform: translate(-50%, 50%); }
+    .arrow.left  { left: 0; top: 50%; transform: translate(-50%, -50%); }
+    .arrow.right { right: 0; top: 50%; transform: translate(50%, -50%); }
+
+    /**************************************************************
+     * INSTRUCTIONS
+     **************************************************************/
+    .instructions {
+      margin-top: 15px;
+      text-align: center;
+      max-width: 600px;
+      line-height: 1.5;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Match-3 with Row/Column Labels & Grayed-Out Non-Selected</h1>
+  <div class="instructions">
+    <p>
+      <strong>Select Row:</strong> Q, W, E, R, T, Y (rows 1–6) <br>
+      <strong>Select Column:</strong> 1–9 <br>
+      <strong>Swap:</strong> Arrow Keys (↑, ↓, ←, →)
+    </p>
+    <p>
+      Rows & Columns not selected become grayed out. You can select <br>
+      row-first or column-first in any order to narrow down the exact cell.
+    </p>
+  </div>
+
+  <!-- Container that holds the board + row labels on left + column labels on bottom -->
+  <div class="board-container">
+    <!-- Row labels on the left -->
+    <div class="row-labels" id="rowLabels"></div>
+
+    <!-- The board area itself -->
+    <div class="board" id="board"></div>
+
+    <!-- Column labels on the bottom -->
+    <div class="col-labels" id="colLabels"></div>
+  </div>
+
+  <script>
+    /**************************************************************
+     * CONFIG
+     **************************************************************/
+    const ROWS = 6;
+    const COLS = 9;
+    const GEM_TYPES = 6;  // gem “colors” are 0..(GEM_TYPES-1)
+    const CELL_SIZE = 50; // each cell is 50×50
+
+    /**************************************************************
+     * GAME STATE
+     **************************************************************/
+    // We'll keep an array of gem objects:
+    // { id, row, col, type, element }
+    let gems = [];
+
+    // Selection states
+    let selectedRow = -1; // -1 means not selected
+    let selectedCol = -1; // -1 means not selected
+
+    // DOM references
+    const boardEl = document.getElementById("board");
+    const rowLabelsEl = document.getElementById("rowLabels");
+    const colLabelsEl = document.getElementById("colLabels");
+
+    // For uniquely identifying gems
+    let nextGemId = 1;
+
+    /**************************************************************
+     * INITIALIZE THE BOARD AND LABELS
+     **************************************************************/
+    initLabels();
+    initBoard();
+
+    /**************************************************************
+     * initLabels(): create the row/col label elements
+     **************************************************************/
+    function initLabels() {
+      // Row labels: top→bottom = 1..6
+      // We'll place them with a simple flex layout in .row-labels
+      for (let r = 1; r <= ROWS; r++) {
+        const label = document.createElement("div");
+        label.textContent = r; 
+        rowLabelsEl.appendChild(label);
+      }
+
+      // Column labels: left→right = 1..9
+      for (let c = 1; c <= COLS; c++) {
+        const label = document.createElement("div");
+        label.textContent = c;
+        colLabelsEl.appendChild(label);
+      }
+    }
+
+    /**************************************************************
+     * initBoard(): fill with random gems
+     **************************************************************/
+    function initBoard() {
+      gems = [];
+      boardEl.innerHTML = "";
+
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          createGem(r, c, randomGemType());
+        }
+      }
+      selectedRow = -1;
+      selectedCol = -1;
+      updateGemPositions();
+    }
+
+    /**************************************************************
+     * createGem(row, col, type): make a gem object + DOM element
+     **************************************************************/
+    function createGem(row, col, type) {
+      const gem = {
+        id: nextGemId++,
+        row: row,
+        col: col,
+        type: type,
+        element: document.createElement("div"),
+      };
+      gem.element.classList.add("gem", `type-${type}`);
+
+      // (Optional) pop-in for new gems:
+      // gem.element.classList.add("spawn");
+
+      boardEl.appendChild(gem.element);
+      gems.push(gem);
+      return gem;
+    }
+
+    /**************************************************************
+     * randomGemType()
+     **************************************************************/
+    function randomGemType() {
+      return Math.floor(Math.random() * GEM_TYPES);
+    }
+
+    /**************************************************************
+     * updateGemPositions():
+     *  - Set each gem’s transform based on (row, col).
+     *  - Highlight the selected row/column/cell.
+     *  - Gray out non-selected cells.
+     **************************************************************/
+    function updateGemPositions() {
+      const rowChosen = (selectedRow !== -1);
+      const colChosen = (selectedCol !== -1);
+
+      for (const gem of gems) {
+        // Position via transform
+        const x = gem.col * CELL_SIZE + 1;
+        const y = gem.row * CELL_SIZE + 1;
+        gem.element.style.transform = `translate(${x}px, ${y}px)`;
+
+        // Remove any old classes
+        gem.element.classList.remove("highlight", "selected-cell", "grayed-out");
+
+        // 1) If no row/col is chosen, do nothing special
+        // 2) If only row is chosen, that row is highlight, others are gray
+        // 3) If only col is chosen, that column is highlight, others are gray
+        // 4) If both row & col are chosen, only that cell is highlight, others are gray
+
+        if (!rowChosen && !colChosen) {
+          // No selection => no highlight, no gray
+          removeArrowIndicators(gem.element);
+        } 
+        else if (rowChosen && !colChosen) {
+          // Only row
+          if (gem.row === selectedRow) {
+            gem.element.classList.add("highlight");
+          } else {
+            gem.element.classList.add("grayed-out");
+          }
+          removeArrowIndicators(gem.element);
+        } 
+        else if (!rowChosen && colChosen) {
+          // Only col
+          if (gem.col === selectedCol) {
+            gem.element.classList.add("highlight");
+          } else {
+            gem.element.classList.add("grayed-out");
+          }
+          removeArrowIndicators(gem.element);
+        } 
+        else {
+          // Both row & col
+          if (gem.row === selectedRow && gem.col === selectedCol) {
+            gem.element.classList.add("highlight", "selected-cell");
+            addArrowIndicators(gem.element, gem.row, gem.col);
+          } else {
+            gem.element.classList.add("grayed-out");
+            removeArrowIndicators(gem.element);
+          }
+        }
+      }
+    }
+
+    /**************************************************************
+     * addArrowIndicators / removeArrowIndicators
+     **************************************************************/
+    function addArrowIndicators(elem, r, c) {
+      removeArrowIndicators(elem);
+      const container = document.createElement("div");
+      container.classList.add("arrow-indicators");
+
+      // Up
+      if (r > 0) {
+        const arrowUp = document.createElement("div");
+        arrowUp.classList.add("arrow", "up");
+        arrowUp.textContent = "↑";
+        container.appendChild(arrowUp);
+      }
+      // Down
+      if (r < ROWS - 1) {
+        const arrowDown = document.createElement("div");
+        arrowDown.classList.add("arrow", "down");
+        arrowDown.textContent = "↓";
+        container.appendChild(arrowDown);
+      }
+      // Left
+      if (c > 0) {
+        const arrowLeft = document.createElement("div");
+        arrowLeft.classList.add("arrow", "left");
+        arrowLeft.textContent = "←";
+        container.appendChild(arrowLeft);
+      }
+      // Right
+      if (c < COLS - 1) {
+        const arrowRight = document.createElement("div");
+        arrowRight.classList.add("arrow", "right");
+        arrowRight.textContent = "→";
+        container.appendChild(arrowRight);
+      }
+
+      elem.appendChild(container);
+    }
+
+    function removeArrowIndicators(elem) {
+      const old = elem.querySelector(".arrow-indicators");
+      if (old) old.remove();
+    }
+
+    /**************************************************************
+     * KEYBOARD CONTROL
+     **************************************************************/
+    document.addEventListener("keydown", (e) => {
+      const key = e.key.toLowerCase();
+
+      // Row keys: Q, W, E, R, T, Y
+      const rowKeys = ["q", "w", "e", "r", "t", "y"];
+      if (rowKeys.includes(key)) {
+        e.preventDefault();
+        const rIndex = rowKeys.indexOf(key); // 0..5
+        if (selectedRow !== -1 && selectedCol !== -1) {
+          // If a cell is already fully selected, picking a new row resets col
+          selectedRow = rIndex;
+          selectedCol = -1;
+        } else {
+          selectedRow = rIndex;
+        }
+        updateGemPositions();
+        return;
+      }
+
+      // Col keys: '1'..'9'
+      if (key >= "1" && key <= "9") {
+        e.preventDefault();
+        const cIndex = parseInt(key) - 1; // 0..8
+        if (selectedRow !== -1 && selectedCol !== -1) {
+          // If a cell is already fully selected, picking a new col resets row
+          selectedCol = cIndex;
+          selectedRow = -1;
+        } else {
+          selectedCol = cIndex;
+        }
+        updateGemPositions();
+        return;
+      }
+
+      // If we have a single cell (row & col) chosen, handle arrow swaps
+      if (selectedRow !== -1 && selectedCol !== -1) {
+        let targetRow = selectedRow;
+        let targetCol = selectedCol;
+        let moved = false;
+
+        switch (key) {
+          case "arrowup":
+            e.preventDefault();
+            if (targetRow > 0) {
+              targetRow--;
+              moved = true;
+            }
+            break;
+          case "arrowdown":
+            e.preventDefault();
+            if (targetRow < ROWS - 1) {
+              targetRow++;
+              moved = true;
+            }
+            break;
+          case "arrowleft":
+            e.preventDefault();
+            if (targetCol > 0) {
+              targetCol--;
+              moved = true;
+            }
+            break;
+          case "arrowright":
+            e.preventDefault();
+            if (targetCol < COLS - 1) {
+              targetCol++;
+              moved = true;
+            }
+            break;
+        }
+
+        if (moved) {
+          swapGems(selectedRow, selectedCol, targetRow, targetCol, () => {
+            // After swap, check for matches
+            if (checkAndClearMatches()) {
+              // If matched, keep selection in same place
+            } else {
+              // If no match, swap back
+              swapGems(selectedRow, selectedCol, targetRow, targetCol);
+            }
+          });
+        }
+      }
+    });
+
+    /**************************************************************
+     * swapGems(r1, c1, r2, c2, callback):
+     *  - Swap row/col of two gems, animate.
+     **************************************************************/
+    function swapGems(r1, c1, r2, c2, callback) {
+      const gem1 = gems.find(g => g.row === r1 && g.col === c1);
+      const gem2 = gems.find(g => g.row === r2 && g.col === c2);
+      if (!gem1 || !gem2) return;
+
+      [gem1.row, gem2.row] = [gem2.row, gem1.row];
+      [gem1.col, gem2.col] = [gem2.col, gem1.col];
+
+      updateGemPositions();
+
+      // Wait for the ~350ms transition to finish, then callback
+      if (callback) {
+        setTimeout(() => {
+          callback();
+          updateGemPositions();
+        }, 350);
+      }
+    }
+
+    /**************************************************************
+     * checkAndClearMatches():
+     *  - Check for 3+ matches, fade them out, remove them, let others fall.
+     **************************************************************/
+    function checkAndClearMatches() {
+      const toClear = new Set();
+
+      // Horizontal check
+      for (let r = 0; r < ROWS; r++) {
+        const rowGems = gems.filter(g => g.row === r).sort((a,b)=>a.col-b.col);
+        for (let i = 0; i < rowGems.length - 2; i++) {
+          const g1 = rowGems[i];
+          const g2 = rowGems[i+1];
+          const g3 = rowGems[i+2];
+          if (g1.type === g2.type && g2.type === g3.type) {
+            toClear.add(g1.id); 
+            toClear.add(g2.id); 
+            toClear.add(g3.id);
+          }
+        }
+      }
+
+      // Vertical check
+      for (let c = 0; c < COLS; c++) {
+        const colGems = gems.filter(g => g.col === c).sort((a,b)=>a.row-b.row);
+        for (let i = 0; i < colGems.length - 2; i++) {
+          const g1 = colGems[i];
+          const g2 = colGems[i+1];
+          const g3 = colGems[i+2];
+          if (g1.type === g2.type && g2.type === g3.type) {
+            toClear.add(g1.id);
+            toClear.add(g2.id);
+            toClear.add(g3.id);
+          }
+        }
+      }
+
+      if (toClear.size === 0) {
+        return false; // No matches
+      }
+
+      // Fade out matched gems
+      for (const gem of gems) {
+        if (toClear.has(gem.id)) {
+          gem.element.classList.add("fade-out");
+        }
+      }
+
+      // After fade, remove them, let others fall, spawn new at top
+      setTimeout(() => {
+        gems = gems.filter(g => {
+          if (toClear.has(g.id)) {
+            g.element.remove();
+            return false;
+          }
+          return true;
+        });
+
+        // For each column, let gems "fall"
+        for (let c = 0; c < COLS; c++) {
+          const colGems = gems.filter(g => g.col === c).sort((a,b)=>a.row-b.row);
+          let writeRow = ROWS - 1;
+          for (let i = colGems.length - 1; i >= 0; i--) {
+            colGems[i].row = writeRow;
+            writeRow--;
+          }
+          // Fill the empty spots at top
+          for (let r = writeRow; r >= 0; r--) {
+            createGem(r, c, randomGemType());
+          }
+        }
+
+        updateGemPositions();
+      }, 400);
+
+      return true;
+    }
+  </script>
+</body>
+</html>

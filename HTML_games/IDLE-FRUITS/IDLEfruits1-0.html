@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idle Juice Farming - Ultimate Edition</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      overflow: hidden;
+      transition: background 0.5s;
+    }
+    /* Layout: Left panel for fruit list, right panel for game */
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+    .fruit-list {
+      width: 20%;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.85);
+      overflow-y: auto;
+    }
+    .fruit-item {
+      font-size: 1.4rem;
+      margin: 8px 0;
+      padding: 8px;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+    .highlight {
+      border-color: #ff4500;
+      box-shadow: 0px 0px 10px rgba(255, 69, 0, 0.8);
+      animation: pulse 1s infinite alternate;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 10px rgba(255,69,0,0.8); }
+      100% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255,69,0,1); }
+    }
+    .game-container {
+      width: 80%;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    h1 { margin-bottom: 10px; }
+    .info { margin: 5px 0; font-size: 1.1rem; }
+    .jar-info { margin-bottom: 10px; }
+    
+    /* Juice Jar */
+    .juice-container {
+      position: relative;
+      width: 180px;
+      height: 250px;
+      border: 5px solid #cc5200;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fff5e1;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    canvas {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .drop {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 69, 0, 0.8);
+      opacity: 1;
+      animation: fall 0.8s linear forwards;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(230px); }
+    }
+    /* Buttons */
+    .buttons {
+      margin: 10px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    button {
+      padding: 12px 18px;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: background 0.3s, transform 0.1s;
+    }
+    button:hover { transform: scale(1.05); }
+    #upgradeClick { background: #ff4500; }
+    #upgradeAuto { background: #008CBA; }
+    #upgradeTree { background: #4caf50; }
+    #prestigeReset { background: #6a0dad; }
+    #prestigeUpgrades { background: #d2691e; }
+    #bgToggle { background: #2e8b57; }
+    #settingsToggle { background: #555; }
+    .blink-red { animation: blinkRed 0.5s linear 3; }
+    @keyframes blinkRed {
+      0%   { background-color: inherit; }
+      50%  { background-color: red; }
+      100% { background-color: inherit; }
+    }
+    
+    /* Notification & MiniGame */
+    #notification {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 10px;
+      width: 300px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    #miniGame {
+      position: absolute;
+      top: 20%;
+      left: calc(50% - 75px);
+      width: 150px;
+      padding: 10px;
+      background: #ffeb3b;
+      text-align: center;
+      border-radius: 10px;
+      display: none;
+      z-index: 10;
+    }
+    #miniGame button {
+      background: #f57c00;
+      margin-top: 10px;
+    }
+    
+    /* Settings Panel */
+    #settingsPanel {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 250px;
+      padding: 15px;
+      background: rgba(255,255,255,0.95);
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      display: none;
+      z-index: 20;
+    }
+    #settingsPanel h2 { margin-bottom: 10px; font-size: 1.2rem; }
+    #settingsPanel label { display: block; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Fruit List Panel -->
+    <div class="fruit-list" id="fruitList"></div>
+    
+    <!-- Main Game Area -->
+    <div class="game-container">
+      <h1>Idle Juice Farming 🍹</h1>
+      <p class="info">Juice: <span id="juiceCount">0</span></p>
+      <p class="info">Gems: <span id="gemCount">0</span></p>
+      <p class="info">Best Juice: <span id="bestJuice">0</span></p>
+      <p class="info jar-info">Prestige Multiplier: x<span id="prestigeMultiplier">1</span></p>
+      
+      <!-- Juice Jar (Clickable) -->
+      <div class="juice-container" id="juiceContainer">
+        <canvas id="juiceCanvas" width="180" height="250"></canvas>
+      </div>
+      
+      <!-- Buttons for Upgrades and Controls -->
+      <div class="buttons">
+        <button id="upgradeClick">Upgrade Click (Cost: <span id="clickCost">10</span>)</button>
+        <button id="upgradeAuto">Upgrade Auto (Cost: <span id="autoCost">50</span>)</button>
+        <button id="upgradeTree">Upgrade Juice Tree (Cost: <span id="treeCost">200</span>)</button>
+        <button id="prestigeReset">Prestige Reset</button>
+        <button id="prestigeUpgrades">Prestige Upgrades</button>
+        <button id="bgToggle">Toggle Music</button>
+        <button id="settingsToggle">Settings</button>
+      </div>
+      <p class="info">Auto Juice Rate: <span id="autoRate">0</span> per sec</p>
+      <p class="info">Juice Tree Rate: <span id="treeRate">0</span> per sec</p>
+      
+      <!-- Notification Area -->
+      <div id="notification">Notifications appear here.</div>
+      
+    </div>
+  </div>
+  
+  <!-- Mini-Game Popup -->
+  <div id="miniGame">
+    <p>Mini-Quest!</p>
+    <button id="miniGameBtn">Click Me!</button>
+  </div>
+  
+  <!-- Settings Panel -->
+  <div id="settingsPanel">
+    <h2>Settings</h2>
+    <label>Music Volume:
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.5">
+    </label>
+    <label>Jar Overlay Color:
+      <input type="color" id="jarColor" value="#fff5e1">
+    </label>
+    <button id="closeSettings">Close</button>
+  </div>
+  
+  <!-- Audio Elements -->
+  <audio id="clickSound" src="https://www.myinstants.com/media/sounds/click.mp3"></audio>
+  <audio id="bgMusic" src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" loop></audio>
+  
+  <script>
+    /***** GAME VARIABLES *****/
+    let juice = 0;               // Juice (currency and jar fill)
+    let juicePerClick = 1;
+    let autoJuiceRate = 0;       // From Upgrade Auto
+    let treeAutoRate = 0;        // From Juice Tree upgrade
+    let clickUpgradeCost = 10;
+    let autoUpgradeCost = 50;
+    let treeUpgradeCost = 200;
+    let prestigePoints = 0;
+    let prestigeMultiplier = 1;
+    // Prestige upgrade bonuses (spend Gems)
+    let prestigeClickBonus = 1;
+    let prestigeAutoBonus = 1;
+    
+    let gems = 0;                // Second currency earned on Prestige reset
+    let bestJuice = 0;
+    
+    // Fruit (jar) stages
+    const fruits = [
+      { name: "🍊 Orange", value: 1, color: "orange" },
+      { name: "🍓 Strawberry", value: 3, color: "red" },
+      { name: "🍏 Apple", value: 5, color: "green" },
+      { name: "🍉 Watermelon", value: 8, color: "lightgreen" },
+      { name: "🍇 Grape", value: 12, color: "purple" },
+      { name: "🥭 Mango", value: 20, color: "goldenrod" },
+      { name: "🍍 Pineapple", value: 30, color: "yellow" },
+      { name: "🥥 Coconut", value: 50, color: "brown" }
+    ];
+    let currentFruitIndex = 0;
+    
+    // Each jar requires more juice than the previous one.
+    const baseMaxJuice = 100;
+    function getCurrentMaxJuice() {
+      return baseMaxJuice * (1 + currentFruitIndex * 0.5);
+    }
+    
+    // Random Events & Mini-Game Variables
+    let frenzyActive = false;
+    let frenzyEndTime = 0;
+    let miniGameActive = false;
+    
+    // Offline progress
+    let lastUpdateTime = Date.now();
+    
+    /***** Canvas Setup *****/
+    const canvas = document.getElementById("juiceCanvas");
+    const ctx = canvas.getContext("2d");
+    let waveOffset = 0;
+    
+    /***** DRAWING: Juice Jar *****/
+    function drawJuice() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const currentFruit = fruits[currentFruitIndex];
+      // Use the fruit color unless the player picked an override.
+      let juiceColor = currentFruit.color;
+      const jarColorPicker = document.getElementById("jarColor");
+      if(jarColorPicker && jarColorPicker.value) {
+        juiceColor = jarColorPicker.value;
+      }
+      ctx.fillStyle = juiceColor;
+      
+      const maxForCurrentJar = getCurrentMaxJuice();
+      let fillRatio;
+      if (currentFruitIndex < fruits.length - 1) {
+        fillRatio = Math.min(juice / maxForCurrentJar, 1);
+      } else {
+        // For last fruit: if full, oscillate the top
+        if (juice < maxForCurrentJar) {
+          fillRatio = juice / maxForCurrentJar;
+        } else {
+          fillRatio = 0.98 + 0.02 * Math.sin(waveOffset * 0.2);
+        }
+      }
+      
+      const baseY = canvas.height - fillRatio * canvas.height;
+      const waveHeight = 8;
+      
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height);
+      for (let x = 0; x <= canvas.width; x += 10) {
+        const y = baseY + Math.sin((x + waveOffset) * 0.2) * waveHeight;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.closePath();
+      ctx.fill();
+      
+      waveOffset++;
+      requestAnimationFrame(drawJuice);
+    }
+    
+    /***** UPDATE FRUIT LIST *****/
+    function updateFruitList() {
+      const fruitList = document.getElementById("fruitList");
+      fruitList.innerHTML = "";
+      fruits.forEach((fruit, index) => {
+        const div = document.createElement("div");
+        div.innerText = `${fruit.name} - ${fruit.value}`;
+        div.classList.add("fruit-item");
+        if (index === currentFruitIndex) {
+          div.classList.add("highlight");
+        }
+        fruitList.appendChild(div);
+      });
+    }
+    
+    /***** UPGRADE TO NEXT FRUIT STAGE *****/
+    function nextFruit() {
+      if (currentFruitIndex < fruits.length - 1) {
+        currentFruitIndex++;
+        juicePerClick = fruits[currentFruitIndex].value;
+        updateFruitList();
+        notify(`Upgraded to ${fruits[currentFruitIndex].name}!`);
+      }
+    }
+    
+    /***** COLLECT JUICE (CLICK) *****/
+    function collectJuice(e) {
+      // Particle effects
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      spawnDrops(x, y);
+      playClickSound();
+      
+      // Calculate click amount (includes prestige and bonus upgrades)
+      let amount = juicePerClick * prestigeMultiplier * prestigeClickBonus;
+      // If frenzy is active, double the production.
+      if (frenzyActive) amount *= 2;
+      juice += amount;
+      
+      // Check jar fullness
+      const maxForCurrentJar = getCurrentMaxJuice();
+      if (juice >= maxForCurrentJar) {
+        if (currentFruitIndex < fruits.length - 1) {
+          juice -= maxForCurrentJar;
+          nextFruit();
+        } else {
+          juice = maxForCurrentJar; // cap at full for last fruit
+        }
+      }
+      updateUI();
+      checkAchievements();
+    }
+    
+    /***** SOUND & PARTICLE EFFECTS *****/
+    function playClickSound() {
+      const sound = document.getElementById("clickSound");
+      sound.currentTime = 0;
+      sound.play();
+    }
+    function spawnDrops(x, y) {
+      const container = document.getElementById("juiceContainer");
+      for (let i = 0; i < 5; i++) {
+        const drop = document.createElement("div");
+        drop.className = "drop";
+        drop.style.left = x + Math.random() * 20 - 10 + "px";
+        drop.style.top = y + Math.random() * 20 - 10 + "px";
+        container.appendChild(drop);
+        setTimeout(() => drop.remove(), 800);
+      }
+    }
+    
+    /***** UPGRADE FUNCTIONS *****/
+    function upgradeClick() {
+      const btn = document.getElementById("upgradeClick");
+      if (juice >= clickUpgradeCost) {
+        juice -= clickUpgradeCost;
+        juicePerClick += 1;
+        clickUpgradeCost = Math.floor(clickUpgradeCost * 1.5);
+        updateUI();
+        notify("Click power upgraded!");
+      } else {
+        blinkButton(btn);
+      }
+    }
+    function upgradeAuto() {
+      const btn = document.getElementById("upgradeAuto");
+      if (juice >= autoUpgradeCost) {
+        juice -= autoUpgradeCost;
+        autoJuiceRate += 1;
+        autoUpgradeCost = Math.floor(autoUpgradeCost * 1.7);
+        updateUI();
+        notify("Auto upgrade purchased!");
+      } else {
+        blinkButton(btn);
+      }
+    }
+    function upgradeTree() {
+      const btn = document.getElementById("upgradeTree");
+      if (juice >= treeUpgradeCost) {
+        juice -= treeUpgradeCost;
+        treeAutoRate += 1;
+        treeUpgradeCost = Math.floor(treeUpgradeCost * 1.8);
+        updateUI();
+        notify("Juice Tree upgraded!");
+      } else {
+        blinkButton(btn);
+      }
+    }
+    
+    /***** BLINK BUTTON WHEN INSUFFICIENT FUNDS *****/
+    function blinkButton(button) {
+      button.classList.add("blink-red");
+      setTimeout(() => { button.classList.remove("blink-red"); }, 1500);
+    }
+    
+    /***** PRESTIGE RESET *****/
+    function prestigeReset() {
+      if (confirm("Reset progress for Prestige? You'll earn Gems!")) {
+        prestigePoints++;
+        // Award some gems (e.g., 5 per prestige reset)
+        gems += 5;
+        prestigeMultiplier = 1 + prestigePoints * 0.1;
+        // Reset variables (except prestige upgrades and gems)
+        juice = 0;
+        juicePerClick = fruits[0].value;
+        currentFruitIndex = 0;
+        autoJuiceRate = 0;
+        treeAutoRate = 0;
+        clickUpgradeCost = 10;
+        autoUpgradeCost = 50;
+        treeUpgradeCost = 200;
+        updateFruitList();
+        updateUI();
+        notify(`Prestiged! Multiplier is now x${prestigeMultiplier.toFixed(1)}. Earned 5 Gems.`);
+      }
+    }
+    
+    /***** PRESTIGE UPGRADES (Spend Gems) *****/
+    function openPrestigeUpgrades() {
+      // For simplicity, use prompt dialogs
+      let choice = prompt("Enter 1 to boost Click Bonus (Cost: 5 Gems) or 2 to boost Auto Bonus (Cost: 5 Gems):");
+      if (choice === "1") {
+        if (gems >= 5) {
+          gems -= 5;
+          prestigeClickBonus += 0.2;
+          notify("Prestige: Click bonus increased!");
+        } else {
+          notify("Not enough Gems for Click bonus upgrade.");
+        }
+      } else if (choice === "2") {
+        if (gems >= 5) {
+          gems -= 5;
+          prestigeAutoBonus += 0.2;
+          notify("Prestige: Auto bonus increased!");
+        } else {
+          notify("Not enough Gems for Auto bonus upgrade.");
+        }
+      }
+      updateUI();
+    }
+    
+    /***** TOGGLE BACKGROUND MUSIC *****/
+    function toggleMusic() {
+      const bgMusic = document.getElementById("bgMusic");
+      if (bgMusic.paused) {
+        bgMusic.play();
+      } else {
+        bgMusic.pause();
+      }
+    }
+    
+    /***** RANDOM EVENTS: Juice Frenzy & Mini-Game *****/
+    function checkRandomEvents() {
+      // Every 10 seconds, with a small probability, start a frenzy event (if not already active)
+      if (!frenzyActive && Math.random() < 0.1) {
+        startFrenzy();
+      }
+      // Every 15 seconds, randomly trigger a mini-game if not active
+      if (!miniGameActive && Math.random() < 0.1) {
+        startMiniGame();
+      }
+    }
+    function startFrenzy() {
+      frenzyActive = true;
+      frenzyEndTime = Date.now() + 10000; // lasts 10 seconds
+      notify("Juice Frenzy! Production Doubled for 10 sec!");
+      // Change background for effect
+      document.body.style.background = "linear-gradient(to right, #ffefba, #ffffff)";
+      setTimeout(() => {
+        frenzyActive = false;
+        document.body.style.background = "linear-gradient(to right, #ff9a9e, #fad0c4)";
+        notify("Frenzy ended.");
+      }, 10000);
+    }
+    function startMiniGame() {
+      miniGameActive = true;
+      const miniGame = document.getElementById("miniGame");
+      miniGame.style.display = "block";
+      // Hide mini-game after 5 sec if not clicked.
+      setTimeout(() => {
+        miniGame.style.display = "none";
+        miniGameActive = false;
+      }, 5000);
+    }
+    document.getElementById("miniGameBtn").addEventListener("click", function() {
+      // Reward bonus juice when mini-game button is clicked.
+      juice += 50;
+      notify("Mini-Game won! Bonus 50 Juice!");
+      updateUI();
+      document.getElementById("miniGame").style.display = "none";
+      miniGameActive = false;
+    });
+    
+    /***** AUTO JUICE COLLECTION *****/
+    setInterval(() => {
+      let production = (autoJuiceRate * prestigeMultiplier * prestigeAutoBonus + treeAutoRate);
+      // If frenzy active, double production.
+      if (frenzyActive) production *= 2;
+      juice += production;
+      
+      const maxForCurrentJar = getCurrentMaxJuice();
+      if (juice >= maxForCurrentJar) {
+        if (currentFruitIndex < fruits.length - 1) {
+          juice -= maxForCurrentJar;
+          nextFruit();
+        } else {
+          juice = maxForCurrentJar;
+        }
+      }
+      
+      // Update best juice if current juice exceeds it
+      if (juice > bestJuice) {
+        bestJuice = juice;
+      }
+      
+      updateUI();
+      checkAchievements();
+      checkRandomEvents();
+    }, 1000);
+    
+    /***** UPDATE UI *****/
+    function updateUI() {
+      document.getElementById("juiceCount").innerText = Math.floor(juice);
+      document.getElementById("clickCost").innerText = clickUpgradeCost;
+      document.getElementById("autoCost").innerText = autoUpgradeCost;
+      document.getElementById("treeCost").innerText = treeUpgradeCost;
+      document.getElementById("autoRate").innerText = autoJuiceRate;
+      document.getElementById("treeRate").innerText = treeAutoRate;
+      document.getElementById("prestigeMultiplier").innerText = prestigeMultiplier.toFixed(1);
+      document.getElementById("gemCount").innerText = gems;
+      document.getElementById("bestJuice").innerText = Math.floor(bestJuice);
+    }
+    
+    /***** ACHIEVEMENTS (Basic) *****/
+    const unlockedAchievements = new Set();
+    function checkAchievements() {
+      if (juice >= 500 && !unlockedAchievements.has("Juice Apprentice")) {
+        unlockedAchievements.add("Juice Apprentice");
+        notify("Achievement Unlocked: Juice Apprentice!");
+      }
+      if (juice >= 2000 && !unlockedAchievements.has("Juice Master")) {
+        unlockedAchievements.add("Juice Master");
+        notify("Achievement Unlocked: Juice Master!");
+      }
+      if (juice >= 10000 && !unlockedAchievements.has("Juice Legend")) {
+        unlockedAchievements.add("Juice Legend");
+        notify("Achievement Unlocked: Juice Legend!");
+      }
+    }
+    function notify(message) {
+      const note = document.getElementById("notification");
+      note.innerText = message;
+      note.style.opacity = 1;
+      setTimeout(() => { note.style.opacity = 0.8; }, 3000);
+    }
+    
+    /***** SETTINGS PANEL *****/
+    const settingsPanel = document.getElementById("settingsPanel");
+    document.getElementById("settingsToggle").addEventListener("click", () => {
+      settingsPanel.style.display = "block";
+    });
+    document.getElementById("closeSettings").addEventListener("click", () => {
+      settingsPanel.style.display = "none";
+    });
+    // Music volume control
+    document.getElementById("volumeSlider").addEventListener("input", function() {
+      document.getElementById("bgMusic").volume = this.value;
+    });
+    
+    /***** SAVE & LOAD GAME *****/
+    function saveGame() {
+      const gameData = {
+        juice,
+        juicePerClick,
+        autoJuiceRate,
+        treeAutoRate,
+        clickUpgradeCost,
+        autoUpgradeCost,
+        treeUpgradeCost,
+        currentFruitIndex,
+        prestigePoints,
+        prestigeMultiplier,
+        prestigeClickBonus,
+        prestigeAutoBonus,
+        gems,
+        bestJuice,
+        unlockedAchievements: Array.from(unlockedAchievements),
+        lastUpdateTime: Date.now()
+      };
+      localStorage.setItem("idleJuiceUltimate", JSON.stringify(gameData));
+    }
+    function loadGame() {
+      const savedData = localStorage.getItem("idleJuiceUltimate");
+      if (savedData) {
+        const data = JSON.parse(savedData);
+        juice = data.juice || 0;
+        juicePerClick = data.juicePerClick || fruits[0].value;
+        autoJuiceRate = data.autoJuiceRate || 0;
+        treeAutoRate = data.treeAutoRate || 0;
+        clickUpgradeCost = data.clickUpgradeCost || 10;
+        autoUpgradeCost = data.autoUpgradeCost || 50;
+        treeUpgradeCost = data.treeUpgradeCost || 200;
+        currentFruitIndex = data.currentFruitIndex || 0;
+        prestigePoints = data.prestigePoints || 0;
+        prestigeMultiplier = data.prestigeMultiplier || 1;
+        prestigeClickBonus = data.prestigeClickBonus || 1;
+        prestigeAutoBonus = data.prestigeAutoBonus || 1;
+        gems = data.gems || 0;
+        bestJuice = data.bestJuice || 0;
+        if (data.unlockedAchievements) {
+          data.unlockedAchievements.forEach(a => unlockedAchievements.add(a));
+        }
+        // Calculate offline progress
+        const offlineSeconds = (Date.now() - (data.lastUpdateTime || Date.now())) / 1000;
+        let offlineProduction = offlineSeconds * (autoJuiceRate * prestigeMultiplier * prestigeAutoBonus + treeAutoRate);
+        juice += offlineProduction;
+        notify(`Welcome back! You earned ${Math.floor(offlineProduction)} offline juice.`);
+      }
+    }
+    // Auto-save every 5 seconds.
+    setInterval(saveGame, 5000);
+    
+    /***** INITIALIZE GAME *****/
+    loadGame();
+    updateFruitList();
+    updateUI();
+    drawJuice();
+    
+    // Event Listeners
+    document.getElementById("juiceContainer").addEventListener("click", collectJuice);
+    document.getElementById("upgradeClick").addEventListener("click", upgradeClick);
+    document.getElementById("upgradeAuto").addEventListener("click", upgradeAuto);
+    document.getElementById("upgradeTree").addEventListener("click", upgradeTree);
+    document.getElementById("prestigeReset").addEventListener("click", prestigeReset);
+    document.getElementById("prestigeUpgrades").addEventListener("click", openPrestigeUpgrades);
+    document.getElementById("bgToggle").addEventListener("click", toggleMusic);
+    
+  </script>
+</body>
+</html>

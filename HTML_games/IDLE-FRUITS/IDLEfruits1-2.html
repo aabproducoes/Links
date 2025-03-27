@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Idle Juice Farming – Speed Run Challenge (Responsive Buffs)</title>
+  <style>
+    /* Global Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+    body {
+      display: flex;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      color: #333;
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+      overflow: hidden;
+    }
+    /* Left Panel: Buyable Farms */
+    .farm-list {
+      width: 25%;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      overflow-y: auto;
+      border-right: 2px solid #ccc;
+      transition: background 0.3s;
+    }
+    .farm-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .farm-item.active {
+      border-color: #ff4500;
+      background: #ffece6;
+    }
+    .farm-item button {
+      margin-top: 5px;
+      padding: 5px 10px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      background: #008CBA;
+      color: white;
+      transition: background 0.3s;
+    }
+    .farm-item button:hover {
+      background: #006f94;
+    }
+    /* Main Game Area */
+    .game-container {
+      width: 75%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 20px;
+      position: relative;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .info {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    /* Juice Jar */
+    .juice-container {
+      position: relative;
+      width: 180px;
+      height: 250px;
+      border: 5px solid #cc5200;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fff5e1;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      margin: 20px 0;
+      transition: transform 0.1s;
+    }
+    /* Click animation class */
+    .jar-clicked {
+      transform: scale(0.95);
+    }
+    canvas {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+    }
+    /* Particle Drops (for click feedback) */
+    .drop {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 69, 0, 0.8);
+      opacity: 1;
+      animation: fall 0.8s linear forwards;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(230px); }
+    }
+    /* Floating Buff Indicator */
+    .buff-indicator {
+      position: absolute;
+      color: #ff4500;
+      font-weight: bold;
+      pointer-events: none;
+      animation: buffFade 1s forwards;
+      z-index: 10;
+    }
+    @keyframes buffFade {
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-30px); }
+    }
+    /* Blink Red for Insufficient Funds */
+    .blink-red {
+      animation: blinkRed 0.5s linear 3;
+    }
+    @keyframes blinkRed {
+      0%   { background-color: inherit; }
+      50%  { background-color: red; }
+      100% { background-color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Left Panel: List of Buyable Farms -->
+  <div class="farm-list" id="farmList">
+    <h2>Fruit Farms</h2>
+    <!-- Farms will be populated by JavaScript -->
+  </div>
+
+  <!-- Main Game Area -->
+  <div class="game-container">
+    <h1>Idle Juice Farming – Speed Run!</h1>
+    <div class="info">Juice: <span id="juiceCount">0</span> / <span id="targetJuice">10000</span></div>
+    <div class="info">Time: <span id="timer">0.0</span> seconds</div>
+    <div class="info">Active Farm: <span id="activeFarm">None</span></div>
+    
+    <!-- Clickable Juice Jar -->
+    <div class="juice-container" id="juiceContainer">
+      <canvas id="juiceCanvas" width="180" height="250"></canvas>
+    </div>
+  </div>
+
+  <script>
+    /***** Game Settings *****/
+    const targetJuice = 10000;         // Goal juice count
+    const baseJuicePerClick = 1;         // Base juice per click (without buff)
+    let juice = 0;                       // Current juice count
+    let activeFarm = null;               // Active fruit farm (buff effect applies)
+    let gameRunning = false;             // Timer running flag
+    let startTime = null;                // Timestamp for when farming started
+    let timerInterval = null;            // Interval for timer updates
+
+    // Global state for buff effects that require tracking:
+    let streakCount = 0;     // For streak buff (Apple Farm)
+    let comboCount = 0;      // For combo buff (Grape Farm)
+    let lastComboTime = undefined; // Timestamp of last combo click
+
+    /***** Farm Definitions *****/
+    // Each farm is buyable and has a unique buff type.
+    const farms = [
+      { 
+        id: 1, 
+        name: "Orange Farm", 
+        cost: 100, 
+        type: "additive", 
+        params: { bonus: 1 }  // Always adds +1 per click.
+      },
+      { 
+        id: 2, 
+        name: "Strawberry Farm", 
+        cost: 300, 
+        type: "chance", 
+        params: { chance: 0.3, bonus: 2 }  // 30% chance to add +2.
+      },
+      { 
+        id: 3, 
+        name: "Apple Farm", 
+        cost: 600, 
+        type: "streak", 
+        params: { streakThreshold: 5, bonus: 2 }  // Every 5 clicks in a row add +2.
+      },
+      { 
+        id: 4, 
+        name: "Watermelon Farm", 
+        cost: 1000, 
+        type: "random", 
+        params: { minBonus: 0, maxBonus: 2 }  // Adds a random bonus between 0 and 2.
+      },
+      { 
+        id: 5, 
+        name: "Grape Farm", 
+        cost: 2000, 
+        type: "combo", 
+        params: { comboIncrement: 0.5, comboTimeout: 2000 }  // Faster clicks build up bonus.
+      }
+    ];
+
+    /***** Helper: Farm Description *****/
+    function getFarmDescription(farm) {
+      switch (farm.type) {
+        case "additive":
+          return "Fixed bonus: +" + farm.params.bonus;
+        case "chance":
+          return "Chance buff: " + Math.round(farm.params.chance * 100) + "% chance to add +" + farm.params.bonus;
+        case "streak":
+          return "Streak buff: Every " + farm.params.streakThreshold + " clicks gives +" + farm.params.bonus;
+        case "random":
+          return "Random buff: Adds between " + farm.params.minBonus + " and " + farm.params.maxBonus;
+        case "combo":
+          return "Combo buff: Faster clicks increase bonus by +" + farm.params.comboIncrement + " (resets after 2 sec)";
+        default:
+          return "";
+      }
+    }
+
+    /***** Populate the Farm List *****/
+    const farmListDiv = document.getElementById("farmList");
+    function updateFarmList() {
+      farmListDiv.innerHTML = "<h2>Fruit Farms</h2>";
+      farms.forEach(farm => {
+        const div = document.createElement("div");
+        div.classList.add("farm-item");
+        if (activeFarm && activeFarm.id === farm.id) {
+          div.classList.add("active");
+        }
+        div.innerHTML = `
+          <strong>${farm.name}</strong><br>
+          Cost: ${farm.cost} Juice<br>
+          ${getFarmDescription(farm)}<br>
+          <button data-id="${farm.id}">Buy & Activate</button>
+        `;
+        farmListDiv.appendChild(div);
+      });
+      // Attach button listeners
+      document.querySelectorAll(".farm-item button").forEach(button => {
+        button.addEventListener("click", purchaseFarm);
+      });
+    }
+
+    /***** Purchase a Farm *****/
+    function purchaseFarm(e) {
+      const farmId = parseInt(e.target.getAttribute("data-id"));
+      const farm = farms.find(f => f.id === farmId);
+      if (juice >= farm.cost) {
+        juice -= farm.cost;
+        activeFarm = farm;
+        // Reset buff-related state when switching farms.
+        streakCount = 0;
+        comboCount = 0;
+        lastComboTime = undefined;
+        updateUI();
+        updateFarmList();
+      } else {
+        blinkButton(e.target);
+      }
+    }
+    function blinkButton(button) {
+      button.classList.add("blink-red");
+      setTimeout(() => button.classList.remove("blink-red"), 1500);
+    }
+
+    /***** Timer Functions *****/
+    function startTimer() {
+      if (!gameRunning) {
+        gameRunning = true;
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 100);
+      }
+    }
+    function updateTimer() {
+      const elapsed = (Date.now() - startTime) / 1000;
+      document.getElementById("timer").innerText = elapsed.toFixed(1);
+    }
+    function stopTimer() {
+      gameRunning = false;
+      clearInterval(timerInterval);
+    }
+
+    /***** Canvas Setup for Juice Jar *****/
+    const canvas = document.getElementById("juiceCanvas");
+    const ctx = canvas.getContext("2d");
+    let waveOffset = 0;
+    function drawJar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Fill level based on progress toward target.
+      let fillRatio = Math.min(juice / targetJuice, 1);
+      const baseY = canvas.height - fillRatio * canvas.height;
+      const waveHeight = 8;
+      ctx.fillStyle = "#ffcc66"; // Juice color.
+      ctx.beginPath();
+      ctx.moveTo(0, canvas.height);
+      for (let x = 0; x <= canvas.width; x += 10) {
+        const y = baseY + Math.sin((x + waveOffset) * 0.2) * waveHeight;
+        ctx.lineTo(x, y);
+      }
+      ctx.lineTo(canvas.width, canvas.height);
+      ctx.closePath();
+      ctx.fill();
+      waveOffset += 1;
+      requestAnimationFrame(drawJar);
+    }
+
+    /***** Buff Calculation *****/
+    // Returns the extra juice amount provided by the active farm buff.
+    function getBuffBonus() {
+      if (!activeFarm) return 0;
+      switch (activeFarm.type) {
+        case "additive":
+          return activeFarm.params.bonus;
+        case "chance":
+          return (Math.random() < activeFarm.params.chance) ? activeFarm.params.bonus : 0;
+        case "streak":
+          streakCount++;
+          if (streakCount >= activeFarm.params.streakThreshold) {
+            streakCount = 0;
+            return activeFarm.params.bonus;
+          }
+          return 0;
+        case "random":
+          return Math.random() * (activeFarm.params.maxBonus - activeFarm.params.minBonus) + activeFarm.params.minBonus;
+        case "combo":
+          let now = Date.now();
+          if (lastComboTime === undefined || (now - lastComboTime) > activeFarm.params.comboTimeout) {
+            comboCount = 1;
+          } else {
+            comboCount = (comboCount || 1) + activeFarm.params.comboIncrement;
+          }
+          lastComboTime = now;
+          return comboCount;
+        default:
+          return 0;
+      }
+    }
+
+    /***** Floating Buff Indicator *****/
+    function showBuffIndicator(clientX, clientY, bonus) {
+      const indicator = document.createElement("span");
+      indicator.className = "buff-indicator";
+      indicator.innerText = "+" + bonus.toFixed(1);
+      // Position relative to the juice container.
+      const container = document.getElementById("juiceContainer");
+      const rect = container.getBoundingClientRect();
+      indicator.style.left = (clientX - rect.left) + "px";
+      indicator.style.top = (clientY - rect.top) + "px";
+      container.appendChild(indicator);
+      // Remove after animation completes.
+      setTimeout(() => indicator.remove(), 1000);
+    }
+
+    /***** Click to Farm Juice *****/
+    function farmJuice(e) {
+      // Add click animation to the jar.
+      const jar = document.getElementById("juiceContainer");
+      jar.classList.add("jar-clicked");
+      setTimeout(() => jar.classList.remove("jar-clicked"), 100);
+
+      if (!gameRunning) startTimer();
+      
+      // Calculate the bonus from the active farm buff.
+      const buffBonus = getBuffBonus();
+      // Show the buff indicator if a bonus was applied.
+      if (buffBonus > 0) {
+        showBuffIndicator(e.clientX, e.clientY, buffBonus);
+      }
+      
+      juice += baseJuicePerClick + buffBonus;
+      
+      // Particle feedback.
+      spawnDrops(e.clientX, e.clientY);
+      
+      // Check if the target is reached.
+      if (juice >= targetJuice) {
+        juice = targetJuice;
+        stopTimer();
+        alert("Target reached! Your time: " + document.getElementById("timer").innerText + " seconds.");
+      }
+      updateUI();
+    }
+    document.getElementById("juiceContainer").addEventListener("click", farmJuice);
+
+    /***** Particle Effects (Drops) *****/
+    function spawnDrops(x, y) {
+      const container = document.getElementById("juiceContainer");
+      const rect = container.getBoundingClientRect();
+      const relX = x - rect.left;
+      const relY = y - rect.top;
+      for (let i = 0; i < 5; i++) {
+        const drop = document.createElement("div");
+        drop.className = "drop";
+        drop.style.left = relX + Math.random() * 20 - 10 + "px";
+        drop.style.top = relY + Math.random() * 20 - 10 + "px";
+        container.appendChild(drop);
+        setTimeout(() => drop.remove(), 800);
+      }
+    }
+
+    /***** Update UI Elements *****/
+    function updateUI() {
+      document.getElementById("juiceCount").innerText = Math.floor(juice);
+      document.getElementById("targetJuice").innerText = targetJuice;
+      document.getElementById("activeFarm").innerText = activeFarm 
+        ? activeFarm.name + " (" + getFarmDescription(activeFarm) + ")"
+        : "None";
+    }
+
+    /***** Initialization *****/
+    updateUI();
+    updateFarmList();
+    drawJar();
+  </script>
+</body>
+</html>

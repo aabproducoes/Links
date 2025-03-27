@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Idle RPG Boss Battle with Flip Animation</title>
+  <style>
+    body {
+      background: #111;
+      color: #eee;
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .game-container {
+      width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .pixelated {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    h1 {
+      margin-bottom: 0.5em;
+    }
+
+    /* The frame (border) around the boss, which is clickable */
+    .boss-frame {
+      display: inline-block;
+      border: 4px solid #666;
+      padding: 10px;
+      cursor: pointer;
+      margin: 20px 0;
+      /* We’ll use position: relative so we can apply animations easily */
+      position: relative;
+    }
+
+    .boss-container {
+      margin: 0 auto;
+      padding: 10px;
+      border: 2px dashed #555;
+      display: inline-block;
+      min-width: 200px;
+      transition: transform 0.2s;
+    }
+
+    .boss-hp {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #f44;
+    }
+
+    .shop-container,
+    .inventory-container {
+      display: inline-block;
+      width: 45%;
+      vertical-align: top;
+      margin: 10px;
+      text-align: left;
+    }
+
+    .shop-item,
+    .inventory-item {
+      background: #222;
+      border: 1px solid #555;
+      padding: 5px;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+
+    .merge-controls {
+      margin-top: 10px;
+    }
+
+    .highlight-merge {
+      background-color: #454;
+    }
+
+    /* 
+      The flip animation:
+        - We'll go from scaleX(1) to scaleX(-1) over 0.6s.
+        - 'forwards' so it stays flipped at the end of animation.
+    */
+    @keyframes flipHorizontal {
+      0% {
+        transform: scaleX(1);
+      }
+      100% {
+        transform: scaleX(-1);
+      }
+    }
+
+    /* When we add this class, the boss-frame or boss-container flips horizontally */
+    .flip-anim {
+      animation: flipHorizontal 0.6s forwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container pixelated">
+    <h1>Idle RPG: Boss Battle (with Flip Animation)</h1>
+
+    <!-- The boss frame with an ID so we can apply the flip class -->
+    <div class="boss-frame" id="bossFrame" onclick="clickAttack()">
+      <!-- BOSS DISPLAY -->
+      <div class="boss-container" id="bossContainer">
+        <div id="bossName"></div>
+        <pre id="bossAscii"></pre>
+        <div class="boss-hp" id="bossHP"></div>
+      </div>
+    </div>
+
+    <!-- SHOP SECTION -->
+    <div class="shop-container" id="shopContainer">
+      <h2>Shop</h2>
+      <div id="shopItems"></div>
+    </div>
+
+    <!-- INVENTORY SECTION -->
+    <div class="inventory-container">
+      <h2>Inventory (Backpack)</h2>
+      <div id="inventoryList"></div>
+      <div class="merge-controls">
+        <button onclick="attemptMerge()">Merge Selected</button>
+      </div>
+    </div>
+
+    <!-- PLAYER STATS -->
+    <div style="clear: both; margin-top: 20px;">
+      <p>Gold: <span id="goldDisplay">0</span></p>
+      <p>Level: <span id="levelDisplay">1</span></p>
+      <p>DPS: <span id="dpsDisplay">0</span></p>
+      <p>Click Damage: <span id="clickDamageDisplay">1</span></p>
+    </div>
+
+  </div>
+
+  <script>
+    /******************************************************
+     * DATA STRUCTURES
+     ******************************************************/
+    const bossForms = [
+      {
+        name: "Green Slime",
+        ascii: [
+          "    ~~~~~    ",
+          "   ( o o )   ",
+          "    \\___/    "
+        ],
+        maxHP: 50
+      },
+      {
+        name: "Angry Goblin",
+        ascii: [
+          "    ,~,     ",
+          "   (O,O)    ",
+          "   /)  (\\   "
+        ],
+        maxHP: 200
+      },
+      {
+        name: "Fire Dragon",
+        ascii: [
+          "      /\\___/\\    ",
+          "     (  o o  )   ",
+          "      \\  ^  /    ",
+          "       |||||     "
+        ],
+        maxHP: 1000
+      }
+      // Add more bosses as needed
+    ];
+
+    const allWeapons = [
+      { name: "Wooden Sword", cost: 10,  damage: 1,   levelRequired: 1 },
+      { name: "Iron Sword",   cost: 50,  damage: 5,   levelRequired: 2 },
+      { name: "Steel Axe",    cost: 200, damage: 15,  levelRequired: 3 }
+      // Add more weapons as needed
+    ];
+
+    let gold = 0;
+    let level = 1;
+    let inventory = [];
+    let selectedIndices = [];
+
+    // Click damage
+    let clickDamage = 1;
+
+    // Current boss
+    let currentBoss = {
+      name: "",
+      ascii: [],
+      maxHP: 100,
+      hp: 100
+    };
+
+    /******************************************************
+     * CORE GAME LOGIC
+     ******************************************************/
+    function spawnBoss() {
+      // pick boss form
+      let formIndex = Math.min(level - 1, bossForms.length - 1);
+      let form = bossForms[formIndex];
+      currentBoss.name = form.name;
+      currentBoss.ascii = form.ascii;
+      currentBoss.maxHP = form.maxHP * Math.pow(2, Math.floor((level - 1) / bossForms.length));
+      currentBoss.hp = currentBoss.maxHP;
+      updateBossDisplay();
+    }
+
+    function updateBossDisplay() {
+      document.getElementById("bossName").textContent = currentBoss.name;
+      document.getElementById("bossAscii").textContent = currentBoss.ascii.join("\n");
+      document.getElementById("bossHP").textContent = `HP: ${Math.ceil(currentBoss.hp)} / ${currentBoss.maxHP}`;
+    }
+
+    function calculateDPS() {
+      return inventory.reduce((sum, w) => sum + w.damage, 0);
+    }
+
+    // passive DPS
+    function tickDamage() {
+      let dps = calculateDPS();
+      if (dps > 0 && currentBoss.hp > 0) {
+        currentBoss.hp -= dps / 10; // run 10x per second
+        if (currentBoss.hp <= 0) {
+          bossDefeated();
+        }
+        updateBossDisplay();
+      }
+    }
+
+    // click attack
+    function clickAttack() {
+      if (currentBoss.hp <= 0) return;
+      currentBoss.hp -= clickDamage;
+      if (currentBoss.hp <= 0) {
+        bossDefeated();
+      }
+      updateBossDisplay();
+    }
+
+    // BOSS DEFEATED (with horizontal flip)
+    function bossDefeated() {
+      currentBoss.hp = 0;
+      // reward
+      gold += Math.floor(currentBoss.maxHP / 5);
+      document.getElementById("goldDisplay").textContent = gold;
+      level++;
+      document.getElementById("levelDisplay").textContent = level;
+
+      // 1) Flip animation:
+      let frameEl = document.getElementById("bossFrame");
+      frameEl.classList.add("flip-anim");
+
+      // 2) After animation finishes, remove flip & spawn next boss
+      frameEl.addEventListener("animationend", handleFlipEnd);
+    }
+
+    function handleFlipEnd(e) {
+      // Make sure we're responding to our 'flipHorizontal' keyframes
+      if (e.animationName === "flipHorizontal") {
+        let frameEl = document.getElementById("bossFrame");
+        // remove the listener so it doesn't trigger multiple times
+        frameEl.removeEventListener("animationend", handleFlipEnd);
+        // remove the flip class so it resets
+        frameEl.classList.remove("flip-anim");
+        // now spawn the new boss
+        spawnBoss();
+        updateShop();
+      }
+    }
+
+    /******************************************************
+     * SHOP & INVENTORY
+     ******************************************************/
+    function updateShop() {
+      const shopDiv = document.getElementById("shopItems");
+      shopDiv.innerHTML = "";
+      let unlockedWeapons = allWeapons.filter(w => w.levelRequired <= level);
+
+      unlockedWeapons.forEach((weapon) => {
+        let itemDiv = document.createElement("div");
+        itemDiv.className = "shop-item";
+        itemDiv.textContent = `${weapon.name} | Cost: ${weapon.cost} | DPS: ${weapon.damage}`;
+        itemDiv.onclick = () => buyWeapon(weapon);
+        shopDiv.appendChild(itemDiv);
+      });
+    }
+
+    function buyWeapon(weapon) {
+      if (gold >= weapon.cost) {
+        gold -= weapon.cost;
+        document.getElementById("goldDisplay").textContent = gold;
+        inventory.push({
+          name: weapon.name,
+          baseDamage: weapon.damage,
+          damage: weapon.damage,
+          mergeLevel: 0
+        });
+        updateInventory();
+      } else {
+        alert("Not enough gold!");
+      }
+    }
+
+    function updateInventory() {
+      const inventoryDiv = document.getElementById("inventoryList");
+      inventoryDiv.innerHTML = "";
+      inventory.forEach((item, idx) => {
+        let invDiv = document.createElement("div");
+        invDiv.className = "inventory-item";
+        invDiv.textContent = `${item.name} (DPS: ${item.damage}) [Mergelv:${item.mergeLevel}]`;
+        if (selectedIndices.includes(idx)) {
+          invDiv.classList.add("highlight-merge");
+        }
+        invDiv.onclick = () => toggleSelect(idx);
+        inventoryDiv.appendChild(invDiv);
+      });
+      document.getElementById("dpsDisplay").textContent = calculateDPS();
+    }
+
+    function toggleSelect(index) {
+      if (selectedIndices.includes(index)) {
+        selectedIndices = selectedIndices.filter(i => i !== index);
+      } else {
+        if (selectedIndices.length < 2) {
+          selectedIndices.push(index);
+        } else {
+          alert("You can only select 2 items to merge at a time.");
+        }
+      }
+      updateInventory();
+    }
+
+    function attemptMerge() {
+      if (selectedIndices.length < 2) {
+        alert("Select exactly 2 identical items to merge!");
+        return;
+      }
+      let i1 = selectedIndices[0];
+      let i2 = selectedIndices[1];
+      let w1 = inventory[i1];
+      let w2 = inventory[i2];
+      if (w1.name === w2.name && w1.mergeLevel === w2.mergeLevel) {
+        w1.mergeLevel++;
+        w1.damage = w1.baseDamage * Math.pow(2, w1.mergeLevel);
+        let maxIndex = Math.max(i1, i2);
+        let minIndex = Math.min(i1, i2);
+        inventory.splice(maxIndex, 1);
+        inventory.splice(minIndex, 1);
+        inventory.push(w1);
+        selectedIndices = [];
+        updateInventory();
+      } else {
+        alert("These items cannot be merged. They must be identical in name & merge level.");
+      }
+    }
+
+    /******************************************************
+     * MAIN LOOP
+     ******************************************************/
+    function mainLoop() {
+      tickDamage();
+    }
+
+    /******************************************************
+     * START
+     ******************************************************/
+    function startGame() {
+      spawnBoss();
+      updateShop();
+      updateInventory();
+      document.getElementById("goldDisplay").textContent = gold;
+      document.getElementById("levelDisplay").textContent = level;
+      document.getElementById("clickDamageDisplay").textContent = clickDamage;
+
+      setInterval(mainLoop, 100); // 10 ticks per second
+    }
+
+    startGame();
+  </script>
+</body>
+</html>

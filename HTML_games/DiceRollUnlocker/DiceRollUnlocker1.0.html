@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dice Roll Unlocker – Start Menu</title>
+  <style>
+    /* Full-screen overlay for the start menu */
+    #overlayMenu {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: #fff;
+      text-align: center;
+    }
+    #overlayMenu h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+    }
+    #overlayMenu p {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+    #overlayMenu button {
+      font-size: 24px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      background-color: #28a745;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #overlayMenu button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    /* Main menu bar (below overlay) */
+    #menu {
+      background: linear-gradient(to right, #444, #777);
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+    #menu h1 {
+      margin: 0;
+      font-size: 28px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+    #menu p {
+      margin: 5px 0 0;
+      font-size: 16px;
+    }
+    #info {
+      padding: 10px;
+      background-color: #ddd;
+      text-align: center;
+    }
+    #cityCanvas {
+      background-color: #eee;
+      display: block;
+      margin: 20px auto;
+      border: 1px solid #333;
+    }
+    /* Shop always visible at the bottom */
+    #shopMenu {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border-top: 2px solid #333;
+      padding: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+    }
+    #shopMenu h3 {
+      flex-basis: 100%;
+      text-align: center;
+      margin: 0 0 10px 0;
+    }
+    #shopMenu button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #shopMenu button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    #message {
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      margin: 10px;
+      min-height: 24px;
+    }
+    /* ASCII 3D dice art */
+    #diceArt {
+      text-align: center;
+      white-space: pre;
+      font-size: 14px;
+      line-height: 1.1;
+      margin: 0 auto 10px auto;
+      width: fit-content;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #333;
+    }
+    /* Loading bar */
+    #loadingContainer {
+      width: 300px;
+      height: 20px;
+      border: 1px solid #333;
+      margin: 0 auto 20px auto;
+      background: #ddd;
+    }
+    #loadingBar {
+      width: 0%;
+      height: 100%;
+      background: green;
+      transition: width 0.1s;
+    }
+    body {
+      font-family: monospace;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Overlay Start Menu -->
+  <div id="overlayMenu">
+    <h1>Dice Roll Unlocker</h1>
+    <p>Unlock houses, generate income, and upgrade your dice!</p>
+    <button id="startGameBtn">Start Game</button>
+  </div>
+  
+  <div id="menu">
+    <h1>Dice Roll Unlocker</h1>
+    <p>Enjoy unlocking houses and upgrading your dice!</p>
+  </div>
+  <div id="info">
+    <span id="diceInfo">Dice: 6</span> | 
+    <span id="moneyInfo">Money: $500</span>
+  </div>
+  <canvas id="cityCanvas" width="800" height="600"></canvas>
+  
+  <div id="shopMenu">
+    <h3>Shop - Buy Better Dice</h3>
+    <button data-dice="8" data-cost="50" data-color="red">8 Sides ($50)</button>
+    <button data-dice="10" data-cost="100" data-color="goldenrod">10 Sides ($100)</button>
+    <button data-dice="16" data-cost="800" data-color="orange">16 Sides ($800)</button>
+    <button data-dice="12" data-cost="200" data-color="purple">12 Sides ($200)</button>
+    <button data-dice="14" data-cost="400" data-color="teal">14 Sides ($400)</button>
+  </div>
+  <div id="message"></div>
+  <pre id="diceArt"></pre>
+  <div id="loadingContainer">
+    <div id="loadingBar"></div>
+  </div>
+  
+  <script>
+    // Game Variables and Setup
+    const canvas = document.getElementById('cityCanvas');
+    const ctx = canvas.getContext('2d');
+    const messageDiv = document.getElementById('message');
+    const diceInfoSpan = document.getElementById('diceInfo');
+    const moneyInfoSpan = document.getElementById('moneyInfo');
+    const winSound = document.getElementById('winSound');
+    const loseSound = document.getElementById('loseSound');
+    const diceArtPre = document.getElementById('diceArt');
+    const loadingBar = document.getElementById('loadingBar');
+    
+    let player = {
+      diceSides: 6,
+      diceColor: 'blue',
+      money: 500
+    };
+    
+    const rows = 6;
+    const cols = 8;
+    const housePadding = 10;
+    const houseWidth = (canvas.width - (cols + 1) * housePadding) / cols;
+    const houseHeight = (canvas.height - (rows + 1) * housePadding) / rows;
+    const minLevel = 3;
+    const maxLevel = 20;
+    let houses = [];
+    let incomeInterval;
+    
+    function computeHouseLevel(houseCenterX, houseCenterY) {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const dx = houseCenterX - centerX;
+      const dy = houseCenterY - centerY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const maxDistance = Math.sqrt((canvas.width/2)**2 + (canvas.height/2)**2);
+      const normalized = 1 - (distance / maxDistance);
+      let level = Math.round(minLevel + normalized * (maxLevel - minLevel));
+      level += Math.floor(Math.random() * 3) - 1;
+      return Math.max(minLevel, Math.min(maxLevel, level));
+    }
+    
+    function getHouseColor(level, unlocked) {
+      let hue = (level * 40) % 360;
+      let lightness = unlocked ? '60%' : '80%';
+      return `hsl(${hue}, 70%, ${lightness})`;
+    }
+    
+    // 3D ASCII Dice Templates for rotation
+    const diceTemplates = [
+      [
+        "   _______",
+        "  /      /|",
+        " /  {val}  / |",
+        "+------+  |",
+        "|  {val}  |  +",
+        "|      | /",
+        "|______|/"
+      ],
+      [
+        "    _______",
+        "   /      /|",
+        "  /  {val}  / |",
+        " /------+  |",
+        "|  {val}  |  +",
+        "|      | /",
+        "|______|/"
+      ],
+      [
+        "   _______",
+        "  /|     /|",
+        " / | {val}/ |",
+        "+--+---+  |",
+        "| {val} |  +",
+        "|     | /",
+        "|_____|/"
+      ],
+      [
+        "    _______",
+        "   /|     /|",
+        "  / | {val}/ |",
+        " /--+---+  |",
+        "| {val} |  +",
+        "|     | /",
+        "|_____|/"
+      ]
+    ];
+    
+    function formatDiceValue(value) {
+      const str = value.toString();
+      if (str.length === 1) return " " + str + " ";
+      if (str.length === 2) return " " + str;
+      return str;
+    }
+    
+    function getRotatedDiceArt(value, frame) {
+      const formatted = formatDiceValue(value);
+      const template = diceTemplates[frame % diceTemplates.length];
+      return template.map(line => line.replace(/{val}/g, formatted));
+    }
+    
+    function combineDiceArts(art1, art2) {
+      let combined = "";
+      for (let i = 0; i < Math.max(art1.length, art2.length); i++){
+        const line1 = art1[i] || "";
+        const line2 = art2[i] || "";
+        combined += line1 + "    " + line2 + "\n";
+      }
+      return combined;
+    }
+    
+    // Income Generation: every 3 seconds each unlocked house generates money equal to its level.
+    function generateIncome() {
+      let totalIncome = 0;
+      houses.forEach(house => {
+        if (house.unlocked) {
+          totalIncome += house.level;
+        }
+      });
+      if (totalIncome > 0) {
+        player.money += totalIncome;
+        updateInfo();
+        messageDiv.textContent = `Generated $${totalIncome} from unlocked houses.`;
+      }
+    }
+    
+    function initGame() {
+      player.money = 500;
+      player.diceSides = 6;
+      player.diceColor = 'blue';
+      houses = [];
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * (houseWidth + housePadding) + housePadding;
+          const y = r * (houseHeight + housePadding) + housePadding;
+          const houseCenterX = x + houseWidth / 2;
+          const houseCenterY = y + houseHeight / 2;
+          const level = computeHouseLevel(houseCenterX, houseCenterY);
+          houses.push({ x, y, width: houseWidth, height: houseHeight, level, unlocked: false });
+        }
+      }
+      updateInfo();
+      drawCity();
+      messageDiv.textContent = "Game started! Click a house to roll against it.";
+      diceArtPre.textContent = "";
+      loadingBar.style.width = "0%";
+      
+      if (incomeInterval) clearInterval(incomeInterval);
+      incomeInterval = setInterval(generateIncome, 3000);
+    }
+    
+    function drawCity() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      houses.forEach(house => {
+        ctx.fillStyle = getHouseColor(house.level, house.unlocked);
+        ctx.fillRect(house.x, house.y, house.width, house.height);
+        ctx.strokeStyle = '#333';
+        ctx.strokeRect(house.x, house.y, house.width, house.height);
+        ctx.fillStyle = '#000';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(house.level, house.x + house.width / 2, house.y + house.height / 2);
+      });
+    }
+    
+    function updateInfo() {
+      diceInfoSpan.innerHTML = `Dice: <span style="color:${player.diceColor}; font-weight:bold;">${player.diceSides}</span>`;
+      moneyInfoSpan.textContent = "Money: $" + player.money;
+    }
+    
+    function rollDice(max) {
+      return Math.floor(Math.random() * max) + 1;
+    }
+    
+    function animateRolls(maxPlayer, maxHouse, callback) {
+      const duration = 1000;
+      const startTime = Date.now();
+      let frameIndex = 0;
+      
+      const rollInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progressPercent = Math.min(100, (elapsed / duration) * 100);
+        loadingBar.style.width = progressPercent + "%";
+        
+        frameIndex = Math.floor(elapsed / 100);
+        const tempPlayerRoll = rollDice(maxPlayer);
+        const tempHouseRoll = rollDice(maxHouse);
+        messageDiv.textContent = `Rolling... Player: ${tempPlayerRoll} vs House: ${tempHouseRoll}`;
+        const art1 = getRotatedDiceArt(tempPlayerRoll, frameIndex);
+        const art2 = getRotatedDiceArt(tempHouseRoll, frameIndex);
+        diceArtPre.textContent = combineDiceArts(art1, art2);
+      }, 100);
+      
+      setTimeout(() => {
+        clearInterval(rollInterval);
+        const finalPlayerRoll = rollDice(maxPlayer);
+        const finalHouseRoll = rollDice(maxHouse);
+        callback(finalPlayerRoll, finalHouseRoll);
+        loadingBar.style.width = "100%";
+        setTimeout(() => {
+          loadingBar.style.width = "0%";
+        }, 300);
+        const art1 = getRotatedDiceArt(finalPlayerRoll, frameIndex);
+        const art2 = getRotatedDiceArt(finalHouseRoll, frameIndex);
+        diceArtPre.textContent = combineDiceArts(art1, art2);
+      }, duration);
+    }
+    
+    function attemptUnlock(house) {
+      const cost = house.level * 5;
+      if (player.money < cost) {
+        messageDiv.textContent = `Not enough money to try unlocking this house. It costs $${cost}.`;
+        return;
+      }
+      player.money -= cost;
+      updateInfo();
+      
+      canvas.style.pointerEvents = 'none';
+      animateRolls(player.diceSides, house.level, (playerRoll, houseRoll) => {
+        canvas.style.pointerEvents = 'auto';
+        if (playerRoll > houseRoll) {
+          if (!house.unlocked) {
+            house.unlocked = true;
+            player.money += house.level * 15;
+            messageDiv.textContent = `Success! Unlocked the house. Your roll: ${playerRoll} vs House: ${houseRoll}. Earned $${house.level * 15}.`;
+          } else {
+            house.level += 1;
+            player.money += house.level * 15;
+            messageDiv.textContent = `House upgraded! New level: ${house.level}. Your roll: ${playerRoll} vs House: ${houseRoll}. Earned $${house.level * 15}.`;
+          }
+          if (winSound) winSound.play();
+          animateHouseFlash(house);
+        } else {
+          messageDiv.textContent = `Failed! Your roll: ${playerRoll} vs House: ${houseRoll}.`;
+          if (loseSound) loseSound.play();
+        }
+        updateInfo();
+        drawCity();
+      });
+    }
+    
+    function animateHouseFlash(house) {
+      let start = null;
+      function animate(timestamp) {
+        if (!start) start = timestamp;
+        const progress = timestamp - start;
+        let opacity = 1 - progress / 500;
+        drawCity();
+        ctx.fillStyle = `rgba(255,255,255,${opacity})`;
+        ctx.fillRect(house.x, house.y, house.width, house.height);
+        if (progress < 500) {
+          requestAnimationFrame(animate);
+        } else {
+          drawCity();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    
+    canvas.addEventListener('click', function(e) {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      houses.forEach(house => {
+        if (mouseX > house.x && mouseX < house.x + house.width &&
+            mouseY > house.y && mouseY < house.y + house.height) {
+          attemptUnlock(house);
+        }
+      });
+    });
+    
+    const shopMenu = document.getElementById('shopMenu');
+    shopMenu.querySelectorAll('button').forEach(button => {
+      const btnColor = button.getAttribute('data-color');
+      button.style.backgroundColor = btnColor;
+    });
+    
+    shopMenu.addEventListener('click', function(e) {
+      if (e.target.tagName === 'BUTTON') {
+        const newDiceSides = parseInt(e.target.getAttribute('data-dice'));
+        const cost = parseInt(e.target.getAttribute('data-cost'));
+        const color = e.target.getAttribute('data-color');
+        if (player.money >= cost) {
+          player.money -= cost;
+          player.diceSides = newDiceSides;
+          player.diceColor = color;
+          updateInfo();
+          messageDiv.textContent = `Purchased new dice: ${newDiceSides} sides (${color}).`;
+        } else {
+          messageDiv.textContent = "Not enough money to purchase this dice.";
+        }
+      }
+    });
+    
+    // Start Game button in the overlay triggers game initialization and hides the overlay.
+    document.getElementById('startGameBtn').addEventListener('click', function() {
+      document.getElementById('overlayMenu').style.display = 'none';
+      initGame();
+    });
+  </script>
+</body>
+</html>

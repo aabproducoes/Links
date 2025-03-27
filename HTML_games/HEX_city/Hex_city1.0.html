@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hex City Builder</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f0f0f0;
+    }
+
+    /* Top panel for resource counters */
+    #resourcePanel {
+      display: flex;
+      justify-content: center;
+      margin: 1rem;
+    }
+
+    .resource-counter {
+      margin: 0 1rem;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .resource-counter img {
+      display: block;
+      margin: 0 auto;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    /* Wrapper to center the game area */
+    #gameWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* horizontally center */
+      margin: 0 auto;
+      padding-bottom: 2rem;
+    }
+
+    /* Hex grid container */
+    #hexGrid {
+      position: relative; /* for absolute-positioned hexes */
+      margin: 1rem auto;  /* center horizontally */
+      /* Adjust to hold enough space for the radius you choose */
+      width: 800px;
+      height: 700px;
+    }
+
+    /*
+      HEX Styles
+      Each .hex is shaped via clip-path.
+      We add transitions for a hover highlight, plus a special buy effect.
+    */
+    .hex {
+      width: 80px;
+      height: 80px;
+      margin: 6px;
+      background: #ccc;
+      clip-path: polygon(
+        50% 0%,
+        100% 25%,
+        100% 75%,
+        50% 100%,
+        0% 75%,
+        0% 25%
+      );
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: filter 0.2s, box-shadow 0.2s;
+    }
+
+    /* Hover highlight */
+    .hex:hover {
+      filter: brightness(1.2);
+    }
+
+    /* Locked hexes (unowned) */
+    .locked {
+      background-color: #666;
+      cursor: pointer;
+    }
+
+    /* Owned hexes */
+    .owned {
+      background-color: #88c;
+      cursor: pointer;
+    }
+
+    /* Content inside each hex: icons, level info, etc. */
+    .hex-content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .hex-content img.resource-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-bottom: 4px;
+    }
+
+    .cost-container {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .cost-item {
+      display: flex;
+      align-items: center;
+      margin: 0 2px;
+    }
+
+    .cost-item img {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      margin-right: 2px;
+    }
+
+    .upgrade-button {
+      margin-top: 4px;
+      font-size: 10px;
+      padding: 2px 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .upgrade-button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    /*
+      "Buy effect" animation:
+      a quick flash using a box-shadow that shrinks.
+    */
+    .buy-effect {
+      animation: buyFlash 0.6s ease-out forwards;
+    }
+
+    @keyframes buyFlash {
+      0% {
+        box-shadow: 0 0 8px 6px rgba(255, 255, 0, 0.7);
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 0, 0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="resourcePanel">
+  <!-- Resource counters -->
+  <div class="resource-counter">
+    <img src="https://imgur.com/gpXGMqZ.png" alt="Food" />
+    <div id="foodCount">0</div>
+  </div>
+  <div class="resource-counter">
+    <img src="https://imgur.com/hegKexv.png" alt="Water" />
+    <div id="waterCount">0</div>
+  </div>
+  <div class="resource-counter">
+    <img src="https://imgur.com/tkq2Sbq.png" alt="Wood" />
+    <div id="woodCount">0</div>
+  </div>
+  <div class="resource-counter">
+    <img src="https://imgur.com/t3WL3rF.png" alt="Iron" />
+    <div id="ironCount">0</div>
+  </div>
+</div>
+
+<div id="gameWrapper">
+  <div id="hexGrid"></div>
+</div>
+
+<script>
+/** Icons for each resource (circular) */
+const iconSources = {
+  food: "https://imgur.com/gpXGMqZ.png",
+  water: "https://imgur.com/hegKexv.png",
+  wood: "https://imgur.com/tkq2Sbq.png",
+  iron: "https://imgur.com/t3WL3rF.png"
+};
+
+/** Resource names for easy iteration. */
+const resourceNames = ["food", "water", "wood", "iron"];
+
+/** Current resource counts. */
+let resources = {
+  food: 10,   // Start with a little to allow buying your first Water tile
+  water: 0,
+  wood: 0,
+  iron: 0
+};
+
+/**
+ * Here is the critical part: The cost to unlock a hex that produces X
+ * is 2 of the "previous" resource in a cycle (food->water->wood->iron->food).
+ */
+const unlockCostMapping = {
+  food:  "iron",  // to buy food, you need 2 iron
+  water: "food",  // to buy water, you need 2 food
+  wood:  "water", // to buy wood, you need 2 water
+  iron:  "wood"   // to buy iron, you need 2 wood
+};
+
+function getUnlockCost(resourceType) {
+  const neededRes = unlockCostMapping[resourceType];
+  return { type: neededRes, amount: 2 };
+}
+
+/**
+ * The cost to upgrade a hex from level L to L+1 is:
+ *   5 * (L+1) of that hex's own resource type
+ */
+function getUpgradeCost(resourceType, newLevel) {
+  return { type: resourceType, amount: 5 * newLevel };
+}
+
+/**
+ * Generate coordinates for a hex grid of given radius (3 => 37 tiles).
+ * We'll store them in axial coordinates (q,r).
+ * Center is (0,0). 
+ */
+function generateHexCoordinates(radius = 3) {
+  const coords = [];
+  for (let q = -radius; q <= radius; q++) {
+    for (let r = -radius; r <= radius; r++) {
+      const s = -q - r;
+      if (Math.max(Math.abs(q), Math.abs(r), Math.abs(s)) <= radius) {
+        coords.push({ q, r });
+      }
+    }
+  }
+  return coords;
+}
+
+/**
+ * Distance between two axial coords (q1,r1) and (q2,r2).
+ * Used to check adjacency (distance==1).
+ */
+function hexDistance(a, b) {
+  const s1 = -a.q - a.r;
+  const s2 = -b.q - b.r;
+  return (Math.abs(a.q - b.q) + Math.abs(a.r - b.r) + Math.abs(s1 - s2)) / 2;
+}
+
+/**
+ * Randomly assign resource types to each hex except center.
+ * The center is "food" at level 1 and owned from the start.
+ */
+function assignHexes(coords) {
+  const assigned = [];
+  const resourcePool = ["food", "water", "wood", "iron"];
+
+  coords.forEach((c) => {
+    let resourceType;
+    let owned = false;
+    let level = 0;
+
+    if (c.q === 0 && c.r === 0) {
+      // Center
+      resourceType = "food";
+      owned = true;
+      level = 1;
+    } else {
+      // Random resource type for example
+      resourceType = resourcePool[Math.floor(Math.random() * resourcePool.length)];
+    }
+
+    assigned.push({
+      q: c.q,
+      r: c.r,
+      resourceType,
+      owned,
+      level
+    });
+  });
+  return assigned;
+}
+
+/**
+ * Convert axial coords (q,r) to pixel left/top for layout.
+ */
+function axialToPixel(q, r) {
+  const hexWidth = 80;
+  const hexHeight = 80;
+  // Variation of offset for "pointy topped" layout
+  const x = (q + r/2) * hexWidth;
+  const y = r * (hexHeight * 0.75);
+  return { left: x, top: y };
+}
+
+// Generate and assign data
+const coords = generateHexCoordinates(3); // radius=3 => bigger grid
+const hexes = assignHexes(coords);
+
+// Create a container to hold all hexes
+const hexGrid = document.getElementById("hexGrid");
+
+/** Create a hex element for each data. */
+hexes.forEach((hex) => {
+  const { q, r, resourceType } = hex;
+
+  const div = document.createElement("div");
+  div.classList.add("hex");
+  // locked vs owned color
+  if (hex.owned) {
+    div.classList.add("owned");
+  } else {
+    div.classList.add("locked");
+  }
+
+  // Position absolutely
+  const pix = axialToPixel(q, r);
+  div.style.left = (pix.left + 300) + "px"; // offset to center within #hexGrid
+  div.style.top =  (pix.top + 300) + "px";
+
+  // Add internal content
+  const content = document.createElement("div");
+  content.className = "hex-content";
+
+  // Resource Icon
+  const icon = document.createElement("img");
+  icon.src = iconSources[resourceType];
+  icon.className = "resource-icon";
+  icon.title = resourceType;
+  content.appendChild(icon);
+
+  // Info line: level or cost
+  const infoLine = document.createElement("div");
+  if (hex.owned) {
+    infoLine.textContent = `Lvl ${hex.level}`;
+  } else {
+    // Show cost to unlock: e.g. "2 [iconOfTheNeededResource]"
+    const cost = getUnlockCost(resourceType);
+    const costDiv = document.createElement("div");
+    costDiv.className = "cost-container";
+    const costItem = document.createElement("div");
+    costItem.className = "cost-item";
+    const smallIcon = document.createElement("img");
+    smallIcon.src = iconSources[cost.type];
+    costItem.appendChild(smallIcon);
+    const amtSpan = document.createElement("span");
+    amtSpan.textContent = cost.amount;
+    costItem.appendChild(amtSpan);
+    costDiv.appendChild(costItem);
+    infoLine.appendChild(costDiv);
+  }
+  content.appendChild(infoLine);
+
+  // Upgrade button if owned
+  if (hex.owned) {
+    const upgradeBtn = document.createElement("button");
+    upgradeBtn.className = "upgrade-button";
+    upgradeBtn.textContent = "Upgrade";
+    upgradeBtn.onclick = (e) => {
+      e.stopPropagation();
+      attemptUpgrade(hex, div, content);
+    };
+    content.appendChild(upgradeBtn);
+  }
+
+  div.appendChild(content);
+
+  // Click to buy/unlock or upgrade info if owned
+  div.addEventListener("click", () => {
+    if (!hex.owned) {
+      attemptBuy(hex, div, content);
+    }
+  });
+
+  hexGrid.appendChild(div);
+  hex.element = div; // store reference for updates
+});
+
+/** Attempt to unlock (buy) a locked hex */
+function attemptBuy(hex, hexDiv, contentDiv) {
+  // Check adjacency to any owned hex
+  const isAdjacent = hexes.some((o) =>
+    o.owned && hexDistance(o, hex) === 1
+  );
+  if (!isAdjacent) {
+    alert("You must buy a hex adjacent to an owned hex.");
+    return;
+  }
+
+  // Check cost: e.g. to buy water => 2 food
+  const cost = getUnlockCost(hex.resourceType);
+  if (resources[cost.type] < cost.amount) {
+    alert(`Not enough ${cost.type} to buy this hex! Need ${cost.amount}.`);
+    return;
+  }
+
+  // Pay cost
+  resources[cost.type] -= cost.amount;
+
+  // Unlock it
+  hex.owned = true;
+  hex.level = 1;
+
+  // Update the hexDiv
+  hexDiv.classList.remove("locked");
+  hexDiv.classList.add("owned");
+
+  // "Buy effect" animation
+  hexDiv.classList.add("buy-effect");
+  setTimeout(() => {
+    hexDiv.classList.remove("buy-effect");
+  }, 600);
+
+  // Rebuild the content (now it shows "Lvl 1" and an Upgrade button)
+  refreshHexContent(hex, contentDiv);
+
+  updateResourceUI();
+}
+
+/** Attempt to upgrade a hex (increase level by 1) */
+function attemptUpgrade(hex, hexDiv, contentDiv) {
+  if (!hex.owned) return;
+  const newLevel = hex.level + 1;
+  const cost = getUpgradeCost(hex.resourceType, newLevel);
+  if (resources[cost.type] < cost.amount) {
+    alert(`Not enough ${cost.type} to upgrade! Need ${cost.amount}.`);
+    return;
+  }
+  // Pay cost
+  resources[cost.type] -= cost.amount;
+
+  // Upgrade
+  hex.level = newLevel;
+  // Update display
+  refreshHexContent(hex, contentDiv);
+  updateResourceUI();
+}
+
+/** Rebuild the content inside a hex. */
+function refreshHexContent(hex, contentDiv) {
+  contentDiv.innerHTML = "";
+  
+  // Resource Icon
+  const icon = document.createElement("img");
+  icon.src = iconSources[hex.resourceType];
+  icon.className = "resource-icon";
+  icon.title = hex.resourceType;
+  contentDiv.appendChild(icon);
+
+  // Level info
+  const lvlInfo = document.createElement("div");
+  lvlInfo.textContent = `Lvl ${hex.level}`;
+  contentDiv.appendChild(lvlInfo);
+
+  // Upgrade button
+  const upgradeBtn = document.createElement("button");
+  upgradeBtn.className = "upgrade-button";
+  upgradeBtn.textContent = "Upgrade";
+  upgradeBtn.onclick = (e) => {
+    e.stopPropagation();
+    attemptUpgrade(hex, hex.element, contentDiv);
+  };
+  contentDiv.appendChild(upgradeBtn);
+}
+
+/** Update the top resource panel display */
+function updateResourceUI() {
+  document.getElementById("foodCount").textContent = resources.food;
+  document.getElementById("waterCount").textContent = resources.water;
+  document.getElementById("woodCount").textContent = resources.wood;
+  document.getElementById("ironCount").textContent = resources.iron;
+}
+
+/**
+ * Produce resources each second:
+ *   sum( level of hexes that produce X ) per second for each resource X
+ */
+function produceResources() {
+  let production = {
+    food: 0,
+    water: 0,
+    wood: 0,
+    iron: 0
+  };
+  hexes.forEach((hex) => {
+    if (hex.owned && hex.level > 0) {
+      production[hex.resourceType] += hex.level;
+    }
+  });
+  // Add to player's stock
+  resourceNames.forEach((res) => {
+    resources[res] += production[res];
+  });
+  // Update UI
+  updateResourceUI();
+}
+
+// Start the resource production loop
+setInterval(produceResources, 1000);
+
+// Initialize UI
+updateResourceUI();
+</script>
+
+</body>
+</html>

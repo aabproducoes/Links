@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Advanced Clicker/Idle Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    header {
+      background: #333;
+      padding: 10px 0;
+      color: #fff;
+      text-align: center;
+    }
+    nav {
+      background: #444;
+      display: flex;
+      justify-content: center;
+    }
+    nav button {
+      background: #444;
+      color: #fff;
+      border: none;
+      padding: 15px 20px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    nav button:hover {
+      background: #555;
+    }
+    #container {
+      margin: 20px auto;
+      max-width: 900px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      min-height: 500px;
+    }
+    .section {
+      display: none; /* All sections hidden initially */
+    }
+    .active {
+      display: block; /* Visible section */
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+    #goldCounter, #diamondCounter {
+      font-size: 1.2em;
+      margin: 10px 0;
+    }
+    #collectButton {
+      margin: 10px 0;
+      padding: 15px;
+      font-size: 1em;
+      cursor: pointer;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+    #collectButton:hover {
+      background: #eaeaea;
+    }
+    .upgradeButton {
+      margin: 5px 0;
+      padding: 10px 15px;
+      cursor: pointer;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+    .upgradeButton:hover {
+      background: #eaeaea;
+    }
+    .disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .shop-item {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .achievement-list {
+      list-style: none;
+      padding: 0;
+    }
+    .achievement-list li {
+      padding: 8px;
+      margin: 4px 0;
+      background: #e1e1e1;
+      border-radius: 4px;
+      transition: background 0.5s;
+    }
+    .unlocked {
+      background: #c1ffc1; /* Greenish background for unlocked achievements */
+      position: relative;
+    }
+    /* Sparkle effect for unlocked achievements (quick highlight) */
+    .achievementHighlight {
+      animation: sparkle 2s ease-out forwards;
+    }
+    @keyframes sparkle {
+      0%   { box-shadow: 0 0 10px 5px gold; }
+      100% { box-shadow: none; }
+    }
+
+    .settings-item {
+      margin: 10px 0;
+    }
+
+    /* ========== EVENT NOTIFICATION STYLES ========== */
+    #eventBox {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff3c4;
+      padding: 15px 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+      visibility: hidden;
+      z-index: 9999;
+    }
+
+    /* Blinking + rotating animation (3s total) */
+    @keyframes blinkrotate {
+      0%   { opacity: 1; transform: rotate(0deg); }
+      20%  { opacity: 0; }
+      40%  { opacity: 1; transform: rotate(180deg); }
+      60%  { opacity: 0; }
+      80%  { opacity: 1; transform: rotate(270deg); }
+      100% { opacity: 0; transform: rotate(360deg); }
+    }
+
+    .eventAnimation {
+      visibility: visible;
+      animation: blinkrotate 3s linear 1 forwards;
+    }
+
+    /* Home Stats box styling */
+    #homeStats {
+      margin-top: 20px;
+      background: #eee;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+    }
+    #homeStats p {
+      margin: 4px 0;
+    }
+
+    /* ========== CUSTOM MODAL FOR RESET ========== */
+    .modal {
+      display: none; /* hidden by default */
+      position: fixed;
+      z-index: 99999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto; 
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 100px auto;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 400px;
+      text-align: center;
+    }
+    .modal-content button {
+      margin: 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Advanced Clicker/Idle Game</h1>
+  </header>
+
+  <!-- Top Menu (Navigation) -->
+  <nav>
+    <button onclick="showSection('homeSection')">Home</button>
+    <button onclick="showSection('shopSection')">Shop</button>
+    <button onclick="showSection('achievementsSection')">Achievements</button>
+    <button onclick="showSection('settingsSection')">Settings</button>
+  </nav>
+
+  <!-- A floating box to show random events -->
+  <div id="eventBox"></div>
+
+  <!-- Main Container -->
+  <div id="container">
+    <!-- HOME Section -->
+    <div id="homeSection" class="section active">
+      <h2>Home</h2>
+      <div id="goldCounter">Gold: 0</div>
+      <div id="diamondCounter">Diamonds: 0</div>
+      <button id="collectButton">Collect Gold</button>
+      <p>Click the button to collect gold. Occasionally, you may find a diamond!</p>
+
+      <!-- Additional stats and info -->
+      <div id="homeStats">
+        <h3>Statistics</h3>
+        <p><strong>Total Gold Collected:</strong> <span id="totalGoldCollectedDisplay">0</span></p>
+        <p><strong>Gold Per Second (GPS):</strong> <span id="gpsDisplay">0</span></p>
+        <p><strong>Time Played:</strong> <span id="timePlayedDisplay">0s</span></p>
+        <p><strong>Random Events Triggered:</strong> <span id="eventsTriggeredDisplay">0</span></p>
+      </div>
+    </div>
+
+    <!-- SHOP Section -->
+    <div id="shopSection" class="section">
+      <h2>Shop</h2>
+      <div class="shop-item">
+        <strong>Auto-Collector</strong>
+        <p>Generates 1 gold per second automatically.</p>
+        <p>Cost: <span id="autoCollectorCostLabel">20</span> gold</p>
+        <button class="upgradeButton" id="buyAutoCollector">Buy</button>
+      </div>
+      <div class="shop-item">
+        <strong>Speed Boost</strong>
+        <p>Increases auto-collect rate by 1 additional gold per second (stacks).</p>
+        <p>Cost: <span id="speedBoostCostLabel">50</span> gold</p>
+        <button class="upgradeButton" id="buySpeedBoost">Buy</button>
+      </div>
+      <div class="shop-item">
+        <strong>Diamond Exchange</strong>
+        <p>Buy 1 diamond for 100 gold.</p>
+        <button class="upgradeButton" id="buyDiamond">Buy Diamond</button>
+      </div>
+      <div class="shop-item">
+        <strong>Goblin Worker</strong>
+        <p>Produces 1 gold every 2 seconds (in bulk every 2s).</p>
+        <p>Cost: <span id="goblinWorkerCostLabel">200</span> gold</p>
+        <button class="upgradeButton" id="buyGoblinWorker">Buy</button>
+      </div>
+      <div class="shop-item">
+        <strong>Knight</strong>
+        <p>Produces 5 gold every 5 seconds (in bulk every 5s).</p>
+        <p>Cost: <span id="knightCostLabel">500</span> gold</p>
+        <button class="upgradeButton" id="buyKnight">Buy</button>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENTS Section -->
+    <div id="achievementsSection" class="section">
+      <h2>Achievements</h2>
+      <ul id="achievementList" class="achievement-list"></ul>
+      <p>Achieve certain milestones to unlock rewards or bragging rights!</p>
+    </div>
+
+    <!-- SETTINGS Section -->
+    <div id="settingsSection" class="section">
+      <h2>Settings</h2>
+      <div class="settings-item">
+        <label>
+          <input type="checkbox" id="toggleEvents" checked>
+          Enable Random Events
+        </label>
+      </div>
+      <!-- Instead of confirm(), we open a custom modal -->
+      <button onclick="openResetModal()">Reset Game</button>
+      <p>Use caution! Resetting the game clears all progress.</p>
+    </div>
+  </div>
+
+  <!-- =========================
+       CUSTOM RESET MODAL
+  ========================== -->
+  <div id="resetModal" class="modal">
+    <div class="modal-content">
+      <h3>Are you sure you want to reset all game progress?</h3>
+      <button onclick="confirmResetYes()">Yes, Reset</button>
+      <button onclick="closeResetModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- AUDIO ELEMENTS (replace src with your own files) -->
+  <!-- Lower the volume of the coin (click) sound to 50% -->
+  <audio id="clickSound" src="click.mp3" preload="auto" volume="0.5"></audio>
+  <audio id="buySound" src="buy.mp3" preload="auto"></audio>
+  <audio id="achievementSound" src="achievement.mp3" preload="auto"></audio>
+
+  <script>
+    // ===============================
+    // GAME VARIABLES
+    // ===============================
+    let gold = 0;
+    let diamonds = 0;
+    let totalGoldCollected = 0; // all-time gold gained (only goes up)
+
+    // Upgrades
+    let autoCollectorCount = 0;
+    let autoCollectorCost = 20;
+
+    let speedBoostCount = 0;
+    let speedBoostCost = 50;
+
+    // Goblin Worker
+    let goblinWorkerCount = 0;
+    let goblinWorkerCost = 200;
+    // Produces 1 gold every 2 seconds per worker
+
+    // Knight
+    let knightCount = 0;
+    let knightCost = 500;
+    // Produces 5 gold every 5 seconds per knight
+
+    // Diamond chance (1% per click)
+    const diamondChance = 0.01;
+
+    // Achievements
+    const achievements = [
+      { id: 1, name: "First Gold", description: "Collect 1 Gold", unlocked: false },
+      { id: 2, name: "Rich Miner", description: "Collect 100 Gold", unlocked: false },
+      { id: 3, name: "Diamond Finder", description: "Obtain your first Diamond", unlocked: false },
+      { id: 4, name: "Diamond Collector", description: "Collect 10 Diamonds", unlocked: false },
+      { id: 5, name: "Auto Master", description: "Buy 5 Auto-Collectors", unlocked: false },
+      { id: 6, name: "Goblin Army", description: "Buy 5 Goblin Workers", unlocked: false },
+      { id: 7, name: "Knight Squad", description: "Buy 5 Knights", unlocked: false }
+    ];
+
+    // Random Events
+    const randomEventsPool = [
+      { text: "You found a hidden treasure chest!", goldEffect: +10 },
+      { text: "Bandits attacked! Pay them off...", goldEffect: -5 },
+      { text: "A traveling merchant gifted you gold!", goldEffect: +15 },
+      { text: "Accidentally broke some equipment, repairs cost gold.", goldEffect: -8 }
+    ];
+    let randomEventsEnabled = true; 
+    let randomEventsTriggered = 0;
+
+    // Time played
+    let startTime = Date.now();
+
+    // ===============================
+    // HTML ELEMENT REFERENCES
+    // ===============================
+    const goldCounter              = document.getElementById('goldCounter');
+    const diamondCounter           = document.getElementById('diamondCounter');
+    const collectButton            = document.getElementById('collectButton');
+
+    // Shop Buttons & Labels
+    const buyAutoCollectorBtn      = document.getElementById('buyAutoCollector');
+    const buySpeedBoostBtn         = document.getElementById('buySpeedBoost');
+    const buyDiamondBtn            = document.getElementById('buyDiamond');
+    const buyGoblinWorkerBtn       = document.getElementById('buyGoblinWorker');
+    const buyKnightBtn             = document.getElementById('buyKnight');
+
+    const autoCollectorCostLabel   = document.getElementById('autoCollectorCostLabel');
+    const speedBoostCostLabel      = document.getElementById('speedBoostCostLabel');
+    const goblinWorkerCostLabel    = document.getElementById('goblinWorkerCostLabel');
+    const knightCostLabel          = document.getElementById('knightCostLabel');
+
+    const achievementList          = document.getElementById('achievementList');
+    const toggleEventsCheckbox     = document.getElementById('toggleEvents');
+
+    // Event Box
+    const eventBox = document.getElementById('eventBox');
+
+    // Stats on Home Page
+    const totalGoldCollectedDisplay= document.getElementById('totalGoldCollectedDisplay');
+    const gpsDisplay               = document.getElementById('gpsDisplay');
+    const timePlayedDisplay        = document.getElementById('timePlayedDisplay');
+    const eventsTriggeredDisplay   = document.getElementById('eventsTriggeredDisplay');
+
+    // AUDIO
+    const clickSound       = document.getElementById('clickSound');
+    const buySound         = document.getElementById('buySound');
+    const achievementSound = document.getElementById('achievementSound');
+
+    // We can also explicitly set the volume in JavaScript:
+    if (clickSound) {
+      clickSound.volume = 0.5; // 50% volume for the coin sound
+    }
+
+    // ===============================
+    // SECTION NAVIGATION
+    // ===============================
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(sec => {
+        sec.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+    }
+
+    // ===============================
+    // SAVE / LOAD
+    // ===============================
+    function saveGame() {
+      const saveData = {
+        gold,
+        diamonds,
+        totalGoldCollected,
+        autoCollectorCount,
+        autoCollectorCost,
+        speedBoostCount,
+        speedBoostCost,
+        goblinWorkerCount,
+        goblinWorkerCost,
+        knightCount,
+        knightCost,
+        achievements,
+        randomEventsEnabled,
+        randomEventsTriggered
+      };
+      localStorage.setItem('clickerGameSave', JSON.stringify(saveData));
+    }
+
+    function loadGame() {
+      const savedData = localStorage.getItem('clickerGameSave');
+      if (savedData) {
+        const data = JSON.parse(savedData);
+
+        gold                    = data.gold                    || 0;
+        diamonds                = data.diamonds                || 0;
+        totalGoldCollected      = data.totalGoldCollected      || 0;
+        autoCollectorCount      = data.autoCollectorCount      || 0;
+        autoCollectorCost       = data.autoCollectorCost       || 20;
+        speedBoostCount         = data.speedBoostCount         || 0;
+        speedBoostCost          = data.speedBoostCost          || 50;
+        goblinWorkerCount       = data.goblinWorkerCount       || 0;
+        goblinWorkerCost        = data.goblinWorkerCost        || 200;
+        knightCount             = data.knightCount             || 0;
+        knightCost              = data.knightCost              || 500;
+        randomEventsTriggered   = data.randomEventsTriggered   || 0;
+
+        if (data.achievements) {
+          for (let i = 0; i < achievements.length; i++) {
+            achievements[i].unlocked = data.achievements[i].unlocked;
+          }
+        }
+        randomEventsEnabled = data.randomEventsEnabled === false ? false : true;
+      }
+    }
+
+    // ===============================
+    // MAIN GAME LOGIC
+    // ===============================
+    collectButton.addEventListener('click', () => {
+      gold++;
+      totalGoldCollected++;
+      // Play click (coin) sound
+      if (clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play().catch(() => {});
+      }
+      // Random chance to find diamond
+      if (Math.random() < diamondChance) {
+        diamonds++;
+      }
+      updateUI();
+      checkAchievements();
+    });
+
+    // SHOP / BUY
+    buyAutoCollectorBtn.addEventListener('click', () => {
+      if (gold >= autoCollectorCost) {
+        gold -= autoCollectorCost;
+        autoCollectorCount++;
+        autoCollectorCost = Math.floor(autoCollectorCost * 1.5);
+        playBuySound();
+        updateUI();
+        checkAchievements();
+      }
+    });
+    buySpeedBoostBtn.addEventListener('click', () => {
+      if (gold >= speedBoostCost) {
+        gold -= speedBoostCost;
+        speedBoostCount++;
+        speedBoostCost = Math.floor(speedBoostCost * 2);
+        playBuySound();
+        updateUI();
+      }
+    });
+    buyDiamondBtn.addEventListener('click', () => {
+      if (gold >= 100) {
+        gold -= 100;
+        diamonds++;
+        playBuySound();
+        updateUI();
+        checkAchievements();
+      }
+    });
+    buyGoblinWorkerBtn.addEventListener('click', () => {
+      if (gold >= goblinWorkerCost) {
+        gold -= goblinWorkerCost;
+        goblinWorkerCount++;
+        goblinWorkerCost = Math.floor(goblinWorkerCost * 1.5);
+        playBuySound();
+        updateUI();
+        checkAchievements();
+      }
+    });
+    buyKnightBtn.addEventListener('click', () => {
+      if (gold >= knightCost) {
+        gold -= knightCost;
+        knightCount++;
+        knightCost = Math.floor(knightCost * 1.4);
+        playBuySound();
+        updateUI();
+        checkAchievements();
+      }
+    });
+
+    function playBuySound() {
+      if (buySound) {
+        buySound.currentTime = 0;
+        buySound.play().catch(() => {});
+      }
+    }
+
+    // ===============================
+    // AUTO PRODUCTION (1-second loop)
+    // ===============================
+    let tick = 0;
+    setInterval(() => {
+      tick++;
+
+      // Auto-Collector: (1 + speedBoostCount) gold/sec each
+      if (autoCollectorCount > 0) {
+        const goldPerCollector = 1 + speedBoostCount;
+        const produced = autoCollectorCount * goldPerCollector;
+        gold += produced;
+        totalGoldCollected += produced;
+      }
+
+      // Goblin Workers: 1 gold every 2 sec each
+      if (goblinWorkerCount > 0 && tick % 2 === 0) {
+        const produced = goblinWorkerCount;
+        gold += produced;
+        totalGoldCollected += produced;
+      }
+
+      // Knights: 5 gold every 5 sec each
+      if (knightCount > 0 && tick % 5 === 0) {
+        const produced = knightCount * 5;
+        gold += produced;
+        totalGoldCollected += produced;
+      }
+
+      updateUI();
+      checkAchievements();
+    }, 1000);
+
+    // ===============================
+    // RANDOM EVENTS (Every 30s)
+    // ===============================
+    setInterval(() => {
+      if (randomEventsEnabled) {
+        triggerRandomEvent();
+      }
+    }, 30000);
+
+    // 50% chance for a random event
+    function triggerRandomEvent() {
+      if (Math.random() < 0.5) {
+        const eventIndex = Math.floor(Math.random() * randomEventsPool.length);
+        const selectedEvent = randomEventsPool[eventIndex];
+        gold += selectedEvent.goldEffect;
+        if (gold < 0) gold = 0;
+        randomEventsTriggered++;
+        showEventNotification(selectedEvent);
+        updateUI();
+      }
+    }
+
+    // Show event in the rotating/blinking box
+    function showEventNotification(eventData) {
+      const effect = eventData.goldEffect >= 0 
+        ? `+${eventData.goldEffect} gold` 
+        : `${eventData.goldEffect} gold`;
+
+      eventBox.textContent = `${eventData.text} (${effect})`;
+      eventBox.classList.add('eventAnimation');
+
+      setTimeout(() => {
+        eventBox.classList.remove('eventAnimation');
+        eventBox.textContent = '';
+      }, 3000);
+    }
+
+    // ===============================
+    // ACHIEVEMENTS
+    // ===============================
+    function checkAchievements() {
+      achievements.forEach(ach => {
+        if (!ach.unlocked) {
+          switch (ach.id) {
+            case 1: // "First Gold"
+              if (gold >= 1) unlockAchievement(ach);
+              break;
+            case 2: // "Rich Miner"
+              if (gold >= 100) unlockAchievement(ach);
+              break;
+            case 3: // "Diamond Finder"
+              if (diamonds >= 1) unlockAchievement(ach);
+              break;
+            case 4: // "Diamond Collector"
+              if (diamonds >= 10) unlockAchievement(ach);
+              break;
+            case 5: // "Auto Master"
+              if (autoCollectorCount >= 5) unlockAchievement(ach);
+              break;
+            case 6: // "Goblin Army"
+              if (goblinWorkerCount >= 5) unlockAchievement(ach);
+              break;
+            case 7: // "Knight Squad"
+              if (knightCount >= 5) unlockAchievement(ach);
+              break;
+          }
+        }
+      });
+      renderAchievements();
+    }
+
+    function unlockAchievement(ach) {
+      ach.unlocked = true;
+      // Show a screen notification
+      showEventNotification({ text: `Achievement Unlocked: ${ach.name}!`, goldEffect: 0 });
+      // Play achievement sound
+      if (achievementSound) {
+        achievementSound.currentTime = 0;
+        achievementSound.play().catch(() => {});
+      }
+    }
+
+    function renderAchievements() {
+      achievementList.innerHTML = "";
+      achievements.forEach(ach => {
+        const li = document.createElement('li');
+        li.textContent = `${ach.name} - ${ach.description}`;
+        if (ach.unlocked) {
+          li.classList.add('unlocked', 'achievementHighlight');
+          // Remove highlight after 2.5s so it resets properly
+          setTimeout(() => {
+            li.classList.remove('achievementHighlight');
+          }, 2500);
+        }
+        achievementList.appendChild(li);
+      });
+    }
+
+    // ===============================
+    // SETTINGS / RESET
+    // ===============================
+    toggleEventsCheckbox.addEventListener('change', () => {
+      randomEventsEnabled = toggleEventsCheckbox.checked;
+    });
+
+    // Instead of confirm(), open a modal
+    function openResetModal() {
+      document.getElementById('resetModal').style.display = 'block';
+    }
+    function closeResetModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+
+    // Confirm "Yes" in the modal -> reset everything
+    function confirmResetYes() {
+      // Clear local storage
+      localStorage.removeItem('clickerGameSave');
+
+      // Reset all variables
+      gold = 0;
+      diamonds = 0;
+      totalGoldCollected = 0;
+      autoCollectorCount = 0;
+      autoCollectorCost = 20;
+      speedBoostCount = 0;
+      speedBoostCost = 50;
+      goblinWorkerCount = 0;
+      goblinWorkerCost = 200;
+      knightCount = 0;
+      knightCost = 500;
+      randomEventsTriggered = 0;
+      randomEventsEnabled = true;
+      startTime = Date.now();
+
+      // Reset achievements
+      achievements.forEach(ach => { ach.unlocked = false; });
+
+      // Close modal
+      closeResetModal();
+
+      // Update UI
+      updateUI();
+      renderAchievements();
+      checkAchievements();
+    }
+
+    // ===============================
+    // UPDATE UI
+    // ===============================
+    function updateUI() {
+      goldCounter.textContent = `Gold: ${Math.floor(gold)}`;
+      diamondCounter.textContent = `Diamonds: ${diamonds}`;
+
+      // Shop states
+      autoCollectorCostLabel.textContent = autoCollectorCost;
+      buyAutoCollectorBtn.disabled = gold < autoCollectorCost;
+      buyAutoCollectorBtn.classList.toggle('disabled', gold < autoCollectorCost);
+
+      speedBoostCostLabel.textContent = speedBoostCost;
+      buySpeedBoostBtn.disabled = gold < speedBoostCost;
+      buySpeedBoostBtn.classList.toggle('disabled', gold < speedBoostCost);
+
+      buyDiamondBtn.disabled = gold < 100;
+      buyDiamondBtn.classList.toggle('disabled', gold < 100);
+
+      goblinWorkerCostLabel.textContent = goblinWorkerCost;
+      buyGoblinWorkerBtn.disabled = gold < goblinWorkerCost;
+      buyGoblinWorkerBtn.classList.toggle('disabled', gold < goblinWorkerCost);
+
+      knightCostLabel.textContent = knightCost;
+      buyKnightBtn.disabled = gold < knightCost;
+      buyKnightBtn.classList.toggle('disabled', gold < knightCost);
+
+      // Stats
+      totalGoldCollectedDisplay.textContent = Math.floor(totalGoldCollected);
+
+      // Calculate average GPS
+      let autoCollectorGPS = (1 + speedBoostCount) * autoCollectorCount;
+      let goblinWorkerGPS  = 0.5 * goblinWorkerCount; // 1 gold every 2s => 0.5 gps
+      let knightGPS        = 1 * knightCount;         // 5 gold every 5s => 1 gps
+      let totalGPS         = autoCollectorGPS + goblinWorkerGPS + knightGPS;
+      gpsDisplay.textContent = totalGPS.toFixed(1);
+
+      // Time played in seconds (this session)
+      let secondsPlayed = Math.floor((Date.now() - startTime) / 1000);
+      timePlayedDisplay.textContent = `${secondsPlayed}s`;
+
+      // Random events triggered
+      eventsTriggeredDisplay.textContent = randomEventsTriggered;
+
+      // Settings
+      toggleEventsCheckbox.checked = randomEventsEnabled;
+    }
+
+    // ===============================
+    // INIT
+    // ===============================
+    window.addEventListener('beforeunload', saveGame);
+
+    // Load from storage, then update
+    loadGame();
+    updateUI();
+    renderAchievements();
+    checkAchievements();
+
+    // Auto-save every 5s
+    setInterval(saveGame, 5000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Backpack Fighting Game</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #1e1e1e;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      user-select: none;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    /* Container for the main game elements */
+    .game-container {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    /* Enemy info and player info */
+    .panel {
+      flex: 1;
+      background: #2c2c2c;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 200px;
+    }
+
+    .panel h2 {
+      margin: 0 0 10px 0;
+      text-align: center;
+      font-size: 1.4rem;
+    }
+
+    /* Display HP as bars */
+    .health-bar {
+      position: relative;
+      width: 100%;
+      background: #444;
+      height: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .health-bar-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: #f33;
+      transition: width 0.4s ease;
+    }
+
+    /* Backpack list */
+    .backpack-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .item-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .item {
+      background: #444;
+      padding: 10px;
+      border-radius: 4px;
+      text-align: center;
+      width: 70px;
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+    .item:hover {
+      background: #555;
+      transform: scale(1.05);
+    }
+
+    /* Buttons */
+    button {
+      padding: 10px 20px;
+      margin: 4px 0;
+      background: #444;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #555;
+    }
+
+    /* "Juicy" animations */
+    /* Screen shake when the enemy gets hit */
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-5px, 5px); }
+      40% { transform: translate(5px, -5px); }
+      60% { transform: translate(-5px, -2px); }
+      80% { transform: translate(5px, 2px); }
+      100% { transform: translate(0, 0); }
+    }
+    .shake {
+      animation: shake 0.4s;
+    }
+  </style>
+</head>
+<body>
+  <h1>Backpack Fighting Game</h1>
+  <div class="game-container">
+
+    <!-- Enemy Panel -->
+    <div class="panel" id="enemyPanel">
+      <h2>Enemy</h2>
+      <div>Level: <span id="levelDisplay"></span></div>
+      <div>Enemy HP: <span id="enemyHpDisplay"></span></div>
+      <div class="health-bar">
+        <div class="health-bar-inner" id="enemyHpBar"></div>
+      </div>
+    </div>
+
+    <!-- Player/Backpack Panel -->
+    <div class="panel">
+      <h2>Player</h2>
+      <div>HP: <span id="playerHpDisplay"></span></div>
+      <div class="health-bar">
+        <div class="health-bar-inner" id="playerHpBar"></div>
+      </div>
+
+      <!-- Actions -->
+      <button id="attackBtn">Attack</button>
+
+      <h3>Your Backpack</h3>
+      <div class="backpack-container">
+        <div class="item-list" id="backpackList">
+          <!-- Items will be displayed here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Basic Game Variables
+    let level = 1;
+    let enemyHP = 0;
+    let enemyMaxHP = 0;
+    let playerHP = 100;
+    let playerMaxHP = 100;
+
+    // Each item in the backpack has an ID, name, damage, etc.
+    let backpack = [
+      { id: 1, name: "Sword", damage: 5 },
+      { id: 2, name: "Dagger", damage: 3 },
+      { id: 3, name: "Spear", damage: 4 }
+    ];
+
+    const levelDisplay = document.getElementById("levelDisplay");
+    const enemyHpDisplay = document.getElementById("enemyHpDisplay");
+    const enemyHpBar = document.getElementById("enemyHpBar");
+    const enemyPanel = document.getElementById("enemyPanel");
+
+    const playerHpDisplay = document.getElementById("playerHpDisplay");
+    const playerHpBar = document.getElementById("playerHpBar");
+
+    const backpackList = document.getElementById("backpackList");
+
+    const attackBtn = document.getElementById("attackBtn");
+
+    // Initialize game
+    function init() {
+      level = 1;
+      playerHP = playerMaxHP;
+      generateEnemy();
+      render();
+    }
+
+    // Generate enemy for current level
+    function generateEnemy() {
+      enemyMaxHP = 20 + level * 10; // scale up with level
+      enemyHP = enemyMaxHP;
+    }
+
+    // Update the HTML UI
+    function render() {
+      levelDisplay.textContent = level;
+      enemyHpDisplay.textContent = `${enemyHP} / ${enemyMaxHP}`;
+      enemyHpBar.style.width = (enemyHP / enemyMaxHP) * 100 + "%";
+
+      playerHpDisplay.textContent = `${playerHP} / ${playerMaxHP}`;
+      playerHpBar.style.width = (playerHP / playerMaxHP) * 100 + "%";
+
+      // Render backpack items
+      backpackList.innerHTML = "";
+      backpack.forEach((item, index) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("item");
+        itemDiv.textContent = `${item.name}\nDMG: ${item.damage}`;
+        itemDiv.title = "Click to remove item";
+        itemDiv.onclick = () => {
+          removeItem(index);
+        };
+        backpackList.appendChild(itemDiv);
+      });
+    }
+
+    // Attack action
+    function attack() {
+      // Calculate total damage from backpack
+      let totalDamage = backpack.reduce((acc, item) => acc + item.damage, 0);
+
+      // Enemy takes damage
+      enemyHP -= totalDamage;
+      // Shake effect on enemy panel for some "juice"
+      enemyPanel.classList.add("shake");
+      setTimeout(() => {
+        enemyPanel.classList.remove("shake");
+      }, 400);
+
+      if (enemyHP <= 0) {
+        enemyHP = 0;
+        levelUp();
+      } else {
+        // Enemy attacks back
+        playerHP -= 5 + level * 2; // scale enemy damage with level
+        if (playerHP <= 0) {
+          playerHP = 0;
+          alert("Game Over! You reached level " + level);
+          init();
+        }
+      }
+
+      render();
+    }
+
+    // Remove an item from the backpack (it "evolves" the rest)
+    // Example "evolution": increase the damage of all remaining items by 1
+    function removeItem(index) {
+      // Remove the item
+      backpack.splice(index, 1);
+
+      // Evolve effect: +1 damage to all items left
+      backpack.forEach(item => {
+        item.damage += 1;
+      });
+
+      render();
+    }
+
+    // Level up after defeating enemy
+    function levelUp() {
+      level++;
+      generateEnemy();
+      // Optionally give new item to the backpack each level
+      backpack.push({
+        id: Date.now(),
+        name: "NewItem" + level,
+        damage: Math.floor(Math.random() * 3) + 2
+      });
+      alert("Level " + (level - 1) + " cleared! Moving to level " + level + "!");
+      render();
+    }
+
+    // Button listeners
+    attackBtn.addEventListener("click", attack);
+
+    // Start the game
+    init();
+  </script>
+</body>
+</html>
