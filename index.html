@@ -460,39 +460,39 @@
       <h1 data-locale="animatedPatternsTitle">Animated Patterns</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="AnimatedBG1.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG1.html"></iframe>
           <p>AnimatedBG1.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG2.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG2.html"></iframe>
           <p>AnimatedBG2.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG3.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG3.html"></iframe>
           <p>AnimatedBG3.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG4.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG4.html"></iframe>
           <p>AnimatedBG4.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG5.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG5.html"></iframe>
           <p>AnimatedBG5.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG6.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG6.html"></iframe>
           <p>AnimatedBG6.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG7.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG7.html"></iframe>
           <p>AnimatedBG7.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG8.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG8.html"></iframe>
           <p>AnimatedBG8.html</p>
         </div>
         <div class="pattern-item">
-          <iframe src="AnimatedBG9.html"></iframe>
+          <iframe src="https://aabproducoes.github.io/Links/AnimatedPatterns/AnimatedBG9.html"></iframe>
           <p>AnimatedBG9.html</p>
         </div>
       </div>
@@ -704,6 +704,7 @@
         // Update the file path here to match your certificados.txt file
         const r = await fetchTextFile('./Certificados/certificados.txt');
         const lines = r.split('\n').filter(l => l.trim() !== '');
+        const baseUrl = '/Links/'; // Include your repository name
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
@@ -711,16 +712,16 @@
             console.warn('Formato inválido:', line);
             return { fullPath: '', pdfName: '', title: '' };
           }
-          const fullPath = line.substring(0, idx).trim();
+          const relativePath = line.substring(0, idx).trim();
           const title = line.substring(idx + sep.length).trim();
-          let pdfName = fullPath;
-          const lastSlash = fullPath.lastIndexOf('/');
+          let pdfName = relativePath;
+          const lastSlash = relativePath.lastIndexOf('/');
           if (lastSlash !== -1) {
-            pdfName = fullPath.substring(lastSlash + 1);
+            pdfName = relativePath.substring(lastSlash + 1);
           }
-          // Modify URL to display only the first page
-          const onlyFirstPage = fullPath + '#page=1';
-          return { fullPath: onlyFirstPage, pdfName, title };
+          // Prepend the baseUrl and force the PDF to open at page 1
+          const fullPath = baseUrl + relativePath + '#page=1';
+          return { fullPath, pdfName, title };
         });
       } catch (err) {
         console.error(err);
