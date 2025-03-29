@@ -1,156 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gaming Skills Showcase</title>
+  <meta charset="UTF-8">
+  <title>My Gaming Skills</title>
   <style>
     /* Overall page styling */
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #1e1e1e;
-      color: #fff;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #111;
+      color: #eee;
     }
+    /* Header with a neon gradient and subtle glow effect */
     header {
-      background: linear-gradient(90deg, #ff0080, #00ffcc);
+      background: linear-gradient(45deg, #00ffff, #ff00ff);
       padding: 20px;
       text-align: center;
-      font-size: 2em;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      font-size: 2.5em;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
     }
-    .container {
+    /* Navigation menu styling */
+    nav {
+      background-color: #222;
       display: flex;
-      height: calc(100vh - 70px); /* adjust for header height */
-    }
-    /* Sidebar menu styling */
-    nav#menu {
-      width: 250px;
-      background: #2e2e2e;
-      overflow-y: auto;
+      justify-content: center;
+      flex-wrap: wrap;
       padding: 10px;
     }
-    nav#menu .menu-item {
-      padding: 12px 15px;
-      margin-bottom: 8px;
-      background: #3a3a3a;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
+    nav a {
+      color: #00ffff;
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 1.2em;
+      position: relative;
+      padding-bottom: 5px;
+      transition: color 0.3s ease;
     }
-    nav#menu .menu-item:hover {
-      background: #505050;
-      transform: scale(1.02);
+    nav a::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #ff00ff;
+      transition: width 0.3s ease;
     }
-    nav#menu .menu-item.active {
-      background: #00ffcc;
-      color: #000;
+    nav a:hover {
+      color: #fff;
     }
-    /* Main content area styling */
-    main#content {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-      background: #282828;
+    nav a:hover::after {
+      width: 100%;
+    }
+    /* Container for the game content */
+    #content {
+      width: 100%;
+      height: calc(100vh - 140px);
+      border: none;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <header>
-    My Gaming Skills Showcase
-  </header>
-  <div class="container">
-    <nav id="menu">
-      <!-- Menu items will be dynamically inserted here -->
-    </nav>
-    <main id="content">
-      <p>Select a game from the menu to view details.</p>
-    </main>
-  </div>
+  <header>My Gaming Skills</header>
+  <nav id="menu">
+    <!-- Dynamic menu items will be added here -->
+  </nav>
+  <!-- Iframe to render the selected game page -->
+  <iframe id="content" src="" frameborder="0"></iframe>
+  
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Check for Fetch API support
-      if (!window.fetch) {
-        document.getElementById('content').innerHTML = 
-          '<p>Your browser does not support the Fetch API. Please update your browser.</p>';
-        return;
-      }
-      
-      // Function to load file list and create menu items
-      function loadMenu() {
-        fetch('https://aabproducoes.github.io/Links/HTML_games/file_list.txt')
-          .then(function(response) {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.text();
-          })
-          .then(function(data) {
-            const lines = data.split('\n').map(function(line) {
-              return line.trim();
-            }).filter(function(line) {
-              return line !== '';
-            });
-            const menu = document.getElementById('menu');
-            if (!menu) {
-              console.error('Menu element not found!');
-              return;
-            }
-            lines.forEach(function(line) {
-              // Extract file name from full path
-              var fileName = line.substring(line.lastIndexOf('/') + 1);
-              const item = document.createElement('div');
-              item.className = 'menu-item';
-              item.textContent = fileName;
-              item.tabIndex = 0; // Ensure item is focusable for accessibility
-              item.addEventListener('click', function() {
-                loadContent(line, item);
-              });
-              item.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                  loadContent(line, item);
-                }
-              });
-              menu.appendChild(item);
-            });
-          })
-          .catch(function(error) {
-            console.error('Error fetching file list:', error);
-            const menu = document.getElementById('menu');
-            if (menu) {
-              menu.innerHTML = '<p>Error loading menu.</p>';
-            }
+    // Base URL for game files
+    const baseUrl = "https://aabproducoes.github.io/Links/HTML_games/";
+    // URL of the file list (each line should be a relative path)
+    const fileListUrl = "https://aabproducoes.github.io/Links/HTML_games/file_list.txt";
+
+    // Custom names for specific file paths
+    const customNames = {
+      "Match3/match31.0.html": "CupWars"
+    };
+
+    // Fetch the file list and build the menu
+    fetch(fileListUrl)
+      .then(response => response.text())
+      .then(text => {
+        // Split by newline and filter out any empty lines
+        const files = text.split("\n").map(line => line.trim()).filter(line => line);
+        const menu = document.getElementById("menu");
+
+        files.forEach(filePath => {
+          // Determine the display name: use a custom name if available, otherwise use the file name without extension.
+          const name = customNames[filePath] || filePath.split("/").pop().replace(".html", "");
+          
+          // Create a link element for each file
+          const link = document.createElement("a");
+          link.href = "#";
+          link.textContent = name;
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            // Load the selected game into the iframe
+            document.getElementById("content").src = baseUrl + filePath;
           });
-      }
-      
-      // Function to load and render selected HTML content
-      function loadContent(filePath, menuItem) {
-        // Remove active state from all menu items
-        document.querySelectorAll('.menu-item').forEach(function(item) {
-          item.classList.remove('active');
+          menu.appendChild(link);
         });
-        menuItem.classList.add('active');
-        
-        fetch(filePath)
-          .then(function(response) {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.text();
-          })
-          .then(function(html) {
-            document.getElementById('content').innerHTML = html;
-          })
-          .catch(function(error) {
-            console.error('Error loading content:', error);
-            document.getElementById('content').innerHTML = '<p>Error loading content.</p>';
-          });
-      }
-      
-      // Initialize menu on page load
-      loadMenu();
-    });
+      })
+      .catch(err => console.error("Error fetching file list:", err));
   </script>
 </body>
 </html>
