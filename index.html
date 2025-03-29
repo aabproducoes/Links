@@ -6,6 +6,8 @@
   <meta name="description" content="Brief description of the site or your profile.">
   <title>One-Page - Tema Sério com Presets</title>
   <!-- Fonte Roboto -->
+  <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+  <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
@@ -555,6 +557,8 @@
           certDiv.classList.add('certificate-container');
           const iframe = document.createElement('iframe');
           iframe.src = cert.fullPath;
+          // Add lazy loading attribute to improve performance
+          iframe.setAttribute('loading', 'lazy');
           certDiv.appendChild(iframe);
           const overlay = document.createElement('div');
           overlay.classList.add('certificate-overlay');
