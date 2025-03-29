@@ -665,7 +665,7 @@
             pdfName = fullPath.substring(lastSlash + 1);
           }
           // Modify URL to display only the first page and hide toolbar
-          const onlyFirstPage = fullPath + '#page=1&toolbar=0';
+          const onlyFirstPage = fullPath + '#page=1';
           return { fullPath: onlyFirstPage, pdfName, title };
         });
       } catch (err) {
