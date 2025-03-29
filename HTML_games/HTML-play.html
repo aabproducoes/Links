@@ -71,8 +71,10 @@
   </div>
   
   <script>
-    // URL containing the list of file paths
-    const fileListUrl = 'https://aabproducoes.github.io/Links/HTML_games/file_list.txt';
+    // Base URL for the site
+    const baseUrl = 'https://aabproducoes.github.io/Links/';
+    // URL for the file list of HTML games (assumed to be inside HTML_games folder)
+    const fileListUrl = baseUrl + 'HTML_games/file_list.txt';
 
     // Fetch the file list and populate the menu
     fetch(fileListUrl)
@@ -87,7 +89,9 @@
         const menuList = document.getElementById('menuList');
         lines.forEach(line => {
           const li = document.createElement('li');
-          li.textContent = line;
+          // Extract only the last part of the path to be used as the title
+          const parts = line.split('/').filter(Boolean);
+          li.textContent = parts[parts.length - 1];
           li.addEventListener('click', () => {
             loadContent(line);
           });
@@ -100,10 +104,12 @@
 
     // Function to load HTML content from the given file path
     function loadContent(path) {
-      fetch(path)
+      // If the path isn't a full URL, prepend the baseUrl
+      let fullUrl = path.startsWith('http') ? path : baseUrl + path;
+      fetch(fullUrl)
         .then(response => {
           if (!response.ok) {
-            throw new Error('Failed to load content: ' + path);
+            throw new Error('Failed to load content: ' + fullUrl);
           }
           return response.text();
         })
