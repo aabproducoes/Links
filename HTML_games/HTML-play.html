@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gaming Skills Showcase</title>
   <style>
@@ -68,40 +69,86 @@
     </main>
   </div>
   <script>
-    // Fetch the file list and create menu items dynamically
-    fetch('https://aabproducoes.github.io/Links/HTML_games/file_list.txt')
-      .then(response => response.text())
-      .then(data => {
-        const lines = data.split('\n').filter(line => line.trim() !== '');
-        const menu = document.getElementById('menu');
-        lines.forEach(line => {
-          const item = document.createElement('div');
-          item.className = 'menu-item';
-          item.textContent = line;
-          item.addEventListener('click', function() {
-            loadContent(line, this);
-          });
-          menu.appendChild(item);
-        });
-      })
-      .catch(error => console.error('Error fetching file list:', error));
-    
-    // Load and render the selected HTML content into the main area
-    function loadContent(filePath, menuItem) {
-      // Set active menu item style
-      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
-      menuItem.classList.add('active');
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check for Fetch API support
+      if (!window.fetch) {
+        document.getElementById('content').innerHTML = 
+          '<p>Your browser does not support the Fetch API. Please update your browser.</p>';
+        return;
+      }
       
-      fetch(filePath)
-        .then(response => response.text())
-        .then(html => {
-          document.getElementById('content').innerHTML = html;
-        })
-        .catch(error => {
-          console.error('Error loading content:', error);
-          document.getElementById('content').innerHTML = '<p>Error loading content.</p>';
+      // Function to load file list and create menu items
+      function loadMenu() {
+        fetch('https://aabproducoes.github.io/Links/HTML_games/file_list.txt')
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then(function(data) {
+            const lines = data.split('\n').map(function(line) {
+              return line.trim();
+            }).filter(function(line) {
+              return line !== '';
+            });
+            const menu = document.getElementById('menu');
+            if (!menu) {
+              console.error('Menu element not found!');
+              return;
+            }
+            lines.forEach(function(line) {
+              const item = document.createElement('div');
+              item.className = 'menu-item';
+              item.textContent = line;
+              item.tabIndex = 0; // Ensure item is focusable for accessibility
+              item.addEventListener('click', function() {
+                loadContent(line, item);
+              });
+              item.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                  loadContent(line, item);
+                }
+              });
+              menu.appendChild(item);
+            });
+          })
+          .catch(function(error) {
+            console.error('Error fetching file list:', error);
+            const menu = document.getElementById('menu');
+            if (menu) {
+              menu.innerHTML = '<p>Error loading menu.</p>';
+            }
+          });
+      }
+      
+      // Function to load and render selected HTML content
+      function loadContent(filePath, menuItem) {
+        // Remove active state from all menu items
+        document.querySelectorAll('.menu-item').forEach(function(item) {
+          item.classList.remove('active');
         });
-    }
+        menuItem.classList.add('active');
+        
+        fetch(filePath)
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.text();
+          })
+          .then(function(html) {
+            document.getElementById('content').innerHTML = html;
+          })
+          .catch(function(error) {
+            console.error('Error loading content:', error);
+            document.getElementById('content').innerHTML = '<p>Error loading content.</p>';
+          });
+      }
+      
+      // Initialize menu on page load
+      loadMenu();
+    });
   </script>
 </body>
 </html>
