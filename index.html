@@ -186,12 +186,10 @@
       max-width: 200px;
       border-right: 1px solid #607d8b;
       padding-right: 10px;
-      /* When hidden, this element will be removed from the layout */
     }
     .certificate-display {
       flex: 3;
       padding-left: 10px;
-      /* Will expand to full width when the list is hidden */
     }
     .certificate-item {
       padding: 8px;
@@ -349,6 +347,10 @@
   <!-- CLOCK -->
   <div id="clock"></div>
   <script>
+    // Global variables for certificate navigation
+    let certificatesArray = [];
+    let currentCertificateIndex = 0;
+
     // TRANSLATIONS (EN / PT)
     const translations = {
       en: {
@@ -491,6 +493,7 @@
       updateLanguage();
       await populateKnowledgeList();
       await populateWhoImI();
+      await populateCertificatesList(); // refresh titles
     });
     function updateLanguage() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
@@ -529,33 +532,31 @@
       const text = await fetchTextFile(filePath);
       whoImIContainer.textContent = text || "Content unavailable.";
     }
-    // Load Certificates List and create a clickable list of certificate titles
+    // Load Certificates List:
+    // Each line is expected to be: URL - Portuguese Title - English Title
     async function fetchCertificatesList() {
       try {
-        // Use the full URL from GitHub
         const r = await fetchTextFile('/Links/Certificados/CertificadosList.txt');
         const lines = r.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
-          const sep = ' - ';
-          const idx = line.indexOf(sep);
-          if (idx === -1) {
+          const parts = line.split(' - ');
+          if (parts.length < 3) {
             console.warn('Formato inválido:', line);
-            return { fullPath: '', pdfName: '', title: '' };
+            return { fullPath: '', pdfName: '', titlePT: '', titleEN: '' };
           }
-          // The certificados file now contains full URLs.
-          const fullUrl = line.substring(0, idx).trim();
-          const title = line.substring(idx + sep.length).trim();
+          const fullUrl = parts[0].trim();
+          const titlePT = parts[1].trim();
+          const titleEN = parts[2].trim();
           let pdfName = fullUrl;
           const lastSlash = fullUrl.lastIndexOf('/');
           if (lastSlash !== -1) {
             pdfName = fullUrl.substring(lastSlash + 1);
           }
-          // Append "#page=1" if not present; later we'll add toolbar=0 to hide navigation.
           let finalUrl = fullUrl;
           if (!fullUrl.includes('#')) {
             finalUrl = fullUrl + '#page=1';
           }
-          return { fullPath: finalUrl, pdfName, title };
+          return { fullPath: finalUrl, pdfName, titlePT, titleEN };
         });
       } catch (err) {
         console.error(err);
@@ -568,41 +569,88 @@
       listContainer.style.display = 'block'; // Ensure list is visible initially
       listContainer.innerHTML = '';
       const list = await fetchCertificatesList();
-      list.forEach(cert => {
-        if (cert.fullPath && cert.title) {
+      certificatesArray = list; // Store globally for navigation
+      list.forEach((cert, index) => {
+        if (cert.fullPath && (cert.titlePT || cert.titleEN)) {
           const listItem = document.createElement('div');
           listItem.classList.add('certificate-item');
-          listItem.textContent = cert.title;
+          // Choose title based on language
+          const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
+          listItem.textContent = title;
           listItem.addEventListener('click', function() {
-            displayCertificate(cert.fullPath, cert.title);
+            displayCertificateAtIndex(index);
           });
           listContainer.appendChild(listItem);
         }
       });
     }
-    // Display the selected certificate in full view, hiding the certificate list.
-    function displayCertificate(url, title) {
+    // Display the selected certificate in full view with header and navigation arrows.
+    function displayCertificateAtIndex(index) {
+      currentCertificateIndex = index;
+      const cert = certificatesArray[index];
+      const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
+      
       // Hide the certificates list to use full width for the display.
       document.getElementById('certificatesList').style.display = 'none';
-      // Adjust the display area to take the full container.
       const displayContainer = document.getElementById('certificateDisplay');
       displayContainer.style.flex = '1 0 100%';
       displayContainer.innerHTML = ''; // Clear previous content
       
-      // Create a back button to return to the list.
+      // Create header container with navigation
+      const headerDiv = document.createElement('div');
+      headerDiv.style.display = 'flex';
+      headerDiv.style.alignItems = 'center';
+      headerDiv.style.justifyContent = 'space-between';
+      headerDiv.style.marginBottom = '10px';
+      
+      // Create Previous arrow button
+      const prevButton = document.createElement('button');
+      prevButton.textContent = '←';
+      prevButton.addEventListener('click', function() {
+        let newIndex = currentCertificateIndex - 1;
+        if (newIndex < 0) {
+          newIndex = certificatesArray.length - 1;
+        }
+        displayCertificateAtIndex(newIndex);
+      });
+      
+      // Create title element
+      const titleElem = document.createElement('div');
+      titleElem.textContent = title;
+      titleElem.style.flex = '1';
+      titleElem.style.textAlign = 'center';
+      titleElem.style.fontWeight = 'bold';
+      
+      // Create Next arrow button
+      const nextButton = document.createElement('button');
+      nextButton.textContent = '→';
+      nextButton.addEventListener('click', function() {
+        let newIndex = currentCertificateIndex + 1;
+        if (newIndex >= certificatesArray.length) {
+          newIndex = 0;
+        }
+        displayCertificateAtIndex(newIndex);
+      });
+      
+      // Create Back to list button
       const backButton = document.createElement('button');
       backButton.textContent = 'Back to list';
-      backButton.style.marginBottom = '10px';
+      backButton.style.marginTop = '10px';
       backButton.addEventListener('click', function() {
-        // Show the certificates list again and reset the display area.
         document.getElementById('certificatesList').style.display = 'block';
         displayContainer.innerHTML = '<p>Select a certificate to display</p>';
-        // Reset the flex property if needed.
         displayContainer.style.flex = '3';
       });
+      
+      headerDiv.appendChild(prevButton);
+      headerDiv.appendChild(titleElem);
+      headerDiv.appendChild(nextButton);
+      
+      displayContainer.appendChild(headerDiv);
       displayContainer.appendChild(backButton);
       
-      // Append toolbar parameter to the URL to hide PDF navigation (if not already present).
+      // Modify URL to hide PDF navigation toolbar
+      let url = cert.fullPath;
       if (!url.includes('toolbar=0')) {
         if (url.includes('#')) {
           url = url + '&toolbar=0';
@@ -610,11 +658,12 @@
           url = url + '#toolbar=0';
         }
       }
+      
+      // Create the iframe for the certificate PDF
       const iframe = document.createElement('iframe');
       iframe.src = url;
       iframe.setAttribute('loading', 'lazy');
       iframe.style.width = '100%';
-      // Set height to use most of the available viewport height.
       iframe.style.height = '80vh';
       displayContainer.appendChild(iframe);
     }
