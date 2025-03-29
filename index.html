@@ -701,10 +701,10 @@
     // ========================
     async function fetchCertificatesList() {
       try {
-        // Update the file path here to match your certificados.txt file
-        const r = await fetchTextFile('./Certificados/certificados.txt');
+        // Use an absolute path to load your certificados.txt file
+        const r = await fetchTextFile('/Links/Certificados/certificados.txt');
         const lines = r.split('\n').filter(l => l.trim() !== '');
-        const baseUrl = '/Links/'; // Include your repository name
+        const baseUrl = '/Links/'; // Prepend your repository name to PDF paths
         return lines.map(line => {
           const sep = ' - ';
           const idx = line.indexOf(sep);
