@@ -362,6 +362,26 @@
       padding-left: 20px;
       border-left: 2px solid var(--menu-color);
     }
+    /* ================================
+       ANIMATED PATTERNS PREVIEW SECTION
+    ================================ */
+    .animated-patterns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .pattern-item iframe {
+      width: 100%;
+      height: 200px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .pattern-item p {
+      text-align: center;
+      margin-top: 5px;
+      font-size: 14px;
+      color: #cfd8dc;
+    }
   </style>
 </head>
 <body>
@@ -378,6 +398,7 @@
       <li><a href="#projects" data-locale="projectsTitle">Projects</a></li>
       <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
       <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
+      <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
@@ -435,6 +456,47 @@
       <h1 data-locale="certificatesTitle">Certificates</h1>
       <div id="certificatesList"></div>
     </section>
+    <section id="animatedPatterns">
+      <h1 data-locale="animatedPatternsTitle">Animated Patterns</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="AnimatedBG1.html"></iframe>
+          <p>AnimatedBG1.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG2.html"></iframe>
+          <p>AnimatedBG2.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG3.html"></iframe>
+          <p>AnimatedBG3.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG4.html"></iframe>
+          <p>AnimatedBG4.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG5.html"></iframe>
+          <p>AnimatedBG5.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG6.html"></iframe>
+          <p>AnimatedBG6.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG7.html"></iframe>
+          <p>AnimatedBG7.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG8.html"></iframe>
+          <p>AnimatedBG8.html</p>
+        </div>
+        <div class="pattern-item">
+          <iframe src="AnimatedBG9.html"></iframe>
+          <p>AnimatedBG9.html</p>
+        </div>
+      </div>
+    </section>
   </div>
   <!-- CLOCK FIXO -->
   <div id="clock"></div>
@@ -450,6 +512,7 @@
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
         knowledgeListTitle: 'Knowledge List',
+        animatedPatternsTitle: 'Animated Patterns',
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Blender Projects',
@@ -466,6 +529,7 @@
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
         knowledgeListTitle: 'Lista de Conhecimento',
+        animatedPatternsTitle: 'Padrões Animados',
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Projetos Blender',
@@ -485,7 +549,8 @@
       socialTitle: '🌐',
       projectsTitle: '💼',
       contactTitle: '📞',
-      certificatesTitle: '📜'
+      certificatesTitle: '📜',
+      animatedPatternsTitle: '🎞️'
     };
     // ========================
     // TEMA PRESETS
