@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Gmasing Skills Showcase</title>
+  <style>
+    /* Base Styles & Themed Colors */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #2c3e50, #bdc3c7);
+      color: #ecf0f1;
+    }
+    header {
+      background: #1abc9c;
+      padding: 20px;
+      text-align: center;
+      font-size: 2em;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    #menu {
+      width: 250px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+      float: left;
+      box-sizing: border-box;
+    }
+    #menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #menu li {
+      padding: 10px;
+      margin: 5px 0;
+      background: #34495e;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    #menu li:hover {
+      background: #16a085;
+    }
+    #content {
+      margin-left: 250px;
+      padding: 20px;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+    }
+    /* Simple fade-in effect for loaded content */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <header>My Gmasing Skills Showcase</header>
+  <div id="menu">
+    <ul id="menuList">
+      <!-- Menu items will be inserted here -->
+    </ul>
+  </div>
+  <div id="content">
+    <p>Select an item from the menu to load its content.</p>
+  </div>
+  
+  <script>
+    // URL containing the list of file paths
+    const fileListUrl = 'https://aabproducoes.github.io/Links/HTML_games/file_list.txt';
+
+    // Fetch the file list and populate the menu
+    fetch(fileListUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.text();
+      })
+      .then(text => {
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        const menuList = document.getElementById('menuList');
+        lines.forEach(line => {
+          const li = document.createElement('li');
+          li.textContent = line;
+          li.addEventListener('click', () => {
+            loadContent(line);
+          });
+          menuList.appendChild(li);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching file list:', error);
+      });
+
+    // Function to load HTML content from the given file path
+    function loadContent(path) {
+      fetch(path)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Failed to load content: ' + path);
+          }
+          return response.text();
+        })
+        .then(html => {
+          const contentDiv = document.getElementById('content');
+          contentDiv.innerHTML = html;
+          contentDiv.classList.add('fade-in');
+          // Remove the animation class after the animation ends so it can be re-triggered
+          setTimeout(() => {
+            contentDiv.classList.remove('fade-in');
+          }, 500);
+        })
+        .catch(error => {
+          console.error('Error loading content:', error);
+        });
+    }
+  </script>
+</body>
+</html>
