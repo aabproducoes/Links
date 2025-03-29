@@ -4,3 +4,22 @@ Certificados/Certificado-21048-10494022.pdf - Curso de Informática Avançada
 Certificados/Certificado-21053-10494022.pdf - Curso de Chat GPT
 Certificados/Certificado-9933-10494022.pdf - Curso de Webdesigner
 Certificados/Certificado-9946-10494022.pdf - Curso de HTML Básico
+Certificados/curso-estudo-de-cor-e-tipografia.pdf - Estudo de cor e Tipografia
+Certificados/curso-power-point-2007.pdf - Curso Power Point 2007
+Certificados/curso-de-hardware.pdf - Curso de Hardware
+Certificados/curso-pacote-office.pdf - Curso de Pacote Office
+Certificados/curso-programacao-de-software-basico.pdf - Curso de Programação de Software Básico
+Certificados/curso-seguranca-de-redes.pdf - Curso Segurança de Redes
+Certificados/curso-fotografia-digital.pdf - Curso de Fotografia Digital
+Certificados/curso-html5.pdf - Curso de HTML5
+Certificados/curso-logica-de-programacao-aplicada-a-mecatronica.pdf - Curso de Lógica de Programação Aplicada á Mecatrônica
+Certificados/curso-teoria-de-design.pdf - Curso Teoria de Design
+Certificados/curso-webdesigner.pdf - Curso de WebDesigner
+Certificados/curso-branding-construcao-de-marca.pdf - Curso de Branding, Construção da Marca
+Certificados/curso-chat-gpt.pdf - Curso Chat GPT 
+Certificados/curso-de-html-basico.pdf - Curso de HTML Básico
+Certificados/curso-de-ingles-basico.pdf - Curso de Inglês Básico
+Certificados/curso-de-redes.pdf - Curso de Redes
+Certificados/curso-de-informatica-basica.pdf - Curso de Informática Básica
+Certificados/curso-seguranca-de-aplicacoes.pdf - Curso de Segurança de Aplicações
+Certificados/curso-teoria-da-computacao.pdf - Curso Teoria da Computação
