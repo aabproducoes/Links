@@ -186,10 +186,12 @@
       max-width: 200px;
       border-right: 1px solid #607d8b;
       padding-right: 10px;
+      /* When hidden, this element will be removed from the layout */
     }
     .certificate-display {
       flex: 3;
       padding-left: 10px;
+      /* Will expand to full width when the list is hidden */
     }
     .certificate-item {
       padding: 8px;
@@ -548,7 +550,7 @@
           if (lastSlash !== -1) {
             pdfName = fullUrl.substring(lastSlash + 1);
           }
-          // Append "#page=1" if not present
+          // Append "#page=1" if not present; later we'll add toolbar=0 to hide navigation.
           let finalUrl = fullUrl;
           if (!fullUrl.includes('#')) {
             finalUrl = fullUrl + '#page=1';
@@ -560,9 +562,10 @@
         return [];
       }
     }
-    // Create a list of certificate titles; on click, display the certificate in the side panel.
+    // Create a list of certificate titles; on click, display the certificate in full view.
     async function populateCertificatesList() {
       const listContainer = document.getElementById('certificatesList');
+      listContainer.style.display = 'block'; // Ensure list is visible initially
       listContainer.innerHTML = '';
       const list = await fetchCertificatesList();
       list.forEach(cert => {
@@ -577,15 +580,42 @@
         }
       });
     }
-    // Display the selected certificate (load the file in an iframe)
+    // Display the selected certificate in full view, hiding the certificate list.
     function displayCertificate(url, title) {
+      // Hide the certificates list to use full width for the display.
+      document.getElementById('certificatesList').style.display = 'none';
+      // Adjust the display area to take the full container.
       const displayContainer = document.getElementById('certificateDisplay');
+      displayContainer.style.flex = '1 0 100%';
       displayContainer.innerHTML = ''; // Clear previous content
+      
+      // Create a back button to return to the list.
+      const backButton = document.createElement('button');
+      backButton.textContent = 'Back to list';
+      backButton.style.marginBottom = '10px';
+      backButton.addEventListener('click', function() {
+        // Show the certificates list again and reset the display area.
+        document.getElementById('certificatesList').style.display = 'block';
+        displayContainer.innerHTML = '<p>Select a certificate to display</p>';
+        // Reset the flex property if needed.
+        displayContainer.style.flex = '3';
+      });
+      displayContainer.appendChild(backButton);
+      
+      // Append toolbar parameter to the URL to hide PDF navigation (if not already present).
+      if (!url.includes('toolbar=0')) {
+        if (url.includes('#')) {
+          url = url + '&toolbar=0';
+        } else {
+          url = url + '#toolbar=0';
+        }
+      }
       const iframe = document.createElement('iframe');
       iframe.src = url;
       iframe.setAttribute('loading', 'lazy');
       iframe.style.width = '100%';
-      iframe.style.height = '400px';
+      // Set height to use most of the available viewport height.
+      iframe.style.height = '80vh';
       displayContainer.appendChild(iframe);
     }
     // CLOCK
