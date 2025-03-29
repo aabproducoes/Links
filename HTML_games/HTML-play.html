@@ -74,22 +74,26 @@
     // Base URL for the site
     const baseUrl = 'https://aabproducoes.github.io/Links/';
     // URL for the file list of HTML games (assumed to be inside HTML_games folder)
-    const fileListUrl = joinUrl(baseUrl, 'HTML_games/file_list.txt');
+    const fileListUrl = baseUrl + 'HTML_games/file_list.txt';
 
-    // Utility function to join URLs without duplicate slashes (except after protocol)
-    function joinUrl(base, path) {
-      // Ensure the protocol part (like "https://") remains intact.
-      const protocolMatch = base.match(/^(https?:\/\/)/);
-      const protocol = protocolMatch ? protocolMatch[1] : '';
-      base = base.replace(/^(https?:\/\/)/, '');
-      
-      if (base.endsWith('/')) {
-        base = base.slice(0, -1);
+    // Utility to normalize the path so that there are no leading slashes
+    function normalizePath(path) {
+      return path.replace(/^\/+/, '');
+    }
+
+    // Utility to get a clean title:
+    // If the last part is "index.html", use the previous part (if any);
+    // otherwise, remove any file extension.
+    function getMenuTitle(path) {
+      const parts = path.split('/').filter(Boolean);
+      let title = parts[parts.length - 1];
+      if(title.toLowerCase() === "index.html" && parts.length > 1) {
+        title = parts[parts.length - 2];
+      } else {
+        // Remove file extension (e.g., .html, .htm) if present
+        title = title.replace(/\.[^/.]+$/, "");
       }
-      if (path.startsWith('/')) {
-        path = path.slice(1);
-      }
-      return protocol + base + '/' + path;
+      return title;
     }
 
     // Fetch the file list and populate the menu
@@ -104,23 +108,11 @@
         const lines = text.split('\n').filter(line => line.trim() !== '');
         const menuList = document.getElementById('menuList');
         lines.forEach(line => {
+          const normalizedLine = normalizePath(line);
           const li = document.createElement('li');
-          // Split the path into parts (filtering out empty strings)
-          const parts = line.split('/').filter(Boolean);
-          let name = '';
-          if (parts.length) {
-            // If the last part is "index.html", use the preceding folder name (if available)
-            const lastPart = parts[parts.length - 1];
-            if (lastPart.toLowerCase() === 'index.html' && parts.length > 1) {
-              name = parts[parts.length - 2];
-            } else {
-              // Otherwise, use the last part and remove .html extension if present
-              name = lastPart.replace(/\.html?$/i, '');
-            }
-          }
-          li.textContent = name;
+          li.textContent = getMenuTitle(normalizedLine);
           li.addEventListener('click', () => {
-            loadContent(line);
+            loadContent(normalizedLine);
           });
           menuList.appendChild(li);
         });
@@ -131,8 +123,13 @@
 
     // Function to load HTML content from the given file path
     function loadContent(path) {
-      // If the path isn't a full URL, join it with baseUrl
-      let fullUrl = path.startsWith('http') ? path : joinUrl(baseUrl, path);
+      const normalizedPath = normalizePath(path);
+      let fullUrl = baseUrl;
+      if (!baseUrl.endsWith('/')) {
+        fullUrl += '/';
+      }
+      fullUrl += normalizedPath;
+      
       fetch(fullUrl)
         .then(response => {
           if (!response.ok) {
