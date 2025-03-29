@@ -7,105 +7,134 @@
     /* Overall page styling */
     body {
       margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #111;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928dab);
       color: #eee;
     }
-    /* Header with a neon gradient and subtle glow effect */
+    
     header {
-      background: linear-gradient(45deg, #00ffff, #ff00ff);
       padding: 20px;
       text-align: center;
-      font-size: 2.5em;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     }
-    /* Navigation menu styling */
-    nav {
-      background-color: #222;
+    
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+    
+    /* Navigation menu styles */
+    nav#menu {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      padding: 10px;
+      padding: 15px;
+      background: rgba(0, 0, 0, 0.3);
     }
-    nav a {
-      color: #00ffff;
+    
+    nav#menu a {
       text-decoration: none;
+      color: #f39c12;
       margin: 0 15px;
       font-size: 1.2em;
       position: relative;
-      padding-bottom: 5px;
       transition: color 0.3s ease;
     }
-    nav a::after {
+    
+    nav#menu a:hover {
+      color: #ffdb4d;
+    }
+    
+    /* Underline effect */
+    nav#menu a::after {
       content: "";
-      position: absolute;
-      width: 0%;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: #ff00ff;
-      transition: width 0.3s ease;
-    }
-    nav a:hover {
-      color: #fff;
-    }
-    nav a:hover::after {
-      width: 100%;
-    }
-    /* Container for the game content */
-    #content {
-      width: 100%;
-      height: calc(100vh - 140px);
-      border: none;
       display: block;
+      width: 0;
+      height: 2px;
+      background: #ffdb4d;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+    }
+    
+    nav#menu a:hover::after {
+      width: 100%;
+    }
+    
+    /* Main content area */
+    main#content {
+      padding: 20px;
+      min-height: 600px;
+    }
+    
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      background: #fff;
     }
   </style>
 </head>
 <body>
-  <header>My Gaming Skills</header>
+  <header>
+    <h1>My Gaming Skills</h1>
+  </header>
+  
   <nav id="menu">
-    <!-- Dynamic menu items will be added here -->
+    <!-- Menu items will be populated here -->
   </nav>
-  <!-- Iframe to render the selected game page -->
-  <iframe id="content" src="" frameborder="0"></iframe>
+  
+  <main id="content">
+    <p style="text-align:center;">Select a game from the menu above to view details.</p>
+  </main>
   
   <script>
-    // Base URL for game files
-    const baseUrl = "https://aabproducoes.github.io/Links/HTML_games/";
-    // URL of the file list (each line should be a relative path)
+    // URL to the file list
     const fileListUrl = "https://aabproducoes.github.io/Links/HTML_games/file_list.txt";
-
-    // Custom names for specific file paths
-    const customNames = {
-      "Match3/match31.0.html": "CupWars"
-    };
-
-    // Fetch the file list and build the menu
+    
+    // Fetch the file list and generate menu items
     fetch(fileListUrl)
       .then(response => response.text())
-      .then(text => {
-        // Split by newline and filter out any empty lines
-        const files = text.split("\n").map(line => line.trim()).filter(line => line);
-        const menu = document.getElementById("menu");
-
-        files.forEach(filePath => {
-          // Determine the display name: use a custom name if available, otherwise use the file name without extension.
-          const name = customNames[filePath] || filePath.split("/").pop().replace(".html", "");
+      .then(data => {
+        // Assume the file_list.txt contains one URL per line
+        const lines = data.split('\n').filter(line => line.trim() !== "");
+        const menu = document.getElementById('menu');
+        
+        lines.forEach(line => {
+          const trimmedLine = line.trim();
+          let menuText = "";
           
-          // Create a link element for each file
-          const link = document.createElement("a");
+          // Custom mapping for a specific game
+          if (trimmedLine.includes("match31.0.html")) {
+            menuText = "CupWars";
+          } else {
+            // Use the filename (without extension) as the menu text
+            const parts = trimmedLine.split('/');
+            menuText = parts[parts.length - 1].replace('.html', '');
+          }
+          
+          // Create the menu item
+          const link = document.createElement('a');
           link.href = "#";
-          link.textContent = name;
-          link.addEventListener("click", (e) => {
+          link.textContent = menuText;
+          link.addEventListener("click", function(e) {
             e.preventDefault();
-            // Load the selected game into the iframe
-            document.getElementById("content").src = baseUrl + filePath;
+            // Render the selected game page in an iframe
+            document.getElementById('content').innerHTML =
+              '<iframe src="' + trimmedLine + '"></iframe>';
           });
+          
           menu.appendChild(link);
         });
       })
-      .catch(err => console.error("Error fetching file list:", err));
+      .catch(error => {
+        console.error('Error fetching file list:', error);
+        const menu = document.getElementById('menu');
+        menu.innerHTML = "<p>Error loading games menu.</p>";
+      });
   </script>
 </body>
 </html>
