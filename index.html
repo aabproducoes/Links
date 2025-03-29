@@ -37,7 +37,7 @@
       color: #e0e0e0; overflow-x: hidden; position: relative;
     }
     /* ==================================
-       SIDEBAR
+       SIDEBAR - FORMATO, INDICADORES, ETC
     =================================== */
     .sidebar {
       width: 280px;
@@ -94,6 +94,7 @@
       padding: 15px 0; display: flex;
       justify-content: center; align-items: center;
     }
+    /* BOTÕES DE LÍNGUA / TEMAS / GRID DE COR */
     .language-btn {
       display: inline-block; margin: 20px auto;
       background: var(--menu-color-alt); color: #fff;
@@ -236,9 +237,8 @@
     }
     .pattern-item iframe {
       width: 100%;
-      height: 100vh; /* Use full viewport height */
+      height: 100vh; /* Full viewport height */
       border: none;
-      /* Optionally, remove border-radius if not desired */
     }
     .pattern-item p {
       text-align: center; margin-top: 5px;
@@ -261,6 +261,7 @@
       <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
       <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
       <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
+      <li><a href="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" target="_blank" data-locale="htmlGames">HTML Games</a></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
@@ -341,6 +342,7 @@
         certificatesTitle: 'Certificates',
         knowledgeListTitle: 'Knowledge List',
         animatedPatternsTitle: 'Animated Patterns',
+        htmlGames: 'HTML Games',
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Blender Projects',
@@ -358,6 +360,7 @@
         certificatesTitle: 'Certificados',
         knowledgeListTitle: 'Lista de Conhecimento',
         animatedPatternsTitle: 'Padrões Animados',
+        htmlGames: 'Jogos HTML',
         facebook: 'Facebook',
         instagram: 'Instagram',
         blenderProjects: 'Projetos Blender',
@@ -376,7 +379,8 @@
       projectsTitle: '💼',
       contactTitle: '📞',
       certificatesTitle: '📜',
-      animatedPatternsTitle: '🎞️'
+      animatedPatternsTitle: '🎞️',
+      htmlGames: '🎮'
     };
     // THEME PRESETS
     const themePresets = {
