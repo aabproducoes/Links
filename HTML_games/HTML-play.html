@@ -2,139 +2,104 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>My Gaming Skills</title>
+  <title>Gaming Skills Showcase</title>
   <style>
-    /* Overall page styling */
+    /* Global Styles */
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1f1c2c, #928dab);
-      color: #eee;
+      font-family: 'Arial', sans-serif;
+      background: #1d1f21;
+      color: #c5c8c6;
     }
-    
     header {
-      padding: 20px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.5);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      padding: 2rem;
+      background: #282a2e;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
     }
-    
-    h1 {
+    header h1 {
       margin: 0;
-      font-size: 2.5em;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+      font-size: 2.5rem;
+      letter-spacing: 0.1rem;
+      color: #f92672;
     }
-    
-    /* Navigation menu styles */
-    nav#menu {
+    /* Menu Styles */
+    .menu {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      padding: 15px;
-      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
     }
-    
-    nav#menu a {
+    .menu a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.8rem 1.5rem;
       text-decoration: none;
-      color: #f39c12;
-      margin: 0 15px;
-      font-size: 1.2em;
-      position: relative;
-      transition: color 0.3s ease;
+      background: #373b41;
+      color: #a6e22e;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+    .menu a:hover {
+      background: #a6e22e;
+      color: #373b41;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    /* Staggered animation delays for each menu item */
+    .menu a:nth-child(1)  { animation-delay: 0.1s; }
+    .menu a:nth-child(2)  { animation-delay: 0.2s; }
+    .menu a:nth-child(3)  { animation-delay: 0.3s; }
+    .menu a:nth-child(4)  { animation-delay: 0.4s; }
+    .menu a:nth-child(5)  { animation-delay: 0.5s; }
+    .menu a:nth-child(6)  { animation-delay: 0.6s; }
+    .menu a:nth-child(7)  { animation-delay: 0.7s; }
+    .menu a:nth-child(8)  { animation-delay: 0.8s; }
+    .menu a:nth-child(9)  { animation-delay: 0.9s; }
+    .menu a:nth-child(10) { animation-delay: 1s; }
+    .menu a:nth-child(11) { animation-delay: 1.1s; }
+    .menu a:nth-child(12) { animation-delay: 1.2s; }
+    .menu a:nth-child(13) { animation-delay: 1.3s; }
+    .menu a:nth-child(14) { animation-delay: 1.4s; }
+    .menu a:nth-child(15) { animation-delay: 1.5s; }
+    
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
     
-    nav#menu a:hover {
-      color: #ffdb4d;
-    }
-    
-    /* Underline effect */
-    nav#menu a::after {
-      content: "";
-      display: block;
-      width: 0;
-      height: 2px;
-      background: #ffdb4d;
-      transition: width 0.3s;
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-    }
-    
-    nav#menu a:hover::after {
-      width: 100%;
-    }
-    
-    /* Main content area */
-    main#content {
-      padding: 20px;
-      min-height: 600px;
-    }
-    
-    iframe {
-      width: 100%;
-      height: 600px;
-      border: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      background: #fff;
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .menu a {
+        width: 100%;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>My Gaming Skills</h1>
+    <h1>Gaming Skills Showcase</h1>
   </header>
-  
-  <nav id="menu">
-    <!-- Menu items will be populated here -->
+  <nav class="menu">
+    <!-- Each menu item is generated from a URL. The button label is the file name after the last "\" -->
+    <a href="https://aabproducoes.github.io\Links\HTML_games\BgAnimation1.html">BgAnimation1.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\AdvancedClickerIdleGame\AdvancedClickerIdleGame1.0.html">AdvancedClickerIdleGame1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\BKPK_FGT_game\BKPK_FGT_game1.0.html">BKPK_FGT_game1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\CupWars\Cupwars_01.html">Cupwars_01.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\DiceRollUnlocker\DiceRollUnlocker1.0.html">DiceRollUnlocker1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\HEX_city\Hex_city1.0.html">Hex_city1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IDLE-FRUITS\IDLEfruits1-0.html">IDLEfruits1-0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IDLE-FRUITS\IDLEfruits1-1.html">IDLEfruits1-1.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IDLE-FRUITS\IDLEfruits1-2.html">IDLEfruits1-2.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IdleRPGBossBattle\IdleRPGBossBattle1.0.html">IdleRPGBossBattle1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\Match3\match31.0.html">match31.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\PatternNumberGenerator\PatternNumberGenerator1.0.html">PatternNumberGenerator1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\PatternNumberGenerator\PatternNumberGenerator2.0.html">PatternNumberGenerator2.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\PolygonTowerDefense\PolygonTowerDefense1.0.html">PolygonTowerDefense1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\TowerDefense_AI-Invasion\TowerDefense_AI-Invasion1.0.html">TowerDefense_AI-Invasion1.0.html</a>
   </nav>
-  
-  <main id="content">
-    <p style="text-align:center;">Select a game from the menu above to view details.</p>
-  </main>
-  
-  <script>
-    // URL to the file list
-    const fileListUrl = "https://aabproducoes.github.io/Links/HTML_games/file_list.txt";
-    
-    // Fetch the file list and generate menu items
-    fetch(fileListUrl)
-      .then(response => response.text())
-      .then(data => {
-        // Assume the file_list.txt contains one URL per line
-        const lines = data.split('\n').filter(line => line.trim() !== "");
-        const menu = document.getElementById('menu');
-        
-        lines.forEach(line => {
-          const trimmedLine = line.trim();
-          let menuText = "";
-          
-          // Custom mapping for a specific game
-          if (trimmedLine.includes("match31.0.html")) {
-            menuText = "CupWars";
-          } else {
-            // Use the filename (without extension) as the menu text
-            const parts = trimmedLine.split('/');
-            menuText = parts[parts.length - 1].replace('.html', '');
-          }
-          
-          // Create the menu item
-          const link = document.createElement('a');
-          link.href = "#";
-          link.textContent = menuText;
-          link.addEventListener("click", function(e) {
-            e.preventDefault();
-            // Render the selected game page in an iframe
-            document.getElementById('content').innerHTML =
-              '<iframe src="' + trimmedLine + '"></iframe>';
-          });
-          
-          menu.appendChild(link);
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching file list:', error);
-        const menu = document.getElementById('menu');
-        menu.innerHTML = "<p>Error loading games menu.</p>";
-      });
-  </script>
 </body>
 </html>
