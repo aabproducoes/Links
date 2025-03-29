@@ -1,10 +1,5 @@
 https://aabproducoes.github.io/Links/\HTML_games\BgAnimation1.html
-https://aabproducoes.github.io/Links/\HTML_games\file_list.txt
-https://aabproducoes.github.io/Links/\HTML_games\get_files.py
-https://aabproducoes.github.io/Links/\HTML_games\AdvancedClickerIdleGame\achievement.mp3
 https://aabproducoes.github.io/Links/\HTML_games\AdvancedClickerIdleGame\AdvancedClickerIdleGame1.0.html
-https://aabproducoes.github.io/Links/\HTML_games\AdvancedClickerIdleGame\buy.mp3
-https://aabproducoes.github.io/Links/\HTML_games\AdvancedClickerIdleGame\click.mp3
 https://aabproducoes.github.io/Links/\HTML_games\BKPK_FGT_game\BKPK_FGT_game1.0.html
 https://aabproducoes.github.io/Links/\HTML_games\CupWars\Cupwars_01.html
 https://aabproducoes.github.io/Links/\HTML_games\DiceRollUnlocker\DiceRollUnlocker1.0.html
