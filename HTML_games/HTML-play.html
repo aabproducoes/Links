@@ -73,18 +73,23 @@
   <script>
     // Base URL for the site
     const baseUrl = 'https://aabproducoes.github.io/Links/';
-    // URL for the file list of HTML games
-    const fileListUrl = combineURL(baseUrl, 'HTML_games/file_list.txt');
+    // URL for the file list of HTML games (assumed to be inside HTML_games folder)
+    const fileListUrl = joinUrl(baseUrl, 'HTML_games/file_list.txt');
 
-    // Combines base URL and path while removing extra slashes
-    function combineURL(base, path) {
+    // Utility function to join URLs without duplicate slashes (except after protocol)
+    function joinUrl(base, path) {
+      // Ensure the protocol part (like "https://") remains intact.
+      const protocolMatch = base.match(/^(https?:\/\/)/);
+      const protocol = protocolMatch ? protocolMatch[1] : '';
+      base = base.replace(/^(https?:\/\/)/, '');
+      
       if (base.endsWith('/')) {
         base = base.slice(0, -1);
       }
       if (path.startsWith('/')) {
-        path = path.substring(1);
+        path = path.slice(1);
       }
-      return base + '/' + path;
+      return protocol + base + '/' + path;
     }
 
     // Fetch the file list and populate the menu
@@ -100,15 +105,20 @@
         const menuList = document.getElementById('menuList');
         lines.forEach(line => {
           const li = document.createElement('li');
-          // Split the path and filter out empty parts
+          // Split the path into parts (filtering out empty strings)
           const parts = line.split('/').filter(Boolean);
-          // Default to the last element
-          let menuText = parts[parts.length - 1];
-          // If the last element is an HTML file, use the preceding part instead
-          if (menuText.match(/\.html?$/i) && parts.length > 1) {
-            menuText = parts[parts.length - 2];
+          let name = '';
+          if (parts.length) {
+            // If the last part is "index.html", use the preceding folder name (if available)
+            const lastPart = parts[parts.length - 1];
+            if (lastPart.toLowerCase() === 'index.html' && parts.length > 1) {
+              name = parts[parts.length - 2];
+            } else {
+              // Otherwise, use the last part and remove .html extension if present
+              name = lastPart.replace(/\.html?$/i, '');
+            }
           }
-          li.textContent = menuText;
+          li.textContent = name;
           li.addEventListener('click', () => {
             loadContent(line);
           });
@@ -121,7 +131,8 @@
 
     // Function to load HTML content from the given file path
     function loadContent(path) {
-      const fullUrl = path.startsWith('http') ? path : combineURL(baseUrl, path);
+      // If the path isn't a full URL, join it with baseUrl
+      let fullUrl = path.startsWith('http') ? path : joinUrl(baseUrl, path);
       fetch(fullUrl)
         .then(response => {
           if (!response.ok) {
@@ -133,7 +144,7 @@
           const contentDiv = document.getElementById('content');
           contentDiv.innerHTML = html;
           contentDiv.classList.add('fade-in');
-          // Remove the animation class after the fade-in finishes
+          // Remove the animation class after the animation ends so it can be re-triggered
           setTimeout(() => {
             contentDiv.classList.remove('fade-in');
           }, 500);
