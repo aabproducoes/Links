@@ -98,9 +98,11 @@
               return;
             }
             lines.forEach(function(line) {
+              // Extract file name from full path
+              var fileName = line.substring(line.lastIndexOf('/') + 1);
               const item = document.createElement('div');
               item.className = 'menu-item';
-              item.textContent = line;
+              item.textContent = fileName;
               item.tabIndex = 0; // Ensure item is focusable for accessibility
               item.addEventListener('click', function() {
                 loadContent(line, item);
