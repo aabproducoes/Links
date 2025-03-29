@@ -73,8 +73,19 @@
   <script>
     // Base URL for the site
     const baseUrl = 'https://aabproducoes.github.io/Links/';
-    // URL for the file list of HTML games (assumed to be inside HTML_games folder)
-    const fileListUrl = baseUrl + 'HTML_games/file_list.txt';
+    // URL for the file list of HTML games
+    const fileListUrl = combineURL(baseUrl, 'HTML_games/file_list.txt');
+
+    // Combines base URL and path while removing extra slashes
+    function combineURL(base, path) {
+      if (base.endsWith('/')) {
+        base = base.slice(0, -1);
+      }
+      if (path.startsWith('/')) {
+        path = path.substring(1);
+      }
+      return base + '/' + path;
+    }
 
     // Fetch the file list and populate the menu
     fetch(fileListUrl)
@@ -89,9 +100,15 @@
         const menuList = document.getElementById('menuList');
         lines.forEach(line => {
           const li = document.createElement('li');
-          // Extract only the last part of the path to be used as the title
+          // Split the path and filter out empty parts
           const parts = line.split('/').filter(Boolean);
-          li.textContent = parts[parts.length - 1];
+          // Default to the last element
+          let menuText = parts[parts.length - 1];
+          // If the last element is an HTML file, use the preceding part instead
+          if (menuText.match(/\.html?$/i) && parts.length > 1) {
+            menuText = parts[parts.length - 2];
+          }
+          li.textContent = menuText;
           li.addEventListener('click', () => {
             loadContent(line);
           });
@@ -104,8 +121,7 @@
 
     // Function to load HTML content from the given file path
     function loadContent(path) {
-      // If the path isn't a full URL, prepend the baseUrl
-      let fullUrl = path.startsWith('http') ? path : baseUrl + path;
+      const fullUrl = path.startsWith('http') ? path : combineURL(baseUrl, path);
       fetch(fullUrl)
         .then(response => {
           if (!response.ok) {
@@ -117,7 +133,7 @@
           const contentDiv = document.getElementById('content');
           contentDiv.innerHTML = html;
           contentDiv.classList.add('fade-in');
-          // Remove the animation class after the animation ends so it can be re-triggered
+          // Remove the animation class after the fade-in finishes
           setTimeout(() => {
             contentDiv.classList.remove('fade-in');
           }, 500);
