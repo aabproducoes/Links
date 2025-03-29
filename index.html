@@ -636,7 +636,8 @@
     // ========================
     async function fetchCertificatesList() {
       try {
-        const r = await fetchTextFile('./Certificados/CertificadosList.txt');
+        // Update the file path here to match your certificados.txt file
+        const r = await fetchTextFile('./Certificados/certificados.txt');
         const lines = r.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
           const sep = ' - ';
