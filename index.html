@@ -80,7 +80,7 @@
       text-decoration: none; font-size: 16px;
       font-weight: 700; text-align: center;
       padding: 15px 20px;
-      position: relative; /* For animated underline and ripple */
+      position: relative;
     }
     /* Animated underline for menu links */
     .menu li a::after {
@@ -157,6 +157,10 @@
       overflow: hidden;
     }
     .theme-btn:hover { filter: brightness(1.15); }
+    /* Added a specific rule for white preset buttons */
+    .white-btn {
+      color: #000 !important;
+    }
     /* MAIN CONTAINER */
     .main-container {
       margin-left: 280px; padding: 20px;
@@ -335,6 +339,8 @@
       <button class="theme-btn" style="background:#0d47a1; color:#fff;" data-theme="blue">Blue</button>
       <button class="theme-btn" style="background:#757575; color:#fff;" data-theme="gray">Gray</button>
       <button class="theme-btn" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
+      <!-- Added a white preset button with dark text -->
+      <button class="theme-btn white-btn" style="background:#ffffff; color:#000;" data-theme="white">White</button>
     </div>
   </div>
   <!-- MAIN CONTAINER -->
@@ -477,6 +483,13 @@
         '--menu-color': '#00b7b7',
         '--menu-color-alt': '#007777',
         '--menu-text-color': '#ffffff'
+      },
+      white: {
+        '--bg-color': '#ffffff',
+        '--gradient-dark': '#e0e0e0',
+        '--menu-color': '#ffffff',
+        '--menu-color-alt': '#cccccc',
+        '--menu-text-color': '#000'
       }
     };
     // HELPER: Fetch a text file as UTF-8
