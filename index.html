@@ -81,32 +81,32 @@
       transition: transform 0.5s ease;
       transform-origin: center center;
     }
-    /* Triangle Button – Now using clip-path to form a triangle */
+    /* Increase clock item size to 160x160 */
+    .clock-item {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      background: none;
+      cursor: pointer;
+    }
+    /* Triangle Button using clip-path; its tip is at 50% 100% (i.e. at (80,160) in a 160px box) */
     .triangle-button {
       width: 100%;
       height: 100%;
       clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
       background: var(--menu-color);
     }
-    /* When the triangle is clamped to the inner border, change its shape */
+    /* Optionally, if clamped, add a curved clip-path (tweak as needed) */
     .triangle-button.curved {
-      /* This example uses an SVG path for a curved bottom edge */
       clip-path: path("M50% 100% Q50% 85% 0% 0% L100% 0% Z");
-    }
-    .clock-item {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background: none; /* no background on the container */
-      cursor: pointer;
     }
     .clock-label {
       display: block;
       transform: rotate(0deg);
       transition: transform 0.5s ease;
       text-align: center;
-      line-height: 50px;
-      font-size: 24px;
+      line-height: 160px; /* Center the icon vertically in a 160px box */
+      font-size: 48px; /* Bigger icon size */
     }
     
     /* Center language toggle button */
@@ -444,40 +444,41 @@
   
   <!-- SCRIPTS -->
   
-  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Triangle Buttons and Clamping) -->
+  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Triangle Buttons & Clamping) -->
   <script>
     const clockMenu = document.getElementById('menuList');
     const clockItems = document.querySelectorAll('.clock-item');
     const RADIUS = 150; 
     let cumulativeRotation = 0;
-    // Define inner border radius (center circle border)
-    const innerRadius = 40;
+    // Define inner border radius (for clamping) – set to 80 now.
+    const innerRadius = 80;
     
-    // Position each clock item.
+    // Position each clock item using the new dimensions (half width = 80)
     clockItems.forEach(item => {
       const angleDeg = parseFloat(item.getAttribute('data-angle'));
       const angleRad = angleDeg * Math.PI / 180;
       let x = RADIUS * Math.cos(angleRad);
       let y = RADIUS * Math.sin(angleRad);
-      // The triangle tip in local coordinates is at (25,50).
-      // Thus its tip position relative to the clock menu center is (x, y + 25).
+      // For a 160x160 item, its tip (bottom center) is at (80,160) relative to top‐left.
+      // Relative to the item center (80,80), the tip is offset (0,80).
+      // Calculate the tip’s position relative to the clock menu center.
       const tipX = x;
-      const tipY = y + 25;
+      const tipY = y + 80;
       const distance = Math.sqrt(tipX * tipX + tipY * tipY);
-      // If the tip is within the inner border, clamp it.
+      // If the tip falls inside the inner border, clamp it.
       if(distance < innerRadius) {
           const a = Math.atan2(tipY, tipX);
           const newTipX = innerRadius * Math.cos(a);
           const newTipY = innerRadius * Math.sin(a);
-          // Adjust x and y so that (x, y+25) becomes (newTipX, newTipY)
-          y = newTipY - 25;
-          // Add a "curved" class to the triangle button.
+          // Adjust y so that (x, y+80) becomes (newTipX, newTipY)
+          y = newTipY - 80;
+          // Add a "curved" class for visual adjustment.
           item.querySelector('.triangle-button').classList.add('curved');
       } else {
           item.querySelector('.triangle-button').classList.remove('curved');
       }
-      item.style.left = (x - 25) + 'px';
-      item.style.top = (y - 25) + 'px';
+      item.style.left = (x - 80) + 'px';
+      item.style.top = (y - 80) + 'px';
       item.dataset.originalAngle = angleDeg;
     });
     
@@ -490,13 +491,11 @@
       cumulativeRotation += diff;
       clockMenu.style.transform = `translate(-50%, -50%) rotate(${-cumulativeRotation}deg)`;
       
-      // Update each triangle button.
+      // Update each triangle button so that its tip always points inward.
       clockItems.forEach(item => {
         const triangle = item.querySelector('.triangle-button');
         const originalAngle = parseFloat(item.dataset.originalAngle);
-        // Rotate the triangle so its tip always points inward.
         triangle.style.transform = `rotate(${originalAngle + 90 - cumulativeRotation}deg)`;
-        // Also update label rotation (if needed).
         const label = item.querySelector('.clock-label');
         label.style.transform = `rotate(${cumulativeRotation}deg)`;
       });
