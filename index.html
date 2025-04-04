@@ -76,9 +76,13 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
     .menu li a {
-      display: block; color: var(--menu-text-color);
-      text-decoration: none; font-size: 16px;
-      font-weight: 700; text-align: center;
+      display: block;
+      /* Force sidebar menu link text to always be black */
+      color: #000 !important;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
       padding: 15px 20px;
       position: relative;
     }
@@ -122,6 +126,7 @@
       cursor: pointer; width: 80%;
       position: relative;
       overflow: hidden;
+      color: #000 !important;
     }
     .language-btn:hover {
       background: var(--menu-color);
@@ -149,14 +154,14 @@
     .preset-themes h4 {
       margin-bottom: 5px; font-size: 14px; color: #fff;
     }
-    /* Removed inline text color from preset theme buttons */
+    /* Force all preset theme buttons text to be black */
     .theme-btn {
       margin: 2px 0; width: 80%; border: none;
       border-radius: 30px; padding: 8px; cursor: pointer;
       font-size: 14px; transition: background 0.3s;
       position: relative;
       overflow: hidden;
-      /* Let JavaScript adjust the text color based on background */
+      color: #000 !important;
     }
     .theme-btn:hover { filter: brightness(1.15); }
     /* MAIN CONTAINER */
@@ -333,7 +338,6 @@
     </div>
     <div class="preset-themes">
       <h4>Theme Presets</h4>
-      <!-- Removed inline color; JavaScript will adjust text color -->
       <button class="theme-btn" style="background:#4caf50;" data-theme="default">Default</button>
       <button class="theme-btn" style="background:#0d47a1;" data-theme="blue">Blue</button>
       <button class="theme-btn" style="background:#757575;" data-theme="gray">Gray</button>
@@ -739,7 +743,7 @@
         document.body.style.background = `linear-gradient(160deg, ${color} 0%, ${gradientDark} 100%)`;
       });
     });
-    // Apply theme preset
+    // Apply theme preset and then update preset button text colors
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const themeName = btn.getAttribute('data-theme');
@@ -749,6 +753,8 @@
           document.documentElement.style.setProperty(varName, selectedTheme[varName]);
         }
         document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
+        // Force all preset theme button text to be black
+        document.querySelectorAll('.theme-btn').forEach(b => b.style.color = '#000');
       });
     });
     // Ripple effect for interactive elements
@@ -770,30 +776,6 @@
           });
         });
       });
-
-      // Set preset theme button text colors based on background brightness.
-      function getBrightness(rgb) {
-        const result = rgb.match(/\d+/g);
-        if (result) {
-          const r = parseInt(result[0], 10);
-          const g = parseInt(result[1], 10);
-          const b = parseInt(result[2], 10);
-          return (r * 299 + g * 587 + b * 114) / 1000;
-        }
-        return 0;
-      }
-      function setThemeButtonTextColors() {
-        document.querySelectorAll('.theme-btn').forEach(btn => {
-          let bg = window.getComputedStyle(btn).backgroundColor;
-          let brightness = getBrightness(bg);
-          if (brightness > 200) { // if background is very light
-            btn.style.color = '#000';
-          } else {
-            btn.style.color = '#fff';
-          }
-        });
-      }
-      setThemeButtonTextColors();
     });
     // SCROLL SPY
     const sections = document.querySelectorAll('section');
