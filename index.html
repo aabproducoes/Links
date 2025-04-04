@@ -114,7 +114,7 @@
     /* BOTÕES DE LÍNGUA / TEMAS / GRID DE COR */
     .language-btn {
       display: inline-block; margin: 20px auto;
-      background: var(--menu-color-alt); color: #fff;
+      background: var(--menu-color-alt);
       padding: 12px 20px; border: 2px solid #455a64;
       border-radius: 50px; text-decoration: none;
       font-weight: 700; text-align: center;
@@ -124,7 +124,7 @@
       overflow: hidden;
     }
     .language-btn:hover {
-      background: var(--menu-color); color: #000;
+      background: var(--menu-color);
       transform: scale(1.05); box-shadow: 0 4px 10px rgba(76,175,80,0.4);
     }
     .language-btn:active {
@@ -149,18 +149,16 @@
     .preset-themes h4 {
       margin-bottom: 5px; font-size: 14px; color: #fff;
     }
+    /* Removed inline text color from preset theme buttons */
     .theme-btn {
       margin: 2px 0; width: 80%; border: none;
       border-radius: 30px; padding: 8px; cursor: pointer;
       font-size: 14px; transition: background 0.3s;
       position: relative;
       overflow: hidden;
+      /* Let JavaScript adjust the text color based on background */
     }
     .theme-btn:hover { filter: brightness(1.15); }
-    /* Added a specific rule for white preset buttons */
-    .white-btn {
-      color: #000 !important;
-    }
     /* MAIN CONTAINER */
     .main-container {
       margin-left: 280px; padding: 20px;
@@ -238,7 +236,7 @@
       background: #607d8b;
       color: #000;
     }
-    /* ANIMATED PATTERNS SECTION (Back button removed) */
+    /* ANIMATED PATTERNS SECTION */
     .animated-patterns-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -335,12 +333,11 @@
     </div>
     <div class="preset-themes">
       <h4>Theme Presets</h4>
-      <button class="theme-btn" style="background:#4caf50; color:#fff;" data-theme="default">Default</button>
-      <button class="theme-btn" style="background:#0d47a1; color:#fff;" data-theme="blue">Blue</button>
-      <button class="theme-btn" style="background:#757575; color:#fff;" data-theme="gray">Gray</button>
-      <button class="theme-btn" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
-      <!-- Added a white preset button with dark text -->
-      <button class="theme-btn white-btn" style="background:#ffffff; color:#000;" data-theme="white">White</button>
+      <!-- Removed inline color; JavaScript will adjust text color -->
+      <button class="theme-btn" style="background:#4caf50;" data-theme="default">Default</button>
+      <button class="theme-btn" style="background:#0d47a1;" data-theme="blue">Blue</button>
+      <button class="theme-btn" style="background:#757575;" data-theme="gray">Gray</button>
+      <button class="theme-btn" style="background:#00796b;" data-theme="teal">Teal</button>
     </div>
   </div>
   <!-- MAIN CONTAINER -->
@@ -483,13 +480,6 @@
         '--menu-color': '#00b7b7',
         '--menu-color-alt': '#007777',
         '--menu-text-color': '#ffffff'
-      },
-      white: {
-        '--bg-color': '#ffffff',
-        '--gradient-dark': '#e0e0e0',
-        '--menu-color': '#ffffff',
-        '--menu-color-alt': '#cccccc',
-        '--menu-text-color': '#000'
       }
     };
     // HELPER: Fetch a text file as UTF-8
@@ -761,6 +751,50 @@
         document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
       });
     });
+    // Ripple effect for interactive elements
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('button, .main-btn, .certificate-item, .menu li a, .theme-btn, .language-btn').forEach(el => {
+        el.style.position = 'relative';
+        el.style.overflow = 'hidden';
+        el.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          ripple.classList.add('ripple');
+          this.appendChild(ripple);
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+          ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+          ripple.addEventListener('animationend', () => {
+            ripple.remove();
+          });
+        });
+      });
+
+      // Set preset theme button text colors based on background brightness.
+      function getBrightness(rgb) {
+        const result = rgb.match(/\d+/g);
+        if (result) {
+          const r = parseInt(result[0], 10);
+          const g = parseInt(result[1], 10);
+          const b = parseInt(result[2], 10);
+          return (r * 299 + g * 587 + b * 114) / 1000;
+        }
+        return 0;
+      }
+      function setThemeButtonTextColors() {
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+          let bg = window.getComputedStyle(btn).backgroundColor;
+          let brightness = getBrightness(bg);
+          if (brightness > 200) { // if background is very light
+            btn.style.color = '#000';
+          } else {
+            btn.style.color = '#fff';
+          }
+        });
+      }
+      setThemeButtonTextColors();
+    });
     // SCROLL SPY
     const sections = document.querySelectorAll('section');
     const navLi = document.querySelectorAll('.menu li');
@@ -802,25 +836,6 @@
       await populateWhoImI();
       await populateCertificatesList();
       activateMenuOnScroll();
-      
-      // Attach ripple effect to interactive elements
-      document.querySelectorAll('button, .main-btn, .certificate-item, .menu li a, .theme-btn, .language-btn').forEach(el => {
-        el.style.position = 'relative';
-        el.style.overflow = 'hidden';
-        el.addEventListener('click', function(e) {
-          const ripple = document.createElement('span');
-          ripple.classList.add('ripple');
-          this.appendChild(ripple);
-          const rect = this.getBoundingClientRect();
-          const size = Math.max(rect.width, rect.height);
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-          ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-          ripple.addEventListener('animationend', () => {
-            ripple.remove();
-          });
-        });
-      });
     });
   </script>
 </body>
