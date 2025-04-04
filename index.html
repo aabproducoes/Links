@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Brief description of the site or your profile.">
-  <title>Merged Clock Menu Page</title>
+  <title>Currículo de Antonio Augusto Barbaro</title>
   
   <!-- Google Fonts: Roboto -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -19,7 +19,7 @@
   
   <style>
     /* --------------------------------------------------
-       Global Variables & Reset (from second code)
+       Global Variables & Reset
     ----------------------------------------------------- */
     :root {
       --bg-color: #2c2c2c;
@@ -44,8 +44,7 @@
     }
     
     /* --------------------------------------------------
-       CLOCK MENU (New, Bigger, Half‑Out & Infinite Roll)
-       Replaces the sidebar navigation.
+       CLOCK MENU (Bigger, Half‑Out, Infinite Roll)
     ----------------------------------------------------- */
     #clockMenu {
       position: fixed;
@@ -55,7 +54,6 @@
       height: 400px;
       border-radius: 50%;
       background: #333;
-      /* Push half of the menu off-screen: half of 400 = 200 */
       transform: translate(-200px, -50%);
       overflow: visible;
       z-index: 1000;
@@ -66,7 +64,6 @@
       width: 100%;
       height: 100%;
     }
-    /* Pointer at the right edge (400 - 10 = 390) */
     .pointer {
       position: absolute;
       top: 50%;
@@ -78,7 +75,6 @@
       border-bottom: 10px solid transparent;
       border-left: 10px solid var(--menu-color);
     }
-    /* The rotating UL */
     .clock-menu {
       position: absolute;
       top: 50%;
@@ -89,7 +85,6 @@
       transition: transform 0.5s ease;
       transform-origin: center center;
     }
-    /* Clock menu items (in a larger circle now) */
     .clock-item {
       position: absolute;
       width: 50px;
@@ -105,20 +100,19 @@
     .clock-item:hover {
       background: #ff4f4f;
     }
-    /* Label stays upright */
     .clock-label {
       display: block;
       transform: rotate(0deg);
       transition: transform 0.5s ease;
     }
-    /* Language toggle button in the center of the clock menu */
+    /* Center language toggle button */
     #langToggle {
       position: absolute;
       top: 50%;
       left: 50%;
       width: 80px;
       height: 80px;
-      margin: -40px 0 0 -40px; /* center the 80px circle */
+      margin: -40px 0 0 -40px;
       background: var(--menu-color-alt);
       border-radius: 50%;
       text-align: center;
@@ -135,10 +129,10 @@
     }
     
     /* --------------------------------------------------
-       MAIN CONTAINER & Sections (from second code, minus sidebar)
+       MAIN CONTAINER & Sections (from second code)
     ----------------------------------------------------- */
     .main-container {
-      margin-left: 420px; /* leave space for the bigger clock menu */
+      margin-left: 420px;
       padding: 20px;
       transition: margin-left 0.3s ease;
     }
@@ -266,8 +260,7 @@
     }
     
     /* --------------------------------------------------
-       Header Controls (Language toggle, Color options, Theme presets)
-       (Kept from your second code but you can hide or remove these if desired.)
+       Header Controls (Optional – from second code)
     ----------------------------------------------------- */
     .header-controls {
       margin-left: 420px;
@@ -344,9 +337,7 @@
   <!-- HALF‑OUT CLOCK MENU (Navigation) -->
   <div id="clockMenu">
     <div class="clock-container">
-      <!-- Pointer on right edge -->
       <div class="pointer"></div>
-      <!-- Rotating clock menu -->
       <ul class="clock-menu" id="menuList">
         <li class="clock-item" data-angle="0" data-target="#profile">
           <span class="clock-label">👤</span>
@@ -370,12 +361,12 @@
           <span class="clock-label">🎮</span>
         </li>
       </ul>
-      <!-- Language toggle button at the center of the clock menu -->
+      <!-- Language toggle button at the center -->
       <div id="langToggle">Lang: EN</div>
     </div>
   </div>
   
-  <!-- HEADER CONTROLS (Optional – can be hidden if using the center language button) -->
+  <!-- HEADER CONTROLS (Optional) -->
   <div class="header-controls">
     <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
@@ -396,7 +387,7 @@
     </div>
   </div>
   
-  <!-- MAIN CONTENT (from your second code) -->
+  <!-- MAIN CONTENT -->
   <div class="main-container" id="mainContainer">
     <section id="profile">
       <h1 data-locale="profileTitle">Profile</h1>
@@ -459,20 +450,19 @@
     </section>
   </div>
   
-  <!-- DIGITAL CLOCK (from second code) -->
+  <!-- DIGITAL CLOCK -->
   <div id="clock"></div>
   
   <!-- --------------------------------------------------
        SCRIPTS
   ----------------------------------------------------- -->
   
-  <!-- CLOCK MENU SCRIPT with continuous rotation -->
+  <!-- CLOCK MENU SCRIPT (Continuous Rotation) -->
   <script>
     const clockMenu = document.getElementById('menuList');
     const clockItems = document.querySelectorAll('.clock-item');
     // Use a larger radius for the bigger menu
     const RADIUS = 150; 
-    // Use a cumulative rotation variable (in degrees)
     let cumulativeRotation = 0;
     clockItems.forEach(item => {
       const angleDeg = parseFloat(item.getAttribute('data-angle'));
@@ -485,7 +475,6 @@
     });
     
     function rotateClockTo(targetAngle) {
-      // Compute current rotation mod 360
       let currentMod = cumulativeRotation % 360;
       if (currentMod < 0) currentMod += 360;
       let diff = targetAngle - currentMod;
@@ -493,7 +482,6 @@
       if (diff < -180) diff += 360;
       cumulativeRotation += diff;
       clockMenu.style.transform = `translate(-50%, -50%) rotate(${-cumulativeRotation}deg)`;
-      // Update each label so it stays upright
       clockItems.forEach(item => {
         const label = item.querySelector('.clock-label');
         let labelRotation = cumulativeRotation % 360;
@@ -515,7 +503,7 @@
         }
       });
     });
-    // Initialize with 0 rotation
+    // Initialize rotation at 0
     rotateClockTo(0);
   </script>
   
@@ -533,7 +521,7 @@
     updateClock();
   </script>
   
-  <!-- LANGUAGE, THEME, KNOWLEDGE, & CERTIFICATES SCRIPTS (from second code) -->
+  <!-- LANGUAGE, THEME, KNOWLEDGE, & CERTIFICATES SCRIPTS -->
   <script>
     let certificatesArray = [];
     let currentCertificateIndex = 0;
@@ -577,7 +565,6 @@
     };
     let currentLanguage = 'en';
     
-    // Function to update language in content
     function updateLanguage() {
       document.querySelectorAll('[data-locale]').forEach(el => {
         const key = el.getAttribute('data-locale');
@@ -585,12 +572,10 @@
           el.textContent = translations[currentLanguage][key];
         }
       });
-      // Update language buttons' text
       document.getElementById('languageBtn').textContent = `Lang: ${currentLanguage.toUpperCase()}`;
       document.getElementById('langToggle').textContent = `Lang: ${currentLanguage.toUpperCase()}`;
     }
     
-    // Language toggle via header controls (if used)
     const languageBtn = document.getElementById('languageBtn');
     languageBtn.addEventListener('click', async () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
@@ -600,7 +585,6 @@
       await populateCertificatesList();
     });
     
-    // Language toggle via clock menu center button
     const langToggle = document.getElementById('langToggle');
     langToggle.addEventListener('click', async () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
@@ -784,6 +768,30 @@
     }, scrollObserverOptions);
     sections.forEach(section => scrollObserver.observe(section));
   </script>
+  
+  <!-- NEW SCRIPT: Update Clock Rotation on Scroll -->
+  <script>
+    function updateClockRotationOnScroll() {
+      let currentSectionId = "";
+      let minDistance = Infinity;
+      document.querySelectorAll('section').forEach(section => {
+        const rect = section.getBoundingClientRect();
+        const distance = Math.abs(rect.top);
+        if (distance < minDistance) {
+          minDistance = distance;
+          currentSectionId = section.id;
+        }
+      });
+      if (currentSectionId) {
+        clockItems.forEach(item => {
+          if (item.getAttribute('data-target') === "#" + currentSectionId) {
+            const angle = parseFloat(item.getAttribute('data-angle'));
+            rotateClockTo(angle);
+          }
+        });
+      }
+    }
+    window.addEventListener('scroll', updateClockRotationOnScroll);
+  </script>
 </body>
 </html>
-
