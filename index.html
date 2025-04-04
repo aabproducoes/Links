@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Brief description of the site or your profile.">
+  <meta name="description" content="Currículo de Antonio Augusto Barbaro">
   <title>Currículo de Antonio Augusto Barbaro</title>
   
   <!-- Google Fonts: Roboto -->
@@ -18,9 +18,7 @@
   <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   
   <style>
-    /* --------------------------------------------------
-       Global Variables & Reset
-    ----------------------------------------------------- */
+    /* Global Variables & Reset */
     :root {
       --bg-color: #2c2c2c;
       --gradient-dark: #1a1a1a;
@@ -43,9 +41,7 @@
       color: #e0e0e0; overflow-x: hidden; position: relative;
     }
     
-    /* --------------------------------------------------
-       CLOCK MENU (Bigger, Half‑Out, Infinite Roll)
-    ----------------------------------------------------- */
+    /* CLOCK MENU – Bigger, Half‑Out, Infinite Roll */
     #clockMenu {
       position: fixed;
       top: 50%;
@@ -85,27 +81,37 @@
       transition: transform 0.5s ease;
       transform-origin: center center;
     }
+    /* Triangle Button: Each item is now a triangle.
+       The shape is defined using clip-path. */
     .clock-item {
       position: absolute;
       width: 50px;
       height: 50px;
-      background: var(--menu-color);
-      border-radius: 50%;
-      text-align: center;
-      line-height: 50px;
+      /* Remove the default circular background */
+      background: none;
       cursor: pointer;
-      color: #000;
-      transition: background 0.3s;
     }
-    .clock-item:hover {
+    .triangle-button {
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+      background: var(--menu-color);
+      /* No border-radius for triangle shape */
+    }
+    .clock-item:hover .triangle-button {
       background: #ff4f4f;
     }
     .clock-label {
       display: block;
       transform: rotate(0deg);
       transition: transform 0.5s ease;
+      /* Center the icon inside the triangle */
+      text-align: center;
+      line-height: 50px;
+      font-size: 24px;
     }
-    /* Center language toggle button */
+    
+    /* Center language toggle button in the clock menu */
     #langToggle {
       position: absolute;
       top: 50%;
@@ -128,9 +134,7 @@
       background: var(--menu-color);
     }
     
-    /* --------------------------------------------------
-       MAIN CONTAINER & Sections (from second code)
-    ----------------------------------------------------- */
+    /* MAIN CONTAINER & Sections */
     .main-container {
       margin-left: 420px;
       padding: 20px;
@@ -168,9 +172,7 @@
     }
     a.main-btn:active { transform: scale(0.98); }
     
-    /* --------------------------------------------------
-       Certificates Section (from second code)
-    ----------------------------------------------------- */
+    /* Certificates Section */
     .certificates-container {
       display: flex;
       gap: 20px;
@@ -205,9 +207,7 @@
       color: #000;
     }
     
-    /* --------------------------------------------------
-       Animated Patterns Section (from second code)
-    ----------------------------------------------------- */
+    /* Animated Patterns Section */
     .animated-patterns-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -223,9 +223,7 @@
       font-size: 14px; color: #cfd8dc;
     }
     
-    /* --------------------------------------------------
-       New HTML Games Section
-    ----------------------------------------------------- */
+    /* New HTML Games Section */
     #htmlgames .animated-patterns-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -241,9 +239,7 @@
       font-size: 14px; color: #cfd8dc;
     }
     
-    /* --------------------------------------------------
-       DIGITAL CLOCK (from second code)
-    ----------------------------------------------------- */
+    /* DIGITAL CLOCK */
     #clock {
       position: fixed; bottom: 20px; right: 20px;
       width: 130px; height: 130px; background: #222;
@@ -259,32 +255,17 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.6);
     }
     
-    /* --------------------------------------------------
-       Header Controls (Optional – from second code)
-    ----------------------------------------------------- */
+    /* Global Button Style – For consistent rounded (pill) shape */
+    button, .theme-btn {
+      border-radius: 50px;
+      border: none;
+    }
+    
+    /* Header Controls – Only Presets & Color Grid */
     .header-controls {
       margin-left: 420px;
       padding: 10px;
       margin-bottom: 20px;
-    }
-    .language-btn {
-      display: inline-block; margin-right: 20px;
-      background: var(--menu-color-alt);
-      padding: 12px 20px; border: 2px solid #455a64;
-      border-radius: 50px; text-decoration: none;
-      font-weight: 700; text-align: center;
-      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      color: #000 !important;
-    }
-    .language-btn:hover {
-      background: var(--menu-color);
-      transform: scale(1.05);
-      box-shadow: 0 4px 10px rgba(76,175,80,0.4);
-    }
-    .language-btn:active {
-      transform: scale(0.95);
-      box-shadow: 0 3px 8px rgba(76,175,80,0.3);
     }
     .color-grid {
       display: inline-block;
@@ -307,16 +288,13 @@
       margin-left: 20px;
     }
     .preset-themes .theme-btn {
-      margin: 2px 0; width: 80px; border: none;
-      border-radius: 30px; padding: 8px; cursor: pointer;
+      margin: 2px 0; width: 80px; padding: 8px;
       font-size: 14px; transition: background 0.3s;
       color: #000 !important;
     }
     .preset-themes .theme-btn:hover { filter: brightness(1.15); }
     
-    /* --------------------------------------------------
-       Ripple Effect
-    ----------------------------------------------------- */
+    /* Ripple Effect */
     .ripple {
       position: absolute;
       border-radius: 50%;
@@ -334,41 +312,54 @@
   </style>
 </head>
 <body>
-  <!-- HALF‑OUT CLOCK MENU (Navigation) -->
+  <!-- CLOCK MENU (Navigation) -->
   <div id="clockMenu">
     <div class="clock-container">
       <div class="pointer"></div>
       <ul class="clock-menu" id="menuList">
         <li class="clock-item" data-angle="0" data-target="#profile">
-          <span class="clock-label">👤</span>
+          <div class="triangle-button">
+            <span class="clock-label">👤</span>
+          </div>
         </li>
         <li class="clock-item" data-angle="51.4" data-target="#social">
-          <span class="clock-label">🌐</span>
+          <div class="triangle-button">
+            <span class="clock-label">🌐</span>
+          </div>
         </li>
         <li class="clock-item" data-angle="102.8" data-target="#projects">
-          <span class="clock-label">💼</span>
+          <div class="triangle-button">
+            <span class="clock-label">💼</span>
+          </div>
         </li>
         <li class="clock-item" data-angle="154.2" data-target="#contact">
-          <span class="clock-label">📞</span>
+          <div class="triangle-button">
+            <span class="clock-label">📞</span>
+          </div>
         </li>
         <li class="clock-item" data-angle="205.6" data-target="#certificates">
-          <span class="clock-label">📜</span>
+          <div class="triangle-button">
+            <span class="clock-label">📜</span>
+          </div>
         </li>
         <li class="clock-item" data-angle="257" data-target="#animatedPatterns">
-          <span class="clock-label">🎞️</span>
+          <div class="triangle-button">
+            <span class="clock-label">🎞️</span>
+          </div>
         </li>
         <li class="clock-item" data-angle="308.4" data-target="#htmlgames">
-          <span class="clock-label">🎮</span>
+          <div class="triangle-button">
+            <span class="clock-label">🎮</span>
+          </div>
         </li>
       </ul>
-      <!-- Language toggle button at the center -->
+      <!-- Center language toggle button -->
       <div id="langToggle">Lang: EN</div>
     </div>
   </div>
   
-  <!-- HEADER CONTROLS (Optional) -->
+  <!-- HEADER CONTROLS (Only Presets & Color Grid) -->
   <div class="header-controls">
-    <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
       <div class="color-option" data-color="#2c2c2c" style="background-color: #2c2c2c;"></div>
       <div class="color-option" data-color="#455a64" style="background-color: #455a64;"></div>
@@ -457,13 +448,13 @@
        SCRIPTS
   ----------------------------------------------------- -->
   
-  <!-- CLOCK MENU SCRIPT (Continuous Rotation) -->
+  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Triangle Buttons) -->
   <script>
     const clockMenu = document.getElementById('menuList');
     const clockItems = document.querySelectorAll('.clock-item');
-    // Use a larger radius for the bigger menu
     const RADIUS = 150; 
     let cumulativeRotation = 0;
+    
     clockItems.forEach(item => {
       const angleDeg = parseFloat(item.getAttribute('data-angle'));
       const angleRad = angleDeg * Math.PI / 180;
@@ -482,11 +473,17 @@
       if (diff < -180) diff += 360;
       cumulativeRotation += diff;
       clockMenu.style.transform = `translate(-50%, -50%) rotate(${-cumulativeRotation}deg)`;
+      
+      // Update each triangle button so that its tip always points inward.
       clockItems.forEach(item => {
+        const triangle = item.querySelector('.triangle-button');
+        const originalAngle = parseFloat(item.dataset.originalAngle);
+        // The triangle's desired rotation is (originalAngle + 90 - cumulativeRotation)
+        triangle.style.transform = `rotate(${originalAngle + 90 - cumulativeRotation}deg)`;
+        
+        // Also keep the label upright relative to the triangle.
         const label = item.querySelector('.clock-label');
-        let labelRotation = cumulativeRotation % 360;
-        if (labelRotation < 0) labelRotation += 360;
-        label.style.transform = `rotate(${labelRotation}deg)`;
+        label.style.transform = `rotate(${cumulativeRotation}deg)`;
       });
     }
     
@@ -521,10 +518,74 @@
     updateClock();
   </script>
   
-  <!-- LANGUAGE, THEME, KNOWLEDGE, & CERTIFICATES SCRIPTS -->
+  <!-- THEME PRESETS & LANGUAGE SCRIPT -->
   <script>
-    let certificatesArray = [];
-    let currentCertificateIndex = 0;
+    const themePresets = {
+      default: {
+        '--bg-color': '#2c2c2c',
+        '--gradient-dark': '#1a1a1a',
+        '--menu-color': '#4caf50',
+        '--menu-color-alt': '#607d8b',
+        '--menu-text-color': '#212121'
+      },
+      blue: {
+        '--bg-color': '#00193d',
+        '--gradient-dark': '#00061a',
+        '--menu-color': '#005eff',
+        '--menu-color-alt': '#00d4ff',
+        '--menu-text-color': '#ffffff'
+      },
+      gray: {
+        '--bg-color': '#3a3a3a',
+        '--gradient-dark': '#1b1b1b',
+        '--menu-color': '#727272',
+        '--menu-color-alt': '#9e9e9e',
+        '--menu-text-color': '#ffffff'
+      },
+      teal: {
+        '--bg-color': '#004f4f',
+        '--gradient-dark': '#002b2b',
+        '--menu-color': '#00b7b7',
+        '--menu-color-alt': '#007777',
+        '--menu-text-color': '#ffffff'
+      }
+    };
+
+    let currentLanguage = 'en';
+    
+    function updateLanguage() {
+      document.querySelectorAll('[data-locale]').forEach(el => {
+        const key = el.getAttribute('data-locale');
+        if (translations[currentLanguage][key]) {
+          el.textContent = translations[currentLanguage][key];
+        }
+      });
+      document.getElementById('langToggle').textContent = `Lang: ${currentLanguage.toUpperCase()}`;
+    }
+    
+    const langToggle = document.getElementById('langToggle');
+    langToggle.addEventListener('click', async () => {
+      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
+      updateLanguage();
+      await populateKnowledgeList();
+      await populateWhoImI();
+      await populateCertificatesList();
+    });
+    
+    // Theme preset event listeners
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const themeName = btn.getAttribute('data-theme');
+        const selectedTheme = themePresets[themeName];
+        if (!selectedTheme) return;
+        for (let varName in selectedTheme) {
+          document.documentElement.style.setProperty(varName, selectedTheme[varName]);
+        }
+        document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
+        document.querySelectorAll('.theme-btn').forEach(b => b.style.color = '#000');
+      });
+    });
+    
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -563,36 +624,6 @@
         email: 'Email'
       }
     };
-    let currentLanguage = 'en';
-    
-    function updateLanguage() {
-      document.querySelectorAll('[data-locale]').forEach(el => {
-        const key = el.getAttribute('data-locale');
-        if (translations[currentLanguage][key]) {
-          el.textContent = translations[currentLanguage][key];
-        }
-      });
-      document.getElementById('languageBtn').textContent = `Lang: ${currentLanguage.toUpperCase()}`;
-      document.getElementById('langToggle').textContent = `Lang: ${currentLanguage.toUpperCase()}`;
-    }
-    
-    const languageBtn = document.getElementById('languageBtn');
-    languageBtn.addEventListener('click', async () => {
-      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
-      updateLanguage();
-      await populateKnowledgeList();
-      await populateWhoImI();
-      await populateCertificatesList();
-    });
-    
-    const langToggle = document.getElementById('langToggle');
-    langToggle.addEventListener('click', async () => {
-      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
-      updateLanguage();
-      await populateKnowledgeList();
-      await populateWhoImI();
-      await populateCertificatesList();
-    });
     
     async function fetchTextFile(filePath) {
       try {
@@ -606,10 +637,12 @@
         return "";
       }
     }
+    
     async function fetchKnowledgeList() {
       const text = await fetchTextFile('./KnowledgeList/KnowledgeList.txt');
       return text.split('\n').filter(line => line.trim() !== '');
     }
+    
     async function populateKnowledgeList() {
       const knowledgeListDiv = document.getElementById('knowledgeList');
       knowledgeListDiv.innerHTML = '';
@@ -624,12 +657,14 @@
         knowledgeListDiv.appendChild(p);
       });
     }
+    
     async function populateWhoImI() {
       const whoImIContainer = document.getElementById('whoImIContainer');
       let filePath = `./translations/whoImI_${currentLanguage}.txt`;
       const text = await fetchTextFile(filePath);
       whoImIContainer.textContent = text || "Content unavailable.";
     }
+    
     async function fetchCertificatesList() {
       try {
         const r = await fetchTextFile('/Links/Certificados/CertificadosList.txt');
@@ -655,6 +690,7 @@
         return [];
       }
     }
+    
     async function populateCertificatesList() {
       const listContainer = document.getElementById('certificatesList');
       listContainer.style.display = 'block';
@@ -674,6 +710,7 @@
         }
       });
     }
+    
     function displayCertificateAtIndex(index) {
       currentCertificateIndex = index;
       const cert = certificatesArray[index];
@@ -730,6 +767,10 @@
       iframe.style.height = '80vh';
       displayContainer.appendChild(iframe);
     }
+    
+    let certificatesArray = [];
+    let currentCertificateIndex = 0;
+    
     document.addEventListener('DOMContentLoaded', async () => {
       updateLanguage();
       await populateKnowledgeList();
@@ -741,7 +782,7 @@
   <!-- RIPPLE EFFECT SCRIPT -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('button, .main-btn, .certificate-item, [data-locale], .theme-btn, .language-btn').forEach(el => {
+      document.querySelectorAll('button, .main-btn, .certificate-item, [data-locale], .theme-btn').forEach(el => {
         el.style.position = 'relative';
         el.style.overflow = 'hidden';
         el.addEventListener('click', function(e) {
@@ -769,7 +810,7 @@
     sections.forEach(section => scrollObserver.observe(section));
   </script>
   
-  <!-- NEW SCRIPT: Update Clock Rotation on Scroll -->
+  <!-- SCRIPT: Update Clock Rotation on Scroll -->
   <script>
     function updateClockRotationOnScroll() {
       let currentSectionId = "";
