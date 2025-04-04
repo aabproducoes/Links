@@ -9,7 +9,7 @@
   <!-- Google Fonts: Roboto -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- AdGuard scripts (preserved from your second code) -->
+  <!-- AdGuard scripts (preserved) -->
   <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
@@ -81,37 +81,35 @@
       transition: transform 0.5s ease;
       transform-origin: center center;
     }
-    /* Triangle Button: Each item is now a triangle.
-       The shape is defined using clip-path. */
-    .clock-item {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      /* Remove the default circular background */
-      background: none;
-      cursor: pointer;
-    }
+    /* Triangle Button – Now using clip-path to form a triangle */
     .triangle-button {
       width: 100%;
       height: 100%;
       clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
       background: var(--menu-color);
-      /* No border-radius for triangle shape */
     }
-    .clock-item:hover .triangle-button {
-      background: #ff4f4f;
+    /* When the triangle is clamped to the inner border, change its shape */
+    .triangle-button.curved {
+      /* This example uses an SVG path for a curved bottom edge */
+      clip-path: path("M50% 100% Q50% 85% 0% 0% L100% 0% Z");
+    }
+    .clock-item {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: none; /* no background on the container */
+      cursor: pointer;
     }
     .clock-label {
       display: block;
       transform: rotate(0deg);
       transition: transform 0.5s ease;
-      /* Center the icon inside the triangle */
       text-align: center;
       line-height: 50px;
       font-size: 24px;
     }
     
-    /* Center language toggle button in the clock menu */
+    /* Center language toggle button */
     #langToggle {
       position: absolute;
       top: 50%;
@@ -255,7 +253,7 @@
       box-shadow: 0 5px 15px rgba(0,0,0,0.6);
     }
     
-    /* Global Button Style – For consistent rounded (pill) shape */
+    /* Global Button Style – For consistent rounded shape */
     button, .theme-btn {
       border-radius: 50px;
       border: none;
@@ -444,22 +442,40 @@
   <!-- DIGITAL CLOCK -->
   <div id="clock"></div>
   
-  <!-- --------------------------------------------------
-       SCRIPTS
-  ----------------------------------------------------- -->
+  <!-- SCRIPTS -->
   
-  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Triangle Buttons) -->
+  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Triangle Buttons and Clamping) -->
   <script>
     const clockMenu = document.getElementById('menuList');
     const clockItems = document.querySelectorAll('.clock-item');
     const RADIUS = 150; 
     let cumulativeRotation = 0;
+    // Define inner border radius (center circle border)
+    const innerRadius = 40;
     
+    // Position each clock item.
     clockItems.forEach(item => {
       const angleDeg = parseFloat(item.getAttribute('data-angle'));
       const angleRad = angleDeg * Math.PI / 180;
-      const x = RADIUS * Math.cos(angleRad);
-      const y = RADIUS * Math.sin(angleRad);
+      let x = RADIUS * Math.cos(angleRad);
+      let y = RADIUS * Math.sin(angleRad);
+      // The triangle tip in local coordinates is at (25,50).
+      // Thus its tip position relative to the clock menu center is (x, y + 25).
+      const tipX = x;
+      const tipY = y + 25;
+      const distance = Math.sqrt(tipX * tipX + tipY * tipY);
+      // If the tip is within the inner border, clamp it.
+      if(distance < innerRadius) {
+          const a = Math.atan2(tipY, tipX);
+          const newTipX = innerRadius * Math.cos(a);
+          const newTipY = innerRadius * Math.sin(a);
+          // Adjust x and y so that (x, y+25) becomes (newTipX, newTipY)
+          y = newTipY - 25;
+          // Add a "curved" class to the triangle button.
+          item.querySelector('.triangle-button').classList.add('curved');
+      } else {
+          item.querySelector('.triangle-button').classList.remove('curved');
+      }
       item.style.left = (x - 25) + 'px';
       item.style.top = (y - 25) + 'px';
       item.dataset.originalAngle = angleDeg;
@@ -474,14 +490,13 @@
       cumulativeRotation += diff;
       clockMenu.style.transform = `translate(-50%, -50%) rotate(${-cumulativeRotation}deg)`;
       
-      // Update each triangle button so that its tip always points inward.
+      // Update each triangle button.
       clockItems.forEach(item => {
         const triangle = item.querySelector('.triangle-button');
         const originalAngle = parseFloat(item.dataset.originalAngle);
-        // The triangle's desired rotation is (originalAngle + 90 - cumulativeRotation)
+        // Rotate the triangle so its tip always points inward.
         triangle.style.transform = `rotate(${originalAngle + 90 - cumulativeRotation}deg)`;
-        
-        // Also keep the label upright relative to the triangle.
+        // Also update label rotation (if needed).
         const label = item.querySelector('.clock-label');
         label.style.transform = `rotate(${cumulativeRotation}deg)`;
       });
@@ -500,7 +515,7 @@
         }
       });
     });
-    // Initialize rotation at 0
+    // Initialize rotation at 0.
     rotateClockTo(0);
   </script>
   
@@ -572,7 +587,6 @@
       await populateCertificatesList();
     });
     
-    // Theme preset event listeners
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const themeName = btn.getAttribute('data-theme');
