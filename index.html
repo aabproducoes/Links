@@ -38,6 +38,25 @@
       background: linear-gradient(160deg, var(--bg-color) 0%, var(--gradient-dark) 100%);
       color: #e0e0e0; overflow-x: hidden; position: relative;
     }
+    /* EXTRA INTERACTION: Ripple Effect */
+    .ripple-effect {
+      position: relative;
+      overflow: hidden;
+    }
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      background: rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
     /* ==================================
        SIDEBAR - FORMATO, INDICADORES, ETC
     =================================== */
@@ -60,7 +79,6 @@
       transition: transform 0.2s; font-size: 18px;
       box-shadow: 0 0 10px rgba(76,175,80,0.3);
       display: flex; align-items: center; justify-content: center;
-      z-index: 1100;
     }
     .toggle-btn:hover { transform: scale(1.1); }
     .toggle-btn:active { transform: scale(0.95); }
@@ -153,7 +171,11 @@
     section.in-view {
       opacity: 1; transform: translateY(0);
     }
-    section:hover { background: var(--section-hover-bg); }
+    /* Enhanced hover: slightly scale sections */
+    section:hover {
+      background: var(--section-hover-bg);
+      transform: scale(1.02);
+    }
     h1, h2 { color: #cfd8dc; margin-bottom: 20px; }
     h1 {
       font-size: 24px; border-bottom: 2px solid var(--menu-color);
@@ -257,38 +279,38 @@
 </head>
 <body>
   <!-- SIDEBAR -->
-  <div class="sidebar" id="sidebar">
-    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+  <div class="sidebar ripple-effect" id="sidebar">
+    <button class="toggle-btn ripple-effect" id="toggleBtn" aria-label="Toggle Sidebar">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
         <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
       </svg>
     </button>
     <ul class="menu" id="menuList" role="navigation" aria-label="Sidebar Menu">
-      <li class="active"><a href="#profile" data-locale="profileTitle">Profile</a></li>
-      <li><a href="#social" data-locale="socialTitle">Social</a></li>
-      <li><a href="#projects" data-locale="projectsTitle">Projects</a></li>
-      <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
-      <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
-      <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
-      <li><a href="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" target="_blank" data-locale="htmlGames">HTML Games</a></li>
+      <li><a href="#profile" data-locale="profileTitle" class="ripple-effect">Profile</a></li>
+      <li><a href="#social" data-locale="socialTitle" class="ripple-effect">Social</a></li>
+      <li><a href="#projects" data-locale="projectsTitle" class="ripple-effect">Projects</a></li>
+      <li><a href="#contact" data-locale="contactTitle" class="ripple-effect">Contact</a></li>
+      <li><a href="#certificates" data-locale="certificatesTitle" class="ripple-effect">Certificates</a></li>
+      <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle" class="ripple-effect">Animated Patterns</a></li>
+      <li><a href="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" target="_blank" data-locale="htmlGames" class="ripple-effect">HTML Games</a></li>
     </ul>
-    <button class="language-btn" id="languageBtn">Lang: EN</button>
+    <button class="language-btn ripple-effect" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
-      <div class="color-option" data-color="#2c2c2c" style="background-color: #2c2c2c;"></div>
-      <div class="color-option" data-color="#455a64" style="background-color: #455a64;"></div>
-      <div class="color-option" data-color="#1a1a1a" style="background-color: #1a1a1a;"></div>
-      <div class="color-option" data-color="#37474f" style="background-color: #37474f;"></div>
-      <div class="color-option" data-color="#222222" style="background-color: #222222;"></div>
-      <div class="color-option" data-color="#263238" style="background-color: #263238;"></div>
-      <div class="color-option" data-color="#3e2723" style="background-color: #3e2723;"></div>
-      <div class="color-option" data-color="#0d0d0d" style="background-color: #0d0d0d;"></div>
+      <div class="color-option ripple-effect" data-color="#2c2c2c" style="background-color: #2c2c2c;"></div>
+      <div class="color-option ripple-effect" data-color="#455a64" style="background-color: #455a64;"></div>
+      <div class="color-option ripple-effect" data-color="#1a1a1a" style="background-color: #1a1a1a;"></div>
+      <div class="color-option ripple-effect" data-color="#37474f" style="background-color: #37474f;"></div>
+      <div class="color-option ripple-effect" data-color="#222222" style="background-color: #222222;"></div>
+      <div class="color-option ripple-effect" data-color="#263238" style="background-color: #263238;"></div>
+      <div class="color-option ripple-effect" data-color="#3e2723" style="background-color: #3e2723;"></div>
+      <div class="color-option ripple-effect" data-color="#0d0d0d" style="background-color: #0d0d0d;"></div>
     </div>
     <div class="preset-themes">
       <h4>Theme Presets</h4>
-      <button class="theme-btn" style="background:#4caf50; color:#fff;" data-theme="default">Default</button>
-      <button class="theme-btn" style="background:#0d47a1; color:#fff;" data-theme="blue">Blue</button>
-      <button class="theme-btn" style="background:#757575; color:#fff;" data-theme="gray">Gray</button>
-      <button class="theme-btn" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
+      <button class="theme-btn ripple-effect" style="background:#4caf50; color:#fff;" data-theme="default">Default</button>
+      <button class="theme-btn ripple-effect" style="background:#0d47a1; color:#fff;" data-theme="blue">Blue</button>
+      <button class="theme-btn ripple-effect" style="background:#757575; color:#fff;" data-theme="gray">Gray</button>
+      <button class="theme-btn ripple-effect" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
     </div>
   </div>
   <!-- MAIN CONTAINER -->
@@ -304,24 +326,24 @@
     <section id="social">
       <h1 data-locale="socialTitle">Social</h1>
       <div>
-        <a href="https://www.facebook.com" target="_blank" class="main-btn" data-locale="facebook">Facebook</a>
-        <a href="https://www.instagram.com" target="_blank" class="main-btn" data-locale="instagram">Instagram</a>
+        <a href="https://www.facebook.com" target="_blank" class="main-btn ripple-effect" data-locale="facebook">Facebook</a>
+        <a href="https://www.instagram.com" target="_blank" class="main-btn ripple-effect" data-locale="instagram">Instagram</a>
       </div>
     </section>
     <section id="projects">
       <h1 data-locale="projectsTitle">Projects</h1>
       <div>
-        <a href="blender-projects.html" target="_blank" class="main-btn" data-locale="blenderProjects">Blender Projects</a>
-        <a href="gimp-projects.html" target="_blank" class="main-btn" data-locale="gimpProjects">Gimp Projects</a>
-        <a href="blender-animations.html" target="_blank" class="main-btn" data-locale="blenderAnimations">Blender Animations</a>
-        <a href="animated-background.html" target="_blank" class="main-btn" data-locale="animatedBackground">Animated Background</a>
+        <a href="blender-projects.html" target="_blank" class="main-btn ripple-effect" data-locale="blenderProjects">Blender Projects</a>
+        <a href="gimp-projects.html" target="_blank" class="main-btn ripple-effect" data-locale="gimpProjects">Gimp Projects</a>
+        <a href="blender-animations.html" target="_blank" class="main-btn ripple-effect" data-locale="blenderAnimations">Blender Animations</a>
+        <a href="animated-background.html" target="_blank" class="main-btn ripple-effect" data-locale="animatedBackground">Animated Background</a>
       </div>
     </section>
     <section id="contact">
       <h1 data-locale="contactTitle">Contact</h1>
       <div>
-        <a href="https://wa.me/54984181968" target="_blank" class="main-btn" data-locale="whatsapp">WhatsApp</a>
-        <a href="mailto:aaugusto444@gmail.com" class="main-btn" data-locale="email">Email</a>
+        <a href="https://wa.me/54984181968" target="_blank" class="main-btn ripple-effect" data-locale="whatsapp">WhatsApp</a>
+        <a href="mailto:aaugusto444@gmail.com" class="main-btn ripple-effect" data-locale="email">Email</a>
       </div>
     </section>
     <!-- Modified Certificates Section -->
@@ -334,6 +356,7 @@
         </div>
       </div>
     </section>
+    <!-- Updated Animated Patterns Section (Back button removed) -->
     <section id="animatedPatterns">
       <h1 data-locale="animatedPatternsTitle">Animated Patterns</h1>
       <div class="animated-patterns-grid">
@@ -345,7 +368,7 @@
     </section>
   </div>
   <!-- CLOCK -->
-  <div id="clock"></div>
+  <div id="clock" class="ripple-effect"></div>
   <script>
     // Global variables for certificate navigation
     let certificatesArray = [];
@@ -573,7 +596,7 @@
       list.forEach((cert, index) => {
         if (cert.fullPath && (cert.titlePT || cert.titleEN)) {
           const listItem = document.createElement('div');
-          listItem.classList.add('certificate-item');
+          listItem.classList.add('certificate-item', 'ripple-effect');
           // Choose title based on language
           const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
           listItem.textContent = title;
@@ -606,6 +629,7 @@
       // Create Previous arrow button
       const prevButton = document.createElement('button');
       prevButton.textContent = '←';
+      prevButton.classList.add('ripple-effect');
       prevButton.addEventListener('click', function() {
         let newIndex = currentCertificateIndex - 1;
         if (newIndex < 0) {
@@ -624,6 +648,7 @@
       // Create Next arrow button
       const nextButton = document.createElement('button');
       nextButton.textContent = '→';
+      nextButton.classList.add('ripple-effect');
       nextButton.addEventListener('click', function() {
         let newIndex = currentCertificateIndex + 1;
         if (newIndex >= certificatesArray.length) {
@@ -635,6 +660,7 @@
       // Create Back to list button
       const backButton = document.createElement('button');
       backButton.textContent = 'Back to list';
+      backButton.classList.add('ripple-effect');
       backButton.style.marginTop = '10px';
       backButton.addEventListener('click', function() {
         document.getElementById('certificatesList').style.display = 'block';
@@ -649,7 +675,7 @@
       displayContainer.appendChild(headerDiv);
       displayContainer.appendChild(backButton);
       
-      // Modify URL to hide PDF navigation toolbar
+      // Append toolbar parameter to the URL to hide PDF navigation.
       let url = cert.fullPath;
       if (!url.includes('toolbar=0')) {
         if (url.includes('#')) {
@@ -735,6 +761,28 @@
       });
     }
     window.addEventListener('scroll', activateMenuOnScroll);
+    // Add Ripple Effect to all clickable elements
+    document.querySelectorAll('button, a, .certificate-item, .menu li a, .toggle-btn, .language-btn, .theme-btn')
+      .forEach(el => {
+        // Ensure the element is positioned relatively
+        if (getComputedStyle(el).position === 'static') {
+          el.style.position = 'relative';
+        }
+        el.style.overflow = 'hidden';
+        el.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          ripple.classList.add('ripple');
+          this.appendChild(ripple);
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+          ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+          ripple.addEventListener('animationend', () => {
+            ripple.remove();
+          });
+        });
+      });
     // INITIALIZATION
     document.addEventListener('DOMContentLoaded', async () => {
       updateLanguage();
