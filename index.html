@@ -78,35 +78,65 @@
       width: 0;
       height: 0;
       list-style: none;
-      transition: transform 0.5s ease;
+      /* Updated transition for a bouncy rotation effect */
+      transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
       transform-origin: center center;
     }
-    /* Increase clock item size to 160x160 */
+    /* Clock Items (160x160) */
     .clock-item {
       position: absolute;
       width: 160px;
       height: 160px;
       background: none;
       cursor: pointer;
+      /* Added transition for left and top changes with bounce */
+      transition: left 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                  top 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
-    /* Triangle Button using clip-path; its tip is at 50% 100% (i.e. at (80,160) in a 160px box) */
-    .triangle-button {
+    /* Merged Curved Shape for Clock Items */
+    .clock-item-content {
+      position: relative;
       width: 100%;
       height: 100%;
-      clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+      /* Lower the gap by reducing the control point's y value */
+      clip-path: path('M 0 0 L 160 0 Q 80 180 0 0 Z');
       background: var(--menu-color);
+      transition: clip-path 0.3s ease, transform 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
     }
-    /* Optionally, if clamped, add a curved clip-path (tweak as needed) */
-    .triangle-button.curved {
-      clip-path: path("M50% 100% Q50% 85% 0% 0% L100% 0% Z");
+    /* Clamped variant: even lower gap */
+    .clock-item-content.curved {
+      clip-path: path('M 0 0 L 160 0 Q 80 160 0 0 Z');
     }
-    .clock-label {
-      display: block;
-      transform: rotate(0deg);
-      transition: transform 0.5s ease;
-      text-align: center;
-      line-height: 160px; /* Center the icon vertically in a 160px box */
-      font-size: 48px; /* Bigger icon size */
+    /* Pseudo-element for Border Behind the Shape */
+    .clock-item-content::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      transform: scale(1.05);
+      clip-path: path('M 0 0 L 160 0 Q 80 180 0 0 Z');
+      border: 2px solid var(--menu-color-alt);
+      background: transparent;
+      z-index: -1;
+    }
+    .clock-item-content.curved::before {
+      clip-path: path('M 0 0 L 160 0 Q 80 160 0 0 Z');
+    }
+    
+    /* Circular Border at Center */
+    #centerCircle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 80px;
+      height: 80px;
+      transform: translate(-50%, -50%);
+      border: 2px solid var(--menu-color);
+      border-radius: 50%;
+      z-index: 1100;
     }
     
     /* Center language toggle button */
@@ -124,7 +154,7 @@
       font-weight: bold;
       color: #000;
       cursor: pointer;
-      z-index: 1100;
+      z-index: 1200;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
       transition: background 0.3s ease;
     }
@@ -316,41 +346,29 @@
       <div class="pointer"></div>
       <ul class="clock-menu" id="menuList">
         <li class="clock-item" data-angle="0" data-target="#profile">
-          <div class="triangle-button">
-            <span class="clock-label">👤</span>
-          </div>
+          <div class="clock-item-content">👤</div>
         </li>
         <li class="clock-item" data-angle="51.4" data-target="#social">
-          <div class="triangle-button">
-            <span class="clock-label">🌐</span>
-          </div>
+          <div class="clock-item-content">🌐</div>
         </li>
         <li class="clock-item" data-angle="102.8" data-target="#projects">
-          <div class="triangle-button">
-            <span class="clock-label">💼</span>
-          </div>
+          <div class="clock-item-content">💼</div>
         </li>
         <li class="clock-item" data-angle="154.2" data-target="#contact">
-          <div class="triangle-button">
-            <span class="clock-label">📞</span>
-          </div>
+          <div class="clock-item-content">📞</div>
         </li>
         <li class="clock-item" data-angle="205.6" data-target="#certificates">
-          <div class="triangle-button">
-            <span class="clock-label">📜</span>
-          </div>
+          <div class="clock-item-content">📜</div>
         </li>
         <li class="clock-item" data-angle="257" data-target="#animatedPatterns">
-          <div class="triangle-button">
-            <span class="clock-label">🎞️</span>
-          </div>
+          <div class="clock-item-content">🎞️</div>
         </li>
         <li class="clock-item" data-angle="308.4" data-target="#htmlgames">
-          <div class="triangle-button">
-            <span class="clock-label">🎮</span>
-          </div>
+          <div class="clock-item-content">🎮</div>
         </li>
       </ul>
+      <!-- Circular border at center -->
+      <div id="centerCircle"></div>
       <!-- Center language toggle button -->
       <div id="langToggle">Lang: EN</div>
     </div>
@@ -444,43 +462,51 @@
   
   <!-- SCRIPTS -->
   
-  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Triangle Buttons & Clamping) -->
+  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Dynamic Clamping) -->
   <script>
     const clockMenu = document.getElementById('menuList');
     const clockItems = document.querySelectorAll('.clock-item');
     const RADIUS = 150; 
     let cumulativeRotation = 0;
-    // Define inner border radius (for clamping) – set to 80 now.
+    // Inner border radius for clamping (in UL coordinate system)
     const innerRadius = 80;
     
-    // Position each clock item using the new dimensions (half width = 80)
+    // Store each item's original angle
     clockItems.forEach(item => {
       const angleDeg = parseFloat(item.getAttribute('data-angle'));
-      const angleRad = angleDeg * Math.PI / 180;
-      let x = RADIUS * Math.cos(angleRad);
-      let y = RADIUS * Math.sin(angleRad);
-      // For a 160x160 item, its tip (bottom center) is at (80,160) relative to top‐left.
-      // Relative to the item center (80,80), the tip is offset (0,80).
-      // Calculate the tip’s position relative to the clock menu center.
-      const tipX = x;
-      const tipY = y + 80;
-      const distance = Math.sqrt(tipX * tipX + tipY * tipY);
-      // If the tip falls inside the inner border, clamp it.
-      if(distance < innerRadius) {
+      item.dataset.originalAngle = angleDeg;
+    });
+    
+    // Function to update each clock item’s position and apply clamping
+    function updateClockItems() {
+      clockItems.forEach(item => {
+        const angleDeg = parseFloat(item.dataset.originalAngle);
+        const angleRad = angleDeg * Math.PI / 180;
+        // Calculate ideal position (relative to UL center)
+        let x = RADIUS * Math.cos(angleRad);
+        let y = RADIUS * Math.sin(angleRad);
+        // For a 160x160 item, the original shape’s tip was at (80,160)
+        const tipX = x;
+        const tipY = y + 80;
+        const distance = Math.sqrt(tipX * tipX + tipY * tipY);
+        const content = item.querySelector('.clock-item-content');
+        if (distance < innerRadius) {
+          // Clamp tip to innerRadius (if needed)
           const a = Math.atan2(tipY, tipX);
           const newTipX = innerRadius * Math.cos(a);
           const newTipY = innerRadius * Math.sin(a);
-          // Adjust y so that (x, y+80) becomes (newTipX, newTipY)
           y = newTipY - 80;
-          // Add a "curved" class for visual adjustment.
-          item.querySelector('.triangle-button').classList.add('curved');
-      } else {
-          item.querySelector('.triangle-button').classList.remove('curved');
-      }
-      item.style.left = (x - 80) + 'px';
-      item.style.top = (y - 80) + 'px';
-      item.dataset.originalAngle = angleDeg;
-    });
+          content.classList.add('curved');
+        } else {
+          content.classList.remove('curved');
+        }
+        item.style.left = (x - 80) + 'px';
+        item.style.top = (y - 80) + 'px';
+      });
+    }
+    
+    // Initial positioning
+    updateClockItems();
     
     function rotateClockTo(targetAngle) {
       let currentMod = cumulativeRotation % 360;
@@ -489,15 +515,17 @@
       if (diff > 180) diff -= 360;
       if (diff < -180) diff += 360;
       cumulativeRotation += diff;
+      // Rotate the whole clock menu
       clockMenu.style.transform = `translate(-50%, -50%) rotate(${-cumulativeRotation}deg)`;
       
-      // Update each triangle button so that its tip always points inward.
+      // Reapply clamping
+      updateClockItems();
+      
+      // For inward pointing, adjust each item's content rotation so that its curved edge faces the clock center.
       clockItems.forEach(item => {
-        const triangle = item.querySelector('.triangle-button');
         const originalAngle = parseFloat(item.dataset.originalAngle);
-        triangle.style.transform = `rotate(${originalAngle + 90 - cumulativeRotation}deg)`;
-        const label = item.querySelector('.clock-label');
-        label.style.transform = `rotate(${cumulativeRotation}deg)`;
+        const content = item.querySelector('.clock-item-content');
+        content.style.transform = `rotate(${originalAngle + 90}deg)`;
       });
     }
     
@@ -534,6 +562,45 @@
   
   <!-- THEME PRESETS & LANGUAGE SCRIPT -->
   <script>
+    const translations = {
+      en: {
+        profileTitle: 'Profile',
+        socialTitle: 'Social',
+        projectsTitle: 'Projects',
+        contactTitle: 'Contact',
+        certificatesTitle: 'Certificates',
+        knowledgeListTitle: 'Knowledge List',
+        animatedPatternsTitle: 'Animated Patterns',
+        htmlGames: 'HTML Games',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        blenderProjects: 'Blender Projects',
+        gimpProjects: 'Gimp Projects',
+        blenderAnimations: 'Blender Animations',
+        animatedBackground: 'Animated Background',
+        whatsapp: 'WhatsApp',
+        email: 'Email'
+      },
+      pt: {
+        profileTitle: 'Perfil',
+        socialTitle: 'Social',
+        projectsTitle: 'Projetos',
+        contactTitle: 'Contato',
+        certificatesTitle: 'Certificados',
+        knowledgeListTitle: 'Lista de Conhecimento',
+        animatedPatternsTitle: 'Padrões Animados',
+        htmlGames: 'Jogos HTML',
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        blenderProjects: 'Projetos Blender',
+        gimpProjects: 'Projetos Gimp',
+        blenderAnimations: 'Animações Blender',
+        animatedBackground: 'Fundo Animado',
+        whatsapp: 'WhatsApp',
+        email: 'Email'
+      }
+    };
+
     const themePresets = {
       default: {
         '--bg-color': '#2c2c2c',
@@ -586,58 +653,6 @@
       await populateCertificatesList();
     });
     
-    document.querySelectorAll('.theme-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const themeName = btn.getAttribute('data-theme');
-        const selectedTheme = themePresets[themeName];
-        if (!selectedTheme) return;
-        for (let varName in selectedTheme) {
-          document.documentElement.style.setProperty(varName, selectedTheme[varName]);
-        }
-        document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
-        document.querySelectorAll('.theme-btn').forEach(b => b.style.color = '#000');
-      });
-    });
-    
-    const translations = {
-      en: {
-        profileTitle: 'Profile',
-        socialTitle: 'Social',
-        projectsTitle: 'Projects',
-        contactTitle: 'Contact',
-        certificatesTitle: 'Certificates',
-        knowledgeListTitle: 'Knowledge List',
-        animatedPatternsTitle: 'Animated Patterns',
-        htmlGames: 'HTML Games',
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        blenderProjects: 'Blender Projects',
-        gimpProjects: 'Gimp Projects',
-        blenderAnimations: 'Blender Animations',
-        animatedBackground: 'Animated Background',
-        whatsapp: 'WhatsApp',
-        email: 'Email'
-      },
-      pt: {
-        profileTitle: 'Perfil',
-        socialTitle: 'Social',
-        projectsTitle: 'Projetos',
-        contactTitle: 'Contato',
-        certificatesTitle: 'Certificados',
-        knowledgeListTitle: 'Lista de Conhecimento',
-        animatedPatternsTitle: 'Padrões Animados',
-        htmlGames: 'Jogos HTML',
-        facebook: 'Facebook',
-        instagram: 'Instagram',
-        blenderProjects: 'Projetos Blender',
-        gimpProjects: 'Projetos Gimp',
-        blenderAnimations: 'Animações Blender',
-        animatedBackground: 'Fundo Animado',
-        whatsapp: 'WhatsApp',
-        email: 'Email'
-      }
-    };
-    
     async function fetchTextFile(filePath) {
       try {
         const resp = await fetch(filePath);
@@ -680,7 +695,7 @@
     
     async function fetchCertificatesList() {
       try {
-        const r = await fetchTextFile('/Links/Certificados/CertificadosList.txt');
+        const r = await fetchTextFile('./Links/Certificados/CertificadosList.txt');
         const lines = r.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
           const parts = line.split(' - ');
