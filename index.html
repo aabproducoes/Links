@@ -60,17 +60,7 @@
       width: 100%;
       height: 100%;
     }
-    .pointer {
-      position: absolute;
-      top: 50%;
-      left: 390px;
-      width: 0;
-      height: 0;
-      transform: translateY(-50%);
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 10px solid var(--menu-color);
-    }
+
     .clock-menu {
       position: absolute;
       top: 50%;
@@ -78,8 +68,7 @@
       width: 0;
       height: 0;
       list-style: none;
-      /* Updated transition for a bouncy rotation effect */
-      transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      transition: transform 0.5s ease;
       transform-origin: center center;
     }
     /* Clock Items (160x160) */
@@ -89,17 +78,14 @@
       height: 160px;
       background: none;
       cursor: pointer;
-      /* Added transition for left and top changes with bounce */
-      transition: left 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55),
-                  top 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
     /* Merged Curved Shape for Clock Items */
     .clock-item-content {
       position: relative;
       width: 100%;
       height: 100%;
-      /* Lower the gap by reducing the control point's y value */
-      clip-path: path('M 0 0 L 160 0 Q 80 180 0 0 Z');
+      /* Lower the gap by reducing the control point's y value from 208 to 180 */
+      clip-path: path('M 0 0 L 160 20 Q 80 260 0 0 Z');
       background: var(--menu-color);
       transition: clip-path 0.3s ease, transform 0.3s ease;
       display: flex;
@@ -109,7 +95,7 @@
     }
     /* Clamped variant: even lower gap */
     .clock-item-content.curved {
-      clip-path: path('M 0 0 L 160 0 Q 80 160 0 0 Z');
+      clip-path: path('M 0 0 L 160 20 Q 80 260 0 0 Z');
     }
     /* Pseudo-element for Border Behind the Shape */
     .clock-item-content::before {
@@ -117,13 +103,14 @@
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
       transform: scale(1.05);
-      clip-path: path('M 0 0 L 160 0 Q 80 180 0 0 Z');
+      /* Use the same clip-path as the main shape (default) */
+      clip-path: path('M 0 0 L 160 20 Q 80 380 0 0 Z');
       border: 2px solid var(--menu-color-alt);
       background: transparent;
       z-index: -1;
     }
     .clock-item-content.curved::before {
-      clip-path: path('M 0 0 L 160 0 Q 80 160 0 0 Z');
+      clip-path: path('M 0 0 L 160 20 Q 80 260 0 0 Z');
     }
     
     /* Circular Border at Center */
