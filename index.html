@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Currículo de Antonio Augusto Barbaro">
-  <title>Currículo de Antonio Augusto Barbaro</title>
-  
-  <!-- Google Fonts: Roboto -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  
-  <!-- AdGuard scripts (preserved) -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Brief description of the site or your profile.">
+  <title>One-Page - Tema Sério com Presets</title>
+  <!-- Fonte Roboto -->
   <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
   <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
-  
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Global Variables & Reset */
+    /* ================================
+       RESET E VARIÁVEIS DE CORES
+    ================================ */
     :root {
       --bg-color: #2c2c2c;
       --gradient-dark: #1a1a1a;
@@ -40,119 +38,109 @@
       background: linear-gradient(160deg, var(--bg-color) 0%, var(--gradient-dark) 100%);
       color: #e0e0e0; overflow-x: hidden; position: relative;
     }
-    
-    /* CLOCK MENU – Bigger, Half‑Out, Infinite Roll */
-    #clockMenu {
-      position: fixed;
-      top: 50%;
-      left: 0;
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
-      background: #333;
-      transform: translate(-200px, -50%);
-      overflow: visible;
-      z-index: 1000;
-      box-shadow: 2px 2px 15px rgba(0,0,0,0.5);
+    /* ==================================
+       SIDEBAR - FORMATO, INDICADORES, ETC
+    =================================== */
+    .sidebar {
+      width: 280px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(5px);
+      color: #fff; display: flex; flex-direction: column;
+      transition: width 0.3s ease;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      border-right: 2px solid var(--menu-color);
+      box-shadow: 4px 0 10px rgba(0,0,0,0.6);
+      z-index: 1000; padding-bottom: 20px;
     }
-    .clock-container {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .clock-menu {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      list-style: none;
-      transition: transform 0.5s ease;
-      transform-origin: center center;
-    }
-    /* Clock Items (160x160) */
-    .clock-item {
-      position: absolute;
-      width: 160px;
-      height: 160px;
-      background: none;
-      cursor: pointer;
-    }
-    /* Merged Curved Shape for Clock Items */
-    .clock-item-content {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      /* Lower the gap by reducing the control point's y value from 208 to 180 */
-      clip-path: path('M 0 0 L 160 20 Q 80 260 0 0 Z');
-      background: var(--menu-color);
-      transition: clip-path 0.3s ease, transform 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-    }
-    /* Clamped variant: even lower gap */
-    .clock-item-content.curved {
-      clip-path: path('M 0 0 L 160 20 Q 80 260 0 0 Z');
-    }
-    /* Pseudo-element for Border Behind the Shape */
-    .clock-item-content::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      transform: scale(1.05);
-      /* Use the same clip-path as the main shape (default) */
-      clip-path: path('M 0 0 L 160 20 Q 80 380 0 0 Z');
-      border: 2px solid var(--menu-color-alt);
-      background: transparent;
-      z-index: -1;
-    }
-    .clock-item-content.curved::before {
-      clip-path: path('M 0 0 L 160 20 Q 80 260 0 0 Z');
-    }
-    
-    /* Circular Border at Center */
-    #centerCircle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 80px;
-      height: 80px;
-      transform: translate(-50%, -50%);
-      border: 2px solid var(--menu-color);
-      border-radius: 50%;
+    .toggle-btn {
+      position: absolute; top: 20px; right: -25px;
+      background: var(--menu-color); color: #000;
+      border: none; border-radius: 50%;
+      width: 50px; height: 50px; cursor: pointer;
+      transition: transform 0.2s; font-size: 18px;
+      box-shadow: 0 0 10px rgba(76,175,80,0.3);
+      display: flex; align-items: center; justify-content: center;
       z-index: 1100;
     }
-    
-    /* Center language toggle button */
-    #langToggle {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 80px;
-      height: 80px;
-      margin: -40px 0 0 -40px;
-      background: var(--menu-color-alt);
-      border-radius: 50%;
-      text-align: center;
-      line-height: 80px;
-      font-weight: bold;
-      color: #000;
-      cursor: pointer;
-      z-index: 1200;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      transition: background 0.3s ease;
+    .toggle-btn:hover { transform: scale(1.1); }
+    .toggle-btn:active { transform: scale(0.95); }
+    .toggle-btn svg { transition: transform 0.3s ease; }
+    .menu {
+      list-style: none; padding: 100px 0 0; flex: 1;
+      display: flex; flex-direction: column;
     }
-    #langToggle:hover {
-      background: var(--menu-color);
+    .menu li {
+      position: relative; margin: 8px 15px;
+      background: #f5f5f5; border-radius: 6px;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
-    
-    /* MAIN CONTAINER & Sections */
+    .menu li a {
+      display: block; color: var(--menu-text-color);
+      text-decoration: none; font-size: 16px;
+      font-weight: 700; text-align: center;
+      padding: 15px 20px;
+    }
+    .menu li:hover {
+      background: var(--menu-color-alt); color: #000;
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    }
+    .menu li.active {
+      background: #fff; transform: translateX(10px);
+      border-left: 5px solid var(--menu-color);
+      box-shadow: 0 0 10px var(--menu-color);
+    }
+    .sidebar.closed { width: 70px; }
+    .sidebar.closed .menu li a {
+      padding: 15px 0; display: flex;
+      justify-content: center; align-items: center;
+    }
+    /* BOTÕES DE LÍNGUA / TEMAS / GRID DE COR */
+    .language-btn {
+      display: inline-block; margin: 20px auto;
+      background: var(--menu-color-alt); color: #fff;
+      padding: 12px 20px; border: 2px solid #455a64;
+      border-radius: 50px; text-decoration: none;
+      font-weight: 700; text-align: center;
+      transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer; width: 80%;
+    }
+    .language-btn:hover {
+      background: var(--menu-color); color: #000;
+      transform: scale(1.05); box-shadow: 0 4px 10px rgba(76,175,80,0.4);
+    }
+    .language-btn:active {
+      transform: scale(0.95); box-shadow: 0 3px 8px rgba(76,175,80,0.3);
+    }
+    .color-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 5px; padding: 10px; margin-bottom: 10px;
+    }
+    .color-option {
+      width: 40px; height: 40px; cursor: pointer;
+      border: 2px solid transparent; border-radius: 4px;
+      transition: transform 0.3s ease, border 0.3s ease;
+    }
+    .color-option:hover {
+      transform: scale(1.1); border-color: var(--menu-color);
+    }
+    .preset-themes {
+      display: flex; flex-direction: column; align-items: center;
+      margin-top: 10px; padding: 0 10px; text-align: center;
+    }
+    .preset-themes h4 {
+      margin-bottom: 5px; font-size: 14px; color: #fff;
+    }
+    .theme-btn {
+      margin: 2px 0; width: 80%; border: none;
+      border-radius: 30px; padding: 8px; cursor: pointer;
+      font-size: 14px; transition: background 0.3s;
+    }
+    .theme-btn:hover { filter: brightness(1.15); }
+    /* MAIN CONTAINER */
     .main-container {
-      margin-left: 420px;
-      padding: 20px;
+      margin-left: 280px; padding: 20px;
       transition: margin-left 0.3s ease;
     }
     section {
@@ -162,8 +150,10 @@
       transform: translateY(30px); transition: all 0.6s ease;
       min-height: 60vh;
     }
+    section.in-view {
+      opacity: 1; transform: translateY(0);
+    }
     section:hover { background: var(--section-hover-bg); }
-    section.in-view { opacity: 1; transform: translateY(0); }
     h1, h2 { color: #cfd8dc; margin-bottom: 20px; }
     h1 {
       font-size: 24px; border-bottom: 2px solid var(--menu-color);
@@ -179,15 +169,13 @@
       text-decoration: none; font-weight: 500; margin: 10px;
       font-size: 16px; transition: transform 0.3s ease, box-shadow 0.3s ease;
       position: relative;
-      overflow: hidden;
     }
     a.main-btn:hover {
       transform: scale(1.05);
       box-shadow: 0 4px 10px rgba(96,125,139,0.4);
     }
     a.main-btn:active { transform: scale(0.98); }
-    
-    /* Certificates Section */
+    /* CERTIFICATES SECTION STYLES */
     .certificates-container {
       display: flex;
       gap: 20px;
@@ -198,14 +186,10 @@
       max-width: 200px;
       border-right: 1px solid #607d8b;
       padding-right: 10px;
-      position: relative;
-      overflow: hidden;
     }
     .certificate-display {
       flex: 3;
       padding-left: 10px;
-      position: relative;
-      overflow: hidden;
     }
     .certificate-item {
       padding: 8px;
@@ -214,47 +198,12 @@
       border-radius: 4px;
       cursor: pointer;
       transition: background 0.3s;
-      position: relative;
-      overflow: hidden;
     }
     .certificate-item:hover {
       background: #607d8b;
       color: #000;
     }
-    
-    /* Animated Patterns Section */
-    .animated-patterns-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    .pattern-item iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-    }
-    .pattern-item p {
-      text-align: center; margin-top: 5px;
-      font-size: 14px; color: #cfd8dc;
-    }
-    
-    /* New HTML Games Section */
-    #htmlgames .animated-patterns-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-    #htmlgames .pattern-item iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-    }
-    #htmlgames .pattern-item p {
-      text-align: center; margin-top: 5px;
-      font-size: 14px; color: #cfd8dc;
-    }
-    
-    /* DIGITAL CLOCK */
+    /* CLOCK */
     #clock {
       position: fixed; bottom: 20px; right: 20px;
       width: 130px; height: 130px; background: #222;
@@ -269,100 +218,61 @@
       transform: scale(1.05) translateY(-5px);
       box-shadow: 0 5px 15px rgba(0,0,0,0.6);
     }
-    
-    /* Global Button Style – For consistent rounded shape */
-    button, .theme-btn {
-      border-radius: 50px;
+    @media (max-width: 768px) {
+      .sidebar { width: 200px; }
+      .main-container { margin-left: 200px; }
+      .toggle-btn { top: 15px; right: -20px; }
+    }
+    @media (max-width: 480px) {
+      .toggle-btn {
+        width: 40px; height: 40px; font-size: 14px;
+      }
+      .menu li a { font-size: 14px; padding: 12px; }
+      #clock { width: 100px; height: 100px; font-size: 18px; }
+      .knowledge-wrapper { flex-direction: column; }
+    }
+    .knowledge-wrapper {
+      display: flex; justify-content: space-between; gap: 20px;
+    }
+    .knowledge-wrapper > div { flex: 1; }
+    #whoImIContainer {
+      padding-left: 20px; border-left: 2px solid var(--menu-color);
+    }
+    /* ANIMATED PATTERNS PREVIEW SECTION */
+    .animated-patterns-grid {
+      display: grid;
+      grid-template-columns: 1fr; /* Single column for full-page view */
+      gap: 20px;
+    }
+    .pattern-item iframe {
+      width: 100%;
+      height: 100vh; /* Full viewport height */
       border: none;
     }
-    
-    /* Header Controls – Only Presets & Color Grid */
-    .header-controls {
-      margin-left: 420px;
-      padding: 10px;
-      margin-bottom: 20px;
-    }
-    .color-grid {
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .color-option {
-      width: 40px; height: 40px; cursor: pointer;
-      border: 2px solid transparent; border-radius: 4px;
-      transition: transform 0.3s ease, border 0.3s ease;
-      display: inline-block;
-      margin-right: 5px;
-    }
-    .color-option:hover {
-      transform: scale(1.1);
-      border-color: var(--menu-color);
-    }
-    .preset-themes {
-      display: inline-block;
-      vertical-align: middle;
-      margin-left: 20px;
-    }
-    .preset-themes .theme-btn {
-      margin: 2px 0; width: 80px; padding: 8px;
-      font-size: 14px; transition: background 0.3s;
-      color: #000 !important;
-    }
-    .preset-themes .theme-btn:hover { filter: brightness(1.15); }
-    
-    /* Ripple Effect */
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.6);
-      transform: scale(0);
-      animation: rippleEffect 0.6s linear;
-      pointer-events: none;
-    }
-    @keyframes rippleEffect {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
+    .pattern-item p {
+      text-align: center; margin-top: 5px;
+      font-size: 14px; color: #cfd8dc;
     }
   </style>
 </head>
 <body>
-  <!-- CLOCK MENU (Navigation) -->
-  <div id="clockMenu">
-    <div class="clock-container">
-      <div class="pointer"></div>
-      <ul class="clock-menu" id="menuList">
-        <li class="clock-item" data-angle="0" data-target="#profile">
-          <div class="clock-item-content">👤</div>
-        </li>
-        <li class="clock-item" data-angle="51.4" data-target="#social">
-          <div class="clock-item-content">🌐</div>
-        </li>
-        <li class="clock-item" data-angle="102.8" data-target="#projects">
-          <div class="clock-item-content">💼</div>
-        </li>
-        <li class="clock-item" data-angle="154.2" data-target="#contact">
-          <div class="clock-item-content">📞</div>
-        </li>
-        <li class="clock-item" data-angle="205.6" data-target="#certificates">
-          <div class="clock-item-content">📜</div>
-        </li>
-        <li class="clock-item" data-angle="257" data-target="#animatedPatterns">
-          <div class="clock-item-content">🎞️</div>
-        </li>
-        <li class="clock-item" data-angle="308.4" data-target="#htmlgames">
-          <div class="clock-item-content">🎮</div>
-        </li>
-      </ul>
-      <!-- Circular border at center -->
-      <div id="centerCircle"></div>
-      <!-- Center language toggle button -->
-      <div id="langToggle">Lang: EN</div>
-    </div>
-  </div>
-  
-  <!-- HEADER CONTROLS (Only Presets & Color Grid) -->
-  <div class="header-controls">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+      </svg>
+    </button>
+    <ul class="menu" id="menuList" role="navigation" aria-label="Sidebar Menu">
+      <li class="active"><a href="#profile" data-locale="profileTitle">Profile</a></li>
+      <li><a href="#social" data-locale="socialTitle">Social</a></li>
+      <li><a href="#projects" data-locale="projectsTitle">Projects</a></li>
+      <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
+      <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
+      <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
+      <li><a href="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" target="_blank" data-locale="htmlGames">HTML Games</a></li>
+    </ul>
+    <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
       <div class="color-option" data-color="#2c2c2c" style="background-color: #2c2c2c;"></div>
       <div class="color-option" data-color="#455a64" style="background-color: #455a64;"></div>
@@ -374,14 +284,14 @@
       <div class="color-option" data-color="#0d0d0d" style="background-color: #0d0d0d;"></div>
     </div>
     <div class="preset-themes">
-      <button class="theme-btn" style="background:#4caf50;" data-theme="default">Default</button>
-      <button class="theme-btn" style="background:#0d47a1;" data-theme="blue">Blue</button>
-      <button class="theme-btn" style="background:#757575;" data-theme="gray">Gray</button>
-      <button class="theme-btn" style="background:#00796b;" data-theme="teal">Teal</button>
+      <h4>Theme Presets</h4>
+      <button class="theme-btn" style="background:#4caf50; color:#fff;" data-theme="default">Default</button>
+      <button class="theme-btn" style="background:#0d47a1; color:#fff;" data-theme="blue">Blue</button>
+      <button class="theme-btn" style="background:#757575; color:#fff;" data-theme="gray">Gray</button>
+      <button class="theme-btn" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
     </div>
   </div>
-  
-  <!-- MAIN CONTENT -->
+  <!-- MAIN CONTAINER -->
   <div class="main-container" id="mainContainer">
     <section id="profile">
       <h1 data-locale="profileTitle">Profile</h1>
@@ -414,6 +324,7 @@
         <a href="mailto:aaugusto444@gmail.com" class="main-btn" data-locale="email">Email</a>
       </div>
     </section>
+    <!-- Modified Certificates Section -->
     <section id="certificates">
       <h1 data-locale="certificatesTitle">Certificates</h1>
       <div class="certificates-container">
@@ -432,123 +343,15 @@
         </div>
       </div>
     </section>
-    <!-- New HTML Games Section -->
-    <section id="htmlgames">
-      <h1 data-locale="htmlGames">HTML Games</h1>
-      <div class="animated-patterns-grid">
-        <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html"></iframe>
-          <p data-locale="htmlGames">HTML Games</p>
-        </div>
-      </div>
-    </section>
   </div>
-  
-  <!-- DIGITAL CLOCK -->
+  <!-- CLOCK -->
   <div id="clock"></div>
-  
-  <!-- SCRIPTS -->
-  
-  <!-- CLOCK MENU SCRIPT (Continuous Rotation with Dynamic Clamping) -->
   <script>
-    const clockMenu = document.getElementById('menuList');
-    const clockItems = document.querySelectorAll('.clock-item');
-    const RADIUS = 150; 
-    let cumulativeRotation = 0;
-    // Inner border radius for clamping (in UL coordinate system)
-    const innerRadius = 80;
-    
-    // Store each item's original angle
-    clockItems.forEach(item => {
-      const angleDeg = parseFloat(item.getAttribute('data-angle'));
-      item.dataset.originalAngle = angleDeg;
-    });
-    
-    // Function to update each clock item’s position and apply clamping
-    function updateClockItems() {
-      clockItems.forEach(item => {
-        const angleDeg = parseFloat(item.dataset.originalAngle);
-        const angleRad = angleDeg * Math.PI / 180;
-        // Calculate ideal position (relative to UL center)
-        let x = RADIUS * Math.cos(angleRad);
-        let y = RADIUS * Math.sin(angleRad);
-        // For a 160x160 item, the original shape’s tip was at (80,160)
-        const tipX = x;
-        const tipY = y + 80;
-        const distance = Math.sqrt(tipX * tipX + tipY * tipY);
-        const content = item.querySelector('.clock-item-content');
-        if (distance < innerRadius) {
-          // Clamp tip to innerRadius (if needed)
-          const a = Math.atan2(tipY, tipX);
-          const newTipX = innerRadius * Math.cos(a);
-          const newTipY = innerRadius * Math.sin(a);
-          y = newTipY - 80;
-          content.classList.add('curved');
-        } else {
-          content.classList.remove('curved');
-        }
-        item.style.left = (x - 80) + 'px';
-        item.style.top = (y - 80) + 'px';
-      });
-    }
-    
-    // Initial positioning
-    updateClockItems();
-    
-    function rotateClockTo(targetAngle) {
-      let currentMod = cumulativeRotation % 360;
-      if (currentMod < 0) currentMod += 360;
-      let diff = targetAngle - currentMod;
-      if (diff > 180) diff -= 360;
-      if (diff < -180) diff += 360;
-      cumulativeRotation += diff;
-      // Rotate the whole clock menu
-      clockMenu.style.transform = `translate(-50%, -50%) rotate(${-cumulativeRotation}deg)`;
-      
-      // Reapply clamping
-      updateClockItems();
-      
-      // For inward pointing, adjust each item's content rotation so that its curved edge faces the clock center.
-      clockItems.forEach(item => {
-        const originalAngle = parseFloat(item.dataset.originalAngle);
-        const content = item.querySelector('.clock-item-content');
-        content.style.transform = `rotate(${originalAngle + 90}deg)`;
-      });
-    }
-    
-    clockItems.forEach(item => {
-      item.addEventListener('click', () => {
-        const targetAngle = parseFloat(item.getAttribute('data-angle'));
-        rotateClockTo(targetAngle);
-        const target = item.getAttribute('data-target');
-        if (target && target.startsWith('#')) {
-          const sectionEl = document.querySelector(target);
-          if (sectionEl) sectionEl.scrollIntoView({ behavior: 'smooth' });
-        } else if (target) {
-          window.open(target, '_blank');
-        }
-      });
-    });
-    // Initialize rotation at 0.
-    rotateClockTo(0);
-  </script>
-  
-  <!-- DIGITAL CLOCK SCRIPT -->
-  <script>
-    function updateClock() {
-      const now = new Date();
-      let hours = now.getHours(), minutes = now.getMinutes(), seconds = now.getSeconds();
-      hours = hours < 10 ? "0" + hours : hours;
-      minutes = minutes < 10 ? "0" + minutes : minutes;
-      seconds = seconds < 10 ? "0" + seconds : seconds;
-      document.getElementById("clock").textContent = hours + ":" + minutes + ":" + seconds;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-  </script>
-  
-  <!-- THEME PRESETS & LANGUAGE SCRIPT -->
-  <script>
+    // Global variables for certificate navigation
+    let certificatesArray = [];
+    let currentCertificateIndex = 0;
+
+    // TRANSLATIONS (EN / PT)
     const translations = {
       en: {
         profileTitle: 'Profile',
@@ -587,7 +390,18 @@
         email: 'Email'
       }
     };
-
+    let currentLanguage = 'en';
+    // EMOJI MAPPING
+    const emojiMapping = {
+      profileTitle: '👤',
+      socialTitle: '🌐',
+      projectsTitle: '💼',
+      contactTitle: '📞',
+      certificatesTitle: '📜',
+      animatedPatternsTitle: '🎞️',
+      htmlGames: '🎮'
+    };
+    // THEME PRESETS
     const themePresets = {
       default: {
         '--bg-color': '#2c2c2c',
@@ -618,28 +432,7 @@
         '--menu-text-color': '#ffffff'
       }
     };
-
-    let currentLanguage = 'en';
-    
-    function updateLanguage() {
-      document.querySelectorAll('[data-locale]').forEach(el => {
-        const key = el.getAttribute('data-locale');
-        if (translations[currentLanguage][key]) {
-          el.textContent = translations[currentLanguage][key];
-        }
-      });
-      document.getElementById('langToggle').textContent = `Lang: ${currentLanguage.toUpperCase()}`;
-    }
-    
-    const langToggle = document.getElementById('langToggle');
-    langToggle.addEventListener('click', async () => {
-      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
-      updateLanguage();
-      await populateKnowledgeList();
-      await populateWhoImI();
-      await populateCertificatesList();
-    });
-    
+    // HELPER: Fetch a text file as UTF-8
     async function fetchTextFile(filePath) {
       try {
         const resp = await fetch(filePath);
@@ -652,12 +445,72 @@
         return "";
       }
     }
-    
+    // Sidebar toggle function
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    function updateMenuItems() {
+      const menuLinks = document.querySelectorAll('#menuList li a');
+      if (sidebar.classList.contains('closed')) {
+        menuLinks.forEach(a => {
+          const key = a.getAttribute('data-locale');
+          a.textContent = emojiMapping[key] || a.textContent;
+        });
+      } else {
+        menuLinks.forEach(a => {
+          const key = a.getAttribute('data-locale');
+          a.textContent = translations[currentLanguage][key] || a.textContent;
+        });
+      }
+    }
+    function toggleSidebar() {
+      sidebar.classList.toggle('closed');
+      sidebar.classList.toggle('open');
+      const svgIcon = toggleBtn.querySelector('svg');
+      if (sidebar.classList.contains('closed')) {
+        sidebar.style.width = '70px';
+        document.getElementById('mainContainer').style.marginLeft = '70px';
+        svgIcon.style.transform = 'rotate(180deg)';
+      } else {
+        sidebar.style.width = '280px';
+        document.getElementById('mainContainer').style.marginLeft = '280px';
+        svgIcon.style.transform = 'rotate(0deg)';
+      }
+      updateMenuItems();
+    }
+    toggleBtn.addEventListener('click', toggleSidebar);
+    // Mobile: Collapse sidebar after menu click
+    document.querySelectorAll('#menuList li a').forEach(a => {
+      a.addEventListener('click', () => {
+        if (window.innerWidth < 768 && !sidebar.classList.contains('closed')) {
+          toggleSidebar();
+        }
+      });
+    });
+    // Language Toggle & Update
+    const languageBtn = document.getElementById('languageBtn');
+    languageBtn.addEventListener('click', async () => {
+      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
+      updateLanguage();
+      await populateKnowledgeList();
+      await populateWhoImI();
+      await populateCertificatesList(); // refresh titles
+    });
+    function updateLanguage() {
+      languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
+      if (!sidebar.classList.contains('closed')) {
+        document.querySelectorAll('[data-locale]').forEach(el => {
+          const key = el.getAttribute('data-locale');
+          if (translations[currentLanguage][key]) {
+            el.textContent = translations[currentLanguage][key];
+          }
+        });
+      }
+    }
+    // Load Knowledge List
     async function fetchKnowledgeList() {
       const text = await fetchTextFile('./KnowledgeList/KnowledgeList.txt');
       return text.split('\n').filter(line => line.trim() !== '');
     }
-    
     async function populateKnowledgeList() {
       const knowledgeListDiv = document.getElementById('knowledgeList');
       knowledgeListDiv.innerHTML = '';
@@ -672,17 +525,18 @@
         knowledgeListDiv.appendChild(p);
       });
     }
-    
+    // Load "Who Am I" text
     async function populateWhoImI() {
       const whoImIContainer = document.getElementById('whoImIContainer');
       let filePath = `./translations/whoImI_${currentLanguage}.txt`;
       const text = await fetchTextFile(filePath);
       whoImIContainer.textContent = text || "Content unavailable.";
     }
-    
+    // Load Certificates List:
+    // Each line is expected to be: URL - Portuguese Title - English Title
     async function fetchCertificatesList() {
       try {
-        const r = await fetchTextFile('./Links/Certificados/CertificadosList.txt');
+        const r = await fetchTextFile('/Links/Certificados/CertificadosList.txt');
         const lines = r.split('\n').filter(l => l.trim() !== '');
         return lines.map(line => {
           const parts = line.split(' - ');
@@ -695,9 +549,13 @@
           const titleEN = parts[2].trim();
           let pdfName = fullUrl;
           const lastSlash = fullUrl.lastIndexOf('/');
-          if (lastSlash !== -1) pdfName = fullUrl.substring(lastSlash + 1);
+          if (lastSlash !== -1) {
+            pdfName = fullUrl.substring(lastSlash + 1);
+          }
           let finalUrl = fullUrl;
-          if (!fullUrl.includes('#')) finalUrl = fullUrl + '#page=1';
+          if (!fullUrl.includes('#')) {
+            finalUrl = fullUrl + '#page=1';
+          }
           return { fullPath: finalUrl, pdfName, titlePT, titleEN };
         });
       } catch (err) {
@@ -705,17 +563,18 @@
         return [];
       }
     }
-    
+    // Create a list of certificate titles; on click, display the certificate in full view.
     async function populateCertificatesList() {
       const listContainer = document.getElementById('certificatesList');
-      listContainer.style.display = 'block';
+      listContainer.style.display = 'block'; // Ensure list is visible initially
       listContainer.innerHTML = '';
       const list = await fetchCertificatesList();
-      certificatesArray = list;
+      certificatesArray = list; // Store globally for navigation
       list.forEach((cert, index) => {
         if (cert.fullPath && (cert.titlePT || cert.titleEN)) {
           const listItem = document.createElement('div');
           listItem.classList.add('certificate-item');
+          // Choose title based on language
           const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
           listItem.textContent = title;
           listItem.addEventListener('click', function() {
@@ -725,39 +584,55 @@
         }
       });
     }
-    
+    // Display the selected certificate in full view with header and navigation arrows.
     function displayCertificateAtIndex(index) {
       currentCertificateIndex = index;
       const cert = certificatesArray[index];
       const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
+      
+      // Hide the certificates list to use full width for the display.
       document.getElementById('certificatesList').style.display = 'none';
       const displayContainer = document.getElementById('certificateDisplay');
       displayContainer.style.flex = '1 0 100%';
-      displayContainer.innerHTML = '';
+      displayContainer.innerHTML = ''; // Clear previous content
+      
+      // Create header container with navigation
       const headerDiv = document.createElement('div');
       headerDiv.style.display = 'flex';
       headerDiv.style.alignItems = 'center';
       headerDiv.style.justifyContent = 'space-between';
       headerDiv.style.marginBottom = '10px';
+      
+      // Create Previous arrow button
       const prevButton = document.createElement('button');
       prevButton.textContent = '←';
       prevButton.addEventListener('click', function() {
         let newIndex = currentCertificateIndex - 1;
-        if (newIndex < 0) newIndex = certificatesArray.length - 1;
+        if (newIndex < 0) {
+          newIndex = certificatesArray.length - 1;
+        }
         displayCertificateAtIndex(newIndex);
       });
+      
+      // Create title element
       const titleElem = document.createElement('div');
       titleElem.textContent = title;
       titleElem.style.flex = '1';
       titleElem.style.textAlign = 'center';
       titleElem.style.fontWeight = 'bold';
+      
+      // Create Next arrow button
       const nextButton = document.createElement('button');
       nextButton.textContent = '→';
       nextButton.addEventListener('click', function() {
         let newIndex = currentCertificateIndex + 1;
-        if (newIndex >= certificatesArray.length) newIndex = 0;
+        if (newIndex >= certificatesArray.length) {
+          newIndex = 0;
+        }
         displayCertificateAtIndex(newIndex);
       });
+      
+      // Create Back to list button
       const backButton = document.createElement('button');
       backButton.textContent = 'Back to list';
       backButton.style.marginTop = '10px';
@@ -766,15 +641,25 @@
         displayContainer.innerHTML = '<p>Select a certificate to display</p>';
         displayContainer.style.flex = '3';
       });
+      
       headerDiv.appendChild(prevButton);
       headerDiv.appendChild(titleElem);
       headerDiv.appendChild(nextButton);
+      
       displayContainer.appendChild(headerDiv);
       displayContainer.appendChild(backButton);
+      
+      // Modify URL to hide PDF navigation toolbar
       let url = cert.fullPath;
       if (!url.includes('toolbar=0')) {
-        url = url.includes('#') ? url + '&toolbar=0' : url + '#toolbar=0';
+        if (url.includes('#')) {
+          url = url + '&toolbar=0';
+        } else {
+          url = url + '#toolbar=0';
+        }
       }
+      
+      // Create the iframe for the certificate PDF
       const iframe = document.createElement('iframe');
       iframe.src = url;
       iframe.setAttribute('loading', 'lazy');
@@ -782,72 +667,82 @@
       iframe.style.height = '80vh';
       displayContainer.appendChild(iframe);
     }
-    
-    let certificatesArray = [];
-    let currentCertificateIndex = 0;
-    
+    // CLOCK
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      document.getElementById("clock").textContent = hours + ":" + minutes + ":" + seconds;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+    // Change background color (grid)
+    const gradientDark = getComputedStyle(document.documentElement)
+      .getPropertyValue('--gradient-dark').trim();
+    document.querySelectorAll('.color-option').forEach(option => {
+      option.addEventListener('click', function () {
+        const color = this.getAttribute('data-color');
+        document.body.style.background = `linear-gradient(160deg, ${color} 0%, ${gradientDark} 100%)`;
+      });
+    });
+    // Apply theme preset
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const themeName = btn.getAttribute('data-theme');
+        const selectedTheme = themePresets[themeName];
+        if (!selectedTheme) return;
+        for (let varName in selectedTheme) {
+          document.documentElement.style.setProperty(varName, selectedTheme[varName]);
+        }
+        document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
+      });
+    });
+    // SCROLL SPY
+    const sections = document.querySelectorAll('section');
+    const navLi = document.querySelectorAll('.menu li');
+    const observerOptions = { threshold: 0.2 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+    sections.forEach(section => observer.observe(section));
+    function activateMenuOnScroll() {
+      let currentSection = '';
+      if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 2) {
+        currentSection = sections[sections.length - 1].getAttribute('id');
+      } else {
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 120;
+          const sectionHeight = section.clientHeight;
+          if (window.pageYOffset >= sectionTop && window.pageYOffset < (sectionTop + sectionHeight)) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+      }
+      navLi.forEach(li => {
+        li.classList.remove('active');
+        const a = li.querySelector('a');
+        if (a && a.getAttribute('href') === `#${currentSection}`) {
+          li.classList.add('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', activateMenuOnScroll);
+    // INITIALIZATION
     document.addEventListener('DOMContentLoaded', async () => {
       updateLanguage();
       await populateKnowledgeList();
       await populateWhoImI();
       await populateCertificatesList();
+      activateMenuOnScroll();
     });
-  </script>
-  
-  <!-- RIPPLE EFFECT SCRIPT -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('button, .main-btn, .certificate-item, [data-locale], .theme-btn').forEach(el => {
-        el.style.position = 'relative';
-        el.style.overflow = 'hidden';
-        el.addEventListener('click', function(e) {
-          const ripple = document.createElement('span');
-          ripple.classList.add('ripple');
-          this.appendChild(ripple);
-          const rect = this.getBoundingClientRect();
-          const size = Math.max(rect.width, rect.height);
-          ripple.style.width = ripple.style.height = size + 'px';
-          ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-          ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-          ripple.addEventListener('animationend', () => { ripple.remove(); });
-        });
-      });
-    });
-  </script>
-  
-  <!-- SCROLL SPY SCRIPT -->
-  <script>
-    const sections = document.querySelectorAll('section');
-    const scrollObserverOptions = { threshold: 0.2 };
-    const scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
-    }, scrollObserverOptions);
-    sections.forEach(section => scrollObserver.observe(section));
-  </script>
-  
-  <!-- SCRIPT: Update Clock Rotation on Scroll -->
-  <script>
-    function updateClockRotationOnScroll() {
-      let currentSectionId = "";
-      let minDistance = Infinity;
-      document.querySelectorAll('section').forEach(section => {
-        const rect = section.getBoundingClientRect();
-        const distance = Math.abs(rect.top);
-        if (distance < minDistance) {
-          minDistance = distance;
-          currentSectionId = section.id;
-        }
-      });
-      if (currentSectionId) {
-        clockItems.forEach(item => {
-          if (item.getAttribute('data-target') === "#" + currentSectionId) {
-            const angle = parseFloat(item.getAttribute('data-angle'));
-            rotateClockTo(angle);
-          }
-        });
-      }
-    }
-    window.addEventListener('scroll', updateClockRotationOnScroll);
   </script>
 </body>
 </html>
