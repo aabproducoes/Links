@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BestSHots Carousel</title>
+  <style>
+    /* Container for the carousel */
+    .carousel {
+      width: 600px;             /* Adjust width as needed */
+      overflow: hidden;         /* Hides images that are not in view */
+      margin: 20px auto;        /* Centers the carousel */
+      border: 1px solid #ccc;   /* Optional border styling */
+    }
+    /* The unordered list acts as the carousel track */
+    .carousel ul {
+      display: flex;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      transition: transform 0.5s ease; /* Smooth transition when sliding */
+    }
+    /* Each list item occupies one full view */
+    .carousel li {
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+    /* Responsive image styling */
+    .carousel img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    /* Navigation controls */
+    .controls {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .controls button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Carousel Container -->
+  <div class="carousel">
+    <ul id="carouselList">
+      <!-- List of images in the BestShots folder -->
+      <li><img src="BestShots/BestSHots (1).JPG" alt="BestSHots 1"></li>
+      <li><img src="BestShots/BestSHots (2).JPG" alt="BestSHots 2"></li>
+      <li><img src="BestShots/BestSHots (3).JPG" alt="BestSHots 3"></li>
+      <li><img src="BestShots/BestSHots (4).JPG" alt="BestSHots 4"></li>
+      <li><img src="BestShots/BestSHots (5).JPG" alt="BestSHots 5"></li>
+      <li><img src="BestShots/BestSHots (6).JPG" alt="BestSHots 6"></li>
+      <li><img src="BestShots/BestSHots (7).JPG" alt="BestSHots 7"></li>
+      <li><img src="BestShots/BestSHots (8).JPG" alt="BestSHots 8"></li>
+      <li><img src="BestShots/BestSHots (9).JPG" alt="BestSHots 9"></li>
+      <li><img src="BestShots/BestSHots (10).JPG" alt="BestSHots 10"></li>
+      <li><img src="BestShots/BestSHots (11).JPG" alt="BestSHots 11"></li>
+      <li><img src="BestShots/BestSHots (12).JPG" alt="BestSHots 12"></li>
+      <li><img src="BestShots/BestSHots (13).JPG" alt="BestSHots 13"></li>
+      <!-- Add more <li> elements here if you want to expand the list further -->
+    </ul>
+  </div>
+
+  <!-- Carousel Navigation Buttons -->
+  <div class="controls">
+    <button id="prevBtn">&laquo; Prev</button>
+    <button id="nextBtn">Next &raquo;</button>
+  </div>
+
+  <script>
+    // JavaScript for navigating through the carousel
+    const carouselList = document.getElementById('carouselList');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // The index for the currently visible slide
+    let currentIndex = 0;
+    // Total number of images in the carousel
+    const totalImages = carouselList.children.length;
+
+    // Function to update the carousel view based on currentIndex
+    function updateCarousel() {
+      // Calculate the translation offset (100% per image)
+      carouselList.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+    }
+
+    // Event listener for the Next button
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalImages;
+      updateCarousel();
+    });
+
+    // Event listener for the Prev button
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalImages) % totalImages;
+      updateCarousel();
+    });
+  </script>
+</body>
+</html>

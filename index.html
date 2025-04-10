@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -242,18 +241,18 @@
     <ul class="menu" id="menuList" role="navigation" aria-label="Sidebar Menu">
       <li class="active"><a href="#profile" data-locale="profileTitle">Profile</a></li>
       <li><a href="#social" data-locale="socialTitle">Social</a></li>
-      <li><a href="#projects" data-locale="projectsTitle">Projects</a></li>
       <li><a href="#contact" data-locale="contactTitle">Contact</a></li>
       <li><a href="#certificates" data-locale="certificatesTitle">Certificates</a></li>
       <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
       <li><a href="#htmlGames" data-locale="htmlGames">HTML Games</a></li>
       <li><a href="#mp3Visualizer" data-locale="mp3Visualizer">MP3 Player Visualizer</a></li>
-
-      <!-- NEW LINKS for BLENDER/GIMP/ANIMATIONS/ANIMATED BACKGROUND -->
+      <!-- Individual project sections -->
       <li><a href="#blenderProjects" data-locale="blenderProjects">Blender Projects</a></li>
       <li><a href="#gimpProjects" data-locale="gimpProjects">Gimp Projects</a></li>
       <li><a href="#blenderAnimations" data-locale="blenderAnimations">Blender Animations</a></li>
       <li><a href="#animatedBgSection" data-locale="animatedBackground">Animated Background</a></li>
+      <!-- NEW: Sony Shots Images -->
+      <li><a href="#sonyShotsImages" data-locale="sonyShotsImages">Sony Shots Images</a></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
@@ -291,16 +290,6 @@
       <div>
         <a href="https://www.facebook.com" target="_blank" class="main-btn" data-locale="facebook">Facebook</a>
         <a href="https://www.instagram.com" target="_blank" class="main-btn" data-locale="instagram">Instagram</a>
-      </div>
-    </section>
-
-    <section id="projects">
-      <h1 data-locale="projectsTitle">Projects</h1>
-      <div>
-        <a href="blender-projects.html" target="_blank" class="main-btn" data-locale="blenderProjects">Blender Projects</a>
-        <a href="gimp-projects.html" target="_blank" class="main-btn" data-locale="gimpProjects">Gimp Projects</a>
-        <a href="blender-animations.html" target="_blank" class="main-btn" data-locale="blenderAnimations">Blender Animations</a>
-        <a href="animated-background.html" target="_blank" class="main-btn" data-locale="animatedBackground">Animated Background</a>
       </div>
     </section>
 
@@ -399,6 +388,17 @@
         </div>
       </div>
     </section>
+
+    <!-- NEW SECTION: Sony Shots Images -->
+    <section id="sonyShotsImages">
+      <h1 data-locale="sonyShotsImages">Sony Shots Images</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="http://aabproducoes.github.io/Links/best-shots-img-caroussell.html"></iframe>
+          <p>best-shots-img-caroussell.html</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <!-- CLOCK -->
@@ -415,7 +415,6 @@
       en: {
         profileTitle: 'Profile',
         socialTitle: 'Social',
-        projectsTitle: 'Projects',
         contactTitle: 'Contact',
         certificatesTitle: 'Certificates',
         knowledgeListTitle: 'Knowledge List',
@@ -428,13 +427,13 @@
         gimpProjects: 'Gimp Projects',
         blenderAnimations: 'Blender Animations',
         animatedBackground: 'Animated Background',
+        sonyShotsImages: 'Sony Shots Images',
         whatsapp: 'WhatsApp',
         email: 'Email'
       },
       pt: {
         profileTitle: 'Perfil',
         socialTitle: 'Social',
-        projectsTitle: 'Projetos',
         contactTitle: 'Contato',
         certificatesTitle: 'Certificados',
         knowledgeListTitle: 'Lista de Conhecimento',
@@ -447,6 +446,7 @@
         gimpProjects: 'Projetos Gimp',
         blenderAnimations: 'Animações Blender',
         animatedBackground: 'Fundo Animado',
+        sonyShotsImages: 'Imagens Sony Shots',
         whatsapp: 'WhatsApp',
         email: 'Email'
       }
@@ -456,7 +456,6 @@
     const emojiMapping = {
       profileTitle: '👤',
       socialTitle: '🌐',
-      projectsTitle: '💼',
       contactTitle: '📞',
       certificatesTitle: '📜',
       animatedPatternsTitle: '🎞️',
@@ -465,7 +464,8 @@
       blenderProjects: '🌀',
       gimpProjects: '🎨',
       blenderAnimations: '📽️',
-      animatedBackground: '🌌'
+      animatedBackground: '🌌',
+      sonyShotsImages: '📷'
     };
     // THEME PRESETS
     const themePresets = {
@@ -498,7 +498,7 @@
         '--menu-text-color': '#ffffff'
       }
     };
-    // HELPER: Fetch text file
+    // HELPER: Fetch a text file as UTF-8
     async function fetchTextFile(filePath) {
       try {
         const resp = await fetch(filePath);
@@ -544,7 +544,7 @@
       updateMenuItems();
     }
     toggleBtn.addEventListener('click', toggleSidebar);
-    // Mobile: collapse sidebar after clicking a menu item
+    // Mobile: collapse sidebar after a menu click
     document.querySelectorAll('#menuList li a').forEach(a => {
       a.addEventListener('click', () => {
         if (window.innerWidth < 768 && !sidebar.classList.contains('closed')) {
@@ -552,7 +552,7 @@
         }
       });
     });
-    // Language Toggle
+    // Language Toggle & Update
     const languageBtn = document.getElementById('languageBtn');
     languageBtn.addEventListener('click', async () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
@@ -572,7 +572,7 @@
         });
       }
     }
-    // Fetch & Populate Knowledge List
+    // Load Knowledge List
     async function fetchKnowledgeList() {
       const text = await fetchTextFile('./KnowledgeList/KnowledgeList.txt');
       return text.split('\n').filter(line => line.trim() !== '');
@@ -591,14 +591,14 @@
         knowledgeListDiv.appendChild(p);
       });
     }
-    // Fetch & Populate "Who Am I"
+    // Load "Who Am I" text
     async function populateWhoImI() {
       const whoImIContainer = document.getElementById('whoImIContainer');
       let filePath = `./translations/whoImI_${currentLanguage}.txt`;
       const text = await fetchTextFile(filePath);
       whoImIContainer.textContent = text || "Content unavailable.";
     }
-    // Fetch & Populate Certificates
+    // Load Certificates List
     async function fetchCertificatesList() {
       try {
         const r = await fetchTextFile('/Links/Certificados/CertificadosList.txt');
@@ -656,7 +656,7 @@
       const displayContainer = document.getElementById('certificateDisplay');
       displayContainer.style.flex = '1 0 100%';
       displayContainer.innerHTML = '';
-      // Header (arrows + title + back button)
+      // Header with navigation
       const headerDiv = document.createElement('div');
       headerDiv.style.display = 'flex';
       headerDiv.style.alignItems = 'center';
@@ -694,7 +694,7 @@
       headerDiv.appendChild(nextButton);
       displayContainer.appendChild(headerDiv);
       displayContainer.appendChild(backButton);
-      // iFrame
+      // iFrame creation
       let url = cert.fullPath;
       if (!url.includes('toolbar=0')) {
         if (url.includes('#')) {
@@ -789,13 +789,3 @@
   </script>
 </body>
 </html>
-=======
-yourProject/
-├── index.html    <-- This file
-├── KnowledgeList/
-│    ├── KnowledgeList.txt
-│    ├── whoImI_en.txt
-│    └── whoImI_pt.txt
-└── Certificados/
-     └── CertificadosList.txt
->>>>>>> Stashed changes
