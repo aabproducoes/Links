@@ -6,17 +6,8 @@
   <meta name="description" content="Brief description of the site or your profile.">
   <title>One-Page - Tema Sério com Presets</title>
   <!-- Fonte Roboto -->
-  <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-  <script type="text/javascript" nonce="734c1c9a8ce145e985d7cdb488e" src="//local.adguard.org?ts=1743243752695&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
-  <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-  <script type="text/javascript" nonce="992c68353c4441caa368ef76da3" src="//local.adguard.org?ts=1743112537728&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
-  <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;type=content-script&amp;dmn=aabproducoes.github.io&amp;url=https%3A%2F%2Faabproducoes.github.io%2FLinks%2F&amp;app=brave.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
-  <script type="text/javascript" nonce="c5ed4e4244eb4430beb58c66b80" src="//local.adguard.org?ts=1742676744885&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* ================================
-       RESET E VARIÁVEIS DE CORES
-    ================================ */
     :root {
       --bg-color: #2c2c2c;
       --gradient-dark: #1a1a1a;
@@ -38,9 +29,6 @@
       background: linear-gradient(160deg, var(--bg-color) 0%, var(--gradient-dark) 100%);
       color: #e0e0e0; overflow-x: hidden; position: relative;
     }
-    /* ==================================
-       SIDEBAR - FORMATO, INDICADORES, ETC
-    =================================== */
     .sidebar {
       width: 280px;
       background: rgba(0,0,0,0.4);
@@ -96,7 +84,6 @@
       padding: 15px 0; display: flex;
       justify-content: center; align-items: center;
     }
-    /* BOTÕES DE LÍNGUA / TEMAS / GRID DE COR */
     .language-btn {
       display: inline-block; margin: 20px auto;
       background: var(--menu-color-alt); color: #fff;
@@ -138,7 +125,6 @@
       font-size: 14px; transition: background 0.3s;
     }
     .theme-btn:hover { filter: brightness(1.15); }
-    /* MAIN CONTAINER */
     .main-container {
       margin-left: 280px; padding: 20px;
       transition: margin-left 0.3s ease;
@@ -175,35 +161,26 @@
       box-shadow: 0 4px 10px rgba(96,125,139,0.4);
     }
     a.main-btn:active { transform: scale(0.98); }
-    /* CERTIFICATES SECTION STYLES */
     .certificates-container {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
+      display: flex; gap: 20px; margin-top: 20px;
     }
     .certificates-list {
-      flex: 1;
-      max-width: 200px;
+      flex: 1; max-width: 200px;
       border-right: 1px solid #607d8b;
       padding-right: 10px;
     }
     .certificate-display {
-      flex: 3;
-      padding-left: 10px;
+      flex: 3; padding-left: 10px;
     }
     .certificate-item {
-      padding: 8px;
-      margin-bottom: 5px;
+      padding: 8px; margin-bottom: 5px;
       border: 1px solid #607d8b;
-      border-radius: 4px;
-      cursor: pointer;
+      border-radius: 4px; cursor: pointer;
       transition: background 0.3s;
     }
     .certificate-item:hover {
-      background: #607d8b;
-      color: #000;
+      background: #607d8b; color: #000;
     }
-    /* CLOCK */
     #clock {
       position: fixed; bottom: 20px; right: 20px;
       width: 130px; height: 130px; background: #222;
@@ -238,15 +215,13 @@
     #whoImIContainer {
       padding-left: 20px; border-left: 2px solid var(--menu-color);
     }
-    /* ANIMATED PATTERNS PREVIEW SECTION */
     .animated-patterns-grid {
-      display: grid;
-      grid-template-columns: 1fr; /* Single column for full-page view */
+      display: grid; grid-template-columns: 1fr;
       gap: 20px;
     }
     .pattern-item iframe {
       width: 100%;
-      height: 100vh; /* Full viewport height */
+      height: 100vh;
       border: none;
     }
     .pattern-item p {
@@ -272,6 +247,12 @@
       <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
       <li><a href="#htmlGames" data-locale="htmlGames">HTML Games</a></li>
       <li><a href="#mp3Visualizer" data-locale="mp3Visualizer">MP3 Player Visualizer</a></li>
+
+      <!-- NEW LINKS for BLENDER/GIMP/ANIMATIONS/ANIMATED BACKGROUND -->
+      <li><a href="#blenderProjects" data-locale="blenderProjects">Blender Projects</a></li>
+      <li><a href="#gimpProjects" data-locale="gimpProjects">Gimp Projects</a></li>
+      <li><a href="#blenderAnimations" data-locale="blenderAnimations">Blender Animations</a></li>
+      <li><a href="#animatedBgSection" data-locale="animatedBackground">Animated Background</a></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
     <div class="color-grid">
@@ -292,6 +273,7 @@
       <button class="theme-btn" style="background:#00796b; color:#fff;" data-theme="teal">Teal</button>
     </div>
   </div>
+
   <!-- MAIN CONTAINER -->
   <div class="main-container" id="mainContainer">
     <section id="profile">
@@ -302,6 +284,7 @@
         <div id="whoImIContainer"></div>
       </div>
     </section>
+
     <section id="social">
       <h1 data-locale="socialTitle">Social</h1>
       <div>
@@ -309,6 +292,7 @@
         <a href="https://www.instagram.com" target="_blank" class="main-btn" data-locale="instagram">Instagram</a>
       </div>
     </section>
+
     <section id="projects">
       <h1 data-locale="projectsTitle">Projects</h1>
       <div>
@@ -318,6 +302,7 @@
         <a href="animated-background.html" target="_blank" class="main-btn" data-locale="animatedBackground">Animated Background</a>
       </div>
     </section>
+
     <section id="contact">
       <h1 data-locale="contactTitle">Contact</h1>
       <div>
@@ -325,6 +310,7 @@
         <a href="mailto:aaugusto444@gmail.com" class="main-btn" data-locale="email">Email</a>
       </div>
     </section>
+
     <!-- Certificates Section -->
     <section id="certificates">
       <h1 data-locale="certificatesTitle">Certificates</h1>
@@ -335,6 +321,7 @@
         </div>
       </div>
     </section>
+
     <!-- Animated Patterns Section -->
     <section id="animatedPatterns">
       <h1 data-locale="animatedPatternsTitle">Animated Patterns</h1>
@@ -345,6 +332,7 @@
         </div>
       </div>
     </section>
+
     <!-- HTML Games Section -->
     <section id="htmlGames">
       <h1 data-locale="htmlGames">HTML Games</h1>
@@ -355,6 +343,7 @@
         </div>
       </div>
     </section>
+
     <!-- MP3 Player Visualizer Section -->
     <section id="mp3Visualizer">
       <h1 data-locale="mp3Visualizer">MP3 Player Visualizer</h1>
@@ -365,9 +354,56 @@
         </div>
       </div>
     </section>
+
+    <!-- NEW SECTION: Blender Projects -->
+    <section id="blenderProjects">
+      <h1 data-locale="blenderProjects">Blender Projects</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://aabproducoes.github.io/Links/blender-projects.html"></iframe>
+          <p>blender-projects.html</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Gimp Projects -->
+    <section id="gimpProjects">
+      <h1 data-locale="gimpProjects">Gimp Projects</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://aabproducoes.github.io/Links/gimp-projects.html"></iframe>
+          <p>gimp-projects.html</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Blender Animations -->
+    <section id="blenderAnimations">
+      <h1 data-locale="blenderAnimations">Blender Animations</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://aabproducoes.github.io/Links/blender-animations.html"></iframe>
+          <p>blender-animations.html</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Animated Background -->
+    <section id="animatedBgSection">
+      <h1 data-locale="animatedBackground">Animated Background</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://aabproducoes.github.io/Links/animated-background.html"></iframe>
+          <p>animated-background.html</p>
+        </div>
+      </div>
+    </section>
   </div>
+
   <!-- CLOCK -->
   <div id="clock"></div>
+
+  <!-- JAVASCRIPT -->
   <script>
     // Global variables for certificate navigation
     let certificatesArray = [];
@@ -424,7 +460,11 @@
       certificatesTitle: '📜',
       animatedPatternsTitle: '🎞️',
       htmlGames: '🎮',
-      mp3Visualizer: '🎵'
+      mp3Visualizer: '🎵',
+      blenderProjects: '🌀',
+      gimpProjects: '🎨',
+      blenderAnimations: '📽️',
+      animatedBackground: '🌌'
     };
     // THEME PRESETS
     const themePresets = {
@@ -457,7 +497,7 @@
         '--menu-text-color': '#ffffff'
       }
     };
-    // HELPER: Fetch a text file as UTF-8
+    // HELPER: Fetch text file
     async function fetchTextFile(filePath) {
       try {
         const resp = await fetch(filePath);
@@ -470,7 +510,7 @@
         return "";
       }
     }
-    // Sidebar toggle function
+    // Sidebar Toggle
     const toggleBtn = document.getElementById('toggleBtn');
     const sidebar = document.getElementById('sidebar');
     function updateMenuItems() {
@@ -503,7 +543,7 @@
       updateMenuItems();
     }
     toggleBtn.addEventListener('click', toggleSidebar);
-    // Mobile: Collapse sidebar after menu click
+    // Mobile: collapse sidebar after clicking a menu item
     document.querySelectorAll('#menuList li a').forEach(a => {
       a.addEventListener('click', () => {
         if (window.innerWidth < 768 && !sidebar.classList.contains('closed')) {
@@ -511,14 +551,14 @@
         }
       });
     });
-    // Language Toggle & Update
+    // Language Toggle
     const languageBtn = document.getElementById('languageBtn');
     languageBtn.addEventListener('click', async () => {
       currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
       updateLanguage();
       await populateKnowledgeList();
       await populateWhoImI();
-      await populateCertificatesList(); // refresh titles
+      await populateCertificatesList();
     });
     function updateLanguage() {
       languageBtn.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
@@ -531,7 +571,7 @@
         });
       }
     }
-    // Load Knowledge List
+    // Fetch & Populate Knowledge List
     async function fetchKnowledgeList() {
       const text = await fetchTextFile('./KnowledgeList/KnowledgeList.txt');
       return text.split('\n').filter(line => line.trim() !== '');
@@ -550,15 +590,14 @@
         knowledgeListDiv.appendChild(p);
       });
     }
-    // Load "Who Am I" text
+    // Fetch & Populate "Who Am I"
     async function populateWhoImI() {
       const whoImIContainer = document.getElementById('whoImIContainer');
       let filePath = `./translations/whoImI_${currentLanguage}.txt`;
       const text = await fetchTextFile(filePath);
       whoImIContainer.textContent = text || "Content unavailable.";
     }
-    // Load Certificates List:
-    // Each line is expected to be: URL - Portuguese Title - English Title
+    // Fetch & Populate Certificates
     async function fetchCertificatesList() {
       try {
         const r = await fetchTextFile('/Links/Certificados/CertificadosList.txt');
@@ -566,7 +605,7 @@
         return lines.map(line => {
           const parts = line.split(' - ');
           if (parts.length < 3) {
-            console.warn('Formato inválido:', line);
+            console.warn('Invalid format:', line);
             return { fullPath: '', pdfName: '', titlePT: '', titleEN: '' };
           }
           const fullUrl = parts[0].trim();
@@ -579,7 +618,7 @@
           }
           let finalUrl = fullUrl;
           if (!fullUrl.includes('#')) {
-            finalUrl = fullUrl + '#page=1';
+            finalUrl += '#page=1';
           }
           return { fullPath: finalUrl, pdfName, titlePT, titleEN };
         });
@@ -588,18 +627,16 @@
         return [];
       }
     }
-    // Create a list of certificate titles; on click, display the certificate in full view.
     async function populateCertificatesList() {
       const listContainer = document.getElementById('certificatesList');
-      listContainer.style.display = 'block'; // Ensure list is visible initially
+      listContainer.style.display = 'block';
       listContainer.innerHTML = '';
       const list = await fetchCertificatesList();
-      certificatesArray = list; // Store globally for navigation
+      certificatesArray = list;
       list.forEach((cert, index) => {
         if (cert.fullPath && (cert.titlePT || cert.titleEN)) {
           const listItem = document.createElement('div');
           listItem.classList.add('certificate-item');
-          // Choose title based on language
           const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
           listItem.textContent = title;
           listItem.addEventListener('click', function() {
@@ -609,55 +646,40 @@
         }
       });
     }
-    // Display the selected certificate in full view with header and navigation arrows.
+    // Display Certificate
     function displayCertificateAtIndex(index) {
       currentCertificateIndex = index;
       const cert = certificatesArray[index];
       const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
-      
-      // Hide the certificates list to use full width for the display.
       document.getElementById('certificatesList').style.display = 'none';
       const displayContainer = document.getElementById('certificateDisplay');
       displayContainer.style.flex = '1 0 100%';
-      displayContainer.innerHTML = ''; // Clear previous content
-      
-      // Create header container with navigation
+      displayContainer.innerHTML = '';
+      // Header (arrows + title + back button)
       const headerDiv = document.createElement('div');
       headerDiv.style.display = 'flex';
       headerDiv.style.alignItems = 'center';
       headerDiv.style.justifyContent = 'space-between';
       headerDiv.style.marginBottom = '10px';
-      
-      // Create Previous arrow button
       const prevButton = document.createElement('button');
       prevButton.textContent = '←';
       prevButton.addEventListener('click', function() {
         let newIndex = currentCertificateIndex - 1;
-        if (newIndex < 0) {
-          newIndex = certificatesArray.length - 1;
-        }
+        if (newIndex < 0) newIndex = certificatesArray.length - 1;
         displayCertificateAtIndex(newIndex);
       });
-      
-      // Create title element
       const titleElem = document.createElement('div');
       titleElem.textContent = title;
       titleElem.style.flex = '1';
       titleElem.style.textAlign = 'center';
       titleElem.style.fontWeight = 'bold';
-      
-      // Create Next arrow button
       const nextButton = document.createElement('button');
       nextButton.textContent = '→';
       nextButton.addEventListener('click', function() {
         let newIndex = currentCertificateIndex + 1;
-        if (newIndex >= certificatesArray.length) {
-          newIndex = 0;
-        }
+        if (newIndex >= certificatesArray.length) newIndex = 0;
         displayCertificateAtIndex(newIndex);
       });
-      
-      // Create Back to list button
       const backButton = document.createElement('button');
       backButton.textContent = 'Back to list';
       backButton.style.marginTop = '10px';
@@ -666,25 +688,20 @@
         displayContainer.innerHTML = '<p>Select a certificate to display</p>';
         displayContainer.style.flex = '3';
       });
-      
       headerDiv.appendChild(prevButton);
       headerDiv.appendChild(titleElem);
       headerDiv.appendChild(nextButton);
-      
       displayContainer.appendChild(headerDiv);
       displayContainer.appendChild(backButton);
-      
-      // Modify URL to hide PDF navigation toolbar
+      // iFrame
       let url = cert.fullPath;
       if (!url.includes('toolbar=0')) {
         if (url.includes('#')) {
-          url = url + '&toolbar=0';
+          url += '&toolbar=0';
         } else {
-          url = url + '#toolbar=0';
+          url += '#toolbar=0';
         }
       }
-      
-      // Create the iframe for the certificate PDF
       const iframe = document.createElement('iframe');
       iframe.src = url;
       iframe.setAttribute('loading', 'lazy');
@@ -705,7 +722,7 @@
     }
     setInterval(updateClock, 1000);
     updateClock();
-    // Change background color (grid)
+    // Color Options
     const gradientDark = getComputedStyle(document.documentElement)
       .getPropertyValue('--gradient-dark').trim();
     document.querySelectorAll('.color-option').forEach(option => {
@@ -714,7 +731,7 @@
         document.body.style.background = `linear-gradient(160deg, ${color} 0%, ${gradientDark} 100%)`;
       });
     });
-    // Apply theme preset
+    // Theme Presets
     document.querySelectorAll('.theme-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const themeName = btn.getAttribute('data-theme');
@@ -726,7 +743,7 @@
         document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-color']} 0%, ${selectedTheme['--gradient-dark']} 100%)`;
       });
     });
-    // SCROLL SPY
+    // SCROLL SPY & Intersection Observer
     const sections = document.querySelectorAll('section');
     const navLi = document.querySelectorAll('.menu li');
     const observerOptions = { threshold: 0.2 };
@@ -760,7 +777,7 @@
       });
     }
     window.addEventListener('scroll', activateMenuOnScroll);
-    // INITIALIZATION
+    // INITIAL LOAD
     document.addEventListener('DOMContentLoaded', async () => {
       updateLanguage();
       await populateKnowledgeList();
