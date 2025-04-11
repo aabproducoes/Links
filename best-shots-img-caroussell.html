@@ -2,103 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- Responsive meta tag -->
+  <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>BestSHots Carousel</title>
+  <title>Full-Page BestSHots Carousel</title>
   <style>
-    /* General reset and basic styling */
-    * { box-sizing: border-box; }
-    body {
+    /* Reset some defaults */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
       font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
     }
-    /* Carousel container styling */
+    /* Full-page carousel container */
     .carousel {
       position: relative;
-      max-width: 800px;
-      width: 90%;
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      background: #fff;
+      background: #000;
     }
+    /* Flex container for slides */
     .carousel ul {
       display: flex;
+      height: 100%;
       margin: 0;
       padding: 0;
       list-style: none;
       transition: transform 0.7s ease-in-out;
     }
+    /* Each slide takes up one full viewport */
     .carousel li {
       min-width: 100%;
+      height: 100%;
+      position: relative;
     }
+    /* Ensure images cover the entire slide area */
     .carousel img {
       width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      border: none;
     }
-    /* Navigation button styling */
+    /* Navigation buttons positioned on the left/right of the viewport */
     .controls {
       position: absolute;
       top: 50%;
       width: 100%;
+      padding: 0 30px;
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
-      padding: 0 20px;
+      z-index: 1;
     }
     .controls button {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       color: #fff;
-      border: none;
-      padding: 10px 15px;
-      font-size: 18px;
+      border: 2px solid #fff;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
+      font-size: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.3s;
+      outline: none;
     }
     .controls button:hover {
       background: rgba(0, 0, 0, 0.8);
+      transform: scale(1.1);
     }
-    /* Indicator dots styling */
+    /* Indicator nav bar styled as clickable dots */
     .indicators {
       position: absolute;
-      bottom: 10px;
+      bottom: 20px;
       width: 100%;
-      text-align: center;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      z-index: 1;
     }
     .indicators span {
-      display: inline-block;
-      height: 10px;
-      width: 10px;
-      margin: 0 4px;
-      background: rgba(0, 0, 0, 0.5);
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.3s;
     }
     .indicators span.active {
-      background: #fff;
-    }
-    /* Responsive adjustments */
-    @media (max-width: 600px) {
-      .controls button {
-        padding: 8px 12px;
-        font-size: 16px;
-      }
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.2);
     }
   </style>
 </head>
 <body>
   <div class="carousel">
     <ul id="carouselList">
-      <!-- Images from the GitHub BestShots directory using raw URLs -->
+      <!-- Replace these URLs if needed -->
       <li><img src="https://raw.githubusercontent.com/aabproducoes/Links/main/BestShots/BestSHots%20(1).JPG" alt="BestSHots 1"></li>
       <li><img src="https://raw.githubusercontent.com/aabproducoes/Links/main/BestShots/BestSHots%20(2).JPG" alt="BestSHots 2"></li>
       <li><img src="https://raw.githubusercontent.com/aabproducoes/Links/main/BestShots/BestSHots%20(3).JPG" alt="BestSHots 3"></li>
@@ -112,16 +115,13 @@
       <li><img src="https://raw.githubusercontent.com/aabproducoes/Links/main/BestShots/BestSHots%20(11).JPG" alt="BestSHots 11"></li>
       <li><img src="https://raw.githubusercontent.com/aabproducoes/Links/main/BestShots/BestSHots%20(12).JPG" alt="BestSHots 12"></li>
       <li><img src="https://raw.githubusercontent.com/aabproducoes/Links/main/BestShots/BestSHots%20(13).JPG" alt="BestSHots 13"></li>
-      <!-- Add more list items here to expand the carousel -->
     </ul>
-    
-    <!-- Navigation controls -->
+    <!-- Navigation buttons -->
     <div class="controls">
       <button id="prevBtn">&#10094;</button>
       <button id="nextBtn">&#10095;</button>
     </div>
-    
-    <!-- Indicator dots -->
+    <!-- Clickable indicator dots -->
     <div class="indicators" id="indicators"></div>
   </div>
 
@@ -134,46 +134,46 @@
     const totalImages = carouselList.children.length;
     let autoplayInterval;
 
-    // Dynamically generate indicator dots
+    // Create clickable indicator dots dynamically based on total slides
     for (let i = 0; i < totalImages; i++) {
       const dot = document.createElement('span');
       dot.dataset.index = i;
       if (i === 0) dot.classList.add('active');
       indicatorsContainer.appendChild(dot);
     }
-    
-    // Update active indicator based on current slide
+
+    // Update the active state for indicator dots
     function updateIndicators(index) {
       document.querySelectorAll('.indicators span').forEach(dot => {
         dot.classList.remove('active');
       });
       document.querySelectorAll('.indicators span')[index].classList.add('active');
     }
-    
-    // Update carousel slide position
+
+    // Update slide position based on current index
     function updateCarousel() {
       carouselList.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
       updateIndicators(currentIndex);
     }
-    
-    // Autoplay functionality: advance slide every few seconds
+
+    // Autoplay function to move slides every 5 seconds
     function startAutoplay() {
       autoplayInterval = setInterval(() => {
         currentIndex = (currentIndex + 1) % totalImages;
         updateCarousel();
-      }, 4000); // Change slide every 4 seconds
+      }, 5000);
     }
-    
+
     function stopAutoplay() {
       clearInterval(autoplayInterval);
     }
 
-    // Navigation events
+    // Navigation button events
     nextBtn.addEventListener('click', () => {
       currentIndex = (currentIndex + 1) % totalImages;
       updateCarousel();
       stopAutoplay();
-      startAutoplay(); // Restart autoplay after manual action
+      startAutoplay();
     });
 
     prevBtn.addEventListener('click', () => {
@@ -183,17 +183,17 @@
       startAutoplay();
     });
 
-    // Allow clicking on indicators to navigate to a specific slide
+    // Allow clicking on any indicator dot to jump directly to that slide
     document.querySelectorAll('.indicators span').forEach(dot => {
-      dot.addEventListener('click', (e) => {
-        currentIndex = parseInt(e.target.dataset.index);
+      dot.addEventListener('click', function() {
+        currentIndex = parseInt(this.dataset.index);
         updateCarousel();
         stopAutoplay();
         startAutoplay();
       });
     });
 
-    // Initialize autoplay on page load
+    // Start autoplay when page loads
     startAutoplay();
   </script>
 </body>
