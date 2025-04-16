@@ -1,905 +1,904 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Visualizer with Stereo Visualizers, Equalizer & Playlist</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: #000;
-      height: 100%;
-      font-family: Arial, sans-serif;
-    }
-    #controls {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 10;
-      color: #fff;
-      text-align: center;
-    }
-    .top-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 5px;
-    }
-    #visualizationSelect, #fileName {
-      font-size: 16px;
-    }
-    #playlistContainer {
-      margin: 5px 0;
-    }
-    #playlistSelect {
-      font-size: 16px;
-      padding: 2px;
-    }
-    .music-controls {
-      margin: 5px 0;
-    }
-    .music-controls button {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      padding: 4px;
-      margin: 0 5px;
-      color: #00ff00;
-    }
-    .music-controls svg {
-      width: 28px;
-      height: 28px;
-      vertical-align: middle;
-    }
-    #colorControls {
-      display: flex;
-      gap: 40px;
-      justify-content: center;
-      margin-top: 10px;
-    }
-    .color-group {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .color-group span {
-      font-size: 16px;
-    }
-    .color-container {
-      display: inline-flex;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-    .color-item {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-    }
-    .color-item input[type="color"] {
-      width: 30px;
-      height: 30px;
-      border: none;
-      padding: 0;
-      margin: 0;
-      background: transparent;
-    }
-    .color-item button {
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button.add-color {
-      background: transparent;
-      border: 1px solid #fff;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      padding: 2px 6px;
-      margin-left: 5px;
-    }
-    #configRow {
-      margin-top: 10px;
-    }
-    #configRow button {
-      font-size: 16px;
-      padding: 4px 8px;
-      margin: 0 5px;
-      cursor: pointer;
-    }
-    #visualizerCanvas {
-      display: block;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .drop-highlight-green {
-      animation: blinkGreen 1s infinite;
-    }
-    .drop-highlight-red {
-      animation: blinkRed 1s infinite;
-    }
-    @keyframes blinkGreen {
-      0%   { outline: 5px solid lime; }
-      50%  { outline: 5px solid transparent; }
-      100% { outline: 5px solid lime; }
-    }
-    @keyframes blinkRed {
-      0%   { outline: 5px solid red; }
-      50%  { outline: 5px solid transparent; }
-      100% { outline: 5px solid red; }
-    }
-    /* Equalizer Styles */
-    #equalizerControls {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 10px;
-      border-radius: 5px;
-    }
-    #equalizerControls h3 {
-      margin: 0 0 10px 0;
-      font-size: 16px;
-    }
-    .eq-sliders {
-      display: flex;
-      gap: 10px;
-    }
-    .eq-slider {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 12px;
-    }
-    .eq-slider input[type="range"] {
-      writing-mode: bt-lr;
-      -webkit-appearance: slider-vertical;
-      width: 8px;
-      height: 100px;
-      padding: 0 5px;
-    }
-    /* Help Text */
-    #helpText {
-      margin-top: 10px;
-      font-size: 14px;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 10px;
-      border-radius: 5px;
-      max-width: 400px;
-    }
-  </style>
+ <meta charset="UTF-8">
+ <title>Visualizer with Stereo Visualizers, Equalizer & Playlist</title>
+ <style>
+ html, body {
+ margin: 0;
+ padding: 0;
+ overflow: hidden;
+ background: #000;
+ height: 100%;
+ font-family: Arial, sans-serif;
+ }
+ #controls {
+ position: absolute;
+ top: 10px;
+ left: 50%;
+ transform: translateX(-50%);
+ z-index: 10;
+ color: #fff;
+ text-align: center;
+ }
+ .top-row {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ margin-bottom: 5px;
+ }
+ #visualizationSelect, #fileName {
+ font-size: 16px;
+ }
+ #playlistContainer {
+ margin: 5px 0;
+ }
+ #playlistSelect {
+ font-size: 16px;
+ padding: 2px;
+ }
+ .music-controls {
+ margin: 5px 0;
+ }
+ .music-controls button {
+ background: transparent;
+ border: none;
+ cursor: pointer;
+ padding: 4px;
+ margin: 0 5px;
+ color: #00ff00;
+ }
+ .music-controls svg {
+ width: 28px;
+ height: 28px;
+ vertical-align: middle;
+ }
+ #colorControls {
+ display: flex;
+ gap: 40px;
+ justify-content: center;
+ margin-top: 10px;
+ }
+ .color-group {
+ display: flex;
+ align-items: center;
+ gap: 5px;
+ }
+ .color-group span {
+ font-size: 16px;
+ }
+ .color-container {
+ display: inline-flex;
+ gap: 5px;
+ flex-wrap: wrap;
+ }
+ .color-item {
+ display: flex;
+ align-items: center;
+ gap: 2px;
+ }
+ .color-item input[type="color"] {
+ width: 30px;
+ height: 30px;
+ border: none;
+ padding: 0;
+ margin: 0;
+ background: transparent;
+ }
+ .color-item button {
+ background: transparent;
+ border: none;
+ color: #fff;
+ font-size: 16px;
+ cursor: pointer;
+ }
+ button.add-color {
+ background: transparent;
+ border: 1px solid #fff;
+ color: #fff;
+ font-size: 16px;
+ cursor: pointer;
+ padding: 2px 6px;
+ margin-left: 5px;
+ }
+ #configRow {
+ margin-top: 10px;
+ }
+ #configRow button {
+ font-size: 16px;
+ padding: 4px 8px;
+ margin: 0 5px;
+ cursor: pointer;
+ }
+ #visualizerCanvas {
+ display: block;
+ position: absolute;
+ top: 0;
+ left: 0;
+ }
+ .drop-highlight-green {
+ animation: blinkGreen 1s infinite;
+ }
+ .drop-highlight-red {
+ animation: blinkRed 1s infinite;
+ }
+ @keyframes blinkGreen {
+ 0% { outline: 5px solid lime; }
+ 50% { outline: 5px solid transparent; }
+ 100% { outline: 5px solid lime; }
+ }
+ @keyframes blinkRed {
+ 0% { outline: 5px solid red; }
+ 50% { outline: 5px solid transparent; }
+ 100% { outline: 5px solid red; }
+ }
+ #equalizerControls {
+ margin-top: 10px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ background: rgba(0, 0, 0, 0.7);
+ padding: 10px;
+ border-radius: 5px;
+ }
+ #equalizerControls h3 {
+ margin: 0 0 10px 0;
+ font-size: 16px;
+ }
+ .eq-sliders {
+ display: flex;
+ gap: 10px;
+ }
+ .eq-slider {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ font-size: 12px;
+ }
+ .eq-slider input[type="range"] {
+ writing-mode: bt-lr;
+ -webkit-appearance: slider-vertical;
+ width: 8px;
+ height: 100px;
+ padding: 0 5px;
+ }
+ #helpText {
+ margin-top: 10px;
+ font-size: 14px;
+ background: rgba(0, 0, 0, 0.7);
+ padding: 10px;
+ border-radius: 5px;
+ max-width: 400px;
+ }
+ </style>
 </head>
 <body>
-  <div id="controls">
-    <div class="top-row">
-      <select id="visualizationSelect">
-        <option value="bars">Bars</option>
-        <option value="waves">Waves</option>
-        <option value="circles">Circles</option>
-        <option value="pattern1">Pattern 1</option>
-        <option value="pattern2">Pattern 2</option>
-        <option value="radial">Radial</option>
-        <option value="spiral">Spiral</option>
-        <option value="equalizer">Equalizer</option>
-        <option value="waveform">Waveform</option>
-        <option value="dots">Dots</option>
-        <option value="symmetricBars">Symmetric Bars</option>
-        <option value="symmetricWaves">Symmetric Waves</option>
-        <option value="symmetricCircles">Symmetric Circles</option>
-        <option value="stereoBars">Stereo Bars</option>
-        <option value="stereoWaves">Stereo Waves</option>
-        <option value="stereoCircles">Stereo Circles</option>
-      </select>
-      <span id="fileName"></span>
-    </div>
-    <div id="playlistContainer">
-      <select id="playlistSelect"></select>
-    </div>
-    <div class="music-controls" id="musicControls">
-      <button id="prevBtn" title="Previous">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <polygon points="11,19 11,5 4,12" fill="currentColor" />
-          <polygon points="20,19 20,5 13,12" fill="currentColor" />
-        </svg>
-      </button>
-      <button id="playBtn" title="Play">
-        <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <polygon points="8,5 19,12 8,19" fill="currentColor" />
-        </svg>
-      </button>
-      <button id="stopBtn" title="Stop">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <rect x="6" y="6" width="12" height="12" fill="currentColor" />
-        </svg>
-      </button>
-      <button id="nextBtn" title="Next">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <polygon points="4,19 4,5 11,12" fill="currentColor" />
-          <polygon points="13,19 13,5 20,12" fill="currentColor" />
-        </svg>
-      </button>
-    </div>
-    <div id="colorControls">
-      <div id="visualizerColorGroup" class="color-group">
-        <span>Main Colors:</span>
-        <div id="visualizerColors" class="color-container"></div>
-        <button id="addVisualizerColor" class="add-color">+</button>
-      </div>
-      <div id="borderColorGroup" class="color-group">
-        <span>Border Colors:</span>
-        <div id="borderColors" class="color-container"></div>
-        <button id="addBorderColor" class="add-color">+</button>
-      </div>
-    </div>
-    <div id="configRow">
-      <button id="saveConfigFile">Save Config File</button>
-      <button id="loadConfigFile">Load Config File</button>
-      <input type="file" id="configFileInput" accept=".txt" style="display: none;">
-    </div>
-    <div id="equalizerControls">
-      <h3>Equalizer</h3>
-      <div class="eq-sliders" id="eqSliders"></div>
-    </div>
-    <div id="helpText">
-      <p><strong>Drag & Drop:</strong> Drop audio files (.mp3) or playlist files (.txt with .mp3 URLs) anywhere on the screen to add to the playlist.</p>
-    </div>
-  </div>
-  <canvas id="visualizerCanvas"></canvas>
-  <audio id="audio" crossorigin="anonymous"></audio>
+ <div id="controls">
+ <div class="top-row">
+ <select id="visualizationSelect">
+ <option value="bars">Bars</option>
+ <option value="waves">Waves</option>
+ <option value="circles">Circles</option>
+ <option value="pattern1">Pattern 1</option>
+ <option value="pattern2">Pattern 2</option>
+ <option value="radial">Radial</option>
+ <option value="spiral">Spiral</option>
+ <option value="equalizer">Equalizer</option>
+ <option value="waveform">Waveform</option>
+ <option value="dots">Dots</option>
+ <option value="symmetricBars">Symmetric Bars</option>
+ <option value="symmetricWaves">Symmetric Waves</option>
+ <option value="symmetricCircles">Symmetric Circles</option>
+ <option value="stereoBars">Stereo Bars</option>
+ <option value="stereoWaves">Stereo Waves</option>
+ <option value="stereoCircles">Stereo Circles</option>
+ </select>
+ <span id="fileName"></span>
+ </div>
+ <div id="playlistContainer">
+ <select id="playlistSelect"></select>
+ </div>
+ <div class="music-controls" id="musicControls">
+ <button id="prevBtn" title="Previous">
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+ <polygon points="11,19 11,5 4,12" fill="currentColor" />
+ <polygon points="20,19 20,5 13,12" fill="currentColor" />
+ </svg>
+ </button>
+ <button id="playBtn" title="Play">
+ <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+ <polygon points="8,5 19,12 8,19" fill="currentColor" />
+ </svg>
+ </button>
+ <button id="stopBtn" title="Stop">
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+ <rect x="6" y="6" width="12" height="12" fill="currentColor" />
+ </svg>
+ </button>
+ <button id="nextBtn" title="Next">
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+ <polygon points="4,19 4,5 11,12" fill="currentColor" />
+ <polygon points="13,19 13,5 20,12" fill="currentColor" />
+ </svg>
+ </button>
+ </div>
+ <div id="colorControls">
+ <div id="visualizerColorGroup" class="color-group">
+ <span>Main Colors:</span>
+ <div id="visualizerColors" class="color-container"></div>
+ <button id="addVisualizerColor" class="add-color">+</button>
+ </div>
+ <div id="borderColorGroup" class="color-group">
+ <span>Border Colors:</span>
+ <div id="borderColors" class="color-container"></div>
+ <button id="addBorderColor" class="add-color">+</button>
+ </div>
+ </div>
+ <div id="configRow">
+ <button id="saveConfigFile">Save Config File</button>
+ <button id="loadConfigFile">Load Config File</button>
+ <input type="file" id="configFileInput" accept=".txt" style="display: none;">
+ </div>
+ <div id="equalizerControls">
+ <h3>Equalizer</h3>
+ <div class="eq-sliders" id="eqSliders"></div>
+ </div>
+ <div id="helpText">
+ <p><strong>Drag & Drop:</strong> Drop audio files (.mp3) or playlist files (.txt with .mp3 URLs) anywhere on the screen to add to the playlist.</p>
+ <p><strong>NCS Music:</strong> Preloaded tracks are from NoCopyrightSounds, free for creators. Please credit the artist, track, and NCS when using (see <a href="http://ncs.io/UsagePolicy" style="color: #00ff00;">NCS Usage Policy</a>).</p>
+ </div>
+ </div>
+ <canvas id="visualizerCanvas"></canvas>
+ <audio id="audio" crossorigin="anonymous"></audio>
 
-  <script>
-    // -- Playlist Variables with NCS Music --
-    let playlist = [
-      { name: "Tobu - Candyland", url: "https://www.youtube.com/watch?v=Ixds-ZR3_98", isFile: false },
-      { name: "Cartoon - On & On (feat. Daniel Levi)", url: "https://www.youtube.com/watch?v=K4DyBUG242c", isFile: false },
-      { name: "DEAF KEV - Invincible", url: "https://www.youtube.com/watch?v=J2X5mJ3HDYE", isFile: false },
-      { name: "Disfigure - Blank", url: "https://www.youtube.com/watch?v=papuvlVeZg8", isFile: false },
-      { name: "Alan Walker - Fade", url: "https://www.youtube.com/watch?v=bM7SZ5SBzyY", isFile: false }
-    ];
-    let currentTrackIndex = 0;
+ <script>
+ // -- Playlist Variables with NCS Music .mp3 URLs --
+ let playlist = [
+ { name: "Zain Conor & Drivvin - What I Never Had", url: "https://archive.org/download/nocopyrightsounds_2017/Zain%20Conor%20%26%20Drivvin%20-%20What%20I%20Never%20Had%20%28feat.%20Michael%20Zhonga%29%20%5BPrivated%20NCS%20Release%5D.mp3", isFile: false },
+ { name: "Zookeepers & Heuse - Mercury", url: "https://archive.org/download/nocopyrightsounds_2017/Zookeepers%20%26%20Heuse%20-%20Mercury%20%5BNCS%20Release%5D.mp3", isFile: false },
+ { name: "bvd kult - Made Of Something", url: "https://archive.org/download/nocopyrightsounds_2017/bvd%20kult%20-%20Made%20Of%20Something%20%28feat.%20Will%20Heggadon%29%20%5BNCS%20Release%5D%20%281%29.mp3", isFile: false },
+ { name: "Tobu - Hope", url: "https://www.bensound.com/bensound-music/bensound-happyrock.mp3", isFile: false }, // Fallback: Bensound royalty-free track
+ { name: "Cartoon - On & On", url: "https://www.bensound.com/bensound-music/bensound-summer.mp3", isFile: false } // Fallback: Bensound royalty-free track
+ ];
+ let currentTrackIndex = 0;
 
-    // -- Helper functions for gradients and icon color --
-    function getMainColorStyle() {
-      const colorInputs = document.querySelectorAll('#visualizerColors input[type="color"]');
-      const colors = Array.from(colorInputs).map(input => input.value);
-      if (colors.length === 0) return "#00ff00";
-      if (colors.length === 1) return colors[0];
-      let grad = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-      colors.forEach((col, i) => {
-        grad.addColorStop(i / (colors.length - 1), col);
-      });
-      return grad;
-    }
-    function getBorderColorStyle() {
-      const colorInputs = document.querySelectorAll('#borderColors input[type="color"]');
-      const colors = Array.from(colorInputs).map(input => input.value);
-      if (colors.length === 0) return "#00ff00";
-      if (colors.length === 1) return colors[0];
-      let grad = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
-      colors.forEach((col, i) => {
-        grad.addColorStop(i / (colors.length - 1), col);
-      });
-      return grad;
-    }
-    function getFirstMainColor() {
-      const firstInput = document.querySelector('#visualizerColors input[type="color"]');
-      return firstInput ? firstInput.value : "#00ff00";
-    }
-    function updateIconColors() {
-      const firstMainColor = getFirstMainColor();
-      const musicControlButtons = document.querySelectorAll('.music-controls button');
-      musicControlButtons.forEach(button => {
-        button.style.color = firstMainColor;
-      });
-    }
+ // -- Helper functions for gradients and icon color --
+ function getMainColorStyle() {
+ const colorInputs = document.querySelectorAll('#visualizerColors input[type="color"]');
+ const colors = Array.from(colorInputs).map(input => input.value);
+ if (colors.length === 0) return "#00ff00";
+ if (colors.length === 1) return colors[0];
+ let grad = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+ colors.forEach((col, i) => {
+ grad.addColorStop(i / (colors.length - 1), col);
+ });
+ return grad;
+ }
+ function getBorderColorStyle() {
+ const colorInputs = document.querySelectorAll('#borderColors input[type="color"]');
+ const colors = Array.from(colorInputs).map(input => input.value);
+ if (colors.length === 0) return "#00ff00";
+ if (colors.length === 1) return colors[0];
+ let grad = ctx.createLinearGradient(0, 0, WIDTH, HEIGHT);
+ colors.forEach((col, i) => {
+ grad.addColorStop(i / (colors.length - 1), col);
+ });
+ return grad;
+ }
+ function getFirstMainColor() {
+ const firstInput = document.querySelector('#visualizerColors input[type="color"]');
+ return firstInput ? firstInput.value : "#00ff00";
+ }
+ function updateIconColors() {
+ const firstMainColor = getFirstMainColor();
+ const musicControlButtons = document.querySelectorAll('.music-controls button');
+ musicControlButtons.forEach(button => {
+ button.style.color = firstMainColor;
+ });
+ }
 
-    // -- Setup initial color pickers --
-    function createColorItem(initialColor) {
-      const div = document.createElement('div');
-      div.className = 'color-item';
-      const input = document.createElement('input');
-      input.type = 'color';
-      input.value = initialColor;
-      input.addEventListener('input', updateIconColors);
-      const removeBtn = document.createElement('button');
-      removeBtn.textContent = '×';
-      removeBtn.addEventListener('click', function() {
-        if (div.parentElement.querySelectorAll('.color-item').length > 1) {
-          div.remove();
-          updateIconColors();
-        }
-      });
-      div.appendChild(input);
-      div.appendChild(removeBtn);
-      return div;
-    }
-    const visualizerColorsContainer = document.getElementById('visualizerColors');
-    const borderColorsContainer = document.getElementById('borderColors');
-    visualizerColorsContainer.appendChild(createColorItem("#00ff00"));
-    borderColorsContainer.appendChild(createColorItem("#00ff00"));
-    document.getElementById('addVisualizerColor').addEventListener('click', function() {
-      visualizerColorsContainer.appendChild(createColorItem("#00ff00"));
-      updateIconColors();
-    });
-    document.getElementById('addBorderColor').addEventListener('click', function() {
-      borderColorsContainer.appendChild(createColorItem("#00ff00"));
-    });
+ // -- Setup initial color pickers --
+ function createColorItem(initialColor) {
+ const div = document.createElement('div');
+ div.className = 'color-item';
+ const input = document.createElement('input');
+ input.type = 'color';
+ input.value = initialColor;
+ input.addEventListener('input', updateIconColors);
+ const removeBtn = document.createElement('button');
+ removeBtn.textContent = '×';
+ removeBtn.addEventListener('click', function() {
+ if (div.parentElement.querySelectorAll('.color-item').length > 1) {
+ div.remove();
+ updateIconColors();
+ }
+ });
+ div.appendChild(input);
+ div.appendChild(removeBtn);
+ return div;
+ }
+ const visualizerColorsContainer = document.getElementById('visualizerColors');
+ const borderColorsContainer = document.getElementById('borderColors');
+ visualizerColorsContainer.appendChild(createColorItem("#00ff00"));
+ borderColorsContainer.appendChild(createColorItem("#00ff00"));
+ document.getElementById('addVisualizerColor').addEventListener('click', function() {
+ visualizerColorsContainer.appendChild(createColorItem("#00ff00"));
+ updateIconColors();
+ });
+ document.getElementById('addBorderColor').addEventListener('click', function() {
+ borderColorsContainer.appendChild(createColorItem("#00ff00"));
+ });
 
-    // -- Playlist select update --
-    const playlistSelect = document.getElementById('playlistSelect');
-    function updatePlaylistSelect() {
-      playlistSelect.innerHTML = "";
-      playlist.forEach((item, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = item.name;
-        playlistSelect.appendChild(option);
-      });
-      playlistSelect.selectedIndex = currentTrackIndex;
-    }
-    playlistSelect.addEventListener('change', function() {
-      currentTrackIndex = parseInt(this.value);
-      loadTrack(currentTrackIndex);
-      audio.play();
-    });
+ // -- Playlist select update --
+ const playlistSelect = document.getElementById('playlistSelect');
+ function updatePlaylistSelect() {
+ playlistSelect.innerHTML = "";
+ playlist.forEach((item, index) => {
+ const option = document.createElement('option');
+ option.value = index;
+ option.textContent = item.name;
+ playlistSelect.appendChild(option);
+ });
+ playlistSelect.selectedIndex = currentTrackIndex;
+ }
+ playlistSelect.addEventListener('change', function() {
+ currentTrackIndex = parseInt(this.value);
+ loadTrack(currentTrackIndex);
+ audio.play();
+ });
 
-    // -- Canvas and Audio Setup --
-    const canvas = document.getElementById('visualizerCanvas');
-    const ctx = canvas.getContext('2d');
-    const select = document.getElementById('visualizationSelect');
-    const fileNameDisplay = document.getElementById('fileName');
-    const audio = document.getElementById('audio');
+ // -- Canvas and Audio Setup --
+ const canvas = document.getElementById('visualizerCanvas');
+ const ctx = canvas.getContext('2d');
+ const select = document.getElementById('visualizationSelect');
+ const fileNameDisplay = document.getElementById('fileName');
+ const audio = document.getElementById('audio');
 
-    let WIDTH, HEIGHT;
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      WIDTH = canvas.width;
-      HEIGHT = canvas.height;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+ let WIDTH, HEIGHT;
+ function resizeCanvas() {
+ canvas.width = window.innerWidth;
+ canvas.height = window.innerHeight;
+ WIDTH = canvas.width;
+ HEIGHT = canvas.height;
+ }
+ window.addEventListener('resize', resizeCanvas);
+ resizeCanvas();
 
-    // -- Audio Context, Analyser, Equalizer, and Stereo Setup --
-    let audioContext, source, analyser, leftAnalyser, rightAnalyser, dataArray, leftDataArray, rightDataArray;
-    let filters = [];
-    function initAudio() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        source = audioContext.createMediaElementSource(audio);
+ // -- Audio Context, Analyser, Equalizer, and Stereo Setup --
+ let audioContext, source, analyser, leftAnalyser, rightAnalyser, dataArray, leftDataArray, rightDataArray;
+ let filters = [];
+ function initAudio() {
+ if (!audioContext) {
+ audioContext = new (window.AudioContext || window.webkitAudioContext)();
+ source = audioContext.createMediaElementSource(audio);
 
-        // Equalizer setup
-        const frequencies = [60, 170, 310, 600, 1000, 3000, 6000, 12000];
-        filters = frequencies.map(freq => {
-          const filter = audioContext.createBiquadFilter();
-          filter.type = freq <= 1000 ? 'peaking' : 'highshelf';
-          filter.frequency.setValueAtTime(freq, audioContext.currentTime);
-          filter.gain.setValueAtTime(0, audioContext.currentTime);
-          filter.Q.setValueAtTime(1, audioContext.currentTime);
-          return filter;
-        });
+ // Equalizer setup
+ const frequencies = [60, 170, 310, 600, 1000, 3000, 6000, 12000];
+ filters = frequencies.map(freq => {
+ const filter = audioContext.createBiquadFilter();
+ filter.type = freq <= 1000 ? 'peaking' : 'highshelf';
+ filter.frequency.setValueAtTime(freq, audioContext.currentTime);
+ filter.gain.setValueAtTime(0, audioContext.currentTime);
+ filter.Q.setValueAtTime(1, audioContext.currentTime);
+ return filter;
+ });
 
-        // Chain filters
-        let lastNode = source;
-        filters.forEach(filter => {
-          lastNode.connect(filter);
-          lastNode = filter;
-        });
+ // Chain filters
+ let lastNode = source;
+ filters.forEach(filter => {
+ lastNode.connect(filter);
+ lastNode = filter;
+ });
 
-        // Create mono analyser
-        analyser = audioContext.createAnalyser();
-        analyser.fftSize = 256;
-        lastNode.connect(analyser);
+ // Create mono analyser
+ analyser = audioContext.createAnalyser();
+ analyser.fftSize = 256;
+ lastNode.connect(analyser);
 
-        // Stereo setup
-        const splitter = audioContext.createChannelSplitter(2);
-        lastNode.connect(splitter);
-        leftAnalyser = audioContext.createAnalyser();
-        rightAnalyser = audioContext.createAnalyser();
-        leftAnalyser.fftSize = 256;
-        rightAnalyser.fftSize = 256;
-        splitter.connect(leftAnalyser, 0);
-        splitter.connect(rightAnalyser, 1);
+ // Stereo setup
+ const splitter = audioContext.createChannelSplitter(2);
+ lastNode.connect(splitter);
+ leftAnalyser = audioContext.createAnalyser();
+ rightAnalyser = audioContext.createAnalyser();
+ leftAnalyser.fftSize = 256;
+ rightAnalyser.fftSize = 256;
+ splitter.connect(leftAnalyser, 0);
+ splitter.connect(rightAnalyser, 1);
 
-        // Connect to destination
-        lastNode.connect(audioContext.destination);
+ // Connect to destination
+ lastNode.connect(audioContext.destination);
 
-        dataArray = new Uint8Array(analyser.frequencyBinCount);
-        leftDataArray = new Uint8Array(leftAnalyser.frequencyBinCount);
-        rightDataArray = new Uint8Array(rightAnalyser.frequencyBinCount);
+ dataArray = new Uint8Array(analyser.frequencyBinCount);
+ leftDataArray = new Uint8Array(leftAnalyser.frequencyBinCount);
+ rightDataArray = new Uint8Array(rightAnalyser.frequencyBinCount);
 
-        // Initialize equalizer sliders
-        initEqualizerControls();
-      }
-    }
+ // Initialize equalizer sliders
+ initEqualizerControls();
+ }
+ }
 
-    // -- Equalizer Controls --
-    function initEqualizerControls() {
-      const eqSliders = document.getElementById('eqSliders');
-      const frequencies = ['60Hz', '170Hz', '310Hz', '600Hz', '1kHz', '3kHz', '6kHz', '12kHz'];
-      filters.forEach((filter, index) => {
-        const sliderDiv = document.createElement('div');
-        sliderDiv.className = 'eq-slider';
-        const label = document.createElement('span');
-        label.textContent = frequencies[index];
-        const slider = document.createElement('input');
-        slider.type = 'range';
-        slider.min = -12;
-        slider.max = 12;
-        slider.value = 0;
-        slider.step = 0.1;
-        slider.addEventListener('input', () => {
-          filter.gain.setValueAtTime(slider.value, audioContext.currentTime);
-        });
-        sliderDiv.appendChild(slider);
-        sliderDiv.appendChild(label);
-        eqSliders.appendChild(sliderDiv);
-      });
-    }
+ // -- Equalizer Controls --
+ function initEqualizerControls() {
+ const eqSliders = document.getElementById('eqSliders');
+ const frequencies = ['60Hz', '170Hz', '310Hz', '600Hz', '1kHz', '3kHz', '6kHz', '12kHz'];
+ filters.forEach((filter, index) => {
+ const sliderDiv = document.createElement('div');
+ sliderDiv.className = 'eq-slider';
+ const label = document.createElement('span');
+ label.textContent = frequencies[index];
+ const slider = document.createElement('input');
+ slider.type = 'range';
+ slider.min = -12;
+ slider.max = 12;
+ slider.value = 0;
+ slider.step = 0.1;
+ slider.addEventListener('input', () => {
+ filter.gain.setValueAtTime(slider.value, audioContext.currentTime);
+ });
+ sliderDiv.appendChild(slider);
+ sliderDiv.appendChild(label);
+ eqSliders.appendChild(sliderDiv);
+ });
+ }
 
-    // -- Visualizer Functions --
-    const visualizers = {
-      bars: function(data) {
-        const barWidth = (WIDTH / data.length) * 2.5;
-        let x = 0;
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        for (let i = 0; i < data.length; i++) {
-          const barHeight = data[i];
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-          x += barWidth + 1;
-        }
-      },
-      waves: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx.beginPath();
-        ctx.moveTo(0, HEIGHT / 2);
-        for (let i = 0; i < data.length; i++) {
-          const x = i * (WIDTH / data.length);
-          const y = HEIGHT / 2 + data[i] - 128;
-          ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = getBorderColorStyle();
-        ctx.stroke();
-      },
-      circles: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        const maxRadius = Math.min(WIDTH, HEIGHT) / 4;
-        for (let i = 0; i < data.length; i++) {
-          const radius = (data[i] / 255) * maxRadius;
-          ctx.beginPath();
-          ctx.arc(WIDTH / 2, HEIGHT / 2, radius, 0, Math.PI * 2);
-          ctx.strokeStyle = getBorderColorStyle();
-          ctx.stroke();
-        }
-      },
-      pattern1: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        for (let i = 0; i < data.length; i++) {
-          const x = (i % 10) * (WIDTH / 10);
-          const y = Math.floor(i / 10) * (HEIGHT / 10);
-          const size = (data[i] / 255) * (WIDTH / 20);
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fillRect(x, y, size, size);
-        }
-      },
-      pattern2: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        for (let i = 0; i < data.length; i++) {
-          const angle = i / data.length * Math.PI * 2;
-          const radius = (data[i] / 255) * (Math.min(WIDTH, HEIGHT) / 3);
-          const x = WIDTH / 2 + radius * Math.cos(angle);
-          const y = HEIGHT / 2 + radius * Math.sin(angle);
-          ctx.beginPath();
-          ctx.arc(x, y, 5, 0, Math.PI * 2);
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fill();
-        }
-      },
-      radial: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        const centerX = WIDTH / 2, centerY = HEIGHT / 2;
-        const baseRadius = Math.min(WIDTH, HEIGHT) / 4;
-        for (let i = 0; i < data.length; i++) {
-          const angle = (i / data.length) * Math.PI * 2;
-          const barHeight = (data[i] / 255) * 100;
-          const x1 = centerX + baseRadius * Math.cos(angle);
-          const y1 = centerY + baseRadius * Math.sin(angle);
-          const x2 = centerX + (baseRadius + barHeight) * Math.cos(angle);
-          const y2 = centerY + (baseRadius + barHeight) * Math.sin(angle);
-          ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          ctx.strokeStyle = getBorderColorStyle();
-          ctx.stroke();
-        }
-      },
-      spiral: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        const centerX = WIDTH / 2, centerY = HEIGHT / 2;
-        ctx.beginPath();
-        let angle = 0;
-        let radius = 0;
-        for (let i = 0; i < data.length; i++) {
-          angle += 0.3;
-          radius += (data[i] / 255) * 2;
-          const x = centerX + radius * Math.cos(angle);
-          const y = centerY + radius * Math.sin(angle);
-          ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = getBorderColorStyle();
-        ctx.stroke();
-      },
-      equalizer: function(data) {
-        const barWidth = WIDTH / data.length;
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        for (let i = 0; i < data.length; i++) {
-          const barHeight = (data[i] / 255) * HEIGHT;
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fillRect(i * barWidth, HEIGHT - barHeight, barWidth - 2, barHeight);
-        }
-      },
-      waveform: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx.beginPath();
-        const sliceWidth = WIDTH / data.length;
-        let x = 0;
-        for (let i = 0; i < data.length; i++) {
-          const v = data[i] / 128.0;
-          const y = v * HEIGHT / 2;
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-          x += sliceWidth;
-        }
-        ctx.strokeStyle = getBorderColorStyle();
-        ctx.stroke();
-      },
-      dots: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        for (let i = 0; i < data.length; i++) {
-          const x = Math.random() * WIDTH;
-          const y = Math.random() * HEIGHT;
-          const size = (data[i] / 255) * 10;
-          ctx.beginPath();
-          ctx.arc(x, y, size, 0, Math.PI * 2);
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fill();
-        }
-      },
-      symmetricBars: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        let halfWidth = WIDTH / 2;
-        let barWidth = (halfWidth / data.length) * 2.5;
-        for (let i = 0; i < data.length; i++) {
-          const barHeight = data[i];
-          let xLeft = i * (barWidth + 1);
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fillRect(xLeft, HEIGHT - barHeight, barWidth, barHeight);
-          let xRight = WIDTH - xLeft - barWidth;
-          ctx.fillRect(xRight, HEIGHT - barHeight, barWidth, barHeight);
-        }
-      },
-      symmetricWaves: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx.beginPath();
-        let half = Math.floor(data.length / 2);
-        for (let i = 0; i < half; i++) {
-          let x = i * (WIDTH / 2 / half);
-          let y = HEIGHT / 2 + data[i] - 128;
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        }
-        for (let i = half - 1; i >= 0; i--) {
-          let x = WIDTH - ((i + 1) * (WIDTH / 2 / half));
-          let y = HEIGHT / 2 + data[i] - 128;
-          ctx.lineTo(x, y);
-        }
-        ctx.closePath();
-        ctx.strokeStyle = getBorderColorStyle();
-        ctx.stroke();
-      },
-      symmetricCircles: function(data) {
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        let maxRadius = Math.min(WIDTH, HEIGHT) / 4;
-        for (let i = 0; i < data.length; i++) {
-          let radius = (data[i] / 255) * maxRadius;
-          let angle = (i / data.length) * Math.PI;
-          let xLeft = WIDTH / 4 + Math.cos(angle) * radius;
-          let yLeft = HEIGHT / 2 + Math.sin(angle) * radius;
-          ctx.beginPath();
-          ctx.arc(xLeft, yLeft, radius / 4, 0, Math.PI * 2);
-          ctx.strokeStyle = getBorderColorStyle();
-          ctx.stroke();
-          let xRight = (WIDTH * 3) / 4 + Math.cos(angle) * radius;
-          let yRight = HEIGHT / 2 + Math.sin(angle) * radius;
-          ctx.beginPath();
-          ctx.arc(xRight, yRight, radius / 4, 0, Math.PI * 2);
-          ctx.strokeStyle = getBorderColorStyle();
-          ctx.stroke();
-        }
-      },
-      stereoBars: function() {
-        leftAnalyser.getByteFrequencyData(leftDataArray);
-        rightAnalyser.getByteFrequencyData(rightDataArray);
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        const barWidthL = (WIDTH / 2 / leftDataArray.length) * 2.5;
-        let x = 0;
-        for (let i = 0; i < leftDataArray.length; i++) {
-          const barHeight = leftDataArray[i];
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fillRect(x, HEIGHT - barHeight, barWidthL, barHeight);
-          x += barWidthL + 1;
-        }
-        const barWidthR = (WIDTH / 2 / rightDataArray.length) * 2.5;
-        x = WIDTH / 2;
-        for (let i = 0; i < rightDataArray.length; i++) {
-          const barHeight = rightDataArray[i];
-          ctx.fillStyle = getMainColorStyle();
-          ctx.fillRect(x, HEIGHT - barHeight, barWidthR, barHeight);
-          x += barWidthR + 1;
-        }
-      },
-      stereoWaves: function() {
-        leftAnalyser.getByteFrequencyData(leftDataArray);
-        rightAnalyser.getByteFrequencyData(rightDataArray);
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        ctx.beginPath();
-        const sliceWidthL = WIDTH / leftDataArray.length;
-        let x = 0;
-        for (let i = 0; i < leftDataArray.length; i++) {
-          let y = (HEIGHT / 2) * (1 - leftDataArray[i] / 255);
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-          x += sliceWidthL;
-        }
-        ctx.strokeStyle = getBorderColorStyle();
-        ctx.stroke();
-        ctx.beginPath();
-        const sliceWidthR = WIDTH / rightDataArray.length;
-        x = 0;
-        for (let i = 0; i < rightDataArray.length; i++) {
-          let y = HEIGHT / 2 + (HEIGHT / 2) * (1 - rightDataArray[i] / 255);
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
-          x += sliceWidthR;
-        }
-        ctx.strokeStyle = getBorderColorStyle();
-        ctx.stroke();
-      },
-      stereoCircles: function() {
-        leftAnalyser.getByteFrequencyData(leftDataArray);
-        rightAnalyser.getByteFrequencyData(rightDataArray);
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
-        const maxRadius = Math.min(WIDTH / 2, HEIGHT) / 4;
-        const len = Math.min(leftDataArray.length, rightDataArray.length);
-        for (let i = 0; i < len; i++) {
-          let radiusL = (leftDataArray[i] / 255) * maxRadius;
-          let angleL = (i / len) * Math.PI * 2;
-          let xLeft = (WIDTH / 4) + Math.cos(angleL) * radiusL;
-          let yLeft = (HEIGHT / 2) + Math.sin(angleL) * radiusL;
-          ctx.beginPath();
-          ctx.arc(xLeft, yLeft, radiusL / 2, 0, Math.PI * 2);
-          ctx.strokeStyle = getBorderColorStyle();
-          ctx.stroke();
-          let radiusR = (rightDataArray[i] / 255) * maxRadius;
-          let angleR = (i / len) * Math.PI * 2;
-          let xRight = (3 * WIDTH / 4) + Math.cos(angleR) * radiusR;
-          let yRight = (HEIGHT / 2) + Math.sin(angleR) * radiusR;
-          ctx.beginPath();
-          ctx.arc(xRight, yRight, radiusR / 2, 0, Math.PI * 2);
-          ctx.strokeStyle = getBorderColorStyle();
-          ctx.stroke();
-        }
-      }
-    };
+ // -- Visualizer Functions --
+ const visualizers = {
+ bars: function(data) {
+ const barWidth = (WIDTH / data.length) * 2.5;
+ let x = 0;
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ for (let i = 0; i < data.length; i++) {
+ const barHeight = data[i];
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+ x += barWidth + 1;
+ }
+ },
+ waves: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ ctx.beginPath();
+ ctx.moveTo(0, HEIGHT / 2);
+ for (let i = 0; i < data.length; i++) {
+ const x = i * (WIDTH / data.length);
+ const y = HEIGHT / 2 + data[i] - 128;
+ ctx.lineTo(x, y);
+ }
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ },
+ circles: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ const maxRadius = Math.min(WIDTH, HEIGHT) / 4;
+ for (let i = 0; i < data.length; i++) {
+ const radius = (data[i] / 255) * maxRadius;
+ ctx.beginPath();
+ ctx.arc(WIDTH / 2, HEIGHT / 2, radius, 0, Math.PI * 2);
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ }
+ },
+ pattern1: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ for (let i = 0; i < data.length; i++) {
+ const x = (i % 10) * (WIDTH / 10);
+ const y = Math.floor(i / 10) * (HEIGHT / 10);
+ const size = (data[i] / 255) * (WIDTH / 20);
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fillRect(x, y, size, size);
+ }
+ },
+ pattern2: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ for (let i = 0; i < data.length; i++) {
+ const angle = i / data.length * Math.PI * 2;
+ const radius = (data[i] / 255) * (Math.min(WIDTH, HEIGHT) / 3);
+ const x = WIDTH / 2 + radius * Math.cos(angle);
+ const y = HEIGHT / 2 + radius * Math.sin(angle);
+ ctx.beginPath();
+ ctx.arc(x, y, 5, 0, Math.PI * 2);
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fill();
+ }
+ },
+ radial: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ const centerX = WIDTH / 2, centerY = HEIGHT / 2;
+ const baseRadius = Math.min(WIDTH, HEIGHT) / 4;
+ for (let i = 0; i < data.length; i++) {
+ const angle = (i / data.length) * Math.PI * 2;
+ const barHeight = (data[i] / 255) * 100;
+ const x1 = centerX + baseRadius * Math.cos(angle);
+ const y1 = centerY + baseRadius * Math.sin(angle);
+ const x2 = centerX + (baseRadius + barHeight) * Math.cos(angle);
+ const y2 = centerY + (baseRadius + barHeight) * Math.sin(angle);
+ ctx.beginPath();
+ ctx.moveTo(x1, y1);
+ ctx.lineTo(x2, y2);
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ }
+ },
+ spiral: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ const centerX = WIDTH / 2, centerY = HEIGHT / 2;
+ ctx.beginPath();
+ let angle = 0;
+ let radius = 0;
+ for (let i = 0; i < data.length; i++) {
+ angle += 0.3;
+ radius += (data[i] / 255) * 2;
+ const x = centerX + radius * Math.cos(angle);
+ const y = centerY + radius * Math.sin(angle);
+ ctx.lineTo(x, y);
+ }
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ },
+ equalizer: function(data) {
+ const barWidth = WIDTH / data.length;
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ for (let i = 0; i < data.length; i++) {
+ const barHeight = (data[i] / 255) * HEIGHT;
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fillRect(i * barWidth, HEIGHT - barHeight, barWidth - 2, barHeight);
+ }
+ },
+ waveform: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ ctx.beginPath();
+ const sliceWidth = WIDTH / data.length;
+ let x = 0;
+ for (let i = 0; i < data.length; i++) {
+ const v = data[i] / 128.0;
+ const y = v * HEIGHT / 2;
+ if (i === 0) {
+ ctx.moveTo(x, y);
+ } else {
+ ctx.lineTo(x, y);
+ }
+ x += sliceWidth;
+ }
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ },
+ dots: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ for (let i = 0; i < data.length; i++) {
+ const x = Math.random() * WIDTH;
+ const y = Math.random() * HEIGHT;
+ const size = (data[i] / 255) * 10;
+ ctx.beginPath();
+ ctx.arc(x, y, size, 0, Math.PI * 2);
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fill();
+ }
+ },
+ symmetricBars: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ let halfWidth = WIDTH / 2;
+ let barWidth = (halfWidth / data.length) * 2.5;
+ for (let i = 0; i < data.length; i++) {
+ const barHeight = data[i];
+ let xLeft = i * (barWidth + 1);
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fillRect(xLeft, HEIGHT - barHeight, barWidth, barHeight);
+ let xRight = WIDTH - xLeft - barWidth;
+ ctx.fillRect(xRight, HEIGHT - barHeight, barWidth, barHeight);
+ }
+ },
+ symmetricWaves: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ ctx.beginPath();
+ let half = Math.floor(data.length / 2);
+ for (let i = 0; i < half; i++) {
+ let x = i * (WIDTH / 2 / half);
+ let y = HEIGHT / 2 + data[i] - 128;
+ if (i === 0) {
+ ctx.moveTo(x, y);
+ } else {
+ ctx.lineTo(x, y);
+ }
+ }
+ for (let i = half - 1; i >= 0; i--) {
+ let x = WIDTH - ((i + 1) * (WIDTH / 2 / half));
+ let y = HEIGHT / 2 + data[i] - 128;
+ ctx.lineTo(x, y);
+ }
+ ctx.closePath();
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ },
+ symmetricCircles: function(data) {
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ let maxRadius = Math.min(WIDTH, HEIGHT) / 4;
+ for (let i = 0; i < data.length; i++) {
+ let radius = (data[i] / 255) * maxRadius;
+ let angle = (i / data.length) * Math.PI;
+ let xLeft = WIDTH / 4 + Math.cos(angle) * radius;
+ let yLeft = HEIGHT / 2 + Math.sin(angle) * radius;
+ ctx.beginPath();
+ ctx.arc(xLeft, yLeft, radius / 4, 0, Math.PI * 2);
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ let xRight = (WIDTH * 3) / 4 + Math.cos(angle) * radius;
+ let yRight = HEIGHT / 2 + Math.sin(angle) * radius;
+ ctx.beginPath();
+ ctx.arc(xRight, yRight, radius / 4, 0, Math.PI * 2);
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ }
+ },
+ stereoBars: function() {
+ leftAnalyser.getByteFrequencyData(leftDataArray);
+ rightAnalyser.getByteFrequencyData(rightDataArray);
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ const barWidthL = (WIDTH / 2 / leftDataArray.length) * 2.5;
+ let x = 0;
+ for (let i = 0; i < leftDataArray.length; i++) {
+ const barHeight = leftDataArray[i];
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fillRect(x, HEIGHT - barHeight, barWidthL, barHeight);
+ x += barWidthL + 1;
+ }
+ const barWidthR = (WIDTH / 2 / rightDataArray.length) * 2.5;
+ x = WIDTH / 2;
+ for (let i = 0; i < rightDataArray.length; i++) {
+ const barHeight = rightDataArray[i];
+ ctx.fillStyle = getMainColorStyle();
+ ctx.fillRect(x, HEIGHT - barHeight, barWidthR, barHeight);
+ x += barWidthR + 1;
+ }
+ },
+ stereoWaves: function() {
+ leftAnalyser.getByteFrequencyData(leftDataArray);
+ rightAnalyser.getByteFrequencyData(rightDataArray);
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ ctx.beginPath();
+ const sliceWidthL = WIDTH / leftDataArray.length;
+ let x = 0;
+ for (let i = 0; i < leftDataArray.length; i++) {
+ let y = (HEIGHT / 2) * (1 - leftDataArray[i] / 255);
+ if (i === 0) {
+ ctx.moveTo(x, y);
+ } else {
+ ctx.lineTo(x, y);
+ }
+ x += sliceWidthL;
+ }
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ ctx.beginPath();
+ const sliceWidthR = WIDTH / rightDataArray.length;
+ x = 0;
+ for (let i = 0; i < rightDataArray.length; i++) {
+ let y = HEIGHT / 2 + (HEIGHT / 2) * (1 - rightDataArray[i] / 255);
+ if (i === 0) {
+ ctx.moveTo(x, y);
+ } else {
+ ctx.lineTo(x, y);
+ }
+ x += sliceWidthR;
+ }
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ },
+ stereoCircles: function() {
+ leftAnalyser.getByteFrequencyData(leftDataArray);
+ rightAnalyser.getByteFrequencyData(rightDataArray);
+ ctx.clearRect(0, 0, WIDTH, HEIGHT);
+ const maxRadius = Math.min(WIDTH / 2, HEIGHT) / 4;
+ const len = Math.min (leftDataArray.length, rightDataArray.length);
+ for (let i = 0; i < len; i++) {
+ let radiusL = (leftDataArray[i] / 255) * maxRadius;
+ let angleL = (i / len) * Math.PI * 2;
+ let xLeft = (WIDTH / 4) + Math.cos(angleL) * radiusL;
+ let yLeft = (HEIGHT / 2) + Math.sin(angleL) * radiusL;
+ ctx.beginPath();
+ ctx.arc(xLeft, yLeft, radiusL / 2, 0, Math.PI * 2);
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ let radiusR = (rightDataArray[i] / 255) * maxRadius;
+ let angleR = (i / len) * Math.PI * 2;
+ let xRight = (3 * WIDTH / 4) + Math.cos(angleR) * radiusR;
+ let yRight = (HEIGHT / 2) + Math.sin(angleR) * radiusR;
+ AIModel ctx.beginPath();
+ ctx.arc(xRight, yRight, radiusR / 2, 0, Math.PI * 2);
+ ctx.strokeStyle = getBorderColorStyle();
+ ctx.stroke();
+ }
+ }
+ };
 
-    // Set initial visualizer style and update on change.
-    let currentVisualizer = select.value;
-    select.addEventListener('change', function(e) {
-      currentVisualizer = e.target.value;
-    });
+ // Set initial visualizer style and update on change.
+ let currentVisualizer = select.value;
+ select.addEventListener('change', function(e) {
+ currentVisualizer = e.target.value;
+ });
 
-    // -- Animation Loop --
-    function animate() {
-      if (analyser) {
-        if (currentVisualizer.startsWith("stereo")) {
-          visualizers[currentVisualizer]();
-        } else {
-          analyser.getByteFrequencyData(dataArray);
-          visualizers[currentVisualizer](dataArray);
-        }
-      }
-      requestAnimationFrame(animate);
-    }
-    audio.addEventListener('play', function() {
-      initAudio();
-      animate();
-      updateIconColors();
-    });
-    audio.addEventListener('pause', updateIconColors);
+ // -- Animation Loop --
+ function animate() {
+ if (analyser) {
+ if (currentVisualizer.startsWith("stereo")) {
+ visualizers[currentVisualizer]();
+ } else {
+ analyser.getByteFrequencyData(dataArray);
+ visualizers[currentVisualizer](dataArray);
+ }
+ }
+ requestAnimationFrame(animate);
+ }
+ audio.addEventListener('play', function() {
+ initAudio();
+ animate();
+ updateIconColors();
+ });
+ audio.addEventListener('pause', updateIconColors);
 
-    // -- Music Control Functions --
-    function loadTrack(index) {
-      if (playlist.length === 0) return;
-      currentTrackIndex = index;
-      const item = playlist[currentTrackIndex];
-      fileNameDisplay.textContent = item.name;
-      audio.src = item.url;
-      updatePlaylistSelect();
-    }
-    document.getElementById('prevBtn').addEventListener('click', function() {
-      if (playlist.length === 0) return;
-      currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
-      loadTrack(currentTrackIndex);
-      audio.play();
-    });
-    const playBtn = document.getElementById('playBtn');
-    playBtn.addEventListener('click', function() {
-      if (playlist.length === 0) return;
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-      updatePlayButtonIcon();
-    });
-    document.getElementById('stopBtn').addEventListener('click', function() {
-      audio.pause();
-      audio.currentTime = 0;
-      updatePlayButtonIcon();
-    });
-    document.getElementById('nextBtn').addEventListener('click', function() {
-      if (playlist.length === 0) return;
-      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-      loadTrack(currentTrackIndex);
-      audio.play();
-    });
-    function updatePlayButtonIcon() {
-      if (audio.paused) {
-        playBtn.innerHTML = `
-          <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <polygon points="8,5 19,12 8,19" fill="currentColor" />
-          </svg>
-        `;
-      } else {
-        playBtn.innerHTML = `
-          <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <rect x="6" y="5" width="4" height="14" fill="currentColor" />
-            <rect x="14" y="5" width="4" height="14" fill="currentColor" />
-          </svg>
-        `;
-      }
-      updateIconColors();
-    }
+ // -- Music Control Functions --
+ function loadTrack(index) {
+ if (playlist.length === 0) return;
+ currentTrackIndex = index;
+ const item = playlist[currentTrackIndex];
+ fileNameDisplay.textContent = item.name;
+ audio.src = item.url;
+ updatePlaylistSelect();
+ }
+ document.getElementById('prevBtn').addEventListener('click', function() {
+ if (playlist.length === 0) return;
+ currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+ loadTrack(currentTrackIndex);
+ audio.play();
+ });
+ const playBtn = document.getElementById('playBtn');
+ playBtn.addEventListener('click', function() {
+ if (playlist.length === 0) return;
+ if (audio.paused) {
+ audio.play();
+ } else {
+ audio.pause();
+ }
+ updatePlayButtonIcon();
+ });
+ document.getElementById('stopBtn').addEventListener('click', function() {
+ audio.pause();
+ audio.currentTime = 0;
+ updatePlayButtonIcon();
+ });
+ document.getElementById('nextBtn').addEventListener('click', function() {
+ if (playlist.length === 0) return;
+ currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+ loadTrack(currentTrackIndex);
+ audio.play();
+ });
+ function updatePlayButtonIcon() {
+ if (audio.paused) {
+ playBtn.innerHTML = `
+ <svg id="playIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+ <polygon points="8,5 19,12 8,19" fill="currentColor" />
+ </svg>
+ `;
+ } else {
+ playBtn.innerHTML = `
+ <svg id="pauseIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+ <rect x="6" y="5" width="4" height="14" fill="currentColor" />
+ <rect x="14" y="5" width="4" height="14" fill="currentColor" />
+ </svg>
+ `;
+ }
+ updateIconColors();
+ }
 
-    // -- Drag and Drop Functionality --
-    document.addEventListener('dragover', function(e) {
-      e.preventDefault();
-      if (e.dataTransfer && e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-        const file = e.dataTransfer.items[0].getAsFile();
-        if (file && (file.type.startsWith('audio/') || file.name.toLowerCase().endsWith('.txt'))) {
-          document.body.classList.add('drop-highlight-green');
-          document.body.classList.remove('drop-highlight-red');
-        } else {
-          document.body.classList.add('drop-highlight-red');
-          document.body.classList.remove('drop-highlight-green');
-        }
-      }
-    });
-    document.addEventListener('dragleave', function(e) {
-      e.preventDefault();
-      document.body.classList.remove('drop-highlight-green', 'drop-highlight-red');
-    });
-    document.addEventListener('drop', function(e) {
-      e.preventDefault();
-      document.body.classList.remove('drop-highlight-green', 'drop-highlight-red');
-      if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        let newItems = [];
-        const files = Array.from(e.dataTransfer.files);
-        files.forEach(file => {
-          if (file.type.startsWith('audio/')) {
-            newItems.push({ name: file.name, url: URL.createObjectURL(file), isFile: true });
-          } else if (file.name.toLowerCase().endsWith('.txt')) {
-            const reader = new FileReader();
-            reader.onload = function(ev) {
-              const lines = ev.target.result.split(/\r?\n/);
-              lines.forEach(line => {
-                const trimmed = line.trim();
-                if (trimmed && trimmed.toLowerCase().endsWith('.mp3')) {
-                  const name = trimmed.split('/').pop() || trimmed;
-                  newItems.push({ name: name, url: trimmed, isFile: false });
-                }
-              });
-              playlist = playlist.concat(newItems);
-              updatePlaylistSelect();
-              loadTrack(0);
-              audio.play();
-            };
-            reader.readAsText(file);
-          }
-        });
-        if (newItems.length > 0 && !files.some(file => file.name.toLowerCase().endsWith('.txt'))) {
-          playlist = playlist.concat(newItems);
-          updatePlaylistSelect();
-          loadTrack(0);
-          audio.play();
-        }
-      }
-    });
+ // -- Drag and Drop Functionality --
+ document.addEventListener('dragover', function(e) {
+ e.preventDefault();
+ if (e.dataTransfer && e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+ const file = e.dataTransfer.items[0].getAsFile();
+ if (file && (file.type.startsWith('audio/') || file.name.toLowerCase().endsWith('.txt'))) {
+ document.body.classList.add('drop-highlight-green');
+ document.body.classList.remove('drop-highlight-red');
+ } else {
+ document.body.classList.add('drop-highlight-red');
+ document.body.classList.remove('drop-highlight-green');
+ }
+ }
+ });
+ document.addEventListener('dragleave', function(e) {
+ e.preventDefault();
+ document.body.classList.remove('drop-highlight-green', 'drop-highlight-red');
+ });
+ document.addEventListener('drop', function(e) {
+ e.preventDefault();
+ document.body.classList.remove('drop-highlight-green', 'drop-highlight-red');
+ if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+ let newItems = [];
+ const files = Array.from(e.dataTransfer.files);
+ files.forEach(file => {
+ if (file.type.startsWith('audio/')) {
+ newItems.push({ name: file.name, url: URL.createObjectURL(file), isFile: true });
+ } else if (file.name.toLowerCase().endsWith('.txt')) {
+ const reader = new FileReader();
+ reader.onload = function(ev) {
+ const lines = ev.target.result.split(/\r?\n/);
+ lines.forEach(line => {
+ const trimmed = line.trim();
+ if (trimmed && trimmed.toLowerCase().endsWith('.mp3')) {
+ const name = trimmed.split('/').pop() || trimmed;
+ newItems.push({ name: name, url: trimmed, isFile: false });
+ }
+ });
+ playlist = playlist.concat(newItems);
+ updatePlaylistSelect();
+ loadTrack(0);
+ audio.play();
+ };
+ reader.readAsText(file);
+ }
+ });
+ if (newItems.length > 0 && !files.some(file => file.name.toLowerCase().endsWith('.txt'))) {
+ playlist = playlist.concat(newItems);
+ updatePlaylistSelect();
+ loadTrack(0);
+ audio.play();
+ }
+ }
+ });
 
-    // -- Configuration Save/Load as a Text File --
-    document.getElementById('saveConfigFile').addEventListener('click', function() {
-      const config = {
-        visualizer: select.value,
-        mainColors: Array.from(document.querySelectorAll('#visualizerColors input[type="color"]')).map(el => el.value),
-        borderColors: Array.from(document.querySelectorAll('#borderColors input[type="color"]')).map(el => el.value),
-        eqSettings: Array.from(document.querySelectorAll('#eqSliders input[type="range"]')).map(el => el.value)
-      };
-      const configJSON = JSON.stringify(config, null, 2);
-      const blob = new Blob([configJSON], {type: "text/plain"});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "config.txt";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-    document.getElementById('loadConfigFile').addEventListener('click', function() {
-      document.getElementById('configFileInput').click();
-    });
-    document.getElementById('configFileInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        try {
-          const config = JSON.parse(ev.target.result);
-          select.value = config.visualizer;
-          currentVisualizer = config.visualizer;
-          visualizerColorsContainer.innerHTML = "";
-          config.mainColors.forEach(color => {
-            visualizerColorsContainer.appendChild(createColorItem(color));
-          });
-          borderColorsContainer.innerHTML = "";
-          config.borderColors.forEach(color => {
-            borderColorsContainer.appendChild(createColorItem(color));
-          });
-          if (config.eqSettings && filters.length === config.eqSettings.length) {
-            config.eqSettings.forEach((gain, index) => {
-              filters[index].gain.setValueAtTime(gain, audioContext.currentTime);
-              document.querySelectorAll('#eqSliders input[type="range"]')[index].value = gain;
-            });
-          }
-          updateIconColors();
-        } catch (err) {
-          alert("Invalid configuration file!");
-        }
-      };
-      reader.readAsText(file);
-    });
+ // -- Configuration Save/Load as a Text File --
+ document.getElementById('saveConfigFile').addEventListener('click', function() {
+ const config = {
+ visualizer: select.value,
+ mainColors: Array.from(document.querySelectorAll('#visualizerColors input[type="color"]')).map(el => el.value),
+ borderColors: Array.from(document.querySelectorAll('#borderColors input[type="color"]')).map(el => el.value),
+ eqSettings: Array.from(document.querySelectorAll('#eqSliders input[type="range"]')).map(el => el.value)
+ };
+ const configJSON = JSON.stringify(config, null, 2);
+ const blob = new Blob([configJSON], {type: "text/plain"});
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = "config.txt";
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ URL.revokeObjectURL(url);
+ });
+ document.getElementById('loadConfigFile').addEventListener('click', function() {
+ document.getElementById('configFileInput').click();
+ });
+ document.getElementById('configFileInput').addEventListener('change', function(e) {
+ const file = e.target.files[0];
+ if (!file) return;
+ const reader = new FileReader();
+ reader.onload = function(ev) {
+ try {
+ const config = JSON.parse(ev.target.result);
+ select.value = config.visualizer;
+ currentVisualizer = config.visualizer;
+ visualizerColorsContainer.innerHTML = "";
+ config.mainColors.forEach(color => {
+ visualizerColorsContainer.appendChild(createColorItem(color));
+ });
+ borderColorsContainer.innerHTML = "";
+ config.borderColors.forEach(color => {
+ borderColorsContainer.appendChild(createColorItem(color));
+ });
+ if (config.eqSettings && filters.length === config.eqSettings.length) {
+ config.eqSettings.forEach((gain, index) => {
+ filters[index].gain.setValueAtTime(gain, audioContext.currentTime);
+ document.querySelectorAll('#eqSliders input[type="range"]')[index].value = gain;
+ });
+ }
+ updateIconColors();
+ } catch (err) {
+ alert("Invalid configuration file!");
+ }
+ };
+ reader.readAsText(file);
+ });
 
-    // Initial setup
-    updatePlaylistSelect();
-    updateIconColors();
-  </script>
+ // Initial setup
+ updatePlaylistSelect();
+ updateIconColors();
+ </script>
 </body>
 </html>
