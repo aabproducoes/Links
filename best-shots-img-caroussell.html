@@ -4,149 +4,95 @@
   <meta charset="UTF-8">
   <!-- Ensure proper scaling on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Full-Page BestSHots Carousel</title>
+  <title>Full‑Page BestShots Carousel</title>
   <style>
     /* Reset some defaults */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-    }
-    /* Full-page carousel container */
-    .carousel {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-      background: #000;
-    }
+    html, body { height: 100%; width: 100%; overflow: hidden; font-family: Arial, sans-serif; }
+
+    /* Full‑page carousel container */
+    .carousel { position: relative; width: 100vw; height: 100vh; overflow: hidden; background: #000; }
+
     /* Flex container for slides */
-    .carousel ul {
-      display: flex;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      transition: transform 0.7s ease-in-out;
-    }
+    .carousel ul { display: flex; height: 100%; margin: 0; padding: 0; list-style: none;
+                   transition: transform 0.7s ease-in-out; }
+
     /* Each slide takes up one full viewport */
-    .carousel li {
-      min-width: 100%;
-      height: 100%;
-      position: relative;
-    }
+    .carousel li { min-width: 100%; height: 100%; position: relative; }
+
     /* Ensure images cover the entire slide area */
-    .carousel img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    /* Navigation buttons positioned on the left/right of the viewport */
-    .controls {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      padding: 0 30px;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-      z-index: 1;
-    }
-    .controls button {
-      background: rgba(0, 0, 0, 0.6);
-      color: #fff;
-      border: 2px solid #fff;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      font-size: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      outline: none;
-    }
-    .controls button:hover {
-      background: rgba(0, 0, 0, 0.8);
-      transform: scale(1.1);
-    }
-    /* Indicator nav bar styled as clickable dots */
-    .indicators {
-      position: absolute;
-      bottom: 20px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      z-index: 1;
-    }
-    .indicators span {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.5);
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-    }
-    .indicators span.active {
-      background: rgba(255, 255, 255, 1);
-      transform: scale(1.2);
-    }
+    .carousel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Navigation buttons */
+    .controls { position: absolute; top: 50%; width: 100%; padding: 0 30px;
+                display: flex; justify-content: space-between; transform: translateY(-50%); z-index: 1; }
+    .controls button { background: rgba(0,0,0,0.6); color: #fff; border: 2px solid #fff;
+                       width: 60px; height: 60px; border-radius: 50%; font-size: 28px;
+                       display: flex; align-items: center; justify-content: center;
+                       cursor: pointer; transition: background .3s, transform .3s; outline: none; }
+    .controls button:hover { background: rgba(0,0,0,.8); transform: scale(1.1); }
+
+    /* Indicator dots */
+    .indicators { position: absolute; bottom: 20px; width: 100%; display: flex;
+                  justify-content: center; gap: 12px; z-index: 1; }
+    .indicators span { width: 18px; height: 18px; border-radius: 50%;
+                       background: rgba(255,255,255,.5); cursor: pointer;
+                       transition: background .3s, transform .3s; }
+    .indicators span.active { background: #fff; transform: scale(1.2); }
   </style>
 </head>
 <body>
   <div class="carousel">
     <ul id="carouselList">
-      <!-- Replace these URLs if needed -->
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20(1).JPG" alt="BestSHots 1"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(2).JPG" alt="BestSHots 2"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(3).JPG" alt="BestSHots 3"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(4).JPG" alt="BestSHots 4"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(5).JPG" alt="BestSHots 5"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(6).JPG" alt="BestSHots 6"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(7).JPG" alt="BestSHots 7"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(8).JPG" alt="BestSHots 8"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(9).JPG" alt="BestSHots 9"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(10).JPG" alt="BestSHots 10"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(11).JPG" alt="BestSHots 11"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(12).JPG" alt="BestSHots 12"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(13).JPG" alt="BestSHots 13"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(14).JPG" alt="BestSHots 14"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(15).JPG" alt="BestSHots 15"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(16).JPG" alt="BestSHots 16"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(17).JPG" alt="BestSHots 17"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(18).JPG" alt="BestSHots 18"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(19).JPG" alt="BestSHots 19"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(20).JPG" alt="BestSHots 20"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(21).JPG" alt="BestSHots 21"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(22).JPG" alt="BestSHots 22"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(23).JPG" alt="BestSHots 23"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(24).JPG" alt="BestSHots 24"></li>
-      <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(25).JPG" alt="BestSHots 25"></li>
+      <!-- CORRECT paths: GitHub Pages URL + %20 for space -->
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(1).JPG"  alt="BestShots 1"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(2).JPG"  alt="BestShots 2"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(3).JPG"  alt="BestShots 3"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(4).JPG"  alt="BestShots 4"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(5).JPG"  alt="BestShots 5"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(6).JPG"  alt="BestShots 6"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(7).JPG"  alt="BestShots 7"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(8).JPG"  alt="BestShots 8"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(9).JPG"  alt="BestShots 9"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(10).JPG" alt="BestShots 10"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(11).JPG" alt="BestShots 11"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(12).JPG" alt="BestShots 12"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(13).JPG" alt="BestShots 13"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(14).JPG" alt="BestShots 14"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(15).JPG" alt="BestShots 15"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(16).JPG" alt="BestShots 16"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(17).JPG" alt="BestShots 17"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(18).JPG" alt="BestShots 18"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(19).JPG" alt="BestShots 19"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(20).JPG" alt="BestShots 20"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(21).JPG" alt="BestShots 21"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(22).JPG" alt="BestShots 22"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(23).JPG" alt="BestShots 23"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(24).JPG" alt="BestShots 24"></li>
+      <li><img src="https://aabproducoes.github.io/Links/BestShots/BestSHots%20(25).JPG" alt="BestShots 25"></li>
     </ul>
+
     <!-- Navigation buttons -->
     <div class="controls">
       <button id="prevBtn">&#10094;</button>
       <button id="nextBtn">&#10095;</button>
     </div>
+
     <!-- Clickable indicator dots -->
     <div class="indicators" id="indicators"></div>
   </div>
 
   <script>
-    const carouselList = document.getElementById('carouselList');
+    const carouselList       = document.getElementById('carouselList');
     const indicatorsContainer = document.getElementById('indicators');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    let currentIndex = 0;
-    const totalImages = carouselList.children.length;
-    let autoplayInterval;
+    const prevBtn            = document.getElementById('prevBtn');
+    const nextBtn            = document.getElementById('nextBtn');
 
-    // Create clickable indicator dots dynamically based on total slides
+    let currentIndex   = 0;
+    const totalImages  = carouselList.children.length;
+    let autoplayHandle;
+
+    /* ------- create indicator dots ------- */
     for (let i = 0; i < totalImages; i++) {
       const dot = document.createElement('span');
       dot.dataset.index = i;
@@ -154,58 +100,38 @@
       indicatorsContainer.appendChild(dot);
     }
 
-    // Update the active state for indicator dots
-    function updateIndicators(index) {
-      document.querySelectorAll('.indicators span').forEach(dot => {
-        dot.classList.remove('active');
-      });
-      document.querySelectorAll('.indicators span')[index].classList.add('active');
+    /* ------- helper functions ------- */
+    function updateIndicators(idx) {
+      indicatorsContainer.querySelectorAll('span').forEach(el => el.classList.toggle('active', el.dataset.index == idx));
     }
 
-    // Update slide position based on current index
     function updateCarousel() {
-      carouselList.style.transform = 'translateX(' + (-currentIndex * 100) + '%)';
+      carouselList.style.transform = `translateX(-${currentIndex * 100}%)`;
       updateIndicators(currentIndex);
     }
 
-    // Autoplay function to move slides every 5 seconds
     function startAutoplay() {
-      autoplayInterval = setInterval(() => {
+      autoplayHandle = setInterval(() => {
         currentIndex = (currentIndex + 1) % totalImages;
         updateCarousel();
       }, 5000);
     }
+    function stopAutoplay() { clearInterval(autoplayHandle); }
 
-    function stopAutoplay() {
-      clearInterval(autoplayInterval);
-    }
+    /* ------- events ------- */
+    nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % totalImages; updateCarousel(); stopAutoplay(); startAutoplay(); });
+    prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + totalImages) % totalImages; updateCarousel(); stopAutoplay(); startAutoplay(); });
 
-    // Navigation button events
-    nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % totalImages;
-      updateCarousel();
-      stopAutoplay();
-      startAutoplay();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-      updateCarousel();
-      stopAutoplay();
-      startAutoplay();
-    });
-
-    // Allow clicking on any indicator dot to jump directly to that slide
-    document.querySelectorAll('.indicators span').forEach(dot => {
-      dot.addEventListener('click', function() {
-        currentIndex = parseInt(this.dataset.index);
+    indicatorsContainer.addEventListener('click', e => {
+      if (e.target.tagName === 'SPAN') {
+        currentIndex = +e.target.dataset.index;
         updateCarousel();
         stopAutoplay();
         startAutoplay();
-      });
+      }
     });
 
-    // Start autoplay when page loads
+    /* ------- init ------- */
     startAutoplay();
   </script>
 </body>
