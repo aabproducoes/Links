@@ -291,7 +291,6 @@
 
     /* MOBILE STYLES */
     @media (max-width:768px) {
-      /* Sidebar becomes off-canvas overlay */
       .sidebar {
         width: 250px;
         transform: translateX(-250px);
@@ -300,11 +299,9 @@
       .sidebar.open {
         transform: translateX(0);
       }
-      /* Remove left margin from main container */
       .main-container {
         margin-left: 0;
       }
-      /* Adjust toggle button to a fixed position on top-left */
       .toggle-btn {
         top: 20px;
         left: 20px;
@@ -376,12 +373,10 @@
       <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle">Animated Patterns</a></li>
       <li><a href="#htmlGames" data-locale="htmlGames">HTML Games</a></li>
       <li><a href="#mp3Visualizer" data-locale="mp3Visualizer">MP3 Player Visualizer</a></li>
-      <!-- Individual project sections -->
       <li><a href="#blenderProjects" data-locale="blenderProjects">Blender Projects</a></li>
       <li><a href="#gimpProjects" data-locale="gimpProjects">Gimp Projects</a></li>
       <li><a href="#blenderAnimations" data-locale="blenderAnimations">Blender Animations</a></li>
       <li><a href="#animatedBgSection" data-locale="animatedBackground">Animated Background</a></li>
-      <!-- NEW: Sony Shots Images -->
       <li><a href="#sonyShotsImages" data-locale="sonyShotsImages">Sony Shots Images</a></li>
     </ul>
     <button class="language-btn" id="languageBtn">Lang: EN</button>
@@ -447,7 +442,10 @@
       <h1 data-locale="animatedPatternsTitle">Animated Patterns</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/animated-background.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/animated-background.html">
+          </iframe>
           <p>animated-background.html</p>
         </div>
       </div>
@@ -458,7 +456,10 @@
       <h1 data-locale="htmlGames">HTML Games</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/HTML_games/HTML-play.html">
+          </iframe>
           <p>HTML-play.html</p>
         </div>
       </div>
@@ -469,62 +470,80 @@
       <h1 data-locale="mp3Visualizer">MP3 Player Visualizer</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/music_player-visualizer.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/music_player-visualizer.html">
+          </iframe>
           <p>music_player-visualizer.html</p>
         </div>
       </div>
     </section>
 
-    <!-- NEW SECTION: Blender Projects -->
+    <!-- Blender Projects Section -->
     <section id="blenderProjects">
       <h1 data-locale="blenderProjects">Blender Projects</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/blender-projects.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/blender-projects.html">
+          </iframe>
           <p>blender-projects.html</p>
         </div>
       </div>
     </section>
 
-    <!-- NEW SECTION: Gimp Projects -->
+    <!-- Gimp Projects Section -->
     <section id="gimpProjects">
       <h1 data-locale="gimpProjects">Gimp Projects</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/gimp-projects.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/gimp-projects.html">
+          </iframe>
           <p>gimp-projects.html</p>
         </div>
       </div>
     </section>
 
-    <!-- NEW SECTION: Blender Animations -->
+    <!-- Blender Animations Section -->
     <section id="blenderAnimations">
       <h1 data-locale="blenderAnimations">Blender Animations</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/blender-animations.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/blender-animations.html">
+          </iframe>
           <p>blender-animations.html</p>
         </div>
       </div>
     </section>
 
-    <!-- NEW SECTION: Animated Background -->
+    <!-- Animated Background Section -->
     <section id="animatedBgSection">
       <h1 data-locale="animatedBackground">Animated Background</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/animated-background.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/animated-background.html">
+          </iframe>
           <p>animated-background.html</p>
         </div>
       </div>
     </section>
 
-    <!-- NEW SECTION: Sony Shots Images -->
+    <!-- Sony Shots Images Section -->
     <section id="sonyShotsImages">
       <h1 data-locale="sonyShotsImages">Sony Shots Images</h1>
       <div class="animated-patterns-grid">
         <div class="pattern-item">
-          <iframe src="https://aabproducoes.github.io/Links/best-shots-img-caroussell.html"></iframe>
+          <iframe
+            loading="lazy"
+            src="https://aabproducoes.github.io/Links/best-shots-img-caroussell.html">
+          </iframe>
           <p>best-shots-img-caroussell.html</p>
         </div>
       </div>
@@ -659,11 +678,9 @@
       }
     }
     function toggleSidebar() {
-      // On mobile, toggle the "open" class to slide sidebar in and out.
       if (window.innerWidth < 768) {
         sidebar.classList.toggle('open');
       } else {
-        // Desktop behavior (toggle closed state and update main container margin)
         sidebar.classList.toggle('closed');
         if (sidebar.classList.contains('closed')) {
           sidebar.style.width = '70px';
@@ -678,7 +695,6 @@
       updateMenuItems();
     }
     toggleBtn.addEventListener('click', toggleSidebar);
-    // Mobile: collapse sidebar after a menu click
     document.querySelectorAll('#menuList li a').forEach(a => {
       a.addEventListener('click', () => {
         if (window.innerWidth < 768 && sidebar.classList.contains('open')) {
@@ -919,7 +935,6 @@
       await populateWhoImI();
       await populateCertificatesList();
       activateMenuOnScroll();
-      // Auto-collapse sidebar on mobile screens on initial load
       if (window.innerWidth < 768 && !sidebar.classList.contains('open')) {
         sidebar.classList.remove('open');
       }
