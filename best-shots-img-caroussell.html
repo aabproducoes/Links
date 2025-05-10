@@ -13,6 +13,204 @@
   .carousel ul{display:flex;height:100%;list-style:none;transition:transform .7s ease-in-out}
   .carousel li{min-width:100%;height:100%}
   .carousel img{width:100%;height:100%;object-fit:cover;display:block}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Juiced BestShots Carousel – Lazy Edition</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#000}
+
+  /* ---------- carousel ---------- */
+  .carousel{position:relative;width:100vw;height:100vh;overflow:hidden}
+  .carousel ul{display:flex;height:100%;list-style:none;transition:transform .7s ease-in-out}
+  .carousel li{min-width:100%;height:100%}
+  .carousel img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* ---------- nav buttons ---------- */
+  .controls{position:absolute;top:50%;width:100%;padding:0 30px;display:flex;justify-content:space-between;
+            transform:translateY(-50%);z-index:2}
+  .controls button{background:rgba(0,0,0,.6);color:#fff;border:2px solid #fff;width:60px;height:60px;
+                   border-radius:50%;font-size:28px;display:flex;align-items:center;justify-content:center;
+                   cursor:pointer;transition:background .3s,transform .3s}
+  .controls button:hover{background:rgba(0,0,0,.85);transform:scale(1.15)}
+
+  /* ---------- indicator dots ---------- */
+  .indicators{position:absolute;bottom:30px;width:100%;display:flex;justify-content:center;gap:14px;z-index:2}
+  .indicators span{
+      --size:18px;
+      width:var(--size);height:var(--size);border-radius:50%;
+      background:rgba(255,255,255,.45);cursor:pointer;position:relative;
+      transition:transform .4s,background .3s;
+  }
+  .indicators span:hover{
+      transform:scale(1.4) rotate(15deg);
+      background:rgba(255,255,255,.85);
+      box-shadow:0 0 8px 4px rgba(0,150,255,.6);
+  }
+  @keyframes halo{
+      0%,100%{box-shadow:0 0 0 0 rgba(0,200,255,0)}
+      50%    {box-shadow:0 0 15px 5px rgba(0,200,255,.8)}
+  }
+  .indicators span.active{
+      background:#fff;
+      animation:halo 2s infinite;
+  }
+  .indicators span.active::after{
+      content:"";position:absolute;inset:-6px;border-radius:50%;pointer-events:none;
+      border:2px solid rgba(0,200,255,.8);
+  }
+
+  /* ---------- progress bar ---------- */
+  .progress{
+      position:absolute;bottom:0;left:0;height:5px;width:0;z-index:3;
+      background:linear-gradient(90deg,#00f,#0ff);
+  }
+</style>
+</head>
+<body>
+  <div class="carousel">
+    <ul id="carouselList">
+      <!-- *** BestShots 1‑25 : src = lightweight “Lazy” file, data-full = original *** -->
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(1).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(1).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(2).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(2).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(3).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(3).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(4).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(4).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(5).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(5).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(6).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(6).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(7).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(7).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(8).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(8).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(9).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(9).JPG?raw=true"  alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(10).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(10).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(11).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(11).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(12).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(12).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(13).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(13).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(14).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(14).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(15).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(15).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(16).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(16).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(17).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(17).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(18).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(18).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(19).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(19).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(20).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(20).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(21).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(21).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(22).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(22).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(23).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(23).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(24).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(24).JPG?raw=true" alt=""></li>
+      <li><img data-full="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(25).JPG?raw=true"
+               src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20Lazy%20%20%20(25).JPG?raw=true" alt=""></li>
+    </ul>
+
+    <!-- nav & dots -->
+    <div class="controls">
+      <button id="prevBtn">&#10094;</button>
+      <button id="nextBtn">&#10095;</button>
+    </div>
+    <div class="indicators" id="indicators"></div>
+
+    <!-- progress bar -->
+    <div class="progress" id="progressBar"></div>
+  </div>
+
+<script>
+  const list   = document.getElementById('carouselList');
+  const dotsBox= document.getElementById('indicators');
+  const prev   = document.getElementById('prevBtn');
+  const next   = document.getElementById('nextBtn');
+  const bar    = document.getElementById('progressBar');
+
+  let idx = 0, timer;
+  const total = list.children.length;
+  const INTERVAL = 5000; // ms per slide
+
+  /* ---------- dots ---------- */
+  for(let i=0;i<total;i++){
+    const s=document.createElement('span');
+    s.dataset.i=i;
+    if(i===0) s.classList.add('active');
+    dotsBox.appendChild(s);
+  }
+  const dots=[...dotsBox.children];
+
+  /* ---------- helpers ---------- */
+  function resetBar(){
+    bar.style.transition='none';
+    bar.style.width='0%';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      bar.style.transition=`width ${INTERVAL}ms linear`;
+      bar.style.width='100%';
+    }));
+  }
+  function go(n){
+    idx=(n+total)%total;
+    list.style.transform=`translateX(-${idx*100}%)`;
+    dots.forEach(d=>d.classList.toggle('active',d.dataset.i==idx));
+    resetBar();
+  }
+  function play(){ timer=setInterval(()=>go(idx+1),INTERVAL); }
+  function stop(){ clearInterval(timer); }
+
+  /* ---------- nav events ---------- */
+  next.onclick = ()=>{ stop(); go(idx+1); play(); };
+  prev.onclick = ()=>{ stop(); go(idx-1); play(); };
+  dotsBox.onclick = e=>{
+    if(e.target.tagName==='SPAN'){ stop(); go(+e.target.dataset.i); play(); }
+  };
+
+  /* ---------- lazy‑to‑full swap ---------- */
+  const imgs = list.querySelectorAll('img');
+  let lazyLoaded=0;
+  function maybeSwap(){
+    if(++lazyLoaded!==imgs.length) return;
+
+    imgs.forEach(img=>{
+      const fullSrc = img.dataset.full;
+      const pre = new Image();
+      pre.onload = ()=>{ img.src = fullSrc; };
+      pre.src = fullSrc;
+    });
+  }
+  imgs.forEach(img=>{
+    if(img.complete) {
+      // already cached
+      maybeSwap();
+    } else {
+      img.addEventListener('load', maybeSwap);
+      img.addEventListener('error', maybeSwap); // keep going even if one fails
+    }
+  });
+
+  /* ---------- init ---------- */
+  resetBar();
+  play();
+</script>
+</body>
+</html>
 
   /* ---------- nav buttons ---------- */
   .controls{position:absolute;top:50%;width:100%;padding:0 30px;display:flex;justify-content:space-between;
