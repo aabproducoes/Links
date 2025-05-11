@@ -1,159 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Juiced BestShots Carousel – LazyLoad swap</title>
-<style>
-/* ---------- base ---------- */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;width:100%;overflow:hidden;font-family:Arial,Helvetica,sans-serif;background:#000}
-
-/* ---------- carousel ---------- */
-.carousel{position:relative;width:100vw;height:100vh;overflow:hidden}
-.carousel ul{display:flex;height:100%;list-style:none;transition:transform .7s ease-in-out}
-.carousel li{min-width:100%;height:100%}
-.carousel img{width:100%;height:100%;object-fit:cover;display:block}
-
-/* ---------- nav buttons ---------- */
-.controls{position:absolute;top:50%;width:100%;padding:0 30px;display:flex;justify-content:space-between;
-          transform:translateY(-50%);z-index:2}
-.controls button{background:rgba(0,0,0,.6);color:#fff;border:2px solid #fff;width:60px;height:60px;
-                 border-radius:50%;font-size:28px;display:flex;align-items:center;justify-content:center;
-                 cursor:pointer;transition:background .3s,transform .3s}
-.controls button:hover{background:rgba(0,0,0,.85);transform:scale(1.15)}
-
-/* ---------- indicator dots ---------- */
-.indicators{position:absolute;bottom:30px;width:100%;display:flex;justify-content:center;gap:14px;z-index:2}
-.indicators span{
-    --size:18px;
-    width:var(--size);height:var(--size);border-radius:50%;
-    background:rgba(255,255,255,.45);cursor:pointer;position:relative;
-    transition:transform .4s,background .3s;
-}
-.indicators span:hover{
-    transform:scale(1.4) rotate(15deg);
-    background:rgba(255,255,255,.85);
-    box-shadow:0 0 8px 4px rgba(0,150,255,.6);
-}
-@keyframes halo{
-    0%,100%{box-shadow:0 0 0 0 rgba(0,200,255,.0)}
-    50%    {box-shadow:0 0 15px 5px rgba(0,200,255,.8)}
-}
-.indicators span.active{
-    background:#fff;
-    animation:halo 2s infinite;
-}
-.indicators span.active::after{
-    content:"";position:absolute;inset:-6px;border-radius:50%;pointer-events:none;
-    border:2px solid rgba(0,200,255,.8);
-}
-
-/* ---------- progress bar ---------- */
-.progress{position:absolute;bottom:0;left:0;height:5px;width:0;z-index:3;
-          background:linear-gradient(90deg,#00f,#0ff);}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BestSHots Grid → Menu Viewer</title>
+  <style>
+    /* Reset */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: Arial, sans-serif; }
+    
+    /* GRID: full-page thumbnail grid */
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      padding: 10px;
+      height: 100vh;
+      overflow-y: auto;
+      background: #111;
+      transition: all 0.5s ease;
+    }
+    #gallery.collapsed {
+      position: absolute;
+      top: 0; left: 0;
+      width: 200px;
+      height: 100vh;
+      grid-template-columns: 1fr;
+      grid-auto-rows: 80px;
+      gap: 8px;
+      padding: 10px;
+      background: rgba(0,0,0,0.9);
+      overflow-y: auto;
+      z-index: 2;
+    }
+    
+    /* THUMBNAILS */
+    .thumb {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
+    }
+    #gallery.collapsed .thumb {
+      height: 70px;
+      opacity: 0.7;
+    }
+    #gallery.collapsed .thumb:hover {
+      transform: scale(1.1);
+      opacity: 1;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+    
+    /* VIEWER: holds the big image */
+    #viewer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 100vh;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+    #viewer.active {
+      left: 200px;
+      width: calc(100vw - 200px);
+      z-index: 1;
+    }
+    #viewer img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      animation: fadeIn 0.7s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
-<div class="carousel">
-  <ul id="carouselList">
-    <!-- full‑size URLs only – the script derives the LazyLoad filenames -->
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(1).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(2).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(3).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(4).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(5).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(6).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(7).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(8).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(9).JPG?raw=true"  alt=""></li>
-    <li><img src="https://github.com/aabproducoes/Links/blob/main/BestShots/BestSHots%20%20%20(10).JPG?raw=true" alt=""></li>
-    <!-- … (11)‑(25) keep going … -->
-  </ul>
+  <!-- Thumbnail Grid -->
+  <div id="gallery">
+    <!-- Images 1–13 -->
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(1).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(2).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(3).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(4).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(5).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(6).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(7).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(8).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(9).JPG"  alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(10).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(11).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(12).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(13).JPG" alt="">
+    <!--                    https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(10).JPG 14–25 -->
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(14).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(15).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(16).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(17).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(18).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(19).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(20).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(21).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(22).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(23).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(24).JPG" alt="">
+    <img class="thumb" src="https://raw.githubusercontent.com/aabproducoes/Links/refs/heads/main/BestShots/BestSHots%20%20%20(25).JPG" alt="">
+  </div>
 
-  <!-- nav & dots -->
-  <div class="controls"><button id="prevBtn">&#10094;</button><button id="nextBtn">&#10095;</button></div>
-  <div class="indicators" id="indicators"></div>
+  <!-- Viewer for selected image -->
+  <div id="viewer"></div>
 
-  <!-- progress bar -->
-  <div class="progress" id="progressBar"></div>
-</div>
+  <script>
+    const gallery = document.getElementById('gallery');
+    const viewer  = document.getElementById('viewer');
 
-<script>
-/* ------- carousel logic (unchanged) ------- */
-const list   = document.getElementById('carouselList');
-const dotsBox= document.getElementById('indicators');
-const prev   = document.getElementById('prevBtn');
-const next   = document.getElementById('nextBtn');
-const bar    = document.getElementById('progressBar');
+    gallery.addEventListener('click', e => {
+      if (!e.target.classList.contains('thumb')) return;
 
-let idx = 0, timer;
-const total = list.children.length;
-const INTERVAL = 5000; // 5 s
+      // Collapse gallery into sidebar
+      gallery.classList.add('collapsed');
 
-for(let i=0;i<total;i++){
-  const d=document.createElement('span');
-  d.dataset.i=i;
-  if(!i) d.classList.add('active');
-  dotsBox.appendChild(d);
-}
-const dots=[...dotsBox.children];
+      // Show viewer area
+      viewer.classList.add('active');
+      viewer.innerHTML = `<img src="${e.target.src}" alt="">`;
+    });
 
-function resetBar(){
-  bar.style.transition='none';
-  bar.style.width='0%';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    bar.style.transition=`width ${INTERVAL}ms linear`;
-    bar.style.width='100%';
-  }));
-}
-function go(n){
-  idx=(n+total)%total;
-  list.style.transform=`translateX(-${idx*100}%)`;
-  dots.forEach(d=>d.classList.toggle('active',d.dataset.i==idx));
-  resetBar();
-}
-function play(){ timer=setInterval(()=>go(idx+1),INTERVAL); }
-function stop(){ clearInterval(timer); }
+    // Allow clicking on sidebar thumbs to switch image
+    gallery.addEventListener('click', e => {
+      if (!gallery.classList.contains('collapsed')) return;
+      if (!e.target.classList.contains('thumb')) return;
 
-next.onclick=()=>{stop();go(idx+1);play();};
-prev.onclick=()=>{stop();go(idx-1);play();};
-dotsBox.onclick=e=>{ if(e.target.tagName==='SPAN'){stop();go(+e.target.dataset.i);play();} };
-
-/* ------- LAZYLOAD  ➜  FULL‑RES SWAP ------- */
-const imgs = document.querySelectorAll('#carouselList img');
-let lazyLoaded = 0;
-
-/** build Lazy URL: insert `_LazyLoad` before the first space and use lowercase .jpg */
-function toLazy(url){
-  const u = new URL(url);
-  const file = u.pathname.split('/').pop();        // BestSHots   (n).JPG
-  const lazyFile = file
-      .replace(/BestSHots/i,'BestSHots_LazyLoad')   // insert marker
-      .replace(/\.JPG$/i,'.jpg');                   // ensure lowercase
-  return url.replace(file, lazyFile);
-}
-
-imgs.forEach(img=>{
-  const full = img.src;
-  img.dataset.full = full;
-
-  const lazy = toLazy(full);
-  img.src = lazy;
-  img.loading = 'lazy';
-
-  img.addEventListener('load',()=>{
-    if(++lazyLoaded === imgs.length){
-      imgs.forEach(im=>{ im.src = im.dataset.full; });
-    }
-  },{once:true});
-
-  img.addEventListener('error',()=>{ img.src = full; });
-});
-
-/* start */
-resetBar();
-play();
-</script>
+      viewer.innerHTML = `<img src="${e.target.src}" alt="">`;
+    });
+  </script>
 </body>
 </html>
