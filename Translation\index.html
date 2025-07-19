@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Document Translations Viewer</title>
+
+<!-- ---------- THEME ---------- -->
+<style>
+ :root{
+     --accent:#00bfff;          /* highlight colour – change once, theme follows */
+     --bg:#0e0e0e;
+     --panel:#1c1c1c;
+     --text:#e8e8e8;
+     --shadow:0 4px 12px rgba(0,0,0,.4);
+     --radius:12px;
+ }
+
+ *{box-sizing:border-box;margin:0;padding:0;}
+
+ body{
+     background:var(--bg);
+     color:var(--text);
+     font-family:system-ui,Segoe UI,sans-serif;
+     line-height:1.5;
+     display:flex;
+     flex-direction:column;
+     align-items:center;
+     padding:2rem 1rem 4rem;
+ }
+
+ h1{
+     margin-bottom:2rem;
+     text-align:center;
+     font-size:clamp(1.6rem,3vw,2.2rem);
+ }
+
+ /* wrapper for each pair */
+ .doc-pair{
+     width:100%;
+     max-width:1600px;
+     background:var(--panel);
+     padding:1.2rem;
+     margin-bottom:2.2rem;
+     border:2px solid var(--accent);
+     border-radius:var(--radius);
+     box-shadow:var(--shadow);
+ }
+
+/* sticky mini‑title bar */
+ .doc-title{
+     position:sticky;
+     top:0;
+     z-index:10;
+     background:var(--accent);
+     color:#000;
+     padding:0.3rem 0.8rem;
+     border-radius:calc(var(--radius) - 4px);
+     font-weight:600;
+     letter-spacing:0.03em;
+     box-shadow:0 2px 6px rgba(0,0,0,.25);
+ }
+
+ .viewer-wrapper{
+     display:grid;
+     grid-template-columns:1fr 1fr;
+     gap:1rem;
+     margin-top:1rem;
+ }
+
+ iframe{
+     width:100%;
+     height:80vh;
+     border:none;
+     background:#fff;
+     border-radius:var(--radius);
+     box-shadow:var(--shadow);
+ }
+
+ /* small screens: stack */
+ @media(max-width:900px){
+     .viewer-wrapper{grid-template-columns:1fr;}
+     iframe{height:70vh;}
+ }
+</style>
+</head>
+<body>
+<h1>Translation Viewer</h1>
+
+<div id="container"><!-- JS injects document pairs here --></div>
+
+<script>
+/**
+ * Attempts to fetch HEAD for a path.
+ * Returns true if status is OK (200‑299), else false.
+ */
+async function fileExists(path){
+    try{
+        const res = await fetch(path,{method:'HEAD',cache:'no-store'});
+        return res.ok;
+    }catch(err){
+        return false;
+    }
+}
+
+async function loadDocuments(){
+    const container=document.getElementById('container');
+    let index=1;
+    while(true){
+        const orig=`Original/${index}.pdf`;
+        const trans=`Translated/${index}.pdf`;
+
+        // check both PDFs exist; stop loop as soon as one is missing
+        const [origOk,transOk]=await Promise.all([fileExists(orig),fileExists(trans)]);
+        if(!origOk||!transOk) break;
+
+        // build HTML elements for this pair
+        const pair=document.createElement('section');
+        pair.className='doc-pair';
+
+        const title=document.createElement('div');
+        title.className='doc-title';
+        title.textContent=`Document ${index}`;
+        pair.appendChild(title);
+
+        const wrap=document.createElement('div');
+        wrap.className='viewer-wrapper';
+
+        const origFrame=document.createElement('iframe');
+        origFrame.src=orig;
+        origFrame.title=`Original ${index}`;
+        wrap.appendChild(origFrame);
+
+        const transFrame=document.createElement('iframe');
+        transFrame.src=trans;
+        transFrame.title=`Translated ${index}`;
+        wrap.appendChild(transFrame);
+
+        pair.appendChild(wrap);
+        container.appendChild(pair);
+
+        index++;
+    }
+
+    if(index===1){
+        container.innerHTML='<p style="text-align:center;font-size:1.2rem;">Nenhum PDF encontrado nas pastas <code>/Original</code> e <code>/Translated</code>.</p>';
+    }
+}
+
+loadDocuments();
+</script>
+</body>
+</html>
