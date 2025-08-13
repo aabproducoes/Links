@@ -1,400 +1,893 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WANTED – Antonio Augusto Barbaro | 4000 GOLD</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>New Tab — Grid + Live (Edit + RSS)</title>
 <style>
   :root{
-    --wood1:#5a3d2b;
-    --wood2:#3f2a1f;
-    --wood3:#6e4c36;
-    --ink:#2a1b13;
-    --sepia:#d9c6a5;
-    --paper:#f0e2c6;
-    --paper-edge:#c9b18a;
-    --accent:#9b6b3f;
-    --gold:#f1c40f;
-    --blood:#7a2d1b;
-    --shadow: rgba(0,0,0,.45);
+    --bg:#0b0f17;
+    --card:#121827;
+    --muted:#94a3b8;
+    --text:#e6edf6;
+    --accent:#3b82f6;
+    --accent-weak:#1e3a8a;
+    --radius:18px;
+    --shadow:0 10px 30px rgba(0,0,0,.35);
   }
-
+  *{ box-sizing:border-box }
+  html,body{ height:100% }
   body{
-    margin:0;
-    color:var(--ink);
+    margin:0; color:var(--text);
     background:
-      repeating-linear-gradient(90deg,
-        var(--wood2) 0 10px,
-        var(--wood1) 10px 22px,
-        var(--wood3) 22px 32px
-      ),
-      radial-gradient(1200px 600px at 30% -10%, rgba(255,255,255,.05), transparent 60%),
-      radial-gradient(1200px 600px at 70% 110%, rgba(0,0,0,.2), transparent 60%);
-    background-blend-mode:multiply,normal,normal;
-    min-height:100svh;
-    font-family: "IM Fell English", "Cinzel", "Georgia", serif;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
+      radial-gradient(1200px 700px at 15% -10%, #0f172a 0%, transparent 55%),
+      radial-gradient(1200px 700px at 115% 120%, #0a0f1f 0%, transparent 60%),
+      var(--bg);
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial;
+    display:grid; place-items:center; padding:28px;
   }
 
-  .tack{
-    position:absolute;
-    width:16px;height:16px;border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, #eee, #bbb 40%, #444 70%);
-    box-shadow: 0 2px 6px var(--shadow), inset 0 1px 2px rgba(255,255,255,.5);
+  .container{ width:min(1200px, 100%); display:grid; gap:16px }
+
+  /* Header & tabs */
+  header{ display:grid; gap:12px; grid-template-columns: 1fr auto; align-items:center }
+  .greeting{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap }
+  .hello{ font-size:clamp(22px,3.5vw,36px); font-weight:700; letter-spacing:.2px }
+  .clock{ font-variant-numeric:tabular-nums; color:var(--muted); font-size:clamp(14px,2.2vw,18px) }
+
+  .tabs{ grid-column:1 / -1; display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+  .tab{
+    background:#0b1220; border:1px solid rgba(148,163,184,.25);
+    color:var(--text); padding:8px 12px; border-radius:12px; cursor:pointer;
+  }
+  .tab[aria-selected="true"]{ border-color:var(--accent); box-shadow:0 0 0 2px rgba(59,130,246,.25) inset }
+
+  .search{
+    grid-column:1/-1; padding:10px; border-radius:calc(var(--radius) + 6px);
+    background:linear-gradient(180deg, rgba(59,130,246,.14), rgba(59,130,246,.06));
+    border:1px solid rgba(148,163,184,.15); box-shadow:var(--shadow);
+  }
+  .search form{ display:flex; gap:10px }
+  .engine,.query,.go{ border-radius:12px; border:1px solid rgba(148,163,184,.22); outline:none }
+  .engine{ min-width:150px; background:#0b1220; color:var(--text); padding:10px 12px }
+  .query{ flex:1; background:#0b1220; color:var(--text); padding:12px 14px }
+  .engine:focus,.query:focus{ box-shadow:0 0 0 2px var(--accent) }
+  .go{ background:var(--accent); border:none; color:white; padding:12px 16px; font-weight:700; cursor:pointer }
+  .go:active{ transform:translateY(1px) }
+  .hint{ margin-top:6px; color:var(--muted); font-size:12px }
+  .kbd{ border:1px solid rgba(148,163,184,.3); padding:1px 6px; border-radius:6px; font-size:11px; color:#cbd5e1; background:#0b1220 }
+
+  .controls{ display:flex; gap:8px; align-items:center }
+  .iconBtn,.toggleEditBtn{
+    display:inline-flex; align-items:center; justify-content:center;
+    background:transparent; color:#cbd5e1; cursor:pointer;
+    border:1px dashed rgba(148,163,184,.4); padding:6px 10px; border-radius:10px;
+  }
+  .iconBtn svg,.toggleEditBtn svg{ width:16px; height:16px }
+  .toggleEditBtn[aria-pressed="true"]{
+    border:1px solid var(--accent);
+    box-shadow:0 0 0 2px rgba(59,130,246,.25) inset;
+    color:#eaf2ff;
+  }
+  .settingsBtn{
+    background:var(--accent); color:white; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700
   }
 
-  .poster{
-    position:relative;
-    max-width:900px;
-    width:min(92vw, 900px);
-    padding:28px 28px 18px;
-    background:
-      radial-gradient(1200px 400px at 50% 0, rgba(0,0,0,.08), transparent 60%),
-      repeating-linear-gradient(170deg, rgba(0,0,0,.03) 0 2px, transparent 2px 6px),
-      linear-gradient(#f7ebcf, #ecd8b5 50%, #e6d0aa);
-    border: 6px solid var(--paper-edge);
-    border-radius: 8px;
-    box-shadow: 0 18px 60px var(--shadow), 0 2px 0 rgba(255,255,255,.4) inset;
-    filter: sepia(.35) contrast(1.05);
-    transform: rotate(-.3deg);
+  /* HOME view (grid sections) */
+  .sections{ display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:16px }
+  .section{
+    background:linear-gradient(180deg, rgba(30,58,138,.3), rgba(2,6,23,.7));
+    border:1px solid rgba(59,130,246,.25);
+    border-radius:var(--radius); padding:14px; box-shadow:var(--shadow);
   }
-  .poster:before, .poster:after{
-    content:"";
-    position:absolute; inset:0;
-    background:
-      radial-gradient(400px 120px at 30% -30%, rgba(0,0,0,.18), transparent 60%),
-      radial-gradient(400px 120px at 70% 110%, rgba(0,0,0,.16), transparent 60%);
-    pointer-events:none;
-    border-radius: 4px;
+  .section h2{
+    margin:0 0 10px; font-size:15px; letter-spacing:.6px; text-transform:uppercase; color:#c7d2fe;
+    display:flex; align-items:center; justify-content:space-between
   }
-  .tack.tl{top:-10px; left:22px}
-  .tack.tr{top:-10px; right:22px}
-  .tack.bl{bottom:-10px; left:22px}
-  .tack.br{bottom:-10px; right:22px}
+  .row{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px }
+  .link{
+    display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px;
+    background:#0b1220; border:1px solid rgba(148,163,184,.25); color:#cbd5e1; text-decoration:none; position:relative; min-height:42px
+  }
+  .link:hover{ border-color:var(--accent) }
+  .link svg{ width:18px; height:18px; opacity:.9 }
+  .label{ font-weight:600; letter-spacing:.2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
 
-  .wanted{
-    text-align:center;
-    letter-spacing:.25rem;
-    font-size: clamp(36px, 6vw, 72px);
-    margin: 0 0 8px;
-    text-transform:uppercase;
-    color:#2b1a10;
-    text-shadow: 0 2px 0 #f6e8c8, 0 6px 12px rgba(0,0,0,.25);
+  /* Inline tools visibility is tied to edit mode */
+  .tools{ display:none }
+  body.editing .tools{ display:flex; gap:6px }
+  .toolbtn{
+    border:none; background:rgba(148,163,184,.12); color:#cbd5e1;
+    padding:6px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center
   }
+  .toolbtn svg{ width:14px; height:14px; display:block }
+  .secAdd{ display:none }
+  body.editing .secAdd{ display:inline-flex }
+  .quickAdd{ display:none }
+  body.editing .quickAdd{ display:inline-flex }
 
-  .name{
-    text-align:center;
-    font-size: clamp(24px, 3.5vw, 36px);
-    margin: 0 0 2px;
-    font-variant: small-caps;
+  /* LIVE view */
+  .view{ display:none }
+  .view[aria-hidden="false"]{ display:block }
+  .livegrid{
+    display:grid; gap:16px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   }
-  .role{
-    text-align:center;
-    font-size: clamp(14px, 2.5vw, 18px);
-    letter-spacing:.06em;
-    opacity:.85;
-    margin:0 0 12px;
+  .card{
+    background:var(--card); border:1px solid rgba(148,163,184,.22);
+    border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);
   }
+  .card h3{
+    margin:0 0 10px; font-size:14px; text-transform:uppercase; color:#c7d2fe; letter-spacing:.6px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px;
+  }
+  .miniRow{ display:flex; gap:6px; align-items:center }
+  .miniBtn{
+    border:none; background:rgba(148,163,184,.12); color:#cbd5e1;
+    padding:6px; border-radius:8px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center
+  }
+  .miniBtn svg{ width:14px; height:14px }
+  .bigclock{ font-size: clamp(28px, 6vw, 52px); font-weight:800; letter-spacing:.5px }
+  .muted{ color:var(--muted) }
+  .kpi{ font-size: clamp(18px, 3.5vw, 28px); font-weight:700 }
+  .delta.up{ color:#22c55e } .delta.down{ color:#ef4444 }
+  .rowpair{ display:flex; justify-content:space-between; gap:12px; margin:6px 0 }
 
-  /* Bounty banner – estável (sem rotacionar o container) */
-  .bounty{
-    position:relative;
-    text-align:center;
-    margin: 8px auto 16px;
-    width: fit-content;
-    padding: 8px 16px;
-    border: 3px double var(--blood);
-    color: var(--blood);
-    font-weight: 700;
-    letter-spacing:.1em;
-    box-shadow: 0 2px 0 rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.4);
-    background:
-      repeating-linear-gradient(90deg, transparent 0 8px, rgba(122,45,27,.08) 8px 10px),
-      linear-gradient(#fff2d8, #f4deaf);
-    transform: translateZ(0);           /* estabiliza rasterização */
-    will-change: filter;                 /* dica de performance, não afeta layout */
+  /* RSS list */
+  .rssList{ display:grid; gap:10px }
+  .rssItem{
+    display:grid; gap:4px; padding:10px; border-radius:12px;
+    background:#0b1220; border:1px solid rgba(148,163,184,.18);
   }
-  .bounty .star{
-    display:inline-block; margin:0 8px;
-    filter: drop-shadow(0 1px 0 rgba(0,0,0,.25));
-  }
-  .stamp{
-    position:absolute; right:-18px; top:-22px;
-    font: 700 12px/1 "Courier New", monospace;
-    color:#6b2c1a;
-    padding:6px 10px;
-    border:2px solid #6b2c1a;
-    opacity:.9;
-    background:#fbe8c6;
-    box-shadow: 0 2px 0 rgba(0,0,0,.2);
-    transform: rotate(12deg) translateZ(0);
-    will-change: transform;
-    transition: transform .18s ease, filter .18s ease;
-  }
-  /* Só o carimbo balança no hover — o texto fica estável */
-  .bounty:hover .stamp{
-    transform: rotate(16deg) translateY(-2px) scale(1.03) translateZ(0);
-    filter: drop-shadow(0 3px 3px rgba(0,0,0,.25));
-  }
+  .rssItem a{ color:#e6edf6; text-decoration:none; font-weight:600 }
+  .rssItem a:hover{ text-decoration:underline }
+  .rssMeta{ font-size:12px; color:var(--muted); display:flex; gap:8px; flex-wrap:wrap }
 
-  .grid{
-    display:grid;
-    grid-template-columns: 1.2fr .8fr;
-    gap:20px;
-  }
-  @media (max-width:900px){
-    .grid{ grid-template-columns: 1fr; }
-  }
+  footer{ margin-top:6px; color:var(--muted); font-size:12px; text-align:center }
 
-  .box{
-    border:2px dashed #a7895f;
-    background:
-      linear-gradient(transparent 0 98%, rgba(0,0,0,.04) 98% 100%),
-      linear-gradient(#f7ebcf, #ecd8b5);
-    padding:16px;
-    border-radius:6px;
-    position:relative;
-  }
-  .box h3{
-    margin:0 0 8px;
-    font-size: clamp(18px, 2.4vw, 22px);
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    color:#3a2417;
-  }
-  .box p, .box li{
-    line-height:1.5;
-    font-size: 16px;
-  }
-  .bullets li{
-    margin:.35em 0;
-    list-style:none;
-    position:relative;
-    padding-left:22px;
-  }
-  .bullets li:before{
-    content:"•";
-    position:absolute; left:0; top:0;
-    color:#3a2417;
-    transform: translateY(-1px) scale(1.2);
-  }
-
-  .timeline{
-    border-left: 3px solid #b39569;
-    padding-left:14px;
-    margin-left:6px;
-  }
-  .job{ margin: 10px 0 16px; }
-  .job .when{ font-size:13px; opacity:.8; letter-spacing:.05em; }
-  .job .title{ font-weight:700; }
-
-  .tabbar{
-    display:flex; gap:10px; flex-wrap:wrap;
-    margin: 14px 0 20px;
-    justify-content:center;
-  }
-  .tabbar button{
-    cursor:pointer;
-    border:2px solid #6a4a2f;
-    background: linear-gradient(#f0dec0, #e6cfa3);
-    padding:8px 12px;
-    border-radius:6px;
-    font-family: inherit;
-    letter-spacing:.06em;
-    transition: transform .08s ease, box-shadow .08s ease;
-    box-shadow: 0 2px 0 #6a4a2f;
-  }
-  .tabbar button.active{
-    transform: translateY(1px) rotate(-.7deg);
-    box-shadow: 0 1px 0 #6a4a2f;
-    background: linear-gradient(#ead1a3, #e1c38d);
-  }
-
-  .contact{
-    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
-    border-top:2px dotted #b08c5e;
-    margin-top:16px; padding-top:12px;
-    font-family: "Courier New", monospace;
-  }
-  .badge{
-    border:1px solid #8d6a40; border-radius:4px;
-    padding:6px 10px; background: linear-gradient(#ffefd0, #f1d7a4);
-  }
-
-  .controls{
-    display:flex; gap:8px; justify-content:center;
-    margin:14px 0 2px;
-  }
-  .btn{
-    cursor:pointer;
-    border:2px solid #6a4a2f;
-    background: linear-gradient(#ffeab2, #e6c27a);
-    padding:8px 14px; border-radius:6px;
-    font-family: inherit;
-    box-shadow: 0 2px 0 #6a4a2f;
-  }
-  .btn:hover{ filter: contrast(1.05); }
-  .smallprint{
-    text-align:center; font-size:12px; opacity:.7; margin-top:6px;
-  }
-
-  @media print{
-    body{ background:#fff; padding:0; }
-    .poster{ margin:0; width:auto; max-width:none; box-shadow:none; transform:none; }
-    .tack, .controls{ display:none!important; }
-    .tabbar{ display:none!important; }
+  @media (max-width:560px){
+    .row{ grid-template-columns: 1fr }
   }
 </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <div class="greeting">
+        <div class="hello">Olá, Antonio 👋</div>
+        <div class="clock" id="clock">--:--</div>
+      </div>
+      <div class="controls">
+        <!-- Toggle Edit Mode -->
+        <button class="toggleEditBtn" id="toggleEdit" aria-label="Toggle edit mode" aria-pressed="false" title="Edit (E)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="3"></rect>
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+        </button>
+        <!-- Quick Add (only in edit mode) -->
+        <button class="iconBtn quickAdd" id="quickAdd" title="Add Link (N)" aria-label="Add link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M12 8v8M8 12h8"></path>
+          </svg>
+        </button>
+        <button class="settingsBtn" id="openSettings" aria-label="Open settings">Settings</button>
+      </div>
 
-  <div class="poster" id="poster">
-    <span class="tack tl"></span>
-    <span class="tack tr"></span>
-    <span class="tack bl"></span>
-    <span class="tack br"></span>
+      <div class="tabs" role="tablist" aria-label="Views">
+        <button class="tab" role="tab" id="tab-home" aria-selected="true" aria-controls="view-home">Home</button>
+        <button class="tab" role="tab" id="tab-live" aria-selected="false" aria-controls="view-live">Live</button>
+      </div>
 
-    <h1 class="wanted">WANTED</h1>
-    <p class="name" id="nome">Antonio Augusto Barbaro</p>
-    <p class="role" id="cargo">Desenvolvedor Web • Front-end & Game Dev</p>
+      <div class="search">
+        <form id="searchForm">
+          <select class="engine" id="engine" aria-label="Search engine">
+            <option value="google">Google</option>
+            <option value="ddg">DuckDuckGo</option>
+            <option value="yt">YouTube</option>
+            <option value="gpt">ChatGPT</option>
+            <option value="wiki">Wikipedia</option>
+          </select>
+          <input class="query" id="q" type="text" placeholder="Search the web… (press S to focus)" autocomplete="off" />
+          <button class="go" type="submit" aria-label="Search">Go ↵</button>
+        </form>
+        <div class="hint">Shortcuts: <span class="kbd">S</span> focus • <span class="kbd">E</span> edit • <span class="kbd">N</span> add (in edit)</div>
+      </div>
+    </header>
 
-    <div class="bounty" aria-label="Recompensa">
-      <span class="star">★</span>
-      RECOMPENSA: <span style="color:var(--gold); text-shadow:0 1px 0 #8c6b12;">4000 GOLD</span>
-      <span class="star">★</span>
-      <span class="stamp">OFERTA VÁLIDA</span>
-    </div>
+    <!-- HOME (grid) -->
+    <main id="view-home" class="view" aria-hidden="false">
+      <section class="sections" id="sections"></section>
+      <footer>Links are local only. Tip: Shift+Enter opens search in a new tab.</footer>
+    </main>
 
-    <div class="tabbar" role="tablist" aria-label="Seções">
-      <button class="active" data-tab="sobre" role="tab" aria-selected="true">Sobre</button>
-      <button data-tab="experiencia" role="tab" aria-selected="false">Experiência</button>
-      <button data-tab="projetos" role="tab" aria-selected="false">Projetos</button>
-      <button data-tab="habilidades" role="tab" aria-selected="false">Habilidades</button>
-      <button data-tab="contato" role="tab" aria-selected="false">Contato</button>
-    </div>
+    <!-- LIVE (dashboard) -->
+    <main id="view-live" class="view" aria-hidden="true">
+      <div class="livegrid">
+        <div class="card">
+          <h3>Time & Date</h3>
+          <div class="bigclock" id="liveTime">--:--:--</div>
+          <div class="muted" id="liveDate">--</div>
+        </div>
 
-    <div class="grid">
-      <section class="box" id="sobre" role="region" aria-labelledby="tab-sobre">
-        <h3>Quem sou</h3>
-        <p>
-          Pistoleiro do código com foco em experiências web rápidas e polidas.
-          Adoro transformar ideias em interfaces vivas, com animações, jogos em HTML5
-          e UIs que dão prazer de usar. Trabalho bem sob pressão de tiroteio. 🤠
-        </p>
-        <ul class="bullets">
-          <li>HTML5, CSS/SCSS, JavaScript/TypeScript, Canvas/WebGL</li>
-          <li>Games 2D/3D no navegador, efeitos “juice” e UI responsiva</li>
-          <li>Automação com Python e integração de ferramentas</li>
-        </ul>
-      </section>
+        <div class="card">
+          <h3>Weather
+            <button class="miniBtn" id="refreshWeather" title="Refresh">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </button>
+          </h3>
+          <div class="kpi" id="wxTemp">--°C</div>
+          <div class="muted" id="wxDesc">Locating…</div>
+        </div>
 
-      <aside class="box" id="habilidades" hidden>
-        <h3>Habilidades</h3>
-        <ul class="bullets">
-          <li>Front-end: React, Vanilla JS, animações, acessibilidade</li>
-          <li>Game dev: física básica, partículas, HUDs, inventário</li>
-          <li>Ferramentas: Git, Figma, Blender (renders estáticos)</li>
-          <li>Workflow: design systems, otimização, testes manuais</li>
-        </ul>
-      </aside>
-
-      <section class="box" id="experiencia" hidden>
-        <h3>Experiência</h3>
-        <div class="timeline">
-          <div class="job">
-            <div class="title">Front-end & Game Dev Freelancer — Remoto</div>
-            <div class="when">2022 — Presente</div>
-            <ul class="bullets">
-              <li>Criação de mini-jogos HTML5, protótipos e landing pages temáticas.</li>
-              <li>Refino de UI/UX, animações e performance para web e mobile.</li>
-            </ul>
-          </div>
-          <div class="job">
-            <div class="title">Desenvolvedor Web — Agência XYZ</div>
-            <div class="when">2020 — 2022</div>
-            <ul class="bullets">
-              <li>Componentes reutilizáveis, micro-interações e sites de alto tráfego.</li>
-              <li>Integração com APIs e otimização de build.</li>
-            </ul>
+        <div class="card">
+          <h3>Crypto (BTC · ETH)
+            <button class="miniBtn" id="refreshCrypto" title="Refresh">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </button>
+          </h3>
+          <div id="cryptoBox">
+            <div class="rowpair"><span>BTC</span><span id="btcUsd">--</span></div>
+            <div class="rowpair muted"><span></span><span id="btcBrl">--</span></div>
+            <div class="rowpair"><span>ETH</span><span id="ethUsd">--</span></div>
+            <div class="rowpair muted"><span></span><span id="ethBrl">--</span></div>
+            <div class="muted" id="cryptoDelta">24h: --</div>
           </div>
         </div>
-      </section>
 
-      <section class="box" id="projetos" hidden>
-        <h3>Projetos</h3>
-        <ul class="bullets">
-          <li><strong>Scrolls of Eternia</strong> — RPG 2D em HTML com HUD mágico e sistema de magias.</li>
-          <li><strong>Rotary Rings TD</strong> — Tower Defense circular com efeitos visuais e loja.</li>
-          <li><strong>ASCII Weather City</strong> — Fundo ASCII animado com parallax e sons de clima.</li>
-        </ul>
-      </section>
-
-      <section class="box" id="contato" hidden>
-        <h3>Contato</h3>
-        <p>Disponível para contratos, bicos e duelos de bugs ao pôr do sol.</p>
-        <div class="contact">
-          <span class="badge">📧 seu.email@exemplo.com</span>
-          <span class="badge">🌐 seuportfólio.exemplo</span>
-          <span class="badge">📞 +55 (00) 00000-0000</span>
-          <span class="badge">🏜️ Brasil</span>
+        <div class="card">
+          <h3>USD ↔ BRL
+            <button class="miniBtn" id="refreshFX" title="Refresh">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+            </button>
+          </h3>
+          <div class="kpi" id="fxRate">--</div>
+          <div class="muted" id="fxUpdated">—</div>
         </div>
-      </section>
-    </div>
 
-    <div class="controls">
-      <button class="btn" id="printBtn">Imprimir / Salvar em PDF</button>
-      <button class="btn" id="editBtn">Editar Nome & Cargo</button>
-    </div>
-    <div class="smallprint">Tema Faroeste. Tudo em um único arquivo. “RECOMPENSA: 4000 GOLD”.</div>
+        <!-- Headlines (RSS) -->
+        <div class="card">
+          <h3>
+            <span>Headlines (RSS)</span>
+            <span class="miniRow">
+              <select id="rssSelect" class="engine" style="min-width:180px; padding:6px 8px">
+                <!-- populated in JS -->
+              </select>
+              <button class="miniBtn" id="refreshRSS" title="Refresh">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg>
+              </button>
+              <button class="miniBtn" id="manageRSS" title="Manage feeds">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"></path>
+                </svg>
+              </button>
+            </span>
+          </h3>
+          <div class="rssList" id="rssList">
+            <div class="muted">Loading headlines…</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Network</h3>
+          <div class="rowpair"><span>Status</span><span id="netStatus">--</span></div>
+          <div class="rowpair"><span>Type</span><span id="netType">--</span></div>
+          <div class="rowpair"><span>Downlink</span><span id="netDown">--</span></div>
+          <div class="muted" id="netNote">—</div>
+        </div>
+      </div>
+      <footer>Weather via Open-Meteo • Crypto via CoinGecko • FX via exchangerate.host • RSS via site feeds (through allorigins)</footer>
+    </main>
   </div>
 
-<script>
-  // Tabs
-  const tabs = document.querySelectorAll('.tabbar button');
-  const sections = {
-    sobre: document.getElementById('sobre'),
-    experiencia: document.getElementById('experiencia'),
-    projetos: document.getElementById('projetos'),
-    habilidades: document.getElementById('habilidades'),
-    contato: document.getElementById('contato'),
-  };
+  <!-- Add/Edit Link Modal -->
+  <dialog id="linkModal">
+    <div class="modal-head" id="modalTitle">Add Link</div>
+    <div class="modal-body">
+      <div class="field"><label for="mLabel">Label</label><input id="mLabel" placeholder="e.g., Instagram" /></div>
+      <div class="field"><label for="mUrl">URL</label><input id="mUrl" placeholder="https://…" /></div>
+      <div class="field"><label for="mSection">Section</label><select id="mSection"></select></div>
+      <div class="field"><label for="mIcon">Icon (optional SVG or emoji)</label><input id="mIcon" placeholder="😀 or &lt;svg …&gt;" /></div>
+    </div>
+    <div class="modal-foot">
+      <button class="cancelBtn" id="cancelLink">Cancel</button>
+      <button class="saveBtn" id="saveLink">Save</button>
+    </div>
+  </dialog>
 
-  tabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      tabs.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const id = btn.dataset.tab;
-      Object.entries(sections).forEach(([k,el])=>{
-        el.hidden = (k !== id && !(id==='sobre' && k==='sobre'));
-      });
-      if(id==='sobre'){
-        sections.sobre.hidden = false;
-        sections.experiencia.hidden = true;
-        sections.projetos.hidden = true;
-        sections.habilidades.hidden = true;
-        sections.contato.hidden = true;
-      }
+  <!-- Settings Modal -->
+  <dialog id="settingsModal">
+    <div class="modal-head">Settings</div>
+    <div class="modal-body">
+      <div class="field"><label for="accentPicker">Accent Color</label><input id="accentPicker" type="color" value="#3b82f6" /></div>
+      <div class="field"><label>Sections (toggle visibility)</label><div id="sectionToggles"></div></div>
+      <div class="field">
+        <label>Backup</label>
+        <div style="display:flex; gap:8px; flex-wrap:wrap">
+          <button class="cancelBtn" id="exportBtn">Export JSON</button>
+          <label class="cancelBtn" style="cursor:pointer">Import JSON<input id="importFile" type="file" accept="application/json" style="display:none"></label>
+          <button class="cancelBtn" id="resetBtn" title="Reset to defaults">Reset</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="saveBtn" id="closeSettings">Done</button></div>
+  </dialog>
+
+<script>
+/* ---------- Keys ---------- */
+const EDIT_KEY = "newtab_editMode_v1";
+const STORAGE_KEY = "newtab_state_v3_live";
+const RSS_KEY = "newtab_rssFeeds_v1";
+
+/* ---------- App State ---------- */
+const DEFAULT_STATE = {
+  accent: "#3b82f6",
+  sections: {
+    "Social": { visible: true, links: [
+      { label:"Instagram", url:"https://instagram.com/", icon:"📸" },
+      { label:"Facebook",  url:"https://facebook.com/",  icon:"📘" },
+      { label:"X / Twitter", url:"https://twitter.com/", icon:"✖️" },
+      { label:"TikTok", url:"https://www.tiktok.com/", icon:"🎵" },
+      { label:"Reddit", url:"https://reddit.com/", icon:"👽" },
+      { label:"LinkedIn", url:"https://linkedin.com/", icon:"💼" },
+      { label:"WhatsApp Web", url:"https://web.whatsapp.com/", icon:"💬" },
+      { label:"Telegram Web", url:"https://web.telegram.org/", icon:"✉️" },
+      { label:"Discord", url:"https://discord.com/app", icon:"🗣️" },
+      { label:"YouTube", url:"https://youtube.com/", icon:"▶️" }
+    ]},
+    "Shops": { visible: true, links: [
+      { label:"Amazon", url:"https://www.amazon.com/", icon:"🛒" },
+      { label:"Mercado Livre", url:"https://www.mercadolivre.com.br/", icon:"🛍️" },
+      { label:"Shopee", url:"https://shopee.com.br/", icon:"🛍️" },
+      { label:"AliExpress", url:"https://www.aliexpress.com/", icon:"📦" },
+      { label:"eBay", url:"https://www.ebay.com/", icon:"🏷️" },
+      { label:"Americanas", url:"https://www.americanas.com.br/", icon:"🛒" },
+      { label:"Magazine Luiza", url:"https://www.magazineluiza.com.br/", icon:"🛒" },
+      { label:"Submarino", url:"https://www.submarino.com.br/", icon:"🛒" }
+    ]},
+    "Gaming": { visible: true, links: [
+      { label:"Steam", url:"https://store.steampowered.com/", icon:"🎮" },
+      { label:"Epic Games", url:"https://store.epicgames.com/", icon:"🕹️" },
+      { label:"GOG", url:"https://www.gog.com/", icon:"🧩" },
+      { label:"itch.io", url:"https://itch.io/", icon:"🧪" },
+      { label:"Battle.net", url:"https://battle.net/", icon:"⚔️" },
+      { label:"Twitch", url:"https://www.twitch.tv/", icon:"📺" },
+      { label:"YouTube Gaming", url:"https://www.youtube.com/gaming", icon:"▶️" },
+      { label:"PC Gamer", url:"https://www.pcgamer.com/", icon:"📰" }
+    ]},
+    "E-commerce / Marketplaces": { visible: true, links: [
+      { label:"OLX", url:"https://www.olx.com.br/", icon:"📣" },
+      { label:"Etsy", url:"https://www.etsy.com/", icon:"🧶" },
+      { label:"Facebook Marketplace", url:"https://www.facebook.com/marketplace", icon:"🏠" },
+      { label:"Enjoei", url:"https://www.enjoei.com.br/", icon:"👗" },
+      { label:"Kabum!", url:"https://www.kabum.com.br/", icon:"💻" },
+      { label:"Netshoes", url:"https://www.netshoes.com.br/", icon:"👟" }
+    ]},
+    "News": { visible: true, links: [
+      { label:"G1", url:"https://g1.globo.com/", icon:"🗞️" },
+      { label:"UOL", url:"https://www.uol.com.br/", icon:"🌐" },
+      { label:"Folha", url:"https://www.folha.uol.com.br/", icon:"📰" },
+      { label:"BBC", url:"https://www.bbc.com/", icon:"🌍" },
+      { label:"Reuters", url:"https://www.reuters.com/", icon:"🛰️" },
+      { label:"AP News", url:"https://apnews.com/", icon:"🗞️" },
+      { label:"The Guardian", url:"https://www.theguardian.com/", icon:"📰" },
+      { label:"NYTimes", url:"https://www.nytimes.com/", icon:"🗽" }
+    ]},
+    "Economy / Finance": { visible: true, links: [
+      { label:"Bloomberg", url:"https://www.bloomberg.com/", icon:"📈" },
+      { label:"Valor Econômico", url:"https://valor.globo.com/", icon:"💹" },
+      { label:"Yahoo Finance", url:"https://finance.yahoo.com/", icon:"💵" },
+      { label:"TradingView", url:"https://www.tradingview.com/", icon:"📊" },
+      { label:"Investing.com", url:"https://www.investing.com/", icon:"📉" },
+      { label:"WSJ Markets", url:"https://www.wsj.com/market-data", icon:"📰" }
+    ]},
+    "Crypto": { visible: true, links: [
+      { label:"CoinMarketCap", url:"https://coinmarketcap.com/", icon:"🪙" },
+      { label:"CoinGecko", url:"https://www.coingecko.com/", icon:"🦎" },
+      { label:"Binance", url:"https://www.binance.com/", icon:"🏦" },
+      { label:"Coinbase", url:"https://www.coinbase.com/", icon:"🏦" },
+      { label:"Kraken", url:"https://www.kraken.com/", icon:"🐙" },
+      { label:"OKX", url:"https://www.okx.com/", icon:"🧭" },
+      { label:"Blockchain.com", url:"https://www.blockchain.com/explorer", icon:"🔎" },
+      { label:"Etherscan", url:"https://etherscan.io/", icon:"🔗" }
+    ]},
+    "Other Common Stuff": { visible: true, links: [
+      { label:"Google Maps", url:"https://maps.google.com/", icon:"🗺️" },
+      { label:"Translate", url:"https://translate.google.com/", icon:"🌐" },
+      { label:"Calendar", url:"https://calendar.google.com/", icon:"📅" },
+      { label:"Drive", url:"https://drive.google.com/", icon:"🗂️" },
+      { label:"Docs", url:"https://docs.google.com/", icon:"📄" },
+      { label:"Gmail", url:"https://mail.google.com/", icon:"✉️" },
+      { label:"GitHub", url:"https://github.com/", icon:"🐙" },
+      { label:"Stack Overflow", url:"https://stackoverflow.com/", icon:"💡" },
+      { label:"Wikipedia", url:"https://wikipedia.org/", icon:"📚" },
+      { label:"Speedtest", url:"https://www.speedtest.net/", icon:"🚀" },
+      { label:"Weather", url:"https://www.weather.com/", icon:"☁️" },
+      { label:"Canva", url:"https://www.canva.com/", icon:"🎨" }
+    ]},
+    "Friendly Sites": { visible: true, links: [
+      { label:"New Tab Replacement", url:"https://aabproducoes.github.io/NewTab/", icon:"🧭" }
+    ]}
+  }
+};
+
+let state = loadState();
+
+/* ---------- Utilities ---------- */
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); applyTheme() }
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return structuredClone(DEFAULT_STATE);
+    const parsed = JSON.parse(raw);
+    return deepMerge(structuredClone(DEFAULT_STATE), parsed);
+  }catch{ return structuredClone(DEFAULT_STATE) }
+}
+function deepMerge(base, extra){
+  for(const k in extra){
+    if(extra[k] && typeof extra[k]==="object" && !Array.isArray(extra[k])){
+      base[k] = deepMerge(base[k] ?? {}, extra[k]);
+    }else base[k] = extra[k];
+  }
+  return base;
+}
+function applyTheme(){
+  document.documentElement.style.setProperty("--accent", state.accent);
+  document.documentElement.style.setProperty("--accent-weak", shade(state.accent, -35));
+}
+function shade(hex, pct){
+  const c = hex.replace("#",""); if(c.length!==6) return hex;
+  const n = x=>Math.max(0,Math.min(255, Math.round(x)));
+  const [r,g,b]=[parseInt(c.slice(0,2),16), parseInt(c.slice(2,4),16), parseInt(c.slice(4,6),16)];
+  const m = 1 + pct/100;
+  return "#" + [n(r*m),n(g*m),n(b*m)].map(v=>v.toString(16).padStart(2,"0")).join("");
+}
+
+/* ---------- Clock (header + live) ---------- */
+function tickClock(){
+  const now = new Date();
+  const tOpts = { hour:"2-digit", minute:"2-digit", second:"2-digit" };
+  const dOpts = { weekday:"short", year:"numeric", month:"short", day:"numeric" };
+  document.getElementById("clock").textContent = now.toLocaleTimeString([],tOpts) + " — " + now.toLocaleDateString();
+  document.getElementById("liveTime").textContent = now.toLocaleTimeString([],tOpts);
+  document.getElementById("liveDate").textContent = now.toLocaleDateString([],dOpts);
+}
+setInterval(tickClock, 1000); tickClock();
+
+/* ---------- Tabs ---------- */
+const homeTab = document.getElementById("tab-home");
+const liveTab = document.getElementById("tab-live");
+const viewHome = document.getElementById("view-home");
+const viewLive = document.getElementById("view-live");
+homeTab.addEventListener("click", ()=>setView("home"));
+liveTab.addEventListener("click", ()=>setView("live"));
+function setView(which){
+  const isLive = which==="live";
+  homeTab.setAttribute("aria-selected", String(!isLive));
+  liveTab.setAttribute("aria-selected", String(isLive));
+  viewHome.setAttribute("aria-hidden", String(isLive));
+  viewLive.setAttribute("aria-hidden", String(!isLive));
+}
+
+/* ---------- Search ---------- */
+const engineMap = {
+  google: q => `https://www.google.com/search?q=${encodeURIComponent(q)}`,
+  ddg:    q => `https://duckduckgo.com/?q=${encodeURIComponent(q)}`,
+  yt:     q => `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}`,
+  gpt:    q => `https://chat.openai.com/?q=${encodeURIComponent(q)}`,
+  wiki:   q => `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(q)}`
+};
+document.getElementById("searchForm").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  const q = document.getElementById("q").value.trim();
+  const eng = document.getElementById("engine").value;
+  const url = engineMap[eng](q || "");
+  if(e.shiftKey) window.open(url, "_blank"); else location.href = url;
+});
+
+/* ---------- Edit Mode ---------- */
+const toggleEditBtn = document.getElementById("toggleEdit");
+const quickAddBtn = document.getElementById("quickAdd");
+let editMode = JSON.parse(localStorage.getItem(EDIT_KEY) || "false");
+function setEditMode(on){
+  editMode = !!on;
+  document.body.classList.toggle("editing", editMode);
+  toggleEditBtn.setAttribute("aria-pressed", String(editMode));
+  localStorage.setItem(EDIT_KEY, JSON.stringify(editMode));
+}
+toggleEditBtn.addEventListener("click", ()=> setEditMode(!editMode));
+
+/* Keyboard shortcuts */
+window.addEventListener("keydown",(e)=>{
+  const tag = (e.target.tagName || "").toLowerCase();
+  const inInput = tag==="input" || tag==="textarea" || e.target.isContentEditable;
+  if(e.key.toLowerCase()==="s" && !e.metaKey && !e.ctrlKey && !inInput){ e.preventDefault(); document.getElementById("q").focus(); }
+  if(e.key.toLowerCase()==="e" && !e.metaKey && !e.ctrlKey){ e.preventDefault(); setEditMode(!editMode); }
+  if(e.key.toLowerCase()==="n" && !e.metaKey && !e.ctrlKey && editMode){ e.preventDefault(); openLinkModal({}); }
+  if(e.key==="?" && !inInput){ e.preventDefault(); alert("Shortcuts:\n• S — focus search\n• E — toggle edit mode\n• N — add link (in edit)\n• Shift+Enter in search — open in new tab"); }
+});
+
+/* ---------- Sections Render (Home) ---------- */
+const sectionsEl = document.getElementById("sections");
+function renderSections(){
+  sectionsEl.innerHTML = "";
+  Object.entries(state.sections).forEach(([name, data])=>{
+    if(!data.visible) return;
+    const sec = document.createElement("section");
+    sec.className = "section";
+    sec.innerHTML = `
+      <h2>
+        <span>${name}</span>
+        <button class="iconBtn secAdd" data-sec="${name}" title="Add link to ${name}" aria-label="Add link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="3"></rect><path d="M12 8v8M8 12h8"></path>
+          </svg>
+        </button>
+      </h2>
+      <div class="row">${data.links.map((link,i)=>renderLink(link,name,i)).join("")}</div>
+    `;
+    sectionsEl.appendChild(sec);
+  });
+
+  sectionsEl.querySelectorAll("button.secAdd").forEach(btn=>{
+    btn.addEventListener("click", ()=> openLinkModal({ section: btn.dataset.sec }));
+  });
+  sectionsEl.querySelectorAll(".tool-del").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const {section,index}=btn.dataset;
+      state.sections[section].links.splice(Number(index),1);
+      saveState(); renderSections();
     });
   });
-
-  // Print
-  document.getElementById('printBtn').addEventListener('click', ()=>window.print());
-
-  // Inline edit
-  document.getElementById('editBtn').addEventListener('click', ()=>{
-    const nome = document.getElementById('nome');
-    const cargo = document.getElementById('cargo');
-    const novoNome = prompt('Seu nome para o pôster:', nome.textContent.trim());
-    if(novoNome) nome.textContent = novoNome;
-    const novoCargo = prompt('Seu cargo/área:', cargo.textContent.trim());
-    if(novoCargo) cargo.textContent = novoCargo;
+  sectionsEl.querySelectorAll(".tool-edit").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const {section,index}=btn.dataset;
+      openLinkModal({ section, editIndex:Number(index), link: state.sections[section].links[Number(index)] });
+    });
   });
+  sectionsEl.querySelectorAll(".tool-up,.tool-down").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const {section,index,dir}=btn.dataset;
+      const arr=state.sections[section].links, i=Number(index), j=dir==="up"?i-1:i+1;
+      if(j<0||j>=arr.length) return;
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+      saveState(); renderSections();
+    });
+  });
+}
+function renderLink(link, section, index){
+  const icon=(link.icon||"").trim();
+  const iconEl= icon.startsWith("<svg") ? icon : `<span aria-hidden="true">${icon||"🔗"}</span>`;
+  return `
+    <a class="link" href="${link.url}" target="_blank" rel="noopener">
+      ${iconEl}<span class="label" title="${escapeHTML(link.label||link.url)}">${escapeHTML(link.label||link.url)}</span>
+      <span class="tools">
+        <button class="toolbtn tool-up" data-section="${section}" data-index="${index}" data-dir="up" title="Move up" aria-label="Move up">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8l-6 6h12l-6-6z"></path></svg>
+        </button>
+        <button class="toolbtn tool-down" data-section="${section}" data-index="${index}" data-dir="down" title="Move down" aria-label="Move down">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16l6-6H6l6 6z"></path></svg>
+        </button>
+        <button class="toolbtn tool-edit" data-section="${section}" data-index="${index}" title="Edit" aria-label="Edit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path></svg>
+        </button>
+        <button class="toolbtn tool-del" data-section="${section}" data-index="${index}" title="Delete" aria-label="Delete">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><rect x="5" y="6" width="14" height="16" rx="2"></rect><path d="M10 11v6M14 11v6"></path></svg>
+        </button>
+      </span>
+    </a>
+  `;
+}
+function escapeHTML(s){ return (s||"").replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m])) }
 
-  // Removido: animação no container .bounty (causava flicker)
-  // Agora o efeito está 100% no CSS, apenas na .stamp
+/* ---------- Link Modal ---------- */
+const linkModal=document.getElementById("linkModal");
+const mLabel=document.getElementById("mLabel");
+const mUrl=document.getElementById("mUrl");
+const mIcon=document.getElementById("mIcon");
+const mSection=document.getElementById("mSection");
+let editing={ section:null, index:null };
+
+function openLinkModal({ section=null, editIndex=null, link=null }={}){
+  mSection.innerHTML = Object.keys(state.sections).map(s=>`<option value="${s}">${s}</option>`).join("");
+  document.getElementById("modalTitle").textContent = editIndex!=null ? "Edit Link" : "Add Link";
+  editing.section = section || Object.keys(state.sections)[0];
+  editing.index = editIndex;
+  mSection.value = editing.section;
+  mLabel.value = link?.label || "";
+  mUrl.value = link?.url || "";
+  mIcon.value = link?.icon || "";
+  linkModal.showModal(); mLabel.focus();
+}
+document.getElementById("saveLink").addEventListener("click", ()=>{
+  const obj = { label:mLabel.value.trim() || "Untitled", url:mUrl.value.trim(), icon:mIcon.value.trim() };
+  if(!/^https?:\/\//i.test(obj.url)) { alert("Please enter a valid URL starting with http(s)://"); return; }
+  const sec=mSection.value;
+  if(editing.index!=null){ state.sections[sec].links[editing.index]=obj; }
+  else{ state.sections[sec].links.push(obj); }
+  saveState(); renderSections(); linkModal.close();
+});
+document.getElementById("cancelLink").addEventListener("click", ()=> linkModal.close());
+document.getElementById("quickAdd").addEventListener("click", ()=> openLinkModal({}));
+
+/* ---------- Settings ---------- */
+const settingsModal=document.getElementById("settingsModal");
+const accentPicker=document.getElementById("accentPicker");
+const sectionToggles=document.getElementById("sectionToggles");
+document.getElementById("openSettings").addEventListener("click", ()=>{
+  accentPicker.value=state.accent;
+  sectionToggles.innerHTML = Object.entries(state.sections).map(([name,data])=>{
+    const id = "sec_"+name.replace(/\s+/g,"_");
+    return `<label style="display:flex; gap:8px; align-items:center">
+      <input id="${id}" data-sec="${name}" type="checkbox" ${data.visible?"checked":""}/>
+      <span>${name}</span>
+    </label>`;
+  }).join("");
+  settingsModal.showModal();
+});
+document.getElementById("closeSettings").addEventListener("click", ()=>{
+  state.accent = accentPicker.value || state.accent;
+  sectionToggles.querySelectorAll("input[type=checkbox]").forEach(cb=>{
+    state.sections[cb.dataset.sec].visible = cb.checked;
+  });
+  saveState(); renderSections(); settingsModal.close();
+});
+document.getElementById("exportBtn").addEventListener("click", ()=>{
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const a=Object.assign(document.createElement("a"),{download:"newtab-backup.json",href:URL.createObjectURL(blob)});
+  a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById("importFile").addEventListener("change",(e)=>{
+  const file=e.target.files[0]; if(!file) return;
+  const r=new FileReader();
+  r.onload=()=>{ try{ state=deepMerge(structuredClone(DEFAULT_STATE), JSON.parse(r.result)); saveState(); renderSections(); alert("Imported!"); }catch{ alert("Invalid JSON"); } };
+  r.readAsText(file);
+});
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  if(confirm("Reset to default links and settings?")){ state=structuredClone(DEFAULT_STATE); saveState(); renderSections(); }
+});
+
+/* ---------- LIVE: Weather ---------- */
+async function getWeather(){
+  const t = (s)=>document.getElementById(s);
+  t("wxTemp").textContent = "…";
+  t("wxDesc").textContent = "Loading weather…";
+  try{
+    const coords = await getCoords();
+    const { latitude, longitude } = coords || { latitude: -23.55, longitude: -46.63 }; // São Paulo fallback
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+    const res = await fetch(url, { cache: "no-store" });
+    if(!res.ok) throw new Error("wx http "+res.status);
+    const data = await res.json();
+    const cw = data.current_weather;
+    t("wxTemp").textContent = `${Math.round(cw.temperature)}°C`;
+    t("wxDesc").textContent = `Wind ${Math.round(cw.windspeed)} km/h • ${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+  }catch(e){
+    t("wxTemp").textContent = "--°C";
+    t("wxDesc").textContent = "Weather unavailable";
+  }
+}
+function getCoords(){
+  return new Promise((resolve)=> {
+    if(!navigator.geolocation){ resolve(null); return; }
+    const done = (pos)=>resolve(pos.coords);
+    const fail = ()=>resolve(null);
+    navigator.geolocation.getCurrentPosition(done, fail, { enableHighAccuracy:true, timeout:5000, maximumAge:600000 });
+  });
+}
+document.getElementById("refreshWeather").addEventListener("click", getWeather);
+
+/* ---------- LIVE: Crypto ---------- */
+async function getCrypto(){
+  const $ = (id)=>document.getElementById(id);
+  try{
+    $("btcUsd").textContent="…"; $("ethUsd").textContent="…";
+    $("btcBrl").textContent="…"; $("ethBrl").textContent="…"; $("cryptoDelta").textContent="…";
+    const url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd,brl&include_24hr_change=true";
+    const res = await fetch(url, { cache:"no-store" });
+    if(!res.ok) throw new Error("crypto http "+res.status);
+    const data = await res.json();
+    const b = data.bitcoin, e = data.ethereum;
+    $("btcUsd").textContent = `$${formatNum(b.usd)} USD`;
+    $("btcBrl").textContent = `R$ ${formatNum(b.brl)} BRL`;
+    $("ethUsd").textContent = `$${formatNum(e.usd)} USD`;
+    $("ethBrl").textContent = `R$ ${formatNum(e.brl)} BRL`;
+    const delta = [];
+    if(typeof b.usd_24h_change === "number"){ delta.push(`BTC ${fmtDelta(b.usd_24h_change)}`); }
+    if(typeof e.usd_24h_change === "number"){ delta.push(`ETH ${fmtDelta(e.usd_24h_change)}`); }
+    $("cryptoDelta").innerHTML = `24h: ${delta.join(" · ")}`;
+  }catch(e){
+    ["btcUsd","btcBrl","ethUsd","ethBrl","cryptoDelta"].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent="--"; });
+  }
+}
+function fmtDelta(x){ const cls = x>=0 ? "up":"down"; const s = (x>=0?"+":"") + x.toFixed(2) + "%"; return `<span class="delta ${cls}">${s}</span>`; }
+function formatNum(n){ return (n>=1000)? n.toLocaleString(undefined,{maximumFractionDigits:0}) : n.toLocaleString(undefined,{maximumFractionDigits:2}); }
+document.getElementById("refreshCrypto").addEventListener("click", getCrypto);
+
+/* ---------- LIVE: FX USD/BRL ---------- */
+async function getFX(){
+  const rateEl = document.getElementById("fxRate");
+  const updEl  = document.getElementById("fxUpdated");
+  try{
+    rateEl.textContent = "…"; updEl.textContent = "";
+    const res = await fetch("https://api.exchangerate.host/latest?base=USD&symbols=BRL", { cache:"no-store" });
+    if(!res.ok) throw new Error("fx http "+res.status);
+    const data = await res.json();
+    const rate = data?.rates?.BRL;
+    rateEl.textContent = `1 USD = ${rate.toFixed(4)} BRL`;
+    updEl.textContent = `As of ${new Date(data.date).toLocaleDateString()}`;
+  }catch(e){
+    rateEl.textContent = "--";
+    updEl.textContent = "FX unavailable";
+  }
+}
+document.getElementById("refreshFX").addEventListener("click", getFX);
+
+/* ---------- LIVE: Network ---------- */
+function updateNetwork(){
+  const st = document.getElementById("netStatus");
+  const tp = document.getElementById("netType");
+  const dn = document.getElementById("netDown");
+  const nt = document.getElementById("netNote");
+  st.textContent = navigator.onLine ? "Online" : "Offline";
+  const info = navigator.connection || navigator.webkitConnection || navigator.mozConnection;
+  if(info){
+    tp.textContent = info.effectiveType || "—";
+    dn.textContent = (info.downlink? info.downlink+" Mbps" : "—");
+    nt.textContent = info.saveData ? "Data saver ON" : "—";
+  }else{ tp.textContent = "—"; dn.textContent = "—"; nt.textContent = "—"; }
+}
+window.addEventListener("online", updateNetwork);
+window.addEventListener("offline", updateNetwork);
+
+/* ---------- LIVE: Headlines (RSS) ---------- */
+const DEFAULT_FEEDS = [
+  { name: "G1 (Brasil)", url: "https://g1.globo.com/dynamo/rss2.xml" },
+  { name: "BBC World",   url: "http://feeds.bbci.co.uk/news/world/rss.xml" },
+  { name: "Reuters World", url: "https://feeds.reuters.com/reuters/worldNews" }
+];
+
+function loadFeeds(){
+  try{
+    const raw = localStorage.getItem(RSS_KEY);
+    if(!raw) return DEFAULT_FEEDS.slice();
+    const arr = JSON.parse(raw);
+    if(!Array.isArray(arr) || arr.length===0) return DEFAULT_FEEDS.slice();
+    return arr;
+  }catch{ return DEFAULT_FEEDS.slice(); }
+}
+function saveFeeds(arr){
+  try{ localStorage.setItem(RSS_KEY, JSON.stringify(arr)); }catch{}
+}
+let FEEDS = loadFeeds();
+
+const rssSelect = document.getElementById("rssSelect");
+const rssList = document.getElementById("rssList");
+document.getElementById("refreshRSS").addEventListener("click", ()=>getRSS());
+document.getElementById("manageRSS").addEventListener("click", manageRSS);
+
+function populateFeedSelect(){
+  rssSelect.innerHTML = FEEDS.map((f,i)=>`<option value="${i}">${escapeHTML(f.name)}</option>`).join("");
+}
+rssSelect.addEventListener("change", getRSS);
+
+async function getRSS(){
+  if(!FEEDS.length){ FEEDS = DEFAULT_FEEDS.slice(); saveFeeds(FEEDS); populateFeedSelect(); }
+  const idx = Number(rssSelect.value || 0) || 0;
+  const feed = FEEDS[idx];
+  rssList.innerHTML = `<div class="muted">Loading ${escapeHTML(feed.name)}…</div>`;
+  try{
+    const xmlText = await fetchRSSWithCors(feed.url);
+    const items = parseFeed(xmlText).slice(0, 8);
+    if(!items.length){ rssList.innerHTML = `<div class="muted">No items found.</div>`; return; }
+    rssList.innerHTML = items.map(item => {
+      const pub = item.date ? `<span>${timeAgo(item.date)}</span>` : "";
+      const src = feed.name ? `<span>${escapeHTML(feed.name)}</span>` : "";
+      return `
+        <div class="rssItem">
+          <a href="${item.link}" target="_blank" rel="noopener">${escapeHTML(item.title || item.link)}</a>
+          <div class="rssMeta">${src}${pub}</div>
+        </div>
+      `;
+    }).join("");
+  }catch(e){
+    rssList.innerHTML = `<div class="muted">Failed to load: ${escapeHTML(e.message||"error")}</div>`;
+  }
+}
+
+// Use allorigins to bypass CORS; fall back to direct (may fail without CORS)
+async function fetchRSSWithCors(url){
+  const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+  let res = await fetch(proxy, { cache:"no-store" });
+  if(res.ok) return await res.text();
+  // last resort try direct
+  res = await fetch(url, { cache:"no-store" });
+  if(!res.ok) throw new Error("http " + res.status);
+  return await res.text();
+}
+
+function parseFeed(xmlText){
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(xmlText, "text/xml");
+  // RSS 2.0 <item>
+  let items = [...xml.querySelectorAll("item")].map(n => ({
+    title: text(n, "title"),
+    link: text(n, "link") || attr(n.querySelector("link"), "href"),
+    date: dateVal(text(n, "pubDate") || text(n, "dc\\:date"))
+  }));
+  if(items.length) return items;
+  // Atom <entry>
+  items = [...xml.querySelectorAll("entry")].map(n => ({
+    title: text(n, "title"),
+    link: attr(n.querySelector("link[rel='alternate']") || n.querySelector("link"), "href"),
+    date: dateVal(text(n, "updated") || text(n, "published"))
+  }));
+  return items;
+}
+function text(parent, sel){
+  const el = parent.querySelector(sel);
+  return el ? (el.textContent || "").trim() : "";
+}
+function attr(el, name){
+  return el ? (el.getAttribute(name) || "").trim() : "";
+}
+function dateVal(s){
+  if(!s) return null;
+  const d = new Date(s);
+  return isNaN(d) ? null : d;
+}
+function timeAgo(date){
+  const now = new Date();
+  const diff = Math.floor((now - date)/1000);
+  const units = [
+    ["y", 365*24*3600],
+    ["mo", 30*24*3600],
+    ["d", 24*3600],
+    ["h", 3600],
+    ["m", 60],
+    ["s", 1]
+  ];
+  for(const [u, sec] of units){
+    const v = Math.floor(diff/sec);
+    if(v>=1) return `${v}${u} ago`;
+  }
+  return "just now";
+}
+
+/* ---------- Boot ---------- */
+function boot(){
+  applyTheme();
+  renderSections();
+  // restore edit mode preference
+  setEditMode(JSON.parse(localStorage.getItem(EDIT_KEY) || "false"));
+  // Live fetches & intervals
+  getWeather(); getCrypto(); getFX(); updateNetwork();
+  setInterval(getCrypto, 60_000);
+  setInterval(getFX, 30 * 60_000);
+  setInterval(getWeather, 10 * 60_000);
+  // RSS
+  populateFeedSelect();
+  getRSS();
+  setInterval(getRSS, 5 * 60_000);
+}
+boot();
+
+/* ---------- Feed manager (simple) ---------- */
+function manageRSS(){
+  const current = FEEDS.map(f=>f.url).join("\n");
+  const eg = "Paste or edit RSS/Atom URLs, one per line.\nExamples:\nhttps://g1.globo.com/dynamo/rss2.xml\nhttp://feeds.bbci.co.uk/news/world/rss.xml\nhttps://feeds.reuters.com/reuters/worldNews\n\n";
+  const input = prompt(eg + "Your list:", current);
+  if(input==null) return;
+  const urls = input.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  if(!urls.length){ alert("No feeds provided. Keeping previous list."); return; }
+  FEEDS = urls.map(u=>({ name: u.replace(/^https?:\/\//,"").slice(0,40), url:u }));
+  saveFeeds(FEEDS);
+  populateFeedSelect();
+  rssSelect.value = "0";
+  getRSS();
+}
 </script>
 </body>
 </html>
