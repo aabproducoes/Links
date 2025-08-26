@@ -1,284 +1,332 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WANTED – Antonio Augusto Barbaro | 4000 GOLD</title>
-<link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --wood1:#5a3d2b; --wood2:#3f2a1f; --wood3:#6e4c36;
-    --ink:#2a1b13; --paper:#f0e2c6; --paper-edge:#c9b18a;
-    --gold:#f1c40f; --blood:#7a2d1b; --shadow: rgba(0,0,0,.45);
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Antonio Augusto Barbaro — CV</title>
+  <style>
+    :root{
+      --bg:#0b0d12; --panel:#121624; --ink:#eaf2ff; --muted:#a7b6d6; --accent:#5ad2ff; --chip:#1b2135; --chipB:#2a3352;
+      --ok:#86efac; --warn:#fde047;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(1000px 700px at 50% -20%, #172038 0%, var(--bg) 60%, #07090f 100%);
+      color:var(--ink); font:400 16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial; letter-spacing:.2px;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{opacity:.9; text-decoration:underline}
 
-  /* Parede de madeira (saloon) */
-  body{
-    margin:0; color:var(--ink);
-    background:
-      repeating-linear-gradient(90deg, var(--wood2) 0 10px, var(--wood1) 10px 22px, var(--wood3) 22px 32px),
-      radial-gradient(1200px 600px at 30% -10%, rgba(255,255,255,.05), transparent 60%),
-      radial-gradient(1200px 600px at 70% 110%, rgba(0,0,0,.2), transparent 60%);
-    min-height:100svh;
-    display:flex; align-items:center; justify-content:center;
-    padding:24px;
-    font-family: "Rye", system-ui, serif;
-  }
+    /* layout */
+    .wrap{max-width:1100px; margin:40px auto; padding:24px;}
+    header{display:flex; gap:20px; align-items:center; justify-content:space-between; margin-bottom:20px}
+    .id{display:flex; gap:16px; align-items:center}
+    .avatar{width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#263150,#0f1424); border:2px solid #30406b; box-shadow:0 0 0 4px rgba(90,210,255,.08)}
+    .title h1{margin:0; font-size:28px}
+    .subtitle{margin-top:2px; color:var(--muted)}
 
-  .poster{
-    position:relative;
-    max-width:900px; width:min(92vw, 900px);
-    padding:28px 28px 18px;
-    background:
-      radial-gradient(1200px 400px at 50% 0, rgba(0,0,0,.08), transparent 60%),
-      repeating-linear-gradient(170deg, rgba(0,0,0,.03) 0 2px, transparent 2px 6px),
-      linear-gradient(#f7ebcf, #ecd8b5 50%, #e6d0aa);
-    border: 6px solid var(--paper-edge); border-radius: 8px;
-    box-shadow: 0 18px 60px var(--shadow), 0 2px 0 rgba(255,255,255,.4) inset;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center;
-  }
+    .toolbar{display:flex; gap:10px; align-items:center}
+    .btn{border:1px solid #30406b; background:linear-gradient(180deg,#1a2138,#11162a); color:var(--ink); padding:8px 12px; border-radius:10px; cursor:pointer}
+    .btn[aria-pressed="true"]{outline:2px solid var(--accent)}
 
-  .wanted{
-    letter-spacing:.25rem;
-    font-size:clamp(38px,6vw,78px);
-    margin:0 0 8px; text-transform:uppercase;
-    color:#2b1a10; text-shadow:0 2px 0 #f6e8c8, 0 6px 12px rgba(0,0,0,.25);
-  }
-  .name{ font-size:clamp(24px,3.6vw,38px); margin:0; }
-  .role{ font-size:clamp(14px,2.2vw,18px); opacity:.9; margin:0 0 12px; }
+    .grid{display:grid; grid-template-columns: 320px 1fr; gap:22px}
+    aside, main{background:linear-gradient(180deg, rgba(18,22,36,.9), rgba(12,15,24,.88)); border:1px solid #283455; border-radius:16px; padding:18px}
 
-  /* Recompensa (estável; sem girar container) */
-  .bounty{
-    margin:8px auto 16px; padding:8px 16px;
-    border:3px double var(--blood); color:var(--blood); font-weight:700; letter-spacing:.08em;
-    background: linear-gradient(#fff2d8, #f4deaf); transform:translateZ(0); will-change:filter;
-  }
-  .bounty .star{ margin:0 8px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); }
-  .stamp{
-    display:inline-block; margin-left:10px;
-    font:700 12px/1 "Courier New", monospace; color:#6b2c1a;
-    padding:4px 8px; border:2px solid #6b2c1a; background:#fbe8c6;
-    transform:rotate(5deg) translateZ(0); transition: transform .18s ease, filter .18s ease;
-  }
-  .bounty:hover .stamp{ transform:rotate(9deg) translateY(-2px) scale(1.03); filter: drop-shadow(0 3px 3px rgba(0,0,0,.25)); }
+    h2{font-size:18px; letter-spacing:.6px; text-transform:uppercase; margin:8px 0 12px 0; color:#cfe2ff}
+    section+section{margin-top:18px}
 
-  /* Abas */
-  .tabbar{
-    display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:14px 0 20px;
-  }
-  .tabbar button{
-    position:relative; overflow:hidden;
-    cursor:pointer; border:2px solid #6a4a2f;
-    background: linear-gradient(#f0dec0, #e6cfa3);
-    padding:8px 14px; border-radius:6px;
-    letter-spacing:.06em; box-shadow:0 2px 0 #6a4a2f;
-    font-family:inherit;
-    transition:transform .08s ease, box-shadow .08s ease;
-  }
-  .tabbar button.active{ transform:translateY(1px) rotate(-.6deg); box-shadow:0 1px 0 #6a4a2f; background:linear-gradient(#ead1a3,#e1c38d); }
+    .list{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{background:var(--chip); border:1px solid var(--chipB); padding:6px 10px; border-radius:999px; font-size:13px}
 
-  /* Efeito da bala */
-  .bullet{
-    position:absolute; top:50%; left:-50px;
-    width:48px; height:4px; border-radius:2px;
-    background: linear-gradient(to right, #ffd700, #ff7a00, transparent);
-    transform:translateY(-50%); pointer-events:none;
-    filter: drop-shadow(0 0 4px rgba(255,170,0,.7));
-    animation: bulletShot .45s linear forwards;
-  }
-  .bullet::after{
-    content:""; position:absolute; right:6px; top:-4px; width:8px; height:8px; border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, #fff7c2, #ffb347 60%, transparent 70%);
-  }
-  @keyframes bulletShot { from{ left:-50px; } to{ left:120%; } }
+    .contact a{display:flex; gap:10px; align-items:center; padding:10px; border-radius:12px; border:1px solid #2a3552; background:#151b2f}
+    .contact svg{width:18px; height:18px}
+    .contact a+a{margin-top:8px}
 
-  /* Furinho temporário */
-  .hole::after{
-    content:"•"; position:absolute; right:12%; top:50%; transform:translateY(-50%);
-    color:#222; font-size:18px; text-shadow:0 1px 0 #0003;
-  }
+    .item{padding:10px 12px; border:1px solid #253353; border-radius:14px; background: rgba(20,26,44,.6)}
+    .item + .item{margin-top:10px}
+    .item .top{display:flex; justify-content:space-between; gap:10px; margin-bottom:6px}
+    .item .role{font-weight:600}
+    .item .where{color:var(--muted)}
+    .item ul{margin:8px 0 0 18px}
 
-  .grid{ display:grid; grid-template-columns:1fr; gap:20px; width:100%; }
+    .langbar{display:flex; gap:8px}
+    .langbtn{padding:6px 10px; border-radius:10px; border:1px solid #30406b; background:#141a2e; cursor:pointer}
+    .langbtn.active{outline:2px solid var(--accent)}
 
-  .box{
-    border:2px dashed #a7895f;
-    background: linear-gradient(#f7ebcf, #ecd8b5);
-    padding:16px; border-radius:6px; text-align:left;
-  }
-  .box h3{ margin:0 0 8px; text-transform:uppercase; }
-  .bullets{ padding-left:18px; }
-  .bullets li{ margin:.35em 0; }
+    .langs{display:flex; gap:8px; flex-wrap:wrap}
 
-  .contact{
-    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
-    border-top:2px dotted #b08c5e; margin-top:16px; padding-top:12px;
-    font-family:"Courier New", monospace;
-  }
-  .badge{ border:1px solid #8d6a40; border-radius:4px; padding:6px 10px; background:linear-gradient(#ffefd0,#f1d7a4); }
+    footer{margin-top:22px; color:var(--muted); text-align:center}
 
-  .controls{ display:flex; gap:8px; justify-content:center; margin:14px 0 2px; }
-  .btn{ cursor:pointer; border:2px solid #6a4a2f; background:linear-gradient(#ffeab2,#e6c27a); padding:8px 14px; border-radius:6px; box-shadow:0 2px 0 #6a4a2f; }
+    /* bilingual visibility */
+    [data-lang]{display:none}
+    body.lang-pt [data-lang="pt"], body.lang-en [data-lang="en"]{display:contents}
 
-  @media (prefers-reduced-motion: reduce){
-    .bullet{ animation: none; display:none; }
-    .stamp{ transition:none; }
-  }
-
-  @media print{
-    body{ background:#fff; padding:0; }
-    .poster{ margin:0; width:auto; max-width:none; box-shadow:none; }
-    .controls, .tabbar{ display:none!important; }
-  }
-</style>
+    /* print */
+    @media print{
+      body{background:white; color:#111}
+      .wrap{margin:0; max-width:none}
+      aside, main{border:none; background:transparent}
+      .toolbar{display:none}
+      .avatar{border:none; box-shadow:none}
+      a{color:#000}
+    }
+  </style>
 </head>
-<body>
-
-  <div class="poster" id="poster">
-    <h1 class="wanted">WANTED</h1>
-    <p class="name" id="nome">Antonio Augusto Barbaro</p>
-    <p class="role" id="cargo">Desenvolvedor Web • Front-end & Game Dev</p>
-
-    <div class="bounty" aria-label="Recompensa">
-      <span class="star">★</span>
-      RECOMPENSA: <span style="color:var(--gold); text-shadow:0 1px 0 #8c6b12;">4000 GOLD</span>
-      <span class="star">★</span>
-      <span class="stamp">OFERTA VÁLIDA</span>
-    </div>
-
-    <div class="tabbar" role="tablist" aria-label="Seções">
-      <button class="active" data-tab="sobre" aria-selected="true">Sobre</button>
-      <button data-tab="experiencia" aria-selected="false">Experiência</button>
-      <button data-tab="projetos" aria-selected="false">Projetos</button>
-      <button data-tab="habilidades" aria-selected="false">Habilidades</button>
-      <button data-tab="contato" aria-selected="false">Contato</button>
-    </div>
+<body class="lang-pt">
+  <div class="wrap">
+    <header>
+      <div class="id">
+        <div class="avatar" aria-hidden="true"></div>
+        <div class="title">
+          <h1>Antonio Augusto Barbaro</h1>
+          <div class="subtitle">
+            <span data-lang="pt">Desenvolvedor Front‑End • Criador de experiências Web interativas</span>
+            <span data-lang="en">Front‑End Developer • Creator of interactive Web experiences</span>
+          </div>
+        </div>
+      </div>
+      <div class="toolbar" role="group" aria-label="Language and actions">
+        <div class="langbar">
+          <button class="langbtn" data-setlang="pt" aria-pressed="true">PT</button>
+          <button class="langbtn" data-setlang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="btn" id="printBtn">
+          <span data-lang="pt">Baixar PDF</span>
+          <span data-lang="en">Download PDF</span>
+        </button>
+      </div>
+    </header>
 
     <div class="grid">
-      <section class="box" id="sobre" role="region">
-        <h3>Quem sou</h3>
-        <p>
-          Pistoleiro do código com foco em experiências web rápidas e polidas.
-          Adoro transformar ideias em interfaces vivas, com animações, jogos em HTML5
-          e UIs que dão prazer de usar. Trabalho bem sob pressão de tiroteio. 🤠
-        </p>
-        <ul class="bullets">
-          <li>HTML5, CSS/SCSS, JavaScript/TypeScript, Canvas/WebGL</li>
-          <li>Games 2D/3D no navegador, efeitos “juice” e UI responsiva</li>
-          <li>Automação com Python e integração de ferramentas</li>
-        </ul>
-      </section>
+      <aside>
+        <section>
+          <h2>
+            <span data-lang="pt">Contato</span>
+            <span data-lang="en">Contact</span>
+          </h2>
+          <div class="contact">
+            <a href="tel:+5554984181968">
+              <!-- phone icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.46 19.46 0 0 1-6-6A19.8 19.8 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.45-1.14a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>
+              <span>+55 54 98418‑1968</span>
+            </a>
+            <a href="mailto:aabproducoes.blooper364@passinbox.com">
+              <!-- mail icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span>aabproducoes.blooper364@passinbox.com</span>
+            </a>
+            <a href="https://wa.me/5554984181968" target="_blank" rel="noopener">
+              <!-- whatsapp-like icon -->
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-14.32 5L3 21l4.12-2.1A8 8 0 1 1 20 12z"/><path d="M8.5 9.5c.5 2 2.5 4 4.5 4.5"/><path d="M13.5 14c1 0 2-.5 2.5-1.5"/></svg>
+              <span data-lang="pt">Fale comigo no WhatsApp</span>
+              <span data-lang="en">Chat on WhatsApp</span>
+            </a>
+          </div>
+        </section>
 
-      <section class="box" id="experiencia" hidden>
-        <h3>Experiência</h3>
-        <ul class="bullets">
-          <li>Front-end & Game Dev Freelancer — 2022–Presente</li>
-          <li>Desenvolvedor Web — Agência XYZ — 2020–2022</li>
-        </ul>
-      </section>
+        <section>
+          <h2>
+            <span data-lang="pt">Competências</span>
+            <span data-lang="en">Skills</span>
+          </h2>
+          <div class="list">
+            <span class="chip">HTML5</span>
+            <span class="chip">CSS3</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">Canvas / WebGL</span>
+            <span class="chip">UI/UX</span>
+            <span class="chip">Git</span>
+          </div>
+        </section>
 
-      <section class="box" id="projetos" hidden>
-        <h3>Projetos</h3>
-        <ul class="bullets">
-          <li><strong>Scrolls of Eternia</strong> — RPG 2D em HTML.</li>
-          <li><strong>Rotary Rings TD</strong> — Tower Defense circular.</li>
-          <li><strong>ASCII Weather City</strong> — Fundo ASCII animado.</li>
-        </ul>
-      </section>
+        <section>
+          <h2>
+            <span data-lang="pt">Idiomas</span>
+            <span data-lang="en">Languages</span>
+          </h2>
+          <div class="langs">
+            <span class="chip">
+              <span data-lang="pt">Português — Nativo</span>
+              <span data-lang="en">Portuguese — Native</span>
+            </span>
+            <span class="chip">
+              <span data-lang="pt">Inglês — Fluente</span>
+              <span data-lang="en">English — Fluent</span>
+            </span>
+          </div>
+        </section>
+      </aside>
 
-      <section class="box" id="habilidades" hidden>
-        <h3>Habilidades</h3>
-        <ul class="bullets">
-          <li>Front-end: React, Vanilla JS, A11y, animações</li>
-          <li>Game dev: física básica, partículas, HUDs</li>
-          <li>Ferramentas: Git, Figma, Blender</li>
-        </ul>
-      </section>
+      <main>
+        <section>
+          <h2>
+            <span data-lang="pt">Resumo</span>
+            <span data-lang="en">Summary</span>
+          </h2>
+          <div class="item">
+            <p>
+              <span data-lang="pt">Desenvolvedor front‑end com foco em experiências web interativas, jogos HTML5 e interfaces responsivas. Entrego páginas rápidas, bonitas e fáceis de manter, com atenção a performance e acessibilidade.</span>
+              <span data-lang="en">Front‑end developer focused on interactive web experiences, HTML5 games, and responsive interfaces. I build fast, beautiful, and maintainable pages with attention to performance and accessibility.</span>
+            </p>
+          </div>
+        </section>
 
-      <section class="box" id="contato" hidden>
-        <h3>Contato</h3>
-        <div class="contact">
-          <span class="badge">📧 aabproducoes.blooper364@passinbox.com</span>
-          <span class="badge">📞 +55 54 98418-1968</span>
-          <span class="badge">🏜️ Brasil</span>
-        </div>
-      </section>
+        <section>
+          <h2>
+            <span data-lang="pt">Experiência</span>
+            <span data-lang="en">Experience</span>
+          </h2>
+
+          <div class="item">
+            <div class="top">
+              <div class="role">Front‑End Developer — Freelance</div>
+              <div class="where">
+                <span data-lang="pt">2019 – Presente</span>
+                <span data-lang="en">2019 – Present</span>
+              </div>
+            </div>
+            <ul>
+              <li>
+                <span data-lang="pt">Criação de landing pages bilíngues (PT/EN) com temas personalizados, animações e carrosséis de mídia.</span>
+                <span data-lang="en">Built bilingual (PT/EN) landing pages with custom themes, animations, and media carousels.</span>
+              </li>
+              <li>
+                <span data-lang="pt">Desenvolvimento de jogos e experiências em Canvas/HTML5 com foco em “juice” visual e som.</span>
+                <span data-lang="en">Developed Canvas/HTML5 games and experiences with strong visual and audio “juice.”</span>
+              </li>
+              <li>
+                <span data-lang="pt">Otimização de performance, acessibilidade e SEO técnico.</span>
+                <span data-lang="en">Optimized performance, accessibility, and technical SEO.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="top">
+              <div class="role">Web Designer — AAB Produções</div>
+              <div class="where">2015 – 2019</div>
+            </div>
+            <ul>
+              <li>
+                <span data-lang="pt">Criação de identidade visual e sites responsivos para portfólios e eventos.</span>
+                <span data-lang="en">Created visual identity and responsive sites for portfolios and events.</span>
+              </li>
+              <li>
+                <span data-lang="pt">Integração com redes sociais e formulários de contato.</span>
+                <span data-lang="en">Integrated social media and contact forms.</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>
+            <span data-lang="pt">Projetos em Destaque</span>
+            <span data-lang="en">Featured Projects</span>
+          </h2>
+
+          <div class="item">
+            <div class="top">
+              <div class="role">TNT Fishing — HTML5 Game</div>
+              <div class="where">
+                <span data-lang="pt">Projeto pessoal</span>
+                <span data-lang="en">Personal project</span>
+              </div>
+            </div>
+            <ul>
+              <li>
+                <span data-lang="pt">Canvas 2D, efeitos de partículas, HUD, áudio e transições polidas.</span>
+                <span data-lang="en">2D Canvas, particle effects, HUD, audio, and polished transitions.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="item">
+            <div class="top">
+              <div class="role">New Tab — Página Personalizada</div>
+              <div class="where">2025</div>
+            </div>
+            <ul>
+              <li>
+                <span data-lang="pt">Grade de links editável, abas, RSS ao vivo, bloqueio por padrão e histórico de desfazer.</span>
+                <span data-lang="en">Editable link grid, tabs, live RSS, pattern lock, and undo history.</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>
+            <span data-lang="pt">Educação</span>
+            <span data-lang="en">Education</span>
+          </h2>
+          <div class="item">
+            <div class="top">
+              <div class="role">
+                <span data-lang="pt">Formação contínua em desenvolvimento Web</span>
+                <span data-lang="en">Ongoing education in Web development</span>
+              </div>
+              <div class="where">Online</div>
+            </div>
+            <ul>
+              <li>
+                <span data-lang="pt">Cursos e projetos práticos em JavaScript, Canvas, UI/UX.</span>
+                <span data-lang="en">Courses and hands‑on projects in JavaScript, Canvas, UI/UX.</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <h2>
+            <span data-lang="pt">Links</span>
+            <span data-lang="en">Links</span>
+          </h2>
+          <div class="list">
+            <a class="chip" href="https://github.com/aabproducoes" target="_blank" rel="noopener">GitHub</a>
+            <a class="chip" href="https://aabproducoes.github.io/NewTab/" target="_blank" rel="noopener">Portfolio</a>
+            <a class="chip" href="https://instagram.com/aabproducoes" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </section>
+      </main>
     </div>
 
-    <div class="controls">
-      <button class="btn" id="printBtn">Imprimir / Salvar PDF</button>
-      <button class="btn" id="editBtn">Editar Nome & Cargo</button>
-      <button class="btn" id="soundBtn">Som do Tiro: OFF</button>
-    </div>
+    <footer>
+      <span data-lang="pt">Atualizado em</span>
+      <span data-lang="en">Updated on</span>
+      <span id="today"></span>
+    </footer>
   </div>
 
-<script>
-  // Referências
-  const tabs = document.querySelectorAll('.tabbar button');
-  const sections = {
-    sobre: document.getElementById('sobre'),
-    experiencia: document.getElementById('experiencia'),
-    projetos: document.getElementById('projetos'),
-    habilidades: document.getElementById('habilidades'),
-    contato: document.getElementById('contato'),
-  };
+  <script>
+    const body = document.body;
+    const btns = document.querySelectorAll('.langbtn');
+    const printBtn = document.getElementById('printBtn');
+    const today = document.getElementById('today');
 
-  // Áudio de tiro (com toggle)
-  const shotSound = new Audio("https://actions.google.com/sounds/v1/weapons/gun_pistol.ogg");
-  shotSound.volume = 0.5;
-  let soundOn = false;
-  const soundBtn = document.getElementById('soundBtn');
-  soundBtn.addEventListener('click', ()=>{
-    soundOn = !soundOn;
-    soundBtn.textContent = `Som do Tiro: ${soundOn ? 'ON' : 'OFF'}`;
-  });
+    function setLang(lang){
+      body.classList.remove('lang-pt','lang-en');
+      body.classList.add('lang-'+lang);
+      btns.forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.setlang===lang)));
+      btns.forEach(b=>b.classList.toggle('active', b.dataset.setlang===lang));
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+      localStorage.setItem('cv_lang', lang);
+    }
 
-  // Tabs + efeito da bala
-  tabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      // Seleciona seção
-      const id = btn.dataset.tab;
-      Object.entries(sections).forEach(([k,el])=>{ el.hidden = (k !== id); });
+    btns.forEach(b=> b.addEventListener('click', ()=> setLang(b.dataset.setlang)) );
+    printBtn.addEventListener('click', ()=> window.print());
 
-      // Estado visual das abas
-      tabs.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
+    // load saved lang or default pt
+    setLang(localStorage.getItem('cv_lang')||'pt');
 
-      // Bala passando
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-        const bullet = document.createElement('span');
-        bullet.className = 'bullet';
-        btn.appendChild(bullet);
-
-        // Som
-        if(soundOn){
-          try { shotSound.currentTime = 0; shotSound.play(); } catch(e){}
-        }
-
-        bullet.addEventListener('animationend', ()=>{
-          bullet.remove();
-          btn.classList.add('hole');
-          setTimeout(()=>btn.classList.remove('hole'), 1200);
-        }, { once:true });
-      }
-    });
-  });
-
-  // Print
-  document.getElementById('printBtn').addEventListener('click', ()=>window.print());
-
-  // Editar nome/cargo
-  document.getElementById('editBtn').addEventListener('click', ()=>{
-    const nome = document.getElementById('nome');
-    const cargo = document.getElementById('cargo');
-    const novoNome = prompt('Seu nome para o pôster:', nome.textContent.trim());
-    if(novoNome) nome.textContent = novoNome;
-    const novoCargo = prompt('Seu cargo/área:', cargo.textContent.trim());
-    if(novoCargo) cargo.textContent = novoCargo;
-  });
-
-  // Estado inicial: mostrar "sobre"
-  Object.entries(sections).forEach(([k,el])=>{ el.hidden = (k !== 'sobre'); });
-</script>
+    // show today date localized to current language
+    function updateDate(){
+      const lang = body.classList.contains('lang-en') ? 'en-US' : 'pt-BR';
+      const d = new Date();
+      today.textContent = new Intl.DateTimeFormat(lang, {year:'numeric', month:'long', day:'2-digit'}).format(d);
+    }
+    updateDate();
+  </script>
 </body>
 </html>
