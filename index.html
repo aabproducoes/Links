@@ -39,13 +39,6 @@
     padding:24px;
   }
 
-  .tack{
-    position:absolute;
-    width:16px;height:16px;border-radius:50%;
-    background: radial-gradient(circle at 30% 30%, #eee, #bbb 40%, #444 70%);
-    box-shadow: 0 2px 6px var(--shadow), inset 0 1px 2px rgba(255,255,255,.5);
-  }
-
   .poster{
     position:relative;
     max-width:900px;
@@ -59,24 +52,14 @@
     border-radius: 8px;
     box-shadow: 0 18px 60px var(--shadow), 0 2px 0 rgba(255,255,255,.4) inset;
     filter: sepia(.35) contrast(1.05);
-    transform: rotate(-.3deg);
+    display:flex;
+    flex-direction:column;
+    align-items:center;   /* centraliza conteúdo */
+    justify-content:center;
+    text-align:center;    /* centraliza textos */
   }
-  .poster:before, .poster:after{
-    content:"";
-    position:absolute; inset:0;
-    background:
-      radial-gradient(400px 120px at 30% -30%, rgba(0,0,0,.18), transparent 60%),
-      radial-gradient(400px 120px at 70% 110%, rgba(0,0,0,.16), transparent 60%);
-    pointer-events:none;
-    border-radius: 4px;
-  }
-  .tack.tl{top:-10px; left:22px}
-  .tack.tr{top:-10px; right:22px}
-  .tack.bl{bottom:-10px; left:22px}
-  .tack.br{bottom:-10px; right:22px}
 
   .wanted{
-    text-align:center;
     letter-spacing:.25rem;
     font-size: clamp(36px, 6vw, 72px);
     margin: 0 0 8px;
@@ -84,117 +67,36 @@
     color:#2b1a10;
     text-shadow: 0 2px 0 #f6e8c8, 0 6px 12px rgba(0,0,0,.25);
   }
+  .name{ font-size: clamp(24px, 3.5vw, 36px); font-variant: small-caps; margin: 0; }
+  .role{ font-size: clamp(14px, 2.5vw, 18px); opacity:.85; margin:0 0 12px; }
 
-  .name{
-    text-align:center;
-    font-size: clamp(24px, 3.5vw, 36px);
-    margin: 0 0 2px;
-    font-variant: small-caps;
-  }
-  .role{
-    text-align:center;
-    font-size: clamp(14px, 2.5vw, 18px);
-    letter-spacing:.06em;
-    opacity:.85;
-    margin:0 0 12px;
-  }
-
-  /* Bounty banner – estável (sem rotacionar o container) */
   .bounty{
-    position:relative;
-    text-align:center;
     margin: 8px auto 16px;
-    width: fit-content;
     padding: 8px 16px;
     border: 3px double var(--blood);
     color: var(--blood);
     font-weight: 700;
     letter-spacing:.1em;
-    box-shadow: 0 2px 0 rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.4);
-    background:
-      repeating-linear-gradient(90deg, transparent 0 8px, rgba(122,45,27,.08) 8px 10px),
-      linear-gradient(#fff2d8, #f4deaf);
-    transform: translateZ(0);           /* estabiliza rasterização */
-    will-change: filter;                 /* dica de performance, não afeta layout */
+    background: linear-gradient(#fff2d8, #f4deaf);
   }
-  .bounty .star{
-    display:inline-block; margin:0 8px;
-    filter: drop-shadow(0 1px 0 rgba(0,0,0,.25));
-  }
+  .bounty .star{ margin:0 8px; }
   .stamp{
-    position:absolute; right:-18px; top:-22px;
-    font: 700 12px/1 "Courier New", monospace;
+    display:inline-block;
+    margin-left:10px;
+    font:700 12px/1 "Courier New", monospace;
     color:#6b2c1a;
-    padding:6px 10px;
+    padding:4px 8px;
     border:2px solid #6b2c1a;
-    opacity:.9;
     background:#fbe8c6;
-    box-shadow: 0 2px 0 rgba(0,0,0,.2);
-    transform: rotate(12deg) translateZ(0);
-    will-change: transform;
-    transition: transform .18s ease, filter .18s ease;
+    transform:rotate(5deg);
   }
-  /* Só o carimbo balança no hover — o texto fica estável */
-  .bounty:hover .stamp{
-    transform: rotate(16deg) translateY(-2px) scale(1.03) translateZ(0);
-    filter: drop-shadow(0 3px 3px rgba(0,0,0,.25));
-  }
-
-  .grid{
-    display:grid;
-    grid-template-columns: 1.2fr .8fr;
-    gap:20px;
-  }
-  @media (max-width:900px){
-    .grid{ grid-template-columns: 1fr; }
-  }
-
-  .box{
-    border:2px dashed #a7895f;
-    background:
-      linear-gradient(transparent 0 98%, rgba(0,0,0,.04) 98% 100%),
-      linear-gradient(#f7ebcf, #ecd8b5);
-    padding:16px;
-    border-radius:6px;
-    position:relative;
-  }
-  .box h3{
-    margin:0 0 8px;
-    font-size: clamp(18px, 2.4vw, 22px);
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    color:#3a2417;
-  }
-  .box p, .box li{
-    line-height:1.5;
-    font-size: 16px;
-  }
-  .bullets li{
-    margin:.35em 0;
-    list-style:none;
-    position:relative;
-    padding-left:22px;
-  }
-  .bullets li:before{
-    content:"•";
-    position:absolute; left:0; top:0;
-    color:#3a2417;
-    transform: translateY(-1px) scale(1.2);
-  }
-
-  .timeline{
-    border-left: 3px solid #b39569;
-    padding-left:14px;
-    margin-left:6px;
-  }
-  .job{ margin: 10px 0 16px; }
-  .job .when{ font-size:13px; opacity:.8; letter-spacing:.05em; }
-  .job .title{ font-weight:700; }
 
   .tabbar{
-    display:flex; gap:10px; flex-wrap:wrap;
-    margin: 14px 0 20px;
-    justify-content:center;
+    display:flex;
+    justify-content:center; /* centraliza abas */
+    flex-wrap:wrap;
+    gap:10px;
+    margin:14px 0 20px;
   }
   .tabbar button{
     cursor:pointer;
@@ -204,197 +106,75 @@
     border-radius:6px;
     font-family: inherit;
     letter-spacing:.06em;
-    transition: transform .08s ease, box-shadow .08s ease;
-    box-shadow: 0 2px 0 #6a4a2f;
   }
   .tabbar button.active{
-    transform: translateY(1px) rotate(-.7deg);
-    box-shadow: 0 1px 0 #6a4a2f;
     background: linear-gradient(#ead1a3, #e1c38d);
   }
 
+  .grid{ display:grid; grid-template-columns:1fr; gap:20px; width:100%; }
+
+  .box{
+    border:2px dashed #a7895f;
+    background: linear-gradient(#f7ebcf, #ecd8b5);
+    padding:16px;
+    border-radius:6px;
+    text-align:left; /* mantém texto legível */
+  }
+  .box h3{ margin:0 0 8px; text-transform:uppercase; }
+  .bullets li{ list-style:disc; margin-left:20px; }
+
   .contact{
-    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
     border-top:2px dotted #b08c5e;
-    margin-top:16px; padding-top:12px;
+    margin-top:16px;
+    padding-top:12px;
     font-family: "Courier New", monospace;
   }
   .badge{
     border:1px solid #8d6a40; border-radius:4px;
     padding:6px 10px; background: linear-gradient(#ffefd0, #f1d7a4);
   }
-
-  .controls{
-    display:flex; gap:8px; justify-content:center;
-    margin:14px 0 2px;
-  }
-  .btn{
-    cursor:pointer;
-    border:2px solid #6a4a2f;
-    background: linear-gradient(#ffeab2, #e6c27a);
-    padding:8px 14px; border-radius:6px;
-    font-family: inherit;
-    box-shadow: 0 2px 0 #6a4a2f;
-  }
-  .btn:hover{ filter: contrast(1.05); }
-  .smallprint{
-    text-align:center; font-size:12px; opacity:.7; margin-top:6px;
-  }
-
-  @media print{
-    body{ background:#fff; padding:0; }
-    .poster{ margin:0; width:auto; max-width:none; box-shadow:none; transform:none; }
-    .tack, .controls{ display:none!important; }
-    .tabbar{ display:none!important; }
-  }
 </style>
 </head>
 <body>
-
-  <div class="poster" id="poster">
-    <span class="tack tl"></span>
-    <span class="tack tr"></span>
-    <span class="tack bl"></span>
-    <span class="tack br"></span>
-
+  <div class="poster">
     <h1 class="wanted">WANTED</h1>
-    <p class="name" id="nome">Antonio Augusto Barbaro</p>
-    <p class="role" id="cargo">Desenvolvedor Web • Front-end & Game Dev</p>
+    <p class="name">Antonio Augusto Barbaro</p>
+    <p class="role">Desenvolvedor Web • Front-end & Game Dev</p>
 
-    <div class="bounty" aria-label="Recompensa">
+    <div class="bounty">
       <span class="star">★</span>
-      RECOMPENSA: <span style="color:var(--gold); text-shadow:0 1px 0 #8c6b12;">4000 GOLD</span>
+      RECOMPENSA: <span style="color:var(--gold);">4000 GOLD</span>
       <span class="star">★</span>
       <span class="stamp">OFERTA VÁLIDA</span>
     </div>
 
-    <div class="tabbar" role="tablist" aria-label="Seções">
-      <button class="active" data-tab="sobre" role="tab" aria-selected="true">Sobre</button>
-      <button data-tab="experiencia" role="tab" aria-selected="false">Experiência</button>
-      <button data-tab="projetos" role="tab" aria-selected="false">Projetos</button>
-      <button data-tab="habilidades" role="tab" aria-selected="false">Habilidades</button>
-      <button data-tab="contato" role="tab" aria-selected="false">Contato</button>
+    <div class="tabbar">
+      <button class="active" data-tab="sobre">Sobre</button>
+      <button data-tab="experiencia">Experiência</button>
+      <button data-tab="projetos">Projetos</button>
+      <button data-tab="habilidades">Habilidades</button>
+      <button data-tab="contato">Contato</button>
     </div>
 
     <div class="grid">
-      <section class="box" id="sobre" role="region" aria-labelledby="tab-sobre">
+      <section class="box" id="sobre">
         <h3>Quem sou</h3>
-        <p>
-          Pistoleiro do código com foco em experiências web rápidas e polidas.
-          Adoro transformar ideias em interfaces vivas, com animações, jogos em HTML5
-          e UIs que dão prazer de usar. Trabalho bem sob pressão de tiroteio. 🤠
-        </p>
-        <ul class="bullets">
-          <li>HTML5, CSS/SCSS, JavaScript/TypeScript, Canvas/WebGL</li>
-          <li>Games 2D/3D no navegador, efeitos “juice” e UI responsiva</li>
-          <li>Automação com Python e integração de ferramentas</li>
-        </ul>
+        <p>Pistoleiro do código com foco em experiências web rápidas e polidas...</p>
       </section>
 
-      <aside class="box" id="habilidades" hidden>
-        <h3>Habilidades</h3>
-        <ul class="bullets">
-          <li>Front-end: React, Vanilla JS, animações, acessibilidade</li>
-          <li>Game dev: física básica, partículas, HUDs, inventário</li>
-          <li>Ferramentas: Git, Figma, Blender (renders estáticos)</li>
-          <li>Workflow: design systems, otimização, testes manuais</li>
-        </ul>
-      </aside>
-
-      <section class="box" id="experiencia" hidden>
-        <h3>Experiência</h3>
-        <div class="timeline">
-          <div class="job">
-            <div class="title">Front-end & Game Dev Freelancer — Remoto</div>
-            <div class="when">2022 — Presente</div>
-            <ul class="bullets">
-              <li>Criação de mini-jogos HTML5, protótipos e landing pages temáticas.</li>
-              <li>Refino de UI/UX, animações e performance para web e mobile.</li>
-            </ul>
-          </div>
-          <div class="job">
-            <div class="title">Desenvolvedor Web — Agência XYZ</div>
-            <div class="when">2020 — 2022</div>
-            <ul class="bullets">
-              <li>Componentes reutilizáveis, micro-interações e sites de alto tráfego.</li>
-              <li>Integração com APIs e otimização de build.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section class="box" id="projetos" hidden>
-        <h3>Projetos</h3>
-        <ul class="bullets">
-          <li><strong>Scrolls of Eternia</strong> — RPG 2D em HTML com HUD mágico e sistema de magias.</li>
-          <li><strong>Rotary Rings TD</strong> — Tower Defense circular com efeitos visuais e loja.</li>
-          <li><strong>ASCII Weather City</strong> — Fundo ASCII animado com parallax e sons de clima.</li>
-        </ul>
-      </section>
-
-      <section class="box" id="contato" hidden>
+      <section class="box" id="contato">
         <h3>Contato</h3>
-        <p>Disponível para contratos, bicos e duelos de bugs ao pôr do sol.</p>
         <div class="contact">
-          <span class="badge">📧 seu.email@exemplo.com</span>
-          <span class="badge">🌐 seuportfólio.exemplo</span>
-          <span class="badge">📞 +55 (00) 00000-0000</span>
+          <span class="badge">📧 aabproducoes.blooper364@passinbox.com</span>
+          <span class="badge">📞 +55 54 98418-1968</span>
           <span class="badge">🏜️ Brasil</span>
         </div>
       </section>
     </div>
-
-    <div class="controls">
-      <button class="btn" id="printBtn">Imprimir / Salvar em PDF</button>
-      <button class="btn" id="editBtn">Editar Nome & Cargo</button>
-    </div>
-    <div class="smallprint">Tema Faroeste. Tudo em um único arquivo. “RECOMPENSA: 4000 GOLD”.</div>
   </div>
-
-<script>
-  // Tabs
-  const tabs = document.querySelectorAll('.tabbar button');
-  const sections = {
-    sobre: document.getElementById('sobre'),
-    experiencia: document.getElementById('experiencia'),
-    projetos: document.getElementById('projetos'),
-    habilidades: document.getElementById('habilidades'),
-    contato: document.getElementById('contato'),
-  };
-
-  tabs.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      tabs.forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      const id = btn.dataset.tab;
-      Object.entries(sections).forEach(([k,el])=>{
-        el.hidden = (k !== id && !(id==='sobre' && k==='sobre'));
-      });
-      if(id==='sobre'){
-        sections.sobre.hidden = false;
-        sections.experiencia.hidden = true;
-        sections.projetos.hidden = true;
-        sections.habilidades.hidden = true;
-        sections.contato.hidden = true;
-      }
-    });
-  });
-
-  // Print
-  document.getElementById('printBtn').addEventListener('click', ()=>window.print());
-
-  // Inline edit
-  document.getElementById('editBtn').addEventListener('click', ()=>{
-    const nome = document.getElementById('nome');
-    const cargo = document.getElementById('cargo');
-    const novoNome = prompt('Seu nome para o pôster:', nome.textContent.trim());
-    if(novoNome) nome.textContent = novoNome;
-    const novoCargo = prompt('Seu cargo/área:', cargo.textContent.trim());
-    if(novoCargo) cargo.textContent = novoCargo;
-  });
-
-  // Removido: animação no container .bounty (causava flicker)
-  // Agora o efeito está 100% no CSS, apenas na .stamp
-</script>
 </body>
 </html>
