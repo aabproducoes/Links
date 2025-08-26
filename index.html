@@ -4,111 +4,99 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>WANTED – Antonio Augusto Barbaro | 4000 GOLD</title>
+<link href="https://fonts.googleapis.com/css2?family=Rye&display=swap" rel="stylesheet">
 <style>
   :root{
-    --wood1:#5a3d2b;
-    --wood2:#3f2a1f;
-    --wood3:#6e4c36;
-    --ink:#2a1b13;
-    --sepia:#d9c6a5;
-    --paper:#f0e2c6;
-    --paper-edge:#c9b18a;
-    --accent:#9b6b3f;
-    --gold:#f1c40f;
-    --blood:#7a2d1b;
-    --shadow: rgba(0,0,0,.45);
+    --wood1:#5a3d2b; --wood2:#3f2a1f; --wood3:#6e4c36;
+    --ink:#2a1b13; --paper:#f0e2c6; --paper-edge:#c9b18a;
+    --gold:#f1c40f; --blood:#7a2d1b; --shadow: rgba(0,0,0,.45);
   }
 
+  /* Parede de madeira (saloon) */
   body{
-    margin:0;
-    color:var(--ink);
+    margin:0; color:var(--ink);
     background:
-      repeating-linear-gradient(90deg,
-        var(--wood2) 0 10px,
-        var(--wood1) 10px 22px,
-        var(--wood3) 22px 32px
-      ),
+      repeating-linear-gradient(90deg, var(--wood2) 0 10px, var(--wood1) 10px 22px, var(--wood3) 22px 32px),
       radial-gradient(1200px 600px at 30% -10%, rgba(255,255,255,.05), transparent 60%),
       radial-gradient(1200px 600px at 70% 110%, rgba(0,0,0,.2), transparent 60%);
-    background-blend-mode:multiply,normal,normal;
     min-height:100svh;
-    font-family: "IM Fell English", "Cinzel", "Georgia", serif;
-    display:flex;
-    align-items:center;
-    justify-content:center;
+    display:flex; align-items:center; justify-content:center;
     padding:24px;
+    font-family: "Rye", system-ui, serif;
   }
 
   .poster{
     position:relative;
-    max-width:900px;
-    width:min(92vw, 900px);
+    max-width:900px; width:min(92vw, 900px);
     padding:28px 28px 18px;
     background:
       radial-gradient(1200px 400px at 50% 0, rgba(0,0,0,.08), transparent 60%),
       repeating-linear-gradient(170deg, rgba(0,0,0,.03) 0 2px, transparent 2px 6px),
       linear-gradient(#f7ebcf, #ecd8b5 50%, #e6d0aa);
-    border: 6px solid var(--paper-edge);
-    border-radius: 8px;
+    border: 6px solid var(--paper-edge); border-radius: 8px;
     box-shadow: 0 18px 60px var(--shadow), 0 2px 0 rgba(255,255,255,.4) inset;
-    filter: sepia(.35) contrast(1.05);
-    display:flex;
-    flex-direction:column;
-    align-items:center;   /* centraliza conteúdo */
-    justify-content:center;
-    text-align:center;    /* centraliza textos */
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
   }
 
   .wanted{
     letter-spacing:.25rem;
-    font-size: clamp(36px, 6vw, 72px);
-    margin: 0 0 8px;
-    text-transform:uppercase;
-    color:#2b1a10;
-    text-shadow: 0 2px 0 #f6e8c8, 0 6px 12px rgba(0,0,0,.25);
+    font-size:clamp(38px,6vw,78px);
+    margin:0 0 8px; text-transform:uppercase;
+    color:#2b1a10; text-shadow:0 2px 0 #f6e8c8, 0 6px 12px rgba(0,0,0,.25);
   }
-  .name{ font-size: clamp(24px, 3.5vw, 36px); font-variant: small-caps; margin: 0; }
-  .role{ font-size: clamp(14px, 2.5vw, 18px); opacity:.85; margin:0 0 12px; }
+  .name{ font-size:clamp(24px,3.6vw,38px); margin:0; }
+  .role{ font-size:clamp(14px,2.2vw,18px); opacity:.9; margin:0 0 12px; }
 
+  /* Recompensa (estável; sem girar container) */
   .bounty{
-    margin: 8px auto 16px;
-    padding: 8px 16px;
-    border: 3px double var(--blood);
-    color: var(--blood);
-    font-weight: 700;
-    letter-spacing:.1em;
-    background: linear-gradient(#fff2d8, #f4deaf);
+    margin:8px auto 16px; padding:8px 16px;
+    border:3px double var(--blood); color:var(--blood); font-weight:700; letter-spacing:.08em;
+    background: linear-gradient(#fff2d8, #f4deaf); transform:translateZ(0); will-change:filter;
   }
-  .bounty .star{ margin:0 8px; }
+  .bounty .star{ margin:0 8px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); }
   .stamp{
-    display:inline-block;
-    margin-left:10px;
-    font:700 12px/1 "Courier New", monospace;
-    color:#6b2c1a;
-    padding:4px 8px;
-    border:2px solid #6b2c1a;
-    background:#fbe8c6;
-    transform:rotate(5deg);
+    display:inline-block; margin-left:10px;
+    font:700 12px/1 "Courier New", monospace; color:#6b2c1a;
+    padding:4px 8px; border:2px solid #6b2c1a; background:#fbe8c6;
+    transform:rotate(5deg) translateZ(0); transition: transform .18s ease, filter .18s ease;
   }
+  .bounty:hover .stamp{ transform:rotate(9deg) translateY(-2px) scale(1.03); filter: drop-shadow(0 3px 3px rgba(0,0,0,.25)); }
 
+  /* Abas */
   .tabbar{
-    display:flex;
-    justify-content:center; /* centraliza abas */
-    flex-wrap:wrap;
-    gap:10px;
-    margin:14px 0 20px;
+    display:flex; justify-content:center; flex-wrap:wrap; gap:10px; margin:14px 0 20px;
   }
   .tabbar button{
-    cursor:pointer;
-    border:2px solid #6a4a2f;
+    position:relative; overflow:hidden;
+    cursor:pointer; border:2px solid #6a4a2f;
     background: linear-gradient(#f0dec0, #e6cfa3);
-    padding:8px 12px;
-    border-radius:6px;
-    font-family: inherit;
-    letter-spacing:.06em;
+    padding:8px 14px; border-radius:6px;
+    letter-spacing:.06em; box-shadow:0 2px 0 #6a4a2f;
+    font-family:inherit;
+    transition:transform .08s ease, box-shadow .08s ease;
   }
-  .tabbar button.active{
-    background: linear-gradient(#ead1a3, #e1c38d);
+  .tabbar button.active{ transform:translateY(1px) rotate(-.6deg); box-shadow:0 1px 0 #6a4a2f; background:linear-gradient(#ead1a3,#e1c38d); }
+
+  /* Efeito da bala */
+  .bullet{
+    position:absolute; top:50%; left:-50px;
+    width:48px; height:4px; border-radius:2px;
+    background: linear-gradient(to right, #ffd700, #ff7a00, transparent);
+    transform:translateY(-50%); pointer-events:none;
+    filter: drop-shadow(0 0 4px rgba(255,170,0,.7));
+    animation: bulletShot .45s linear forwards;
+  }
+  .bullet::after{
+    content:""; position:absolute; right:6px; top:-4px; width:8px; height:8px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, #fff7c2, #ffb347 60%, transparent 70%);
+  }
+  @keyframes bulletShot { from{ left:-50px; } to{ left:120%; } }
+
+  /* Furinho temporário */
+  .hole::after{
+    content:"•"; position:absolute; right:12%; top:50%; transform:translateY(-50%);
+    color:#222; font-size:18px; text-shadow:0 1px 0 #0003;
   }
 
   .grid{ display:grid; grid-template-columns:1fr; gap:20px; width:100%; }
@@ -116,57 +104,98 @@
   .box{
     border:2px dashed #a7895f;
     background: linear-gradient(#f7ebcf, #ecd8b5);
-    padding:16px;
-    border-radius:6px;
-    text-align:left; /* mantém texto legível */
+    padding:16px; border-radius:6px; text-align:left;
   }
   .box h3{ margin:0 0 8px; text-transform:uppercase; }
-  .bullets li{ list-style:disc; margin-left:20px; }
+  .bullets{ padding-left:18px; }
+  .bullets li{ margin:.35em 0; }
 
   .contact{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    justify-content:center;
-    border-top:2px dotted #b08c5e;
-    margin-top:16px;
-    padding-top:12px;
-    font-family: "Courier New", monospace;
+    display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+    border-top:2px dotted #b08c5e; margin-top:16px; padding-top:12px;
+    font-family:"Courier New", monospace;
   }
-  .badge{
-    border:1px solid #8d6a40; border-radius:4px;
-    padding:6px 10px; background: linear-gradient(#ffefd0, #f1d7a4);
+  .badge{ border:1px solid #8d6a40; border-radius:4px; padding:6px 10px; background:linear-gradient(#ffefd0,#f1d7a4); }
+
+  .controls{ display:flex; gap:8px; justify-content:center; margin:14px 0 2px; }
+  .btn{ cursor:pointer; border:2px solid #6a4a2f; background:linear-gradient(#ffeab2,#e6c27a); padding:8px 14px; border-radius:6px; box-shadow:0 2px 0 #6a4a2f; }
+
+  @media (prefers-reduced-motion: reduce){
+    .bullet{ animation: none; display:none; }
+    .stamp{ transition:none; }
+  }
+
+  @media print{
+    body{ background:#fff; padding:0; }
+    .poster{ margin:0; width:auto; max-width:none; box-shadow:none; }
+    .controls, .tabbar{ display:none!important; }
   }
 </style>
 </head>
 <body>
-  <div class="poster">
-    <h1 class="wanted">WANTED</h1>
-    <p class="name">Antonio Augusto Barbaro</p>
-    <p class="role">Desenvolvedor Web • Front-end & Game Dev</p>
 
-    <div class="bounty">
+  <div class="poster" id="poster">
+    <h1 class="wanted">WANTED</h1>
+    <p class="name" id="nome">Antonio Augusto Barbaro</p>
+    <p class="role" id="cargo">Desenvolvedor Web • Front-end & Game Dev</p>
+
+    <div class="bounty" aria-label="Recompensa">
       <span class="star">★</span>
-      RECOMPENSA: <span style="color:var(--gold);">4000 GOLD</span>
+      RECOMPENSA: <span style="color:var(--gold); text-shadow:0 1px 0 #8c6b12;">4000 GOLD</span>
       <span class="star">★</span>
       <span class="stamp">OFERTA VÁLIDA</span>
     </div>
 
-    <div class="tabbar">
-      <button class="active" data-tab="sobre">Sobre</button>
-      <button data-tab="experiencia">Experiência</button>
-      <button data-tab="projetos">Projetos</button>
-      <button data-tab="habilidades">Habilidades</button>
-      <button data-tab="contato">Contato</button>
+    <div class="tabbar" role="tablist" aria-label="Seções">
+      <button class="active" data-tab="sobre" aria-selected="true">Sobre</button>
+      <button data-tab="experiencia" aria-selected="false">Experiência</button>
+      <button data-tab="projetos" aria-selected="false">Projetos</button>
+      <button data-tab="habilidades" aria-selected="false">Habilidades</button>
+      <button data-tab="contato" aria-selected="false">Contato</button>
     </div>
 
     <div class="grid">
-      <section class="box" id="sobre">
+      <section class="box" id="sobre" role="region">
         <h3>Quem sou</h3>
-        <p>Pistoleiro do código com foco em experiências web rápidas e polidas...</p>
+        <p>
+          Pistoleiro do código com foco em experiências web rápidas e polidas.
+          Adoro transformar ideias em interfaces vivas, com animações, jogos em HTML5
+          e UIs que dão prazer de usar. Trabalho bem sob pressão de tiroteio. 🤠
+        </p>
+        <ul class="bullets">
+          <li>HTML5, CSS/SCSS, JavaScript/TypeScript, Canvas/WebGL</li>
+          <li>Games 2D/3D no navegador, efeitos “juice” e UI responsiva</li>
+          <li>Automação com Python e integração de ferramentas</li>
+        </ul>
       </section>
 
-      <section class="box" id="contato">
+      <section class="box" id="experiencia" hidden>
+        <h3>Experiência</h3>
+        <ul class="bullets">
+          <li>Front-end & Game Dev Freelancer — 2022–Presente</li>
+          <li>Desenvolvedor Web — Agência XYZ — 2020–2022</li>
+        </ul>
+      </section>
+
+      <section class="box" id="projetos" hidden>
+        <h3>Projetos</h3>
+        <ul class="bullets">
+          <li><strong>Scrolls of Eternia</strong> — RPG 2D em HTML.</li>
+          <li><strong>Rotary Rings TD</strong> — Tower Defense circular.</li>
+          <li><strong>ASCII Weather City</strong> — Fundo ASCII animado.</li>
+        </ul>
+      </section>
+
+      <section class="box" id="habilidades" hidden>
+        <h3>Habilidades</h3>
+        <ul class="bullets">
+          <li>Front-end: React, Vanilla JS, A11y, animações</li>
+          <li>Game dev: física básica, partículas, HUDs</li>
+          <li>Ferramentas: Git, Figma, Blender</li>
+        </ul>
+      </section>
+
+      <section class="box" id="contato" hidden>
         <h3>Contato</h3>
         <div class="contact">
           <span class="badge">📧 aabproducoes.blooper364@passinbox.com</span>
@@ -175,6 +204,81 @@
         </div>
       </section>
     </div>
+
+    <div class="controls">
+      <button class="btn" id="printBtn">Imprimir / Salvar PDF</button>
+      <button class="btn" id="editBtn">Editar Nome & Cargo</button>
+      <button class="btn" id="soundBtn">Som do Tiro: OFF</button>
+    </div>
   </div>
+
+<script>
+  // Referências
+  const tabs = document.querySelectorAll('.tabbar button');
+  const sections = {
+    sobre: document.getElementById('sobre'),
+    experiencia: document.getElementById('experiencia'),
+    projetos: document.getElementById('projetos'),
+    habilidades: document.getElementById('habilidades'),
+    contato: document.getElementById('contato'),
+  };
+
+  // Áudio de tiro (com toggle)
+  const shotSound = new Audio("https://actions.google.com/sounds/v1/weapons/gun_pistol.ogg");
+  shotSound.volume = 0.5;
+  let soundOn = false;
+  const soundBtn = document.getElementById('soundBtn');
+  soundBtn.addEventListener('click', ()=>{
+    soundOn = !soundOn;
+    soundBtn.textContent = `Som do Tiro: ${soundOn ? 'ON' : 'OFF'}`;
+  });
+
+  // Tabs + efeito da bala
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      // Seleciona seção
+      const id = btn.dataset.tab;
+      Object.entries(sections).forEach(([k,el])=>{ el.hidden = (k !== id); });
+
+      // Estado visual das abas
+      tabs.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Bala passando
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+        const bullet = document.createElement('span');
+        bullet.className = 'bullet';
+        btn.appendChild(bullet);
+
+        // Som
+        if(soundOn){
+          try { shotSound.currentTime = 0; shotSound.play(); } catch(e){}
+        }
+
+        bullet.addEventListener('animationend', ()=>{
+          bullet.remove();
+          btn.classList.add('hole');
+          setTimeout(()=>btn.classList.remove('hole'), 1200);
+        }, { once:true });
+      }
+    });
+  });
+
+  // Print
+  document.getElementById('printBtn').addEventListener('click', ()=>window.print());
+
+  // Editar nome/cargo
+  document.getElementById('editBtn').addEventListener('click', ()=>{
+    const nome = document.getElementById('nome');
+    const cargo = document.getElementById('cargo');
+    const novoNome = prompt('Seu nome para o pôster:', nome.textContent.trim());
+    if(novoNome) nome.textContent = novoNome;
+    const novoCargo = prompt('Seu cargo/área:', cargo.textContent.trim());
+    if(novoCargo) cargo.textContent = novoCargo;
+  });
+
+  // Estado inicial: mostrar "sobre"
+  Object.entries(sections).forEach(([k,el])=>{ el.hidden = (k !== 'sobre'); });
+</script>
 </body>
 </html>
