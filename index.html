@@ -1,332 +1,338 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Antonio Augusto Barbaro — CV</title>
+  <title>Portfólio — AAB Produções</title>
+  <meta name="color-scheme" content="dark light">
   <style>
     :root{
-      --bg:#0b0d12; --panel:#121624; --ink:#eaf2ff; --muted:#a7b6d6; --accent:#5ad2ff; --chip:#1b2135; --chipB:#2a3352;
-      --ok:#86efac; --warn:#fde047;
+      --bg:#0b0d12;
+      --panel:#0f131b;
+      --muted:#97a0b0;
+      --text:#e6ebf2;
+      --accent:#00e0ff;
+      --accent-2:#00ff87;
+      --ring: 0 0 0 2px color-mix(in oklab, var(--accent) 60%, transparent),
+              0 0 24px color-mix(in oklab, var(--accent) 40%, transparent);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0; background:radial-gradient(1000px 700px at 50% -20%, #172038 0%, var(--bg) 60%, #07090f 100%);
-      color:var(--ink); font:400 16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial; letter-spacing:.2px;
+      margin:0; background:radial-gradient(1200px 800px at -10% -20%, #101525 0%, var(--bg) 50%, #0a0d13 100%);
+      color:var(--text); font: 14.5px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
     }
-    a{color:var(--accent); text-decoration:none}
-    a:hover{opacity:.9; text-decoration:underline}
+    .app{display:flex; min-height:100dvh; gap:0}
+    /* Sidebar */
+    .sidebar{
+      width: 300px; max-width: 85vw; background: linear-gradient(180deg, #0f141e 0%, var(--panel) 100%);
+      border-right:1px solid #1a2230; position:relative; box-shadow: var(--shadow);
+      display:flex; flex-direction:column;
+    }
+    .brand{
+      padding:20px 18px; border-bottom:1px solid #1a2230; position:relative;
+    }
+    .brand h1{
+      margin:0; font-size:18px; letter-spacing:.5px; display:flex; align-items:center; gap:8px;
+    }
+    .badge{
+      font-size:11px; padding:2px 8px; border:1px solid #1a2230; border-radius:999px; color:var(--muted)
+    }
+    nav{padding:10px 8px 14px 8px; overflow:auto}
+    .link{
+      appearance:none; width:100%; text-align:left; border:0; background:transparent; color:var(--text);
+      padding:12px 14px; margin:6px; border-radius:14px; cursor:pointer; position:relative;
+      outline:none; display:flex; align-items:center; gap:10px; isolation:isolate;
+    }
+    .link .dot{
+      width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent-2));
+      opacity:.9; box-shadow:0 0 12px color-mix(in oklab, var(--accent) 50%, transparent);
+    }
+    .link .label{flex:1}
+    .link .open{
+      opacity:.6; font-size:12px; border:1px solid #233149; padding:2px 8px; border-radius:999px
+    }
+    .link:hover{background:#111826}
+    .link:focus-visible{box-shadow:var(--ring)}
+    .link.active{
+      background:linear-gradient(180deg, #121a27, #0f1722);
+      border:1px solid #203049;
+      box-shadow:
+        inset 0 0 0 1px rgba(0,224,255,.15),
+        inset 0 0 24px rgba(0,224,255,.06),
+        0 6px 22px rgba(0,0,0,.45);
+    }
+    .link.active::before{
+      content:""; position:absolute; inset:-1px; border-radius:14px;
+      pointer-events:none; z-index:-1;
+      background:
+        conic-gradient(from 0deg at 0% 50%, var(--accent), transparent 45%),
+        conic-gradient(from 180deg at 0% 50%, var(--accent-2), transparent 45%);
+      filter: blur(16px); opacity:.18;
+    }
+    .hint{
+      margin:8px 14px 0; color:var(--muted); font-size:12px
+    }
 
-    /* layout */
-    .wrap{max-width:1100px; margin:40px auto; padding:24px;}
-    header{display:flex; gap:20px; align-items:center; justify-content:space-between; margin-bottom:20px}
-    .id{display:flex; gap:16px; align-items:center}
-    .avatar{width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,#263150,#0f1424); border:2px solid #30406b; box-shadow:0 0 0 4px rgba(90,210,255,.08)}
-    .title h1{margin:0; font-size:28px}
-    .subtitle{margin-top:2px; color:var(--muted)}
+    /* Main pane */
+    .main{flex:1; min-width:0; position:relative; display:flex; flex-direction:column}
+    .toolbar{
+      display:flex; gap:8px; align-items:center; justify-content:space-between;
+      padding:10px 12px; border-bottom:1px solid #1a2230; background:linear-gradient(180deg, #0e141e, #0b1018);
+    }
+    .toolbar .left, .toolbar .right{display:flex; gap:8px; align-items:center}
+    .btn{
+      color:var(--text); background:#111826; border:1px solid #1e2a3f; padding:8px 10px; border-radius:12px; cursor:pointer;
+    }
+    .btn:hover{background:#0f1725}
+    .btn:focus-visible{box-shadow:var(--ring); outline:none}
+    .title{font-size:13px; color:var(--muted)}
+    .title strong{color:var(--text)}
+    .viewer{position:relative; flex:1; min-height:0}
+    iframe{
+      position:absolute; inset:0; width:100%; height:100%; border:0; background:#0a0f16;
+    }
+    .loading{
+      position:absolute; inset:0; display:grid; place-items:center; pointer-events:none;
+      background: radial-gradient(600px 300px at 50% -10%, rgba(0,224,255,.05), transparent 40%);
+    }
+    .spinner{
+      width:56px; height:56px; border-radius:50%;
+      border:3px solid rgba(255,255,255,.12);
+      border-top-color: var(--accent);
+      border-right-color: var(--accent-2);
+      animation: spin 1s linear infinite;
+      filter: drop-shadow(0 0 14px rgba(0,224,255,.45));
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .footer{
+      padding:8px 12px; border-top:1px solid #1a2230; color:var(--muted); font-size:12px;
+      background:linear-gradient(180deg, #0b1018, #0a0e15)
+    }
 
-    .toolbar{display:flex; gap:10px; align-items:center}
-    .btn{border:1px solid #30406b; background:linear-gradient(180deg,#1a2138,#11162a); color:var(--ink); padding:8px 12px; border-radius:10px; cursor:pointer}
-    .btn[aria-pressed="true"]{outline:2px solid var(--accent)}
-
-    .grid{display:grid; grid-template-columns: 320px 1fr; gap:22px}
-    aside, main{background:linear-gradient(180deg, rgba(18,22,36,.9), rgba(12,15,24,.88)); border:1px solid #283455; border-radius:16px; padding:18px}
-
-    h2{font-size:18px; letter-spacing:.6px; text-transform:uppercase; margin:8px 0 12px 0; color:#cfe2ff}
-    section+section{margin-top:18px}
-
-    .list{display:flex; flex-wrap:wrap; gap:8px}
-    .chip{background:var(--chip); border:1px solid var(--chipB); padding:6px 10px; border-radius:999px; font-size:13px}
-
-    .contact a{display:flex; gap:10px; align-items:center; padding:10px; border-radius:12px; border:1px solid #2a3552; background:#151b2f}
-    .contact svg{width:18px; height:18px}
-    .contact a+a{margin-top:8px}
-
-    .item{padding:10px 12px; border:1px solid #253353; border-radius:14px; background: rgba(20,26,44,.6)}
-    .item + .item{margin-top:10px}
-    .item .top{display:flex; justify-content:space-between; gap:10px; margin-bottom:6px}
-    .item .role{font-weight:600}
-    .item .where{color:var(--muted)}
-    .item ul{margin:8px 0 0 18px}
-
-    .langbar{display:flex; gap:8px}
-    .langbtn{padding:6px 10px; border-radius:10px; border:1px solid #30406b; background:#141a2e; cursor:pointer}
-    .langbtn.active{outline:2px solid var(--accent)}
-
-    .langs{display:flex; gap:8px; flex-wrap:wrap}
-
-    footer{margin-top:22px; color:var(--muted); text-align:center}
-
-    /* bilingual visibility */
-    [data-lang]{display:none}
-    body.lang-pt [data-lang="pt"], body.lang-en [data-lang="en"]{display:contents}
-
-    /* print */
-    @media print{
-      body{background:white; color:#111}
-      .wrap{margin:0; max-width:none}
-      aside, main{border:none; background:transparent}
-      .toolbar{display:none}
-      .avatar{border:none; box-shadow:none}
-      a{color:#000}
+    /* Mobile */
+    .hamburger{display:none}
+    @media (max-width: 860px){
+      .app{flex-direction:column}
+      .sidebar{width:100%; border-right:0; border-bottom:1px solid #1a2230}
+      .hamburger{display:inline-flex}
+      nav{display:none}
+      .sidebar.open nav{display:block; max-height:60vh}
     }
   </style>
 </head>
-<body class="lang-pt">
-  <div class="wrap">
-    <header>
-      <div class="id">
-        <div class="avatar" aria-hidden="true"></div>
-        <div class="title">
-          <h1>Antonio Augusto Barbaro</h1>
-          <div class="subtitle">
-            <span data-lang="pt">Desenvolvedor Front‑End • Criador de experiências Web interativas</span>
-            <span data-lang="en">Front‑End Developer • Creator of interactive Web experiences</span>
-          </div>
-        </div>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <h1>
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="url(#g)" d="M12 2L2 7l10 5 10-5-10-5Zm0 7L2 4v13l10 5 10-5V4l-10 5Z"/><defs>
+              <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#00ff87"/>
+              </linearGradient>
+            </defs>
+          </svg>
+          Portfólio <span class="badge">AAB</span>
+        </h1>
       </div>
-      <div class="toolbar" role="group" aria-label="Language and actions">
-        <div class="langbar">
-          <button class="langbtn" data-setlang="pt" aria-pressed="true">PT</button>
-          <button class="langbtn" data-setlang="en" aria-pressed="false">EN</button>
-        </div>
-        <button class="btn" id="printBtn">
-          <span data-lang="pt">Baixar PDF</span>
-          <span data-lang="en">Download PDF</span>
+      <button class="btn hamburger" aria-controls="menu" aria-expanded="false" id="burger">☰ Menu</button>
+      <nav id="menu" aria-label="Seções">
+        <!-- Links do menu -->
+        <button class="link" data-key="1" data-id="blender-projects">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="label"><strong>Blender</strong> — Projects</span>
+          <span class="open">1</span>
         </button>
+        <button class="link" data-key="2" data-id="blender-animations">
+          <span class="dot"></span><span class="label"><strong>Blender</strong> — Animations</span><span class="open">2</span>
+        </button>
+        <button class="link" data-key="3" data-id="gimp-projects">
+          <span class="dot"></span><span class="label"><strong>GIMP</strong> — Projects</span><span class="open">3</span>
+        </button>
+        <button class="link" data-key="4" data-id="music-visualizer">
+          <span class="dot"></span><span class="label">Music Player — Visualizer</span><span class="open">4</span>
+        </button>
+        <button class="link" data-key="5" data-id="best-shots">
+          <span class="dot"></span><span class="label">Best Shots — Carousel</span><span class="open">5</span>
+        </button>
+        <button class="link" data-key="6" data-id="animated-background">
+          <span class="dot"></span><span class="label">Animated Background</span><span class="open">6</span>
+        </button>
+
+        <div class="hint">Dicas: 1–6 para trocar • ↑/↓ navegam • Enter abre</div>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="toolbar">
+        <div class="left">
+          <span class="title">Visualizando: <strong id="currentTitle">—</strong></span>
+        </div>
+        <div class="right">
+          <button class="btn" id="openNew">Abrir em nova aba</button>
+          <button class="btn" id="copyLink">Copiar link</button>
+        </div>
       </div>
-    </header>
 
-    <div class="grid">
-      <aside>
-        <section>
-          <h2>
-            <span data-lang="pt">Contato</span>
-            <span data-lang="en">Contact</span>
-          </h2>
-          <div class="contact">
-            <a href="tel:+5554984181968">
-              <!-- phone icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.46 19.46 0 0 1-6-6A19.8 19.8 0 0 1 2.08 4.18 2 2 0 0 1 4.06 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.45-1.14a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"/></svg>
-              <span>+55 54 98418‑1968</span>
-            </a>
-            <a href="mailto:aabproducoes.blooper364@passinbox.com">
-              <!-- mail icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <span>aabproducoes.blooper364@passinbox.com</span>
-            </a>
-            <a href="https://wa.me/5554984181968" target="_blank" rel="noopener">
-              <!-- whatsapp-like icon -->
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-14.32 5L3 21l4.12-2.1A8 8 0 1 1 20 12z"/><path d="M8.5 9.5c.5 2 2.5 4 4.5 4.5"/><path d="M13.5 14c1 0 2-.5 2.5-1.5"/></svg>
-              <span data-lang="pt">Fale comigo no WhatsApp</span>
-              <span data-lang="en">Chat on WhatsApp</span>
-            </a>
-          </div>
-        </section>
+      <div class="viewer">
+        <div class="loading" id="loading" aria-hidden="true"><div class="spinner" role="status" aria-label="Carregando"></div></div>
+        <iframe id="frame" title="Visualização do portfólio" referrerpolicy="no-referrer"></iframe>
+      </div>
 
-        <section>
-          <h2>
-            <span data-lang="pt">Competências</span>
-            <span data-lang="en">Skills</span>
-          </h2>
-          <div class="list">
-            <span class="chip">HTML5</span>
-            <span class="chip">CSS3</span>
-            <span class="chip">JavaScript</span>
-            <span class="chip">Canvas / WebGL</span>
-            <span class="chip">UI/UX</span>
-            <span class="chip">Git</span>
-          </div>
-        </section>
-
-        <section>
-          <h2>
-            <span data-lang="pt">Idiomas</span>
-            <span data-lang="en">Languages</span>
-          </h2>
-          <div class="langs">
-            <span class="chip">
-              <span data-lang="pt">Português — Nativo</span>
-              <span data-lang="en">Portuguese — Native</span>
-            </span>
-            <span class="chip">
-              <span data-lang="pt">Inglês — Fluente</span>
-              <span data-lang="en">English — Fluent</span>
-            </span>
-          </div>
-        </section>
-      </aside>
-
-      <main>
-        <section>
-          <h2>
-            <span data-lang="pt">Resumo</span>
-            <span data-lang="en">Summary</span>
-          </h2>
-          <div class="item">
-            <p>
-              <span data-lang="pt">Desenvolvedor front‑end com foco em experiências web interativas, jogos HTML5 e interfaces responsivas. Entrego páginas rápidas, bonitas e fáceis de manter, com atenção a performance e acessibilidade.</span>
-              <span data-lang="en">Front‑end developer focused on interactive web experiences, HTML5 games, and responsive interfaces. I build fast, beautiful, and maintainable pages with attention to performance and accessibility.</span>
-            </p>
-          </div>
-        </section>
-
-        <section>
-          <h2>
-            <span data-lang="pt">Experiência</span>
-            <span data-lang="en">Experience</span>
-          </h2>
-
-          <div class="item">
-            <div class="top">
-              <div class="role">Front‑End Developer — Freelance</div>
-              <div class="where">
-                <span data-lang="pt">2019 – Presente</span>
-                <span data-lang="en">2019 – Present</span>
-              </div>
-            </div>
-            <ul>
-              <li>
-                <span data-lang="pt">Criação de landing pages bilíngues (PT/EN) com temas personalizados, animações e carrosséis de mídia.</span>
-                <span data-lang="en">Built bilingual (PT/EN) landing pages with custom themes, animations, and media carousels.</span>
-              </li>
-              <li>
-                <span data-lang="pt">Desenvolvimento de jogos e experiências em Canvas/HTML5 com foco em “juice” visual e som.</span>
-                <span data-lang="en">Developed Canvas/HTML5 games and experiences with strong visual and audio “juice.”</span>
-              </li>
-              <li>
-                <span data-lang="pt">Otimização de performance, acessibilidade e SEO técnico.</span>
-                <span data-lang="en">Optimized performance, accessibility, and technical SEO.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="item">
-            <div class="top">
-              <div class="role">Web Designer — AAB Produções</div>
-              <div class="where">2015 – 2019</div>
-            </div>
-            <ul>
-              <li>
-                <span data-lang="pt">Criação de identidade visual e sites responsivos para portfólios e eventos.</span>
-                <span data-lang="en">Created visual identity and responsive sites for portfolios and events.</span>
-              </li>
-              <li>
-                <span data-lang="pt">Integração com redes sociais e formulários de contato.</span>
-                <span data-lang="en">Integrated social media and contact forms.</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section>
-          <h2>
-            <span data-lang="pt">Projetos em Destaque</span>
-            <span data-lang="en">Featured Projects</span>
-          </h2>
-
-          <div class="item">
-            <div class="top">
-              <div class="role">TNT Fishing — HTML5 Game</div>
-              <div class="where">
-                <span data-lang="pt">Projeto pessoal</span>
-                <span data-lang="en">Personal project</span>
-              </div>
-            </div>
-            <ul>
-              <li>
-                <span data-lang="pt">Canvas 2D, efeitos de partículas, HUD, áudio e transições polidas.</span>
-                <span data-lang="en">2D Canvas, particle effects, HUD, audio, and polished transitions.</span>
-              </li>
-            </ul>
-          </div>
-
-          <div class="item">
-            <div class="top">
-              <div class="role">New Tab — Página Personalizada</div>
-              <div class="where">2025</div>
-            </div>
-            <ul>
-              <li>
-                <span data-lang="pt">Grade de links editável, abas, RSS ao vivo, bloqueio por padrão e histórico de desfazer.</span>
-                <span data-lang="en">Editable link grid, tabs, live RSS, pattern lock, and undo history.</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section>
-          <h2>
-            <span data-lang="pt">Educação</span>
-            <span data-lang="en">Education</span>
-          </h2>
-          <div class="item">
-            <div class="top">
-              <div class="role">
-                <span data-lang="pt">Formação contínua em desenvolvimento Web</span>
-                <span data-lang="en">Ongoing education in Web development</span>
-              </div>
-              <div class="where">Online</div>
-            </div>
-            <ul>
-              <li>
-                <span data-lang="pt">Cursos e projetos práticos em JavaScript, Canvas, UI/UX.</span>
-                <span data-lang="en">Courses and hands‑on projects in JavaScript, Canvas, UI/UX.</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section>
-          <h2>
-            <span data-lang="pt">Links</span>
-            <span data-lang="en">Links</span>
-          </h2>
-          <div class="list">
-            <a class="chip" href="https://github.com/aabproducoes" target="_blank" rel="noopener">GitHub</a>
-            <a class="chip" href="https://aabproducoes.github.io/NewTab/" target="_blank" rel="noopener">Portfolio</a>
-            <a class="chip" href="https://instagram.com/aabproducoes" target="_blank" rel="noopener">Instagram</a>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <footer>
-      <span data-lang="pt">Atualizado em</span>
-      <span data-lang="en">Updated on</span>
-      <span id="today"></span>
-    </footer>
+      <div class="footer">
+        Feito com ❤ — Tema escuro com acentos ciano/verde. Problemas de exibição? Use “Abrir em nova aba”.
+      </div>
+    </main>
   </div>
 
   <script>
-    const body = document.body;
-    const btns = document.querySelectorAll('.langbtn');
-    const printBtn = document.getElementById('printBtn');
-    const today = document.getElementById('today');
+    // Mapeamento de páginas
+    const PAGES = {
+      "blender-projects": {
+        url: "https://aabproducoes.github.io/Links/blender-projects.html",
+        title: "Blender — Projects"
+      },
+      "blender-animations": {
+        url: "https://aabproducoes.github.io/Links/blender-animations.html",
+        title: "Blender — Animations"
+      },
+      "gimp-projects": {
+        url: "https://aabproducoes.github.io/Links/gimp-projects.html",
+        title: "GIMP — Projects"
+      },
+      "music-visualizer": {
+        url: "https://aabproducoes.github.io/Links/music_player-visualizer.html",
+        title: "Music Player — Visualizer"
+      },
+      "best-shots": {
+        url: "https://aabproducoes.github.io/Links/best-shots-img-caroussell.html",
+        title: "Best Shots — Carousel"
+      },
+      "animated-background": {
+        url: "https://aabproducoes.github.io/Links/animated-background.html",
+        title: "Animated Background"
+      },
+    };
 
-    function setLang(lang){
-      body.classList.remove('lang-pt','lang-en');
-      body.classList.add('lang-'+lang);
-      btns.forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.setlang===lang)));
-      btns.forEach(b=>b.classList.toggle('active', b.dataset.setlang===lang));
-      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
-      localStorage.setItem('cv_lang', lang);
+    const frame = document.getElementById('frame');
+    const loading = document.getElementById('loading');
+    const currentTitle = document.getElementById('currentTitle');
+    const openNew = document.getElementById('openNew');
+    const copyLink = document.getElementById('copyLink');
+    const burger = document.getElementById('burger');
+    const sidebar = document.getElementById('sidebar');
+
+    // Helpers
+    const $ = (sel, ctx=document) => ctx.querySelector(sel);
+    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+
+    function setActive(id){
+      $$('.link').forEach(b=>b.classList.toggle('active', b.dataset.id === id));
     }
 
-    btns.forEach(b=> b.addEventListener('click', ()=> setLang(b.dataset.setlang)) );
-    printBtn.addEventListener('click', ()=> window.print());
+    function loadPage(id, pushHash=true){
+      const item = PAGES[id]; if(!item) return;
+      // show spinner
+      loading.removeAttribute('aria-hidden');
+      loading.style.opacity = '1';
 
-    // load saved lang or default pt
-    setLang(localStorage.getItem('cv_lang')||'pt');
+      // update UI
+      setActive(id);
+      currentTitle.textContent = item.title;
+      frame.src = item.url;
 
-    // show today date localized to current language
-    function updateDate(){
-      const lang = body.classList.contains('lang-en') ? 'en-US' : 'pt-BR';
-      const d = new Date();
-      today.textContent = new Intl.DateTimeFormat(lang, {year:'numeric', month:'long', day:'2-digit'}).format(d);
+      // persist + deep link
+      localStorage.setItem('aab.portfolio.current', id);
+      if (pushHash) history.replaceState(null, "", `#${id}`);
+
+      // close mobile menu if open
+      if (sidebar.classList.contains('open')) toggleMenu(false);
     }
-    updateDate();
+
+    // spinner hide on load
+    frame.addEventListener('load', ()=> {
+      // quick fadeout
+      loading.style.transition = 'opacity .35s ease';
+      loading.style.opacity = '0';
+      setTimeout(()=>loading.setAttribute('aria-hidden','true'), 360);
+      // update document title
+      const id = getCurrentId();
+      if (id) document.title = `Portfólio — ${PAGES[id].title}`;
+    });
+
+    function getCurrentId(){
+      const h = (location.hash || '').replace('#','').trim();
+      if (PAGES[h]) return h;
+      const saved = localStorage.getItem('aab.portfolio.current');
+      if (PAGES[saved]) return saved;
+      return 'blender-projects';
+    }
+
+    // Menu clicks
+    $$('.link').forEach(btn=>{
+      btn.addEventListener('click', ()=>loadPage(btn.dataset.id));
+    });
+
+    // Keyboard navigation: 1–6, arrows, Enter
+    window.addEventListener('keydown', (e)=>{
+      const num = Number(e.key);
+      if (num>=1 && num<=6){
+        const target = $(`.link[data-key="${num}"]`);
+        if (target) { target.focus(); loadPage(target.dataset.id); }
+        return;
+      }
+      const links = $$('.link');
+      const idx = links.findIndex(el=>el.classList.contains('active'));
+      if (['ArrowDown','j'].includes(e.key)){
+        const next = links[Math.min(idx+1, links.length-1)];
+        if (next){ next.focus(); loadPage(next.dataset.id); }
+      } else if (['ArrowUp','k'].includes(e.key)){
+        const prev = links[Math.max(idx-1, 0)];
+        if (prev){ prev.focus(); loadPage(prev.dataset.id); }
+      } else if (e.key === 'Enter'){
+        const active = links[idx] || links[0];
+        if (active) loadPage(active.dataset.id);
+      }
+    });
+
+    // Toolbar buttons
+    openNew.addEventListener('click', ()=>{
+      const id = getCurrentId();
+      window.open(PAGES[id].url, '_blank', 'noopener');
+    });
+
+    copyLink.addEventListener('click', async ()=>{
+      const id = getCurrentId();
+      const share = `${location.origin}${location.pathname}#${id}`;
+      try{
+        await navigator.clipboard.writeText(share);
+        copyLink.textContent = 'Copiado!';
+        setTimeout(()=>copyLink.textContent='Copiar link', 1200);
+      }catch{
+        prompt('Copie o link:', share);
+      }
+    });
+
+    // Mobile menu
+    function toggleMenu(force){
+      const open = typeof force === 'boolean' ? force : !sidebar.classList.contains('open');
+      sidebar.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', String(open));
+    }
+    burger.addEventListener('click', ()=>toggleMenu());
+
+    // Init
+    window.addEventListener('hashchange', ()=>{
+      const id = getCurrentId();
+      loadPage(id, /*pushHash*/false);
+    });
+
+    // Primeiro load
+    loadPage(getCurrentId());
   </script>
 </body>
 </html>
