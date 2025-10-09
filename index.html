@@ -6,124 +6,128 @@
   <title>Portfólio — AAB Produções</title>
   <meta name="color-scheme" content="dark light">
   <style>
-    :root{
-      --bg:#0b0d12;
-      --panel:#0f131b;
-      --muted:#97a0b0;
-      --text:#e6ebf2;
-      --accent:#00e0ff;
-      --accent-2:#00ff87;
-      --ring: 0 0 0 2px color-mix(in oklab, var(--accent) 60%, transparent),
-              0 0 24px color-mix(in oklab, var(--accent) 40%, transparent);
+    /* ===== THEME TOKENS (escuro / claro) ===== */
+    body{ margin:0; font:14.5px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; }
+    body[data-theme="dark"]{
+      --bg:#0b0d12; --panel:#0f131b; --muted:#97a0b0; --text:#e6ebf2;
+      --accent:#00e0ff; --accent-2:#00ff87; --border:#1a2230;
+      --soft:#111826; --soft-2:#0f1722; --glowA: rgba(0,224,255,.06); --glowB: rgba(0,224,255,.15);
       --shadow: 0 10px 30px rgba(0,0,0,.35);
+      background:radial-gradient(1200px 800px at -10% -20%, #101525 0%, var(--bg) 50%, #0a0d13 100%);
+      color:var(--text);
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; background:radial-gradient(1200px 800px at -10% -20%, #101525 0%, var(--bg) 50%, #0a0d13 100%);
-      color:var(--text); font: 14.5px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+    body[data-theme="light"]{
+      --bg:#f5f7fb; --panel:#ffffff; --muted:#5d6778; --text:#0e1726;
+      --accent:#007bff; --accent-2:#21c97a; --border:#dfe6ee;
+      --soft:#f2f6fb; --soft-2:#eef3fa; --glowA: rgba(0,123,255,.08); --glowB: rgba(0,123,255,.25);
+      --shadow: 0 10px 30px rgba(10,35,80,.10);
+      background:linear-gradient(180deg, #f7faff 0%, #edf3fb 100%);
+      color:var(--text);
     }
-    .app{display:flex; min-height:100dvh; gap:0}
-    /* Sidebar */
+    :root{ color-scheme: light dark }
+    *{ box-sizing: border-box }
+    .app{ display:flex; min-height:100dvh; gap:0 }
+
+    /* ===== SIDEBAR ===== */
     .sidebar{
-      width: 300px; max-width: 85vw; background: linear-gradient(180deg, #0f141e 0%, var(--panel) 100%);
-      border-right:1px solid #1a2230; position:relative; box-shadow: var(--shadow);
-      display:flex; flex-direction:column;
+      width: 300px; max-width: 85vw; background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, transparent) 0%, var(--panel) 100%);
+      border-right:1px solid var(--border); position:relative; box-shadow: var(--shadow);
+      display:flex; flex-direction:column; min-width:240px;
     }
-    .brand{
-      padding:20px 18px; border-bottom:1px solid #1a2230; position:relative;
+    .brand{ padding:16px 16px 8px; border-bottom:1px solid var(--border) }
+    .brand h1{ margin:0; font-size:18px; letter-spacing:.3px; display:flex; align-items:center; gap:8px }
+    .badge{ font-size:11px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; color:var(--muted) }
+
+    .about{
+      padding:12px 16px; border-bottom:1px solid var(--border);
+      display:grid; grid-template-columns:40px 1fr; gap:12px; align-items:center;
     }
-    .brand h1{
-      margin:0; font-size:18px; letter-spacing:.5px; display:flex; align-items:center; gap:8px;
+    .avatar{
+      width:40px; height:40px;
+      border-radius:12px;
+      object-fit:cover;
+      display:block;
+      box-shadow:0 0 0 2px color-mix(in oklab, var(--accent) 35%, transparent);
     }
-    .badge{
-      font-size:11px; padding:2px 8px; border:1px solid #1a2230; border-radius:999px; color:var(--muted)
-    }
-    nav{padding:10px 8px 14px 8px; overflow:auto}
+    .about h2{ margin:0; font-size:14px }
+    .about p{ margin:.25rem 0 0; font-size:12.5px; color:var(--muted) }
+
+    nav{ padding:10px 8px 14px 8px; overflow:auto; flex:1 }
     .link{
       appearance:none; width:100%; text-align:left; border:0; background:transparent; color:var(--text);
-      padding:12px 14px; margin:6px; border-radius:14px; cursor:pointer; position:relative;
-      outline:none; display:flex; align-items:center; gap:10px; isolation:isolate;
+      padding:12px 14px; margin:6px; border-radius:14px; cursor:pointer; position:relative; outline:none; display:flex; align-items:center; gap:10px;
     }
-    .link .dot{
-      width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent-2));
-      opacity:.9; box-shadow:0 0 12px color-mix(in oklab, var(--accent) 50%, transparent);
-    }
-    .link .label{flex:1}
-    .link .open{
-      opacity:.6; font-size:12px; border:1px solid #233149; padding:2px 8px; border-radius:999px
-    }
-    .link:hover{background:#111826}
-    .link:focus-visible{box-shadow:var(--ring)}
+    .link .dot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent-2)); opacity:.9; box-shadow:0 0 12px color-mix(in oklab, var(--accent) 50%, transparent) }
+    .link .label{ flex:1 }
+    .link .open{ opacity:.6; font-size:12px; border:1px solid color-mix(in oklab, var(--border) 80%, transparent); padding:2px 8px; border-radius:999px }
+    .link:hover{ background:var(--soft) }
+    .link:focus-visible{ box-shadow: 0 0 0 2px var(--glowB) }
     .link.active{
-      background:linear-gradient(180deg, #121a27, #0f1722);
-      border:1px solid #203049;
+      background:linear-gradient(180deg, var(--soft-2), var(--soft));
+      border:1px solid color-mix(in oklab, var(--accent) 30%, var(--border));
       box-shadow:
-        inset 0 0 0 1px rgba(0,224,255,.15),
-        inset 0 0 24px rgba(0,224,255,.06),
-        0 6px 22px rgba(0,0,0,.45);
+        inset 0 0 0 1px color-mix(in oklab, var(--accent) 35%, transparent),
+        inset 0 0 24px var(--glowA),
+        0 6px 22px rgba(0,0,0,.08);
     }
     .link.active::before{
-      content:""; position:absolute; inset:-1px; border-radius:14px;
-      pointer-events:none; z-index:-1;
+      content:""; position:absolute; inset:-1px; border-radius:14px; pointer-events:none; z-index:-1;
       background:
         conic-gradient(from 0deg at 0% 50%, var(--accent), transparent 45%),
         conic-gradient(from 180deg at 0% 50%, var(--accent-2), transparent 45%);
-      filter: blur(16px); opacity:.18;
+      filter: blur(16px); opacity:.2;
     }
-    .hint{
-      margin:8px 14px 0; color:var(--muted); font-size:12px
-    }
+    .hint{ margin:8px 14px 0; color:var(--muted); font-size:12px }
 
-    /* Main pane */
-    .main{flex:1; min-width:0; position:relative; display:flex; flex-direction:column}
+    /* Resizer */
+    .resizer{ position:absolute; right:-3px; top:0; width:6px; height:100%; cursor: col-resize; background: transparent; }
+    .resizer::after{ content:""; position:absolute; inset:0; opacity:0; transition:.2s; background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 40%, transparent), transparent 60%) }
+    .resizer:hover::after, .resizing .resizer::after{ opacity:.6 }
+
+    /* ===== MAIN PANE ===== */
+    .main{ flex:1; min-width:0; position:relative; display:flex; flex-direction:column }
     .toolbar{
       display:flex; gap:8px; align-items:center; justify-content:space-between;
-      padding:10px 12px; border-bottom:1px solid #1a2230; background:linear-gradient(180deg, #0e141e, #0b1018);
+      padding:10px 12px; border-bottom:1px solid var(--border); background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
     }
-    .toolbar .left, .toolbar .right{display:flex; gap:8px; align-items:center}
-    .btn{
-      color:var(--text); background:#111826; border:1px solid #1e2a3f; padding:8px 10px; border-radius:12px; cursor:pointer;
-    }
-    .btn:hover{background:#0f1725}
-    .btn:focus-visible{box-shadow:var(--ring); outline:none}
-    .title{font-size:13px; color:var(--muted)}
-    .title strong{color:var(--text)}
-    .viewer{position:relative; flex:1; min-height:0}
-    iframe{
-      position:absolute; inset:0; width:100%; height:100%; border:0; background:#0a0f16;
-    }
+    .toolbar .left, .toolbar .right{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
+    .btn{ color:var(--text); background:var(--soft); border:1px solid color-mix(in oklab, var(--border) 80%, transparent); padding:8px 10px; border-radius:12px; cursor:pointer; user-select:none }
+    .btn:hover{ filter:brightness(1.03) }
+    .btn:focus-visible{ outline:none; box-shadow: 0 0 0 2px var(--glowB) }
+    .title{ font-size:13px; color:var(--muted) }
+    .title strong{ color:var(--text) }
+    .viewer{ position:relative; flex:1; min-height:0 }
+    iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; background:var(--bg) }
     .loading{
       position:absolute; inset:0; display:grid; place-items:center; pointer-events:none;
-      background: radial-gradient(600px 300px at 50% -10%, rgba(0,224,255,.05), transparent 40%);
+      background: radial-gradient(600px 300px at 50% -10%, var(--glowA), transparent 40%);
     }
     .spinner{
-      width:56px; height:56px; border-radius:50%;
-      border:3px solid rgba(255,255,255,.12);
-      border-top-color: var(--accent);
-      border-right-color: var(--accent-2);
-      animation: spin 1s linear infinite;
-      filter: drop-shadow(0 0 14px rgba(0,224,255,.45));
+      width:56px; height:56px; border-radius:50%; border:3px solid rgba(127,127,127,.18);
+      border-top-color: var(--accent); border-right-color: var(--accent-2);
+      animation: spin 1s linear infinite; filter: drop-shadow(0 0 14px color-mix(in oklab, var(--accent) 45%, transparent));
     }
-    @keyframes spin{to{transform:rotate(360deg)}}
+    @keyframes spin{ to{ transform:rotate(360deg) } }
+
     .footer{
-      padding:8px 12px; border-top:1px solid #1a2230; color:var(--muted); font-size:12px;
-      background:linear-gradient(180deg, #0b1018, #0a0e15)
+      padding:8px 12px; border-top:1px solid var(--border); color:var(--muted); font-size:12px;
+      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
     }
 
-    /* Mobile */
-    .hamburger{display:none}
+    /* ===== MOBILE ===== */
+    .hamburger{ display:none }
     @media (max-width: 860px){
-      .app{flex-direction:column}
-      .sidebar{width:100%; border-right:0; border-bottom:1px solid #1a2230}
-      .hamburger{display:inline-flex}
-      nav{display:none}
-      .sidebar.open nav{display:block; max-height:60vh}
+      .app{ flex-direction:column }
+      .sidebar{ width:100% !important; border-right:0; border-bottom:1px solid var(--border) }
+      .resizer{ display:none }
+      .hamburger{ display:inline-flex }
+      nav{ display:none }
+      .sidebar.open nav{ display:block; max-height:60vh }
     }
   </style>
 </head>
-<body>
-  <div class="app">
+<body data-theme="dark">
+  <div class="app" id="app">
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="brand">
@@ -138,32 +142,25 @@
           Portfólio <span class="badge">AAB</span>
         </h1>
       </div>
-      <button class="btn hamburger" aria-controls="menu" aria-expanded="false" id="burger">☰ Menu</button>
-      <nav id="menu" aria-label="Seções">
-        <!-- Links do menu -->
-        <button class="link" data-key="1" data-id="blender-projects">
-          <span class="dot" aria-hidden="true"></span>
-          <span class="label"><strong>Blender</strong> — Projects</span>
-          <span class="open">1</span>
-        </button>
-        <button class="link" data-key="2" data-id="blender-animations">
-          <span class="dot"></span><span class="label"><strong>Blender</strong> — Animations</span><span class="open">2</span>
-        </button>
-        <button class="link" data-key="3" data-id="gimp-projects">
-          <span class="dot"></span><span class="label"><strong>GIMP</strong> — Projects</span><span class="open">3</span>
-        </button>
-        <button class="link" data-key="4" data-id="music-visualizer">
-          <span class="dot"></span><span class="label">Music Player — Visualizer</span><span class="open">4</span>
-        </button>
-        <button class="link" data-key="5" data-id="best-shots">
-          <span class="dot"></span><span class="label">Best Shots — Carousel</span><span class="open">5</span>
-        </button>
-        <button class="link" data-key="6" data-id="animated-background">
-          <span class="dot"></span><span class="label">Animated Background</span><span class="open">6</span>
-        </button>
 
-        <div class="hint">Dicas: 1–6 para trocar • ↑/↓ navegam • Enter abre</div>
-      </nav>
+      <div class="about">
+        <img
+          class="avatar"
+          src="https://aabproducoes.github.io/Links/images/292440780_2225688030932761_1836941331334930994_n.webp.png"
+          alt="Foto de perfil de Antonio Augusto Barbaro"
+          loading="lazy" decoding="async"
+        />
+        <div>
+          <h2>Antonio A. Barbaro</h2>
+          <p>Fotografia, HTML5/Games e projetos criativos — <strong>AAB Produções</strong>.</p>
+        </div>
+      </div>
+
+      <button class="btn hamburger" aria-controls="menu" aria-expanded="false" id="burger">☰ Menu</button>
+      <nav id="menu" aria-label="Seções"><!-- items gerados via JS --></nav>
+
+      <div class="hint" id="hintText">Dicas: 1–9 para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar</div>
+      <div class="resizer" id="resizer" title="Arraste para redimensionar (duplo clique reseta)"></div>
     </aside>
 
     <!-- Main -->
@@ -173,6 +170,7 @@
           <span class="title">Visualizando: <strong id="currentTitle">—</strong></span>
         </div>
         <div class="right">
+          <button class="btn" id="themeToggle" aria-pressed="false" title="Alternar tema">Tema: Escuro</button>
           <button class="btn" id="openNew">Abrir em nova aba</button>
           <button class="btn" id="copyLink">Copiar link</button>
         </div>
@@ -184,113 +182,143 @@
       </div>
 
       <div class="footer">
-        Feito com ❤ — Tema escuro com acentos ciano/verde. Problemas de exibição? Use “Abrir em nova aba”.
+        Feito com ❤ — Tema claro/escuro, sidebar redimensionável e atalhos. Se alguma página bloquear *iframe*, use “Abrir em nova aba”.
       </div>
     </main>
   </div>
 
   <script>
-    // Mapeamento de páginas
-    const PAGES = {
-      "blender-projects": {
-        url: "https://aabproducoes.github.io/Links/blender-projects.html",
-        title: "Blender — Projects"
-      },
-      "blender-animations": {
-        url: "https://aabproducoes.github.io/Links/blender-animations.html",
-        title: "Blender — Animations"
-      },
-      "gimp-projects": {
-        url: "https://aabproducoes.github.io/Links/gimp-projects.html",
-        title: "GIMP — Projects"
-      },
-      "music-visualizer": {
-        url: "https://aabproducoes.github.io/Links/music_player-visualizer.html",
-        title: "Music Player — Visualizer"
-      },
-      "best-shots": {
-        url: "https://aabproducoes.github.io/Links/best-shots-img-caroussell.html",
-        title: "Best Shots — Carousel"
-      },
-      "animated-background": {
-        url: "https://aabproducoes.github.io/Links/animated-background.html",
-        title: "Animated Background"
-      },
+    /* ===== DATA ===== */
+    const PAGES = [
+      { id:"blender-projects",    key:1, title:"Blender — Projects",           url:"https://aabproducoes.github.io/Links/blender-projects.html" },
+      { id:"blender-animations",  key:2, title:"Blender — Animations",         url:"https://aabproducoes.github.io/Links/blender-animations.html" },
+      { id:"gimp-projects",       key:3, title:"GIMP — Projects",              url:"https://aabproducoes.github.io/Links/gimp-projects.html" },
+      { id:"music-visualizer",    key:4, title:"Music Player — Visualizer",    url:"https://aabproducoes.github.io/Links/music_player-visualizer.html" },
+      { id:"best-shots",          key:5, title:"Best Shots — Carousel",        url:"https://aabproducoes.github.io/Links/best-shots-img-caroussell.html" },
+      { id:"animated-background", key:6, title:"Animated Background",          url:"https://aabproducoes.github.io/Links/animated-background.html" },
+      { id:"html-play",           key:7, title:"HTML Games — Play",            url:"https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" },
+      { id:"translation",         key:8, title:"Translation",                  url:"https://aabproducoes.github.io/Links/Translation/translation.html" },
+      // Novo item especial: Certificados (gera página interna com base no TXT)
+      { id:"certificados",        key:9, title:"Certificados",                 url:"__internal_certificados__" },
+    ];
+
+    const CERTS_BASE = "https://aabproducoes.github.io/Links/Certificados/";
+    const CERTS_TXT  = CERTS_BASE + "CertificadosList.txt";
+
+    const els = {
+      app: document.getElementById('app'),
+      sidebar: document.getElementById('sidebar'),
+      menu: document.getElementById('menu'),
+      frame: document.getElementById('frame'),
+      loading: document.getElementById('loading'),
+      currentTitle: document.getElementById('currentTitle'),
+      openNew: document.getElementById('openNew'),
+      copyLink: document.getElementById('copyLink'),
+      burger: document.getElementById('burger'),
+      resizer: document.getElementById('resizer'),
+      themeToggle: document.getElementById('themeToggle'),
+      body: document.body,
+      hintText: document.getElementById('hintText')
     };
 
-    const frame = document.getElementById('frame');
-    const loading = document.getElementById('loading');
-    const currentTitle = document.getElementById('currentTitle');
-    const openNew = document.getElementById('openNew');
-    const copyLink = document.getElementById('copyLink');
-    const burger = document.getElementById('burger');
-    const sidebar = document.getElementById('sidebar');
+    const STORE = {
+      current: 'aab.portfolio.current',
+      theme: 'aab.portfolio.theme',
+      width: 'aab.portfolio.sidebarWidth'
+    };
 
-    // Helpers
-    const $ = (sel, ctx=document) => ctx.querySelector(sel);
-    const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+    /* ===== MENU RENDER ===== */
+    function renderMenu(){
+      els.menu.innerHTML = '';
+      PAGES.forEach(p=>{
+        const btn = document.createElement('button');
+        btn.className = 'link';
+        btn.dataset.id = p.id;
+        btn.dataset.key = String(p.key);
+        btn.innerHTML = `
+          <span class="dot" aria-hidden="true"></span>
+          <span class="label">${p.title}</span>
+          <span class="open">${p.key}</span>
+        `;
+        btn.addEventListener('click', ()=>loadPage(p.id));
+        els.menu.appendChild(btn);
+      });
+      // Atualiza dica dinâmica (1–N)
+      const first = PAGES[0]?.key ?? 1;
+      const last  = PAGES[PAGES.length-1]?.key ?? PAGES.length;
+      els.hintText.textContent = `Dicas: ${first}–${last} para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar`;
+    }
 
+    /* ===== STATE ===== */
     function setActive(id){
-      $$('.link').forEach(b=>b.classList.toggle('active', b.dataset.id === id));
+      document.querySelectorAll('.link').forEach(b=>b.classList.toggle('active', b.dataset.id === id));
+    }
+    function getCurrentId(){
+      const h = (location.hash || '').replace('#','').trim();
+      if (PAGES.find(p=>p.id===h)) return h;
+      const saved = localStorage.getItem(STORE.current);
+      if (PAGES.find(p=>p.id===saved)) return saved;
+      return PAGES[0].id;
+    }
+
+    function isInternalCertPage(id){
+      const p = PAGES.find(x=>x.id===id);
+      return p && p.url === "__internal_certificados__";
     }
 
     function loadPage(id, pushHash=true){
-      const item = PAGES[id]; if(!item) return;
-      // show spinner
-      loading.removeAttribute('aria-hidden');
-      loading.style.opacity = '1';
+      const item = PAGES.find(p=>p.id===id); if(!item) return;
 
-      // update UI
+      // spinner ON
+      els.loading.removeAttribute('aria-hidden'); els.loading.style.opacity = '1';
+
       setActive(id);
-      currentTitle.textContent = item.title;
-      frame.src = item.url;
-
-      // persist + deep link
-      localStorage.setItem('aab.portfolio.current', id);
+      els.currentTitle.textContent = item.title;
+      localStorage.setItem(STORE.current, id);
       if (pushHash) history.replaceState(null, "", `#${id}`);
 
-      // close mobile menu if open
-      if (sidebar.classList.contains('open')) toggleMenu(false);
+      if (isInternalCertPage(id)){
+        // Gera página interna com a lista de PDFs
+        buildCertificatesPage().then(html=>{
+          els.frame.srcdoc = html;
+        }).catch(err=>{
+          const safe = escapeHTML(String(err?.message || err || 'Erro desconhecido'));
+          els.frame.srcdoc = errorCertificatesHTML(safe);
+        });
+      } else {
+        els.frame.removeAttribute('srcdoc');
+        els.frame.src = item.url;
+      }
+
+      // fechar menu mobile
+      if (els.sidebar.classList.contains('open')) toggleMenu(false);
     }
 
-    // spinner hide on load
-    frame.addEventListener('load', ()=> {
-      // quick fadeout
-      loading.style.transition = 'opacity .35s ease';
-      loading.style.opacity = '0';
-      setTimeout(()=>loading.setAttribute('aria-hidden','true'), 360);
-      // update document title
+    // Fadeout spinner quando iframe termina de carregar (src ou srcdoc)
+    els.frame.addEventListener('load', ()=>{
+      els.loading.style.transition = 'opacity .35s ease';
+      els.loading.style.opacity = '0';
+      setTimeout(()=>els.loading.setAttribute('aria-hidden','true'), 360);
       const id = getCurrentId();
-      if (id) document.title = `Portfólio — ${PAGES[id].title}`;
+      const current = PAGES.find(p=>p.id===id);
+      if (current) document.title = `Portfólio — ${current.title}`;
     });
 
-    function getCurrentId(){
-      const h = (location.hash || '').replace('#','').trim();
-      if (PAGES[h]) return h;
-      const saved = localStorage.getItem('aab.portfolio.current');
-      if (PAGES[saved]) return saved;
-      return 'blender-projects';
-    }
-
-    // Menu clicks
-    $$('.link').forEach(btn=>{
-      btn.addEventListener('click', ()=>loadPage(btn.dataset.id));
-    });
-
-    // Keyboard navigation: 1–6, arrows, Enter
+    /* ===== KEYBOARD ===== */
     window.addEventListener('keydown', (e)=>{
-      const num = Number(e.key);
-      if (num>=1 && num<=6){
-        const target = $(`.link[data-key="${num}"]`);
-        if (target) { target.focus(); loadPage(target.dataset.id); }
+      const keyNum = Number(e.key);
+      if (keyNum>=1 && keyNum<=PAGES.length){
+        const p = PAGES[keyNum-1];
+        const target = document.querySelector(`.link[data-id="${p.id}"]`);
+        if (target){ target.focus(); loadPage(p.id); }
         return;
       }
-      const links = $$('.link');
+      const links = Array.from(document.querySelectorAll('.link'));
       const idx = links.findIndex(el=>el.classList.contains('active'));
-      if (['ArrowDown','j'].includes(e.key)){
+      if (['ArrowDown','j','J'].includes(e.key)){
         const next = links[Math.min(idx+1, links.length-1)];
         if (next){ next.focus(); loadPage(next.dataset.id); }
-      } else if (['ArrowUp','k'].includes(e.key)){
+      } else if (['ArrowUp','k','K'].includes(e.key)){
         const prev = links[Math.max(idx-1, 0)];
         if (prev){ prev.focus(); loadPage(prev.dataset.id); }
       } else if (e.key === 'Enter'){
@@ -299,39 +327,222 @@
       }
     });
 
-    // Toolbar buttons
-    openNew.addEventListener('click', ()=>{
+    /* ===== TOOLBAR BUTTONS ===== */
+    els.openNew.addEventListener('click', ()=>{
       const id = getCurrentId();
-      window.open(PAGES[id].url, '_blank', 'noopener');
+      const item = PAGES.find(p=>p.id===id);
+      if (!item) return;
+      if (isInternalCertPage(id)){
+        // Abre o TXT base (ponto de verdade) em nova aba
+        window.open(CERTS_TXT, '_blank', 'noopener');
+      } else {
+        window.open(item.url, '_blank', 'noopener');
+      }
     });
 
-    copyLink.addEventListener('click', async ()=>{
+    els.copyLink.addEventListener('click', async ()=>{
       const id = getCurrentId();
       const share = `${location.origin}${location.pathname}#${id}`;
       try{
         await navigator.clipboard.writeText(share);
-        copyLink.textContent = 'Copiado!';
-        setTimeout(()=>copyLink.textContent='Copiar link', 1200);
+        els.copyLink.textContent = 'Copiado!';
+        setTimeout(()=>els.copyLink.textContent='Copiar link', 1200);
       }catch{
         prompt('Copie o link:', share);
       }
     });
 
-    // Mobile menu
-    function toggleMenu(force){
-      const open = typeof force === 'boolean' ? force : !sidebar.classList.contains('open');
-      sidebar.classList.toggle('open', open);
-      burger.setAttribute('aria-expanded', String(open));
+    /* ===== THEME TOGGLE ===== */
+    function applyTheme(theme){
+      document.body.setAttribute('data-theme', theme);
+      localStorage.setItem(STORE.theme, theme);
+      const isDark = theme === 'dark';
+      els.themeToggle.setAttribute('aria-pressed', String(isDark));
+      els.themeToggle.textContent = `Tema: ${isDark ? 'Escuro' : 'Claro'}`;
     }
-    burger.addEventListener('click', ()=>toggleMenu());
+    function initTheme(){
+      const saved = localStorage.getItem(STORE.theme);
+      if (saved === 'dark' || saved === 'light'){
+        applyTheme(saved);
+      } else {
+        applyTheme('dark');
+      }
+    }
+    els.themeToggle.addEventListener('click', ()=>{
+      const next = (document.body.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+      applyTheme(next);
+      // Se estiver na página interna, recarrega para aplicar as cores nela também
+      if (isInternalCertPage(getCurrentId())) loadPage('certificados', /*pushHash*/false);
+    });
 
-    // Init
+    /* ===== MOBILE MENU ===== */
+    function toggleMenu(force){
+      const open = typeof force === 'boolean' ? force : !els.sidebar.classList.contains('open');
+      els.sidebar.classList.toggle('open', open);
+      els.burger?.setAttribute('aria-expanded', String(open));
+    }
+    els.burger?.addEventListener('click', ()=>toggleMenu());
+
+    /* ===== SIDEBAR RESIZE ===== */
+    (function sidebarResize(){
+      const MIN = 240, MAX = 520;
+      const saved = parseInt(localStorage.getItem(STORE.width)||'', 10);
+      if (!Number.isNaN(saved)) els.sidebar.style.width = Math.max(MIN, Math.min(MAX, saved)) + 'px';
+
+      let resizing = false;
+      const onPointerMove = (e)=>{
+        if (!resizing) return;
+        const rect = els.sidebar.getBoundingClientRect();
+        const newW = Math.max(MIN, Math.min(MAX, Math.round(e.clientX - rect.left)));
+        els.sidebar.style.width = newW + 'px';
+      };
+      const stop = ()=>{
+        if (!resizing) return;
+        resizing = false;
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', stop);
+        els.app.classList.remove('resizing');
+        const w = parseInt(els.sidebar.style.width,10);
+        if (!Number.isNaN(w)) localStorage.setItem(STORE.width, String(w));
+      };
+      els.resizer.addEventListener('pointerdown', (e)=>{
+        if (window.matchMedia('(max-width: 860px)').matches) return;
+        resizing = true; e.preventDefault();
+        els.app.classList.add('resizing');
+        document.addEventListener('pointermove', onPointerMove);
+        document.addEventListener('pointerup', stop);
+      });
+      els.resizer.addEventListener('dblclick', ()=>{
+        els.sidebar.style.width = '300px';
+        localStorage.setItem(STORE.width, '300');
+      });
+    })();
+
+    /* ===== UTIL ===== */
+    function escapeHTML(str){
+      return str.replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+    }
+
+    /* ===== CERTIFICADOS ===== */
+    async function buildCertificatesPage(){
+      const theme = document.body.getAttribute('data-theme') || 'dark';
+      const resp = await fetch(CERTS_TXT, { cache: 'no-cache' });
+      if (!resp.ok) throw new Error(`Falha ao carregar a lista (${resp.status})`);
+      const text = await resp.text();
+
+      // Parse linhas -> detectar .pdf e descrição entre " - ... - "
+      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      const items = [];
+      for (const line of lines){
+        // pega primeiro token terminando com .pdf
+        const mPdf = line.match(/(?:^|\s)([^\s]+\.pdf)(?:\s|$)/i);
+        if (!mPdf) continue;
+        const pdfName = mPdf[1];
+        const url = pdfName.match(/^https?:\/\//i) ? pdfName : (CERTS_BASE + pdfName);
+        // descrição entre hífens (com espaços) => " - desc - "
+        let desc = '';
+        const mDescSpaced = line.match(/\s-\s(.*?)\s-\s/);
+        if (mDescSpaced && mDescSpaced[1]) desc = mDescSpaced[1].trim();
+        else {
+          const mDescLoose = line.match(/-(.*?)-/);
+          if (mDescLoose && mDescLoose[1]) desc = mDescLoose[1].trim();
+        }
+        const display = desc || decodeURIComponent(pdfName.replace(/^.*\//,'').replace(/\.pdf$/i,''));
+        items.push({ url, display, tooltip: desc });
+      }
+
+      // Gera HTML interno (srcdoc) com tema equivalente
+      const doc = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificados</title>
+<style>
+  html,body{height:100%}
+  body[data-theme="dark"]{
+    --bg:#0b0d12; --panel:#0f131b; --text:#e6ebf2; --muted:#97a0b0; --accent:#00e0ff; --border:#1a2230; --soft:#111826;
+    background:var(--bg); color:var(--text); font:14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Noto Sans";
+  }
+  body[data-theme="light"]{
+    --bg:#f5f7fb; --panel:#ffffff; --text:#0e1726; --muted:#5d6778; --accent:#007bff; --border:#dfe6ee; --soft:#f2f6fb;
+    background:var(--bg); color:var(--text); font:14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Noto Sans";
+  }
+  .wrap{ max-width:1100px; margin:0 auto; padding:18px }
+  h1{ margin:0 0 8px 0; font-size:16px }
+  p.sub{ margin:0 0 16px 0; color:var(--muted) }
+  .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:12px }
+  .card{
+    background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
+    border:1px solid var(--border); border-radius:14px; padding:12px; display:flex; align-items:center; gap:10px;
+  }
+  .icon{
+    width:38px; height:38px; border-radius:10px;
+    background:linear-gradient(135deg, var(--accent), #21c97a);
+    display:grid; place-items:center; color:white; font-weight:700;
+  }
+  .title{ flex:1; min-width:0 }
+  .title a{ color:inherit; text-decoration:none }
+  .title a:hover{ text-decoration:underline }
+  .hint{ color:var(--muted); font-size:12px; margin-top:8px }
+</style>
+<base target="_blank">
+</head>
+<body data-theme="${escapeHTML(theme)}">
+  <div class="wrap">
+    <h1>Certificados</h1>
+    <p class="sub">Passe o mouse para ver a descrição (entre hífens) como dica de ferramenta.</p>
+    ${items.length ? `
+    <div class="grid">
+      ${items.map(it=>`
+        <div class="card" title="${escapeHTML(it.tooltip || it.display)}">
+          <div class="icon">PDF</div>
+          <div class="title">
+            <a href="${escapeHTML(it.url)}" title="${escapeHTML(it.tooltip || it.display)}">${escapeHTML(it.display)}</a>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    ` : `
+      <p class="hint">Nenhum PDF encontrado em <code>CertificadosList.txt</code>. Verifique o conteúdo.</p>
+    `}
+    <p class="hint">Fonte: <a href="${escapeHTML(CERTS_TXT)}">CertificadosList.txt</a></p>
+  </div>
+</body>
+</html>`;
+      return doc;
+    }
+
+    function errorCertificatesHTML(msg){
+      const theme = document.body.getAttribute('data-theme') || 'dark';
+      return `
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Erro</title>
+<style>
+ body[data-theme="dark"]{--bg:#0b0d12;--text:#e6ebf2;--muted:#97a0b0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}
+ body[data-theme="light"]{--bg:#f5f7fb;--text:#0e1726;--muted:#5d6778;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}
+ .wrap{max-width:900px;margin:0 auto;padding:18px}
+ code{background:rgba(127,127,127,.15);padding:2px 6px;border-radius:6px}
+ a{color:inherit}
+</style></head>
+<body data-theme="${escapeHTML(theme)}">
+  <div class="wrap">
+    <h1>Não foi possível carregar os certificados</h1>
+    <p class="hint">Detalhe: <code>${msg}</code></p>
+    <p>Tente abrir diretamente: <a href="${escapeHTML(CERTS_TXT)}">${escapeHTML(CERTS_TXT)}</a></p>
+  </div>
+</body></html>`;
+    }
+
+    /* ===== INIT ===== */
+    renderMenu();
+    initTheme();
+
     window.addEventListener('hashchange', ()=>{
       const id = getCurrentId();
       loadPage(id, /*pushHash*/false);
     });
-
-    // Primeiro load
     loadPage(getCurrentId());
   </script>
 </body>
