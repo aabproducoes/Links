@@ -227,6 +227,53 @@
       80%       { transform: translateX(0%) }
       100%      { transform: translateX(120%) }
     }
+
+    /* ===== THEME PRESETS (além de dark/light) ===== */
+    body[data-theme="neon"]{
+      --bg:#07080d; --panel:#0b0f17; --muted:#8aa0b8; --text:#e7f5ff;
+      --accent:#00e0ff; --accent-2:#00ff87; --border:#1a2a3a;
+      --soft:#0e1420; --soft-2:#0b1220; --glowA: rgba(0,224,255,.10); --glowB: rgba(0,224,255,.28);
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      background: radial-gradient(1400px 900px at -10% -20%, #0d1324 0%, var(--bg) 55%, #080b12 100%);
+      color:var(--text);
+    }
+    body[data-theme="sunset"]{
+      --bg:#1a1215; --panel:#23161b; --muted:#f2c8cc; --text:#ffe9ef;
+      --accent:#ff7a59; --accent-2:#ff4f93; --border:#3a1d2a;
+      --soft:#2a1820; --soft-2:#21131a; --glowA: rgba(255,122,89,.12); --glowB: rgba(255,79,147,.30);
+      --shadow: 0 10px 30px rgba(0,0,0,.40);
+      background: linear-gradient(180deg, #2a1620 0%, #1a1215 100%);
+      color:var(--text);
+    }
+    body[data-theme="ocean"]{
+      --bg:#081417; --panel:#0c1b20; --muted:#a7c8cf; --text:#e8fbff;
+      --accent:#00bcd4; --accent-2:#00ffa8; --border:#143239;
+      --soft:#0d2228; --soft-2:#0c1d23; --glowA: rgba(0,188,212,.12); --glowB: rgba(0,255,168,.28);
+      --shadow: 0 10px 30px rgba(0,0,0,.40);
+      background: linear-gradient(180deg, #0b1e24 0%, #081417 100%);
+      color:var(--text);
+    }
+    body[data-theme="forest"]{
+      --bg:#0c120e; --panel:#101a13; --muted:#aecbb3; --text:#e9fff0;
+      --accent:#2bd576; --accent-2:#00c16a; --border:#1b2a20;
+      --soft:#122217; --soft-2:#0f1c14; --glowA: rgba(43,213,118,.10); --glowB: rgba(0,193,106,.28);
+      --shadow: 0 10px 30px rgba(0,0,0,.38);
+      background: radial-gradient(1200px 800px at 110% -20%, #12261a 0%, var(--bg) 55%, #0a130e 100%);
+      color:var(--text);
+    }
+    body[data-theme="grape"]{
+      --bg:#110b18; --panel:#160e22; --muted:#c9b5da; --text:#f8ecff;
+      --accent:#9b5cff; --accent-2:#ff67d2; --border:#2b1745;
+      --soft:#1a1030; --soft-2:#150d27; --glowA: rgba(155,92,255,.12); --glowB: rgba(255,103,210,.30);
+      --shadow: 0 10px 30px rgba(0,0,0,.42);
+      background: linear-gradient(180deg, #1a1030 0%, #110b18 100%);
+      color:var(--text);
+    }
+    #themePreset option[value="neon"]   { background:#0b0f17; color:#00e0ff }
+    #themePreset option[value="sunset"] { background:#23161b; color:#ff7a59 }
+    #themePreset option[value="ocean"]  { background:#0c1b20; color:#00bcd4 }
+    #themePreset option[value="forest"] { background:#101a13; color:#2bd576 }
+    #themePreset option[value="grape"]  { background:#160e22; color:#9b5cff }
   </style>
 </head>
 <body data-theme="dark">
@@ -278,6 +325,17 @@
           <span class="title">Visualizando: <strong id="currentTitle">—</strong></span>
         </div>
         <div class="right">
+          <!-- Selector de presets -->
+          <select class="btn" id="themePreset" title="Tema (preset)">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+            <option value="neon">Neon</option>
+            <option value="sunset">Sunset</option>
+            <option value="ocean">Ocean</option>
+            <option value="forest">Forest</option>
+            <option value="grape">Grape</option>
+          </select>
+
           <button class="btn" id="themeToggle" aria-pressed="false" title="Alternar tema">Tema: Escuro</button>
           <button class="btn" id="openNew">Abrir em nova aba</button>
           <button class="btn" id="copyLink">Copiar link</button>
@@ -293,14 +351,14 @@
       </div>
 
       <div class="footer">
-        Feito com ❤ — Tema claro/escuro, sidebar redimensionável e atalhos. Se alguma página bloquear <em>iframe</em>, use “Abrir em nova aba”.
+        Feito com ❤ — Tema claro/escuro, presets, sidebar redimensionável e atalhos. Se alguma página bloquear <em>iframe</em>, use “Abrir em nova aba”.
       </div>
     </main>
   </div>
 
   <script>
     /* ===== CONFIG INTRO/KNOWLEDGE ===== */
-    const INTRO_BACK_TARGET = 'blender-projects'; // mude para o ID que quiser voltar como “Resume”
+    const INTRO_BACK_TARGET = 'blender-projects'; // mude para o ID desejado
     const KNOW_BASE = "https://aabproducoes.github.io/Links/KnowledgeList/";
     const KNOW_TXT  = KNOW_BASE + "KnowledgeList.txt";
 
@@ -317,7 +375,6 @@
       { id:"translation",         key:9, title:"Translation",                   url:"https://aabproducoes.github.io/Links/Translation/translation.html" },
       { id:"certificados",        key:0, title:"Certificados",                  url:"__internal_certificados__" }
     ];
-    // Nota: "key:0" em certificados para não mostrar número na dica (opcional). Os atalhos 1–9 ficam do Intro ao Translation.
 
     const CERTS_BASE = "https://aabproducoes.github.io/Links/Certificados/";
     const CERTS_TXT  = CERTS_BASE + "CertificadosList.txt";
@@ -347,6 +404,56 @@
       width: 'aab.portfolio.sidebarWidth'
     };
 
+    /* ===== THEME PRESETS LOGIC ===== */
+    const THEME_PRESETS = ['dark','light','neon','sunset','ocean','forest','grape'];
+
+    function setThemeAttr(name){
+      document.body.setAttribute('data-theme', name);
+      const isDarkBtn = (name === 'dark');
+      els.themeToggle?.setAttribute('aria-pressed', String(isDarkBtn));
+      if (els.themeToggle) els.themeToggle.textContent = 'Tema: ' + (isDarkBtn ? 'Escuro' : 'Claro');
+      const sel = document.getElementById('themePreset');
+      if (sel && sel.value !== name) sel.value = name;
+    }
+
+    function applyTheme(name){
+      const preset = THEME_PRESETS.includes(name) ? name : (name === 'light' ? 'light' : 'dark');
+      setThemeAttr(preset);
+      localStorage.setItem(STORE.theme, preset);
+    }
+
+    function initTheme(){
+      const urlPreset = new URLSearchParams(location.search).get('theme');
+      const saved = urlPreset || localStorage.getItem(STORE.theme) || 'dark';
+      applyTheme(saved);
+    }
+
+    function populateThemePreset(){
+      const sel = document.getElementById('themePreset');
+      if (!sel) return;
+      const saved = localStorage.getItem(STORE.theme) || 'dark';
+      if (THEME_PRESETS.includes(saved)) sel.value = saved;
+      sel.addEventListener('change', (e)=>{
+        const v = e.target.value;
+        applyTheme(v);
+        const cur = getCurrentId();
+        if (isInternalCertPage(cur)) loadPage('certificados', false);
+        if (isInternalIntroPage(cur)) loadPage('intro', false);
+      });
+    }
+
+    window.addEventListener('keydown', (e)=>{
+      if (e.shiftKey && (e.key.toLowerCase() === 't')) {
+        const cur = localStorage.getItem(STORE.theme) || 'dark';
+        const idx = THEME_PRESETS.indexOf(cur);
+        const next = THEME_PRESETS[(idx + 1) % THEME_PRESETS.length];
+        applyTheme(next);
+        const id = getCurrentId();
+        if (isInternalCertPage(id)) loadPage('certificados', false);
+        if (isInternalIntroPage(id)) loadPage('intro', false);
+      }
+    });
+
     /* ===== MENU RENDER ===== */
     function renderMenu(){
       els.menu.innerHTML = '';
@@ -360,10 +467,10 @@
           '<span class="label">'+p.title+'</span>'+
           '<span class="open">'+(p.key ? p.key : '')+'</span>';
 
-        // clique normal => carrega no iframe
+        // clique normal
         btn.addEventListener('click', ()=>loadPage(p.id));
 
-        // middle-click abre em nova aba
+        // middle-click
         btn.addEventListener('auxclick', (e)=>{
           if (e.button === 1) {
             if (p.url === "__internal_certificados__") window.open(CERTS_TXT, '_blank', 'noopener');
@@ -371,7 +478,7 @@
             else window.open(p.url, '_blank', 'noopener');
           }
         });
-        // Ctrl/Cmd+click abre nova aba sem trocar o iframe
+        // Ctrl/Cmd+click
         btn.addEventListener('click', (e)=>{
           if (e.ctrlKey || e.metaKey) {
             if (p.url === "__internal_certificados__") window.open(CERTS_TXT, '_blank', 'noopener');
@@ -402,13 +509,12 @@
           setTimeout(()=>btn.classList.remove('juice-rippling'), 600);
         }, { passive:true });
 
-        // tooltip
         btn.title = p.title;
 
         els.menu.appendChild(btn);
       });
 
-      const keys = PAGES.map(p=>p.key).filter(Boolean);
+      const keys = PAGES.map(p=>p.key).filter(k=>k>0);
       const first = Math.min.apply(null, keys);
       const last  = Math.max.apply(null, keys);
       els.hintText.textContent = 'Dicas: '+first+'–'+last+' para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar';
@@ -447,7 +553,7 @@
       if (PAGES.find(p=>p.id===h)) return h;
       const saved = localStorage.getItem(STORE.current);
       if (PAGES.find(p=>p.id===saved)) return saved;
-      return PAGES[0].id; // Intro
+      return PAGES[0].id; // Intro como padrão
     }
     function isInternalCertPage(id){
       const p = PAGES.find(x=>x.id===id);
@@ -576,28 +682,14 @@
       }
     });
 
-    /* ===== THEME TOGGLE ===== */
-    function applyTheme(theme){
-      document.body.setAttribute('data-theme', theme);
-      localStorage.setItem(STORE.theme, theme);
-      const isDark = theme === 'dark';
-      els.themeToggle.setAttribute('aria-pressed', String(isDark));
-      els.themeToggle.textContent = 'Tema: ' + (isDark ? 'Escuro' : 'Claro');
-    }
-    function initTheme(){
-      const saved = localStorage.getItem(STORE.theme);
-      if (saved === 'dark' || saved === 'light'){
-        applyTheme(saved);
-      } else {
-        applyTheme('dark');
-      }
-    }
+    /* ===== THEME TOGGLE (compat com presets) ===== */
     els.themeToggle.addEventListener('click', ()=>{
-      const next = (document.body.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
+      const cur = document.body.getAttribute('data-theme') || 'dark';
+      const next = (cur === 'dark') ? 'light' : 'dark';
       applyTheme(next);
-      const cur = getCurrentId();
-      if (isInternalCertPage(cur)) loadPage('certificados', false);
-      if (isInternalIntroPage(cur)) loadPage('intro', false);
+      const id = getCurrentId();
+      if (isInternalCertPage(id)) loadPage('certificados', false);
+      if (isInternalIntroPage(id)) loadPage('intro', false);
     });
 
     /* ===== MOBILE MENU ===== */
@@ -666,7 +758,7 @@
       );
     }
 
-    /* ===== CERTIFICADOS (SEM <script> dentro) ===== */
+    /* ===== CERTIFICADOS ===== */
     async function buildCertificatesPage(){
       const theme = document.body.getAttribute('data-theme') || 'dark';
       const resp = await fetch(CERTS_TXT, { cache: 'no-cache' });
@@ -739,14 +831,13 @@
       const items = [];
       for (let i=0;i<lines.length;i++){
         const raw = (lines[i]||'').trim();
-        if (!raw || raw.startsWith('#')) continue; // ignora vazio e comentário
+        if (!raw || raw.startsWith('#')) continue;
         const parts = raw.split('||');
         if (parts.length < 2) continue;
-        const after = parts.slice(1).join('||').trim(); // tudo após o primeiro ||
+        const after = parts.slice(1).join('||').trim();
         if (after) items.push(after);
       }
 
-      // monta lista
       let lis = '';
       for (let i=0;i<items.length;i++){
         lis += '<li>'+escapeHTML(items[i])+'</li>';
@@ -794,7 +885,8 @@
     /* ===== INIT ===== */
     renderMenu();
     attachMenuFilter();
-    initTheme();
+    initTheme();            // lê também ?theme=...
+    populateThemePreset();  // sincroniza o <select>
 
     window.addEventListener('hashchange', ()=>{
       const id = getCurrentId();
@@ -840,6 +932,11 @@
       </feTurbulence>
       <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
+    <defs>
+      <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#00ff87"/>
+      </linearGradient>
+    </defs>
   </svg>
 </body>
 </html>
