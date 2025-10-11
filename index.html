@@ -178,7 +178,9 @@
 
       <div class="viewer">
         <div class="loading" id="loading" aria-hidden="true"><div class="spinner" role="status" aria-label="Carregando"></div></div>
-        <iframe id="frame" title="Visualização do portfólio" referrerpolicy="no-referrer"></iframe>
+        <!-- SRC INICIAL: evita tela branca se o JS quebrar -->
+        <iframe id="frame" title="Visualização do portfólio" referrerpolicy="no-referrer"
+                src="https://aabproducoes.github.io/Links/blender-projects.html"></iframe>
       </div>
 
       <div class="footer">
@@ -198,22 +200,11 @@
       { id:"animated-background", key:6, title:"Animated Background",          url:"https://aabproducoes.github.io/Links/animated-background.html" },
       { id:"html-play",           key:7, title:"HTML Games — Play",            url:"https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" },
       { id:"translation",         key:8, title:"Translation",                  url:"https://aabproducoes.github.io/Links/Translation/translation.html" },
-      { id:"certificados",        key:9, title:"Certificados",                 url:"__internal_certificados__" },
-      // NOVO: página interna lendo whoImI_pt/en
-      { id:"sobre",               key:0, title:"Sobre mim (PT/EN)",            url:"__internal_sobre__" },
-    ].sort((a,b)=>{
-      // Mantém 1..9 em ordem e põe "Sobre" no final (key 0)
-      if(a.key===0 && b.key!==0) return 1;
-      if(b.key===0 && a.key!==0) return -1;
-      return a.key-b.key;
-    });
+      { id:"certificados",        key:9, title:"Certificados",                 url:"__internal_certificados__" }
+    ];
 
     const CERTS_BASE = "https://aabproducoes.github.io/Links/Certificados/";
     const CERTS_TXT  = CERTS_BASE + "CertificadosList.txt";
-
-    const WHO_BASE   = "https://aabproducoes.github.io/Links/Translation/";
-    const WHO_PT     = WHO_BASE + "whoImI_pt.txt";
-    const WHO_EN     = WHO_BASE + "whoImI_en.txt";
 
     const els = {
       app: document.getElementById('app'),
@@ -245,19 +236,16 @@
         btn.className = 'link';
         btn.dataset.id = p.id;
         btn.dataset.key = String(p.key);
-        btn.innerHTML = `
-          <span class="dot" aria-hidden="true"></span>
-          <span class="label">${p.title}</span>
-          <span class="open">${p.key || ''}</span>
-        `;
+        btn.innerHTML =
+          '<span class="dot" aria-hidden="true"></span>'+
+          '<span class="label">'+p.title+'</span>'+
+          '<span class="open">'+p.key+'</span>';
         btn.addEventListener('click', ()=>loadPage(p.id));
         els.menu.appendChild(btn);
       });
-      // Atualiza dica dinâmica (1–N)
-      const numbered = PAGES.filter(p=>p.key>0);
-      const first = numbered[0]?.key ?? 1;
-      const last  = numbered[numbered.length-1]?.key ?? numbered.length;
-      els.hintText.textContent = `Dicas: ${first}–${last} para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar`;
+      const first = PAGES[0]?.key ?? 1;
+      const last  = PAGES[PAGES.length-1]?.key ?? PAGES.length;
+      els.hintText.textContent = 'Dicas: '+first+'–'+last+' para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar';
     }
 
     /* ===== STATE ===== */
@@ -271,14 +259,12 @@
       if (PAGES.find(p=>p.id===saved)) return saved;
       return PAGES[0].id;
     }
-
-    const isInternal = (id, tag) => {
+    function isInternalCertPage(id){
       const p = PAGES.find(x=>x.id===id);
-      return p && p.url === tag;
-    };
-    const isCertPage = id => isInternal(id, "__internal_certificados__");
-    const isSobre    = id => isInternal(id, "__internal_sobre__");
+      return p && p.url === "__internal_certificados__";
+    }
 
+    /* ===== LOAD ===== */
     async function loadPage(id, pushHash=true){
       const item = PAGES.find(p=>p.id===id); if(!item) return;
 
@@ -288,45 +274,41 @@
       setActive(id);
       els.currentTitle.textContent = item.title;
       localStorage.setItem(STORE.current, id);
-      if (pushHash) history.replaceState(null, "", `#${id}`);
+      if (pushHash) history.replaceState(null, "", '#'+id);
 
       try{
-        if (isCertPage(id)){
+        if (isInternalCertPage(id)){
           const html = await buildCertificatesPage();
-          els.frame.srcdoc = html;
-        } else if (isSobre(id)){
-          const html = await buildSobrePage();
           els.frame.srcdoc = html;
         } else {
           els.frame.removeAttribute('srcdoc');
           els.frame.src = item.url;
         }
       } catch(err){
-        const safe = escapeHTML(String(err?.message || err || 'Erro desconhecido'));
-        els.frame.srcdoc = errorHTML(item.title, safe);
+        const safe = escapeHTML(String((err && err.message) ? err.message : err || 'Erro desconhecido'));
+        els.frame.srcdoc = errorCertificatesHTML(safe);
       }
 
       // fechar menu mobile
       if (els.sidebar.classList.contains('open')) toggleMenu(false);
     }
 
-    // Fadeout spinner quando iframe termina de carregar (src ou srcdoc)
+    /* Spinner OFF quando iframe termina de carregar */
     els.frame.addEventListener('load', ()=>{
       els.loading.style.transition = 'opacity .35s ease';
       els.loading.style.opacity = '0';
       setTimeout(()=>els.loading.setAttribute('aria-hidden','true'), 360);
       const id = getCurrentId();
       const current = PAGES.find(p=>p.id===id);
-      if (current) document.title = `Portfólio — ${current.title}`;
+      if (current) document.title = 'Portfólio — '+current.title;
     });
 
     /* ===== KEYBOARD ===== */
     window.addEventListener('keydown', (e)=>{
       const keyNum = Number(e.key);
-      const numbered = PAGES.filter(p=>p.key>0);
-      if (keyNum>=1 && keyNum<=numbered.length){
-        const p = numbered[keyNum-1];
-        const target = document.querySelector(`.link[data-id="${p.id}"]`);
+      if (keyNum>=1 && keyNum<=PAGES.length){
+        const p = PAGES[keyNum-1];
+        const target = document.querySelector('.link[data-id="'+p.id+'"]');
         if (target){ target.focus(); loadPage(p.id); }
         return;
       }
@@ -349,10 +331,8 @@
       const id = getCurrentId();
       const item = PAGES.find(p=>p.id===id);
       if (!item) return;
-      if (isCertPage(id)){
+      if (isInternalCertPage(id)){
         window.open(CERTS_TXT, '_blank', 'noopener');
-      } else if (isSobre(id)){
-        window.open(WHO_BASE, '_blank', 'noopener');
       } else {
         window.open(item.url, '_blank', 'noopener');
       }
@@ -360,7 +340,7 @@
 
     els.copyLink.addEventListener('click', async ()=>{
       const id = getCurrentId();
-      const share = `${location.origin}${location.pathname}#${id}`;
+      const share = location.origin+location.pathname+'#'+id;
       try{
         await navigator.clipboard.writeText(share);
         els.copyLink.textContent = 'Copiado!';
@@ -376,7 +356,7 @@
       localStorage.setItem(STORE.theme, theme);
       const isDark = theme === 'dark';
       els.themeToggle.setAttribute('aria-pressed', String(isDark));
-      els.themeToggle.textContent = `Tema: ${isDark ? 'Escuro' : 'Claro'}`;
+      els.themeToggle.textContent = 'Tema: ' + (isDark ? 'Escuro' : 'Claro');
     }
     function initTheme(){
       const saved = localStorage.getItem(STORE.theme);
@@ -389,9 +369,7 @@
     els.themeToggle.addEventListener('click', ()=>{
       const next = (document.body.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
       applyTheme(next);
-      const id = getCurrentId();
-      if (isCertPage(id)) loadPage('certificados', false);
-      if (isSobre(id))    loadPage('sobre', false);
+      if (isInternalCertPage(getCurrentId())) loadPage('certificados', false);
     });
 
     /* ===== MOBILE MENU ===== */
@@ -439,23 +417,26 @@
 
     /* ===== UTIL ===== */
     function escapeHTML(str){
-      return str.replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+      return String(str).replace(/[&<>"']/g, function(m){
+        return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m];
+      });
     }
 
-    /* ===== CERTIFICADOS ===== */
+    /* ===== CERTIFICADOS (SEM <script> DENTRO DO HTML GERADO) ===== */
     async function buildCertificatesPage(){
       const theme = document.body.getAttribute('data-theme') || 'dark';
       const resp = await fetch(CERTS_TXT, { cache: 'no-cache' });
-      if (!resp.ok) throw new Error(`Falha ao carregar a lista (${resp.status})`);
+      if (!resp.ok) throw new Error('Falha ao carregar a lista ('+resp.status+')');
       const text = await resp.text();
 
       const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
       const items = [];
-      for (const line of lines){
+      for (let i=0;i<lines.length;i++){
+        const line = lines[i];
         const mPdf = line.match(/(?:^|\s)([^\s]+\.pdf)(?:\s|$)/i);
         if (!mPdf) continue;
         const pdfName = mPdf[1];
-        const url = pdfName.match(/^https?:\/\//i) ? pdfName : (CERTS_BASE + pdfName);
+        const url = /^https?:\/\//i.test(pdfName) ? pdfName : (CERTS_BASE + pdfName);
 
         let desc = '';
         const mDescSpaced = line.match(/\s-\s(.*?)\s-\s/);
@@ -468,170 +449,70 @@
         items.push({ url, display, tooltip: desc });
       }
 
-      const doc = `
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Certificados</title>
-<style>
-  html,body{height:100%}
-  body[data-theme="dark"]{
-    --bg:#0b0d12; --panel:#0f131b; --text:#e6ebf2; --muted:#97a0b0; --accent:#00e0ff; --border:#1a2230; --soft:#111826;
-    background:var(--bg); color:var(--text); font:14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Noto Sans";
-  }
-  body[data-theme="light"]{
-    --bg:#f5f7fb; --panel:#ffffff; --text:#0e1726; --muted:#5d6778; --accent:#007bff; --border:#dfe6ee; --soft:#f2f6fb;
-    background:var(--bg); color:var(--text); font:14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, "Noto Sans";
-  }
-  .wrap{ max-width:1100px; margin:0 auto; padding:18px }
-  h1{ margin:0 0 8px 0; font-size:16px }
-  p.sub{ margin:0 0 16px 0; color:var(--muted) }
-  .grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap:12px }
-  .card{
-    background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
-    border:1px solid var(--border); border-radius:14px; padding:12px; display:flex; align-items:center; gap:10px;
-  }
-  .icon{
-    width:38px; height:38px; border-radius:10px;
-    background:linear-gradient(135deg, var(--accent), #21c97a);
-    display:grid; place-items:center; color:white; font-weight:700;
-  }
-  .title{ flex:1; min-width:0 }
-  .title a{ color:inherit; text-decoration:none }
-  .title a:hover{ text-decoration:underline }
-  .hint{ color:var(--muted); font-size:12px; margin-top:8px }
-</style>
-<base target="_blank">
-</head>
-<body data-theme="${escapeHTML(theme)}">
-  <div class="wrap">
-    <h1>Certificados</h1>
-    <p class="sub">Passe o mouse para ver a descrição (entre hífens) como dica de ferramenta.</p>
-    ${items.length ? `
-    <div class="grid">
-      ${items.map(it=>`
-        <div class="card" title="${escapeHTML(it.tooltip || it.display)}">
-          <div class="icon">PDF</div>
-          <div class="title">
-            <a href="${escapeHTML(it.url)}" title="${escapeHTML(it.tooltip || it.display)}">${escapeHTML(it.display)}</a>
-          </div>
-        </div>
-      `).join('')}
-    </div>
-    ` : `
-      <p class="hint">Nenhum PDF encontrado em <code>CertificadosList.txt</code>. Verifique o conteúdo.</p>
-    `}
-    <p class="hint">Fonte: <a href="${escapeHTML(CERTS_TXT)}">CertificadosList.txt</a></p>
-  </div>
-</body>
-</html>`;
-      return doc;
-    }
-
-    /* ===== SOBRE (PT/EN) ===== */
-    async function buildSobrePage(){
-      const theme = document.body.getAttribute('data-theme') || 'dark';
-      const [ptResp, enResp] = await Promise.all([
-        fetch(WHO_PT, { cache:'no-cache' }),
-        fetch(WHO_EN, { cache:'no-cache' }),
-      ]);
-      if(!ptResp.ok && !enResp.ok){
-        throw new Error('Não foi possível carregar whoImI_pt.txt nem whoImI_en.txt');
+      // monta HTML manualmente (sem <script> interno, portanto não encerra o script raiz)
+      var cards = '';
+      for (let i=0;i<items.length;i++){
+        const it = items[i];
+        const title = escapeHTML(it.tooltip || it.display);
+        cards += ''
+          + '<div class="card" title="'+title+'">'
+          +   '<div class="icon">PDF</div>'
+          +   '<div class="title"><a href="'+escapeHTML(it.url)+'" title="'+title+'" target="_blank" rel="noopener">'+escapeHTML(it.display)+'</a></div>'
+          + '</div>';
       }
-      const ptText = ptResp.ok ? await ptResp.text() : '—';
-      const enText = enResp.ok ? await enResp.text() : '—';
 
-      const doc = `
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sobre mim</title>
-<style>
-  body[data-theme="dark"]{
-    --bg:#0b0d12; --panel:#0f131b; --text:#e6ebf2; --muted:#97a0b0; --accent:#00e0ff; --border:#1a2230; --soft:#111826;
-    background:var(--bg); color:var(--text); font:14px/1.6 system-ui;
-  }
-  body[data-theme="light"]{
-    --bg:#f5f7fb; --panel:#ffffff; --text:#0e1726; --muted:#5d6778; --accent:#007bff; --border:#dfe6ee; --soft:#f2f6fb;
-    background:var(--bg); color:var(--text); font:14px/1.6 system-ui;
-  }
-  .wrap{ max-width:960px; margin:0 auto; padding:18px }
-  h1{ margin:0 0 10px; font-size:18px }
-  .tabs{ display:flex; gap:8px; margin:10px 0 18px }
-  .tab{ padding:8px 12px; border:1px solid var(--border); background:var(--soft); border-radius:10px; cursor:pointer; }
-  .tab[aria-selected="true"]{ outline:2px solid color-mix(in oklab, var(--accent) 35%, transparent) }
-  .panel{ display:none; white-space:pre-wrap; background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
-          border:1px solid var(--border); border-radius:14px; padding:14px }
-  .panel.active{ display:block }
-  .hint{ color:var(--muted); font-size:12px; margin-top:10px }
-</style>
-</head>
-<body data-theme="${escapeHTML(theme)}">
-  <div class="wrap">
-    <h1>Sobre mim</h1>
-    <div class="tabs" role="tablist">
-      <button class="tab" id="tab-pt" role="tab" aria-controls="pane-pt" aria-selected="true">PT</button>
-      <button class="tab" id="tab-en" role="tab" aria-controls="pane-en" aria-selected="false">EN</button>
-    </div>
-    <section id="pane-pt" class="panel active" role="tabpanel" aria-labelledby="tab-pt">${escapeHTML(ptText)}</section>
-    <section id="pane-en" class="panel" role="tabpanel" aria-labelledby="tab-en">${escapeHTML(enText)}</section>
-    <p class="hint">Fonte: <a href="${escapeHTML(WHO_PT)}">whoImI_pt.txt</a> • <a href="${escapeHTML(WHO_EN)}">whoImI_en.txt</a></p>
-  </div>
-  <script>
-    const tabPT = document.getElementById('tab-pt');
-    const tabEN = document.getElementById('tab-en');
-    const panePT = document.getElementById('pane-pt');
-    const paneEN = document.getElementById('pane-en');
-    function select(lang){
-      const isPT = lang === 'pt';
-      tabPT.setAttribute('aria-selected', String(isPT));
-      tabEN.setAttribute('aria-selected', String(!isPT));
-      panePT.classList.toggle('active', isPT);
-      paneEN.classList.toggle('active', !isPT);
-    }
-    tabPT.addEventListener('click', ()=>select('pt'));
-    tabEN.addEventListener('click', ()=>select('en'));
-    window.addEventListener('keydown', (e)=>{
-      if(e.key.toLowerCase()==='p') select('pt');
-      if(e.key.toLowerCase()==='e') select('en');
-    });
-  </script>
-</body>
-</html>`;
+      const css =
+        'html,body{height:100%}'+
+        'body[data-theme="dark"]{--bg:#0b0d12;--panel:#0f131b;--text:#e6ebf2;--muted:#97a0b0;--accent:#00e0ff;--border:#1a2230;--soft:#111826;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
+        'body[data-theme="light"]{--bg:#f5f7fb;--panel:#ffffff;--text:#0e1726;--muted:#5d6778;--accent:#007bff;--border:#dfe6ee;--soft:#f2f6fb;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
+        '.wrap{max-width:1100px;margin:0 auto;padding:18px}'+
+        'h1{margin:0 0 8px 0;font-size:16px}'+
+        'p.sub{margin:0 0 16px 0;color:var(--muted)}'+
+        '.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}'+
+        '.card{background:linear-gradient(180deg,color-mix(in oklab,var(--panel) 85%,transparent),var(--panel));border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px}'+
+        '.icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#21c97a);display:grid;place-items:center;color:#fff;font-weight:700}'+
+        '.title{flex:1;min-width:0}.title a{color:inherit;text-decoration:none}.title a:hover{text-decoration:underline}'+
+        '.hint{color:var(--muted);font-size:12px;margin-top:8px}';
+
+      const doc =
+        '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'+
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'+
+        '<title>Certificados</title><style>'+css+'</style></head>'+
+        '<body data-theme="'+escapeHTML(theme)+'"><div class="wrap">'+
+        '<h1>Certificados</h1>'+
+        '<p class="sub">Passe o mouse para ver a descrição (entre hífens) como dica de ferramenta.</p>'+
+        (items.length ? '<div class="grid">'+cards+'</div>' : '<p class="hint">Nenhum PDF encontrado em <code>CertificadosList.txt</code>. Verifique o conteúdo.</p>')+
+        '<p class="hint">Fonte: <a href="'+escapeHTML(CERTS_TXT)+'" target="_blank" rel="noopener">CertificadosList.txt</a></p>'+
+        '</div></body></html>';
+
       return doc;
     }
 
-    function errorHTML(title, msg){
+    function errorCertificatesHTML(msg){
       const theme = document.body.getAttribute('data-theme') || 'dark';
-      return `
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Erro — ${escapeHTML(title||'')}</title>
-<style>
- body[data-theme="dark"]{--bg:#0b0d12;--text:#e6ebf2;--muted:#97a0b0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}
- body[data-theme="light"]{--bg:#f5f7fb;--text:#0e1726;--muted:#5d6778;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}
- .wrap{max-width:900px;margin:0 auto;padding:18px}
- code{background:rgba(127,127,127,.15);padding:2px 6px;border-radius:6px}
- a{color:inherit}
-</style></head>
-<body data-theme="${escapeHTML(theme)}">
-  <div class="wrap">
-    <h1>Não foi possível carregar</h1>
-    <p class="hint">Detalhe: <code>${msg}</code></p>
-  </div>
-</body></html>`;
+      return (
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+        '<title>Erro</title>'+
+        '<style>'+
+        'body[data-theme="dark"]{--bg:#0b0d12;--text:#e6ebf2;--muted:#97a0b0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
+        'body[data-theme="light"]{--bg:#f5f7fb;--text:#0e1726;--muted:#5d6778;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
+        '.wrap{max-width:900px;margin:0 auto;padding:18px} code{background:rgba(127,127,127,.15);padding:2px 6px;border-radius:6px} a{color:inherit}'+
+        '</style></head><body data-theme="'+escapeHTML(theme)+'"><div class="wrap">'+
+        '<h1>Não foi possível carregar os certificados</h1>'+
+        '<p class="hint">Detalhe: <code>'+msg+'</code></p>'+
+        '<p>Tente abrir diretamente: <a href="'+escapeHTML(CERTS_TXT)+'" target="_blank" rel="noopener">'+escapeHTML(CERTS_TXT)+'</a></p>'+
+        '</div></body></html>'
+      );
     }
 
     /* ===== INIT ===== */
     renderMenu();
     initTheme();
 
+    // Garante conteúdo mesmo se JS falhar (iframe já tem src inicial)
     window.addEventListener('hashchange', ()=>{
       const id = getCurrentId();
-      loadPage(id, /*pushHash*/false);
+      loadPage(id, false);
     });
     loadPage(getCurrentId());
   </script>
