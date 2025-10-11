@@ -38,6 +38,13 @@
     .brand h1{ margin:0; font-size:18px; letter-spacing:.3px; display:flex; align-items:center; gap:8px }
     .badge{ font-size:11px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; color:var(--muted) }
 
+    .filter-wrap{ padding:8px 12px; border-bottom:1px solid var(--border) }
+    .filter{
+      width:100%; padding:8px 10px; border-radius:10px;
+      border:1px solid color-mix(in oklab, var(--border) 80%, transparent);
+      background:var(--soft); color:inherit; outline:none
+    }
+
     .about{
       padding:12px 16px; border-bottom:1px solid var(--border);
       display:grid; grid-template-columns:40px 1fr; gap:12px; align-items:center;
@@ -56,12 +63,40 @@
     .link{
       appearance:none; width:100%; text-align:left; border:0; background:transparent; color:var(--text);
       padding:12px 14px; margin:6px; border-radius:14px; cursor:pointer; position:relative; outline:none; display:flex; align-items:center; gap:10px;
+      transition: transform .15s ease, background .25s ease, box-shadow .25s ease;
+      overflow: hidden;
     }
+    .link:hover{ background:var(--soft); transform: translateX(2px) }
+    .link:focus-visible{ box-shadow: 0 0 0 2px var(--glowB) }
+    .link:active{ transform: translateX(1px) scale(.99) }
+
     .link .dot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent-2)); opacity:.9; box-shadow:0 0 12px color-mix(in oklab, var(--accent) 50%, transparent) }
     .link .label{ flex:1 }
-    .link .open{ opacity:.6; font-size:12px; border:1px solid color-mix(in oklab, var(--border) 80%, transparent); padding:2px 8px; border-radius:999px }
-    .link:hover{ background:var(--soft) }
-    .link:focus-visible{ box-shadow: 0 0 0 2px var(--glowB) }
+    .link .open{
+      opacity:.8; font-size:12px; padding:2px 8px; border-radius:999px;
+      border:1px solid color-mix(in oklab, var(--border) 80%, transparent);
+      background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 70%, transparent), transparent);
+    }
+
+    /* Spotlight dinâmico (coordenadas via --x/--y) */
+    .link::after{
+      content:""; position:absolute; inset:-1px; border-radius:14px; pointer-events:none;
+      background: radial-gradient(140px 80px at var(--x,50%) var(--y,50%),
+        color-mix(in oklab, var(--accent) 18%, transparent),
+        transparent 60%);
+      opacity: 0; transition: opacity .25s ease;
+    }
+    .link:hover::after{ opacity:.6 }
+
+    /* Ripple no clique */
+    .link::before{
+      content:""; position:absolute; width:12px; height:12px; border-radius:50%; pointer-events:none; opacity:0; transform:scale(0);
+      background: color-mix(in oklab, var(--accent) 55%, transparent);
+      filter: blur(1px);
+    }
+    @keyframes aab-ripple{ from{ transform:translate(var(--rx,0), var(--ry,0)) scale(0); opacity:.35 } to{ transform:translate(var(--rx,0), var(--ry,0)) scale(16); opacity:0 } }
+    .link.juice-rippling::before{ animation: aab-ripple .55s ease-out forwards; }
+
     .link.active{
       background:linear-gradient(180deg, var(--soft-2), var(--soft));
       border:1px solid color-mix(in oklab, var(--accent) 30%, var(--border));
@@ -70,13 +105,9 @@
         inset 0 0 24px var(--glowA),
         0 6px 22px rgba(0,0,0,.08);
     }
-    .link.active::before{
-      content:""; position:absolute; inset:-1px; border-radius:14px; pointer-events:none; z-index:-1;
-      background:
-        conic-gradient(from 0deg at 0% 50%, var(--accent), transparent 45%),
-        conic-gradient(from 180deg at 0% 50%, var(--accent-2), transparent 45%);
-      filter: blur(16px); opacity:.2;
-    }
+    @keyframes aab-pulse{ 0%{ transform:scale(.9); opacity:.7 } 50%{ transform:scale(1.15); opacity:1 } 100%{ transform:scale(.9); opacity:.7 } }
+    .link.active .dot{ animation: aab-pulse 1.8s ease-in-out infinite }
+
     .hint{ margin:8px 14px 0; color:var(--muted); font-size:12px }
 
     /* Resizer */
@@ -124,6 +155,78 @@
       nav{ display:none }
       .sidebar.open nav{ display:block; max-height:60vh }
     }
+
+    /* ===== GLASS ===== */
+    @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
+      .sidebar,
+      .toolbar,
+      .footer {
+        background: color-mix(in oklab, var(--panel) 65%, transparent);
+        border-color: color-mix(in oklab, var(--border) 60%, transparent);
+        -webkit-backdrop-filter: blur(14px) saturate(140%) brightness(1.05);
+        backdrop-filter: blur(14px) saturate(140%) brightness(1.05);
+        box-shadow: 0 8px 30px rgba(0,0,0,.20);
+      }
+      .link{
+        background: color-mix(in oklab, var(--soft) 50%, transparent);
+        border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
+      }
+      .link:hover{
+        background: color-mix(in oklab, var(--soft) 75%, transparent);
+        box-shadow: 0 6px 20px rgba(0,0,0,.20), inset 0 0 0 1px color-mix(in oklab, var(--accent) 12%, transparent);
+      }
+      .link.active{
+        background: color-mix(in oklab, var(--soft-2) 80%, transparent);
+      }
+    }
+    @supports not ((backdrop-filter: blur(10px))) {
+      .sidebar, .toolbar, .footer {
+        background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 80%, transparent), var(--panel));
+      }
+    }
+    .sidebar, .toolbar, .footer{
+      border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+    }
+
+    /* ===== WATER TEXT ===== */
+    .water-text{
+      position: relative;
+      display: inline-block;
+      font-weight: 800;
+      letter-spacing: .3px;
+      background:
+        radial-gradient(120% 180% at 50% 0%, color-mix(in oklab, var(--accent) 75%, #fff) 0%, transparent 60%) ,
+        conic-gradient(from 180deg at 50% 50%, var(--accent), var(--accent-2), var(--accent), var(--accent-2));
+      background-size: 160% 160%, 200% 200%;
+      background-position: 50% 0%, 50% 50%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: url(#aab-water-ripple);
+      text-shadow:
+        0 1px 0 rgba(255,255,255,.18),
+        0 10px 30px color-mix(in oklab, var(--accent) 20%, transparent);
+      animation: aab-water-move 8s ease-in-out infinite;
+    }
+    @keyframes aab-water-move{
+      0%   { background-position: 50% 0%, 45% 50% }
+      50%  { background-position: 52% 20%, 55% 60% }
+      100% { background-position: 50% 0%, 45% 50% }
+    }
+    .water-text::after{
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.45) 50%, transparent 60%);
+      mix-blend-mode: screen;
+      transform: translateX(-120%);
+      animation: aab-water-glare 3.8s ease-in-out infinite;
+      pointer-events:none;
+    }
+    @keyframes aab-water-glare{
+      0%, 60%   { transform: translateX(-120%) }
+      80%       { transform: translateX(0%) }
+      100%      { transform: translateX(120%) }
+    }
   </style>
 </head>
 <body data-theme="dark">
@@ -139,8 +242,13 @@
               </linearGradient>
             </defs>
           </svg>
-          Portfólio <span class="badge">AAB</span>
+          <span class="water-text">Portfólio</span> <span class="badge">AAB</span>
         </h1>
+      </div>
+
+      <!-- Busca no menu -->
+      <div class="filter-wrap">
+        <input id="filter" class="filter" type="search" placeholder="Filtrar…">
       </div>
 
       <div class="about">
@@ -157,7 +265,7 @@
       </div>
 
       <button class="btn hamburger" aria-controls="menu" aria-expanded="false" id="burger">☰ Menu</button>
-      <nav id="menu" aria-label="Seções"><!-- items gerados via JS --></nav>
+      <nav id="menu" aria-label="Seções"><!-- items via JS --></nav>
 
       <div class="hint" id="hintText">Dicas: 1–9 para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar</div>
       <div class="resizer" id="resizer" title="Arraste para redimensionar (duplo clique reseta)"></div>
@@ -173,12 +281,13 @@
           <button class="btn" id="themeToggle" aria-pressed="false" title="Alternar tema">Tema: Escuro</button>
           <button class="btn" id="openNew">Abrir em nova aba</button>
           <button class="btn" id="copyLink">Copiar link</button>
+          <button class="btn" id="reload">Recarregar</button>
+          <button class="btn" id="hardReload" title="Ignora cache">Hard</button>
         </div>
       </div>
 
       <div class="viewer">
         <div class="loading" id="loading" aria-hidden="true"><div class="spinner" role="status" aria-label="Carregando"></div></div>
-        <!-- SRC INICIAL: evita tela branca se o JS quebrar -->
         <iframe id="frame" title="Visualização do portfólio" referrerpolicy="no-referrer"
                 src="https://aabproducoes.github.io/Links/blender-projects.html"></iframe>
       </div>
@@ -190,18 +299,25 @@
   </div>
 
   <script>
+    /* ===== CONFIG INTRO/KNOWLEDGE ===== */
+    const INTRO_BACK_TARGET = 'blender-projects'; // mude para o ID que quiser voltar como “Resume”
+    const KNOW_BASE = "https://aabproducoes.github.io/Links/KnowledgeList/";
+    const KNOW_TXT  = KNOW_BASE + "KnowledgeList.txt";
+
     /* ===== DATA ===== */
     const PAGES = [
-      { id:"blender-projects",    key:1, title:"Blender — Projects",           url:"https://aabproducoes.github.io/Links/blender-projects.html" },
-      { id:"blender-animations",  key:2, title:"Blender — Animations",         url:"https://aabproducoes.github.io/Links/blender-animations.html" },
-      { id:"gimp-projects",       key:3, title:"GIMP — Projects",              url:"https://aabproducoes.github.io/Links/gimp-projects.html" },
-      { id:"music-visualizer",    key:4, title:"Music Player — Visualizer",    url:"https://aabproducoes.github.io/Links/music_player-visualizer.html" },
-      { id:"best-shots",          key:5, title:"Best Shots — Carousel",        url:"https://aabproducoes.github.io/Links/best-shots-img-caroussell.html" },
-      { id:"animated-background", key:6, title:"Animated Background",          url:"https://aabproducoes.github.io/Links/animated-background.html" },
-      { id:"html-play",           key:7, title:"HTML Games — Play",            url:"https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" },
-      { id:"translation",         key:8, title:"Translation",                  url:"https://aabproducoes.github.io/Links/Translation/translation.html" },
-      { id:"certificados",        key:9, title:"Certificados",                 url:"__internal_certificados__" }
+      { id:"intro",               key:1, title:"Intro",                         url:"__internal_intro__" },
+      { id:"blender-projects",    key:2, title:"Blender — Projects",            url:"https://aabproducoes.github.io/Links/blender-projects.html" },
+      { id:"blender-animations",  key:3, title:"Blender — Animations",          url:"https://aabproducoes.github.io/Links/blender-animations.html" },
+      { id:"gimp-projects",       key:4, title:"GIMP — Projects",               url:"https://aabproducoes.github.io/Links/gimp-projects.html" },
+      { id:"music-visualizer",    key:5, title:"Music Player — Visualizer",     url:"https://aabproducoes.github.io/Links/music_player-visualizer.html" },
+      { id:"best-shots",          key:6, title:"Best Shots — Carousel",         url:"https://aabproducoes.github.io/Links/best-shots-img-caroussell.html" },
+      { id:"animated-background", key:7, title:"Animated Background",           url:"https://aabproducoes.github.io/Links/animated-background.html" },
+      { id:"html-play",           key:8, title:"HTML Games — Play",             url:"https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" },
+      { id:"translation",         key:9, title:"Translation",                   url:"https://aabproducoes.github.io/Links/Translation/translation.html" },
+      { id:"certificados",        key:0, title:"Certificados",                  url:"__internal_certificados__" }
     ];
+    // Nota: "key:0" em certificados para não mostrar número na dica (opcional). Os atalhos 1–9 ficam do Intro ao Translation.
 
     const CERTS_BASE = "https://aabproducoes.github.io/Links/Certificados/";
     const CERTS_TXT  = CERTS_BASE + "CertificadosList.txt";
@@ -215,11 +331,14 @@
       currentTitle: document.getElementById('currentTitle'),
       openNew: document.getElementById('openNew'),
       copyLink: document.getElementById('copyLink'),
+      reload: document.getElementById('reload'),
+      hardReload: document.getElementById('hardReload'),
       burger: document.getElementById('burger'),
       resizer: document.getElementById('resizer'),
       themeToggle: document.getElementById('themeToggle'),
       body: document.body,
-      hintText: document.getElementById('hintText')
+      hintText: document.getElementById('hintText'),
+      filter: document.getElementById('filter')
     };
 
     const STORE = {
@@ -239,13 +358,84 @@
         btn.innerHTML =
           '<span class="dot" aria-hidden="true"></span>'+
           '<span class="label">'+p.title+'</span>'+
-          '<span class="open">'+p.key+'</span>';
+          '<span class="open">'+(p.key ? p.key : '')+'</span>';
+
+        // clique normal => carrega no iframe
         btn.addEventListener('click', ()=>loadPage(p.id));
+
+        // middle-click abre em nova aba
+        btn.addEventListener('auxclick', (e)=>{
+          if (e.button === 1) {
+            if (p.url === "__internal_certificados__") window.open(CERTS_TXT, '_blank', 'noopener');
+            else if (p.url === "__internal_intro__") window.open(KNOW_TXT, '_blank', 'noopener');
+            else window.open(p.url, '_blank', 'noopener');
+          }
+        });
+        // Ctrl/Cmd+click abre nova aba sem trocar o iframe
+        btn.addEventListener('click', (e)=>{
+          if (e.ctrlKey || e.metaKey) {
+            if (p.url === "__internal_certificados__") window.open(CERTS_TXT, '_blank', 'noopener');
+            else if (p.url === "__internal_intro__") window.open(KNOW_TXT, '_blank', 'noopener');
+            else window.open(p.url, '_blank', 'noopener');
+            e.preventDefault();
+          }
+        });
+
+        // JUICE: spotlight + ripple
+        btn.addEventListener('mousemove', (e)=>{
+          const r = btn.getBoundingClientRect();
+          const x = ((e.clientX - r.left) / r.width) * 100;
+          const y = ((e.clientY - r.top)  / r.height)* 100;
+          btn.style.setProperty('--x', x + '%');
+          btn.style.setProperty('--y', y + '%');
+        });
+        btn.addEventListener('mouseleave', ()=>{
+          btn.style.removeProperty('--x'); btn.style.removeProperty('--y');
+        });
+        btn.addEventListener('mousedown', (e)=>{
+          const r = btn.getBoundingClientRect();
+          const rx = (e.clientX - r.left) + 'px';
+          const ry = (e.clientY - r.top)  + 'px';
+          btn.style.setProperty('--rx', 'calc(' + rx + ' - 6px)');
+          btn.style.setProperty('--ry', 'calc(' + ry + ' - 6px)');
+          btn.classList.remove('juice-rippling'); void btn.offsetWidth; btn.classList.add('juice-rippling');
+          setTimeout(()=>btn.classList.remove('juice-rippling'), 600);
+        }, { passive:true });
+
+        // tooltip
+        btn.title = p.title;
+
         els.menu.appendChild(btn);
       });
-      const first = PAGES[0]?.key ?? 1;
-      const last  = PAGES[PAGES.length-1]?.key ?? PAGES.length;
+
+      const keys = PAGES.map(p=>p.key).filter(Boolean);
+      const first = Math.min.apply(null, keys);
+      const last  = Math.max.apply(null, keys);
       els.hintText.textContent = 'Dicas: '+first+'–'+last+' para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar';
+
+      // Ping de status
+      (function markStatus(){
+        PAGES.forEach(p=>{
+          if (p.url === "__internal_certificados__" || p.url === "__internal_intro__") return;
+          const label = els.menu.querySelector('.link[data-id="'+p.id+'"] .label');
+          if (!label) return;
+          fetch(p.url, { method:'HEAD' })
+            .then(()=>{ label.textContent = label.textContent.replace(/^([🟢🔴]\s)?/, '🟢 '); })
+            .catch(()=>{ label.textContent = label.textContent.replace(/^([🟢🔴]\s)?/, '🔴 '); });
+        });
+      })();
+    }
+
+    /* ===== MENU FILTER ===== */
+    function attachMenuFilter(){
+      if (!els.filter) return;
+      els.filter.addEventListener('input', function(){
+        const q = this.value.toLowerCase().trim();
+        document.querySelectorAll('#menu .link').forEach(btn=>{
+          const label = btn.querySelector('.label')?.textContent.toLowerCase() || '';
+          btn.style.display = label.includes(q) ? '' : 'none';
+        });
+      });
     }
 
     /* ===== STATE ===== */
@@ -257,11 +447,15 @@
       if (PAGES.find(p=>p.id===h)) return h;
       const saved = localStorage.getItem(STORE.current);
       if (PAGES.find(p=>p.id===saved)) return saved;
-      return PAGES[0].id;
+      return PAGES[0].id; // Intro
     }
     function isInternalCertPage(id){
       const p = PAGES.find(x=>x.id===id);
       return p && p.url === "__internal_certificados__";
+    }
+    function isInternalIntroPage(id){
+      const p = PAGES.find(x=>x.id===id);
+      return p && p.url === "__internal_intro__";
     }
 
     /* ===== LOAD ===== */
@@ -280,13 +474,16 @@
         if (isInternalCertPage(id)){
           const html = await buildCertificatesPage();
           els.frame.srcdoc = html;
+        } else if (isInternalIntroPage(id)){
+          const html = await buildIntroPage();
+          els.frame.srcdoc = html;
         } else {
           els.frame.removeAttribute('srcdoc');
           els.frame.src = item.url;
         }
       } catch(err){
         const safe = escapeHTML(String((err && err.message) ? err.message : err || 'Erro desconhecido'));
-        els.frame.srcdoc = errorCertificatesHTML(safe);
+        els.frame.srcdoc = errorGenericHTML('Não foi possível carregar o conteúdo', safe);
       }
 
       // fechar menu mobile
@@ -306,10 +503,12 @@
     /* ===== KEYBOARD ===== */
     window.addEventListener('keydown', (e)=>{
       const keyNum = Number(e.key);
-      if (keyNum>=1 && keyNum<=PAGES.length){
-        const p = PAGES[keyNum-1];
-        const target = document.querySelector('.link[data-id="'+p.id+'"]');
-        if (target){ target.focus(); loadPage(p.id); }
+      if (keyNum>=1 && keyNum<=9){
+        const p = PAGES.find(pg=>pg.key===keyNum);
+        if (p){
+          const target = document.querySelector('.link[data-id="'+p.id+'"]');
+          if (target){ target.focus(); loadPage(p.id); }
+        }
         return;
       }
       const links = Array.from(document.querySelectorAll('.link'));
@@ -331,11 +530,9 @@
       const id = getCurrentId();
       const item = PAGES.find(p=>p.id===id);
       if (!item) return;
-      if (isInternalCertPage(id)){
-        window.open(CERTS_TXT, '_blank', 'noopener');
-      } else {
-        window.open(item.url, '_blank', 'noopener');
-      }
+      if (isInternalCertPage(id)) window.open(CERTS_TXT, '_blank', 'noopener');
+      else if (isInternalIntroPage(id)) window.open(KNOW_TXT, '_blank', 'noopener');
+      else window.open(item.url, '_blank', 'noopener');
     });
 
     els.copyLink.addEventListener('click', async ()=>{
@@ -347,6 +544,35 @@
         setTimeout(()=>els.copyLink.textContent='Copiar link', 1200);
       }catch{
         prompt('Copie o link:', share);
+      }
+    });
+
+    // Recarregar + Hard reload
+    els.reload.addEventListener('click', ()=>{
+      const id = getCurrentId();
+      const it = PAGES.find(p=>p.id===id);
+      if (!it) return;
+      if (isInternalCertPage(id)) {
+        buildCertificatesPage().then(html=>{ els.frame.srcdoc = html; });
+      } else if (isInternalIntroPage(id)) {
+        buildIntroPage().then(html=>{ els.frame.srcdoc = html; });
+      } else {
+        try { els.frame.contentWindow.location.reload(); }
+        catch { els.frame.src = it.url; }
+      }
+    });
+    els.hardReload.addEventListener('click', ()=>{
+      const id = getCurrentId();
+      const it = PAGES.find(p=>p.id===id);
+      if (!it) return;
+      if (isInternalCertPage(id)) {
+        buildCertificatesPage().then(html=>{ els.frame.srcdoc = html; });
+      } else if (isInternalIntroPage(id)) {
+        buildIntroPage().then(html=>{ els.frame.srcdoc = html; });
+      } else {
+        const base = (it.url||'').split('#')[0].split('?')[0];
+        els.frame.removeAttribute('srcdoc');
+        els.frame.src = base + '?ts=' + Date.now();
       }
     });
 
@@ -369,7 +595,9 @@
     els.themeToggle.addEventListener('click', ()=>{
       const next = (document.body.getAttribute('data-theme') === 'dark') ? 'light' : 'dark';
       applyTheme(next);
-      if (isInternalCertPage(getCurrentId())) loadPage('certificados', false);
+      const cur = getCurrentId();
+      if (isInternalCertPage(cur)) loadPage('certificados', false);
+      if (isInternalIntroPage(cur)) loadPage('intro', false);
     });
 
     /* ===== MOBILE MENU ===== */
@@ -422,7 +650,23 @@
       });
     }
 
-    /* ===== CERTIFICADOS (SEM <script> DENTRO DO HTML GERADO) ===== */
+    function errorGenericHTML(title, msg){
+      const theme = document.body.getAttribute('data-theme') || 'dark';
+      return (
+        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
+        '<title>Erro</title>'+
+        '<style>'+
+        'body[data-theme="dark"]{--bg:#0b0d12;--text:#e6ebf2;--muted:#97a0b0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
+        'body[data-theme="light"]{--bg:#f5f7fb;--text:#0e1726;--muted:#5d6778;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
+        '.wrap{max-width:900px;margin:0 auto;padding:18px} code{background:rgba(127,127,127,.15);padding:2px 6px;border-radius:6px} a{color:inherit}'+
+        '</style></head><body data-theme="'+escapeHTML(theme)+'"><div class="wrap">'+
+        '<h1>'+escapeHTML(title)+'</h1>'+
+        '<p class="hint">Detalhe: <code>'+escapeHTML(msg)+'</code></p>'+
+        '</div></body></html>'
+      );
+    }
+
+    /* ===== CERTIFICADOS (SEM <script> dentro) ===== */
     async function buildCertificatesPage(){
       const theme = document.body.getAttribute('data-theme') || 'dark';
       const resp = await fetch(CERTS_TXT, { cache: 'no-cache' });
@@ -449,15 +693,14 @@
         items.push({ url, display, tooltip: desc });
       }
 
-      // monta HTML manualmente (sem <script> interno, portanto não encerra o script raiz)
       var cards = '';
       for (let i=0;i<items.length;i++){
         const it = items[i];
         const title = escapeHTML(it.tooltip || it.display);
         cards += ''
-          + '<div class="card" title="'+title+'">'
-          +   '<div class="icon">PDF</div>'
-          +   '<div class="title"><a href="'+escapeHTML(it.url)+'" title="'+title+'" target="_blank" rel="noopener">'+escapeHTML(it.display)+'</a></div>'
+          + '<div class="card" title="'+title+'" style="background:linear-gradient(180deg,color-mix(in oklab,var(--panel) 85%,transparent),var(--panel));border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px">'
+          +   '<div class="icon" style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#21c97a);display:grid;place-items:center;color:#fff;font-weight:700">PDF</div>'
+          +   '<div class="title" style="flex:1;min-width:0"><a href="'+escapeHTML(it.url)+'" title="'+title+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+escapeHTML(it.display)+'</a></div>'
           + '</div>';
       }
 
@@ -469,9 +712,6 @@
         'h1{margin:0 0 8px 0;font-size:16px}'+
         'p.sub{margin:0 0 16px 0;color:var(--muted)}'+
         '.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}'+
-        '.card{background:linear-gradient(180deg,color-mix(in oklab,var(--panel) 85%,transparent),var(--panel));border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px}'+
-        '.icon{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#21c97a);display:grid;place-items:center;color:#fff;font-weight:700}'+
-        '.title{flex:1;min-width:0}.title a{color:inherit;text-decoration:none}.title a:hover{text-decoration:underline}'+
         '.hint{color:var(--muted);font-size:12px;margin-top:8px}';
 
       const doc =
@@ -488,33 +728,118 @@
       return doc;
     }
 
-    function errorCertificatesHTML(msg){
+    /* ===== INTRO (lê KnowledgeList.txt; pega texto depois de ||) ===== */
+    async function buildIntroPage(){
       const theme = document.body.getAttribute('data-theme') || 'dark';
-      return (
-        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
-        '<title>Erro</title>'+
-        '<style>'+
-        'body[data-theme="dark"]{--bg:#0b0d12;--text:#e6ebf2;--muted:#97a0b0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
-        'body[data-theme="light"]{--bg:#f5f7fb;--text:#0e1726;--muted:#5d6778;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
-        '.wrap{max-width:900px;margin:0 auto;padding:18px} code{background:rgba(127,127,127,.15);padding:2px 6px;border-radius:6px} a{color:inherit}'+
-        '</style></head><body data-theme="'+escapeHTML(theme)+'"><div class="wrap">'+
-        '<h1>Não foi possível carregar os certificados</h1>'+
-        '<p class="hint">Detalhe: <code>'+msg+'</code></p>'+
-        '<p>Tente abrir diretamente: <a href="'+escapeHTML(CERTS_TXT)+'" target="_blank" rel="noopener">'+escapeHTML(CERTS_TXT)+'</a></p>'+
-        '</div></body></html>'
-      );
+      const resp = await fetch(KNOW_TXT, { cache: 'no-cache' });
+      if (!resp.ok) throw new Error('Falha ao carregar KnowledgeList ('+resp.status+')');
+      const text = await resp.text();
+
+      const lines = text.split(/\r?\n/);
+      const items = [];
+      for (let i=0;i<lines.length;i++){
+        const raw = (lines[i]||'').trim();
+        if (!raw || raw.startsWith('#')) continue; // ignora vazio e comentário
+        const parts = raw.split('||');
+        if (parts.length < 2) continue;
+        const after = parts.slice(1).join('||').trim(); // tudo após o primeiro ||
+        if (after) items.push(after);
+      }
+
+      // monta lista
+      let lis = '';
+      for (let i=0;i<items.length;i++){
+        lis += '<li>'+escapeHTML(items[i])+'</li>';
+      }
+
+      const css =
+        'html,body{height:100%}'+
+        'body[data-theme="dark"]{--bg:#0b0d12;--panel:#0f131b;--text:#e6ebf2;--muted:#97a0b0;--accent:#00e0ff;--border:#1a2230;--soft:#111826;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
+        'body[data-theme="light"]{--bg:#f5f7fb;--panel:#ffffff;--text:#0e1726;--muted:#5d6778;--accent:#007bff;--border:#dfe6ee;--soft:#f2f6fb;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
+        '.wrap{max-width:1000px;margin:0 auto;padding:24px}'+
+        '.hero{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}'+
+        '.title{font-size:22px;margin:0}'+
+        '.muted{color:var(--muted)}'+
+        '.glass{background: color-mix(in oklab, var(--panel) 70%, transparent); border:1px solid var(--border); border-radius:16px; padding:16px;'+
+          'box-shadow:0 8px 30px rgba(0,0,0,.15);'+
+          'backdrop-filter: blur(12px) saturate(140%) brightness(1.05); -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.05);}'+
+        '.btn{display:inline-block;padding:10px 14px;border-radius:12px;border:1px solid color-mix(in oklab, var(--border) 80%, transparent);'+
+          'text-decoration:none;color:inherit;background:linear-gradient(180deg, color-mix(in oklab, var(--soft) 70%, transparent), transparent);'+
+          'box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 20%, transparent);}'+
+        'ul{margin:0;padding-left:20px}'+
+        'li{margin:6px 0}';
+
+      const backHref = '#'+encodeURIComponent(INTRO_BACK_TARGET);
+
+      const doc =
+        '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'+
+        '<meta name="viewport" content="width=device-width, initial-scale=1">'+
+        '<title>Intro</title><style>'+css+'</style></head>'+
+        '<body data-theme="'+escapeHTML(theme)+'">'+
+        '<div class="wrap">'+
+          '<div class="hero">'+
+            '<h1 class="title">Intro <span class="muted">— Knowledge List</span></h1>'+
+            '<a class="btn" href="'+backHref+'" target="_top" rel="noopener">⟵ Back to Resume</a>'+
+          '</div>'+
+          '<div class="glass">'+
+            (items.length ? ('<ul>'+lis+'</ul>') : '<p class="muted">Nenhuma linha válida encontrada após <code>||</code>.</p>')+
+          '</div>'+
+          '<p class="muted" style="margin-top:10px">Fonte: <a href="'+escapeHTML(KNOW_TXT)+'" target="_blank" rel="noopener">'+escapeHTML(KNOW_TXT)+'</a></p>'+
+        '</div>'+
+        '</body></html>';
+
+      return doc;
     }
 
     /* ===== INIT ===== */
     renderMenu();
+    attachMenuFilter();
     initTheme();
 
-    // Garante conteúdo mesmo se JS falhar (iframe já tem src inicial)
     window.addEventListener('hashchange', ()=>{
       const id = getCurrentId();
       loadPage(id, false);
     });
     loadPage(getCurrentId());
+
+    /* WATCHDOG anti-iframe bloqueado */
+    (function watchdog(){
+      let ok = false;
+      function mark(){ ok = true; }
+      els.frame.addEventListener('load', mark, { once:true });
+      setInterval(()=>{
+        if (ok) return;
+        if (document.getElementById('wdg-overlay')) return;
+        const overlay = document.createElement('div');
+        overlay.id = 'wdg-overlay';
+        overlay.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;padding:24px;'+
+          'background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));'+
+          'border-top:1px solid var(--border);color:var(--muted);text-align:center';
+        const id = getCurrentId();
+        overlay.innerHTML = '<div style="max-width:720px">'+
+          '<h2 style="margin:0 0 8px;color:var(--text);font-size:16px">Não foi possível exibir dentro do iframe</h2>'+
+          '<p style="margin:0 0 12px">Alguns sites bloqueiam incorporação (X-Frame-Options). Abra em nova aba.</p>'+
+          '<button id="wdg-open" class="btn">Abrir em nova aba</button></div>';
+        els.frame.parentElement.appendChild(overlay);
+        document.getElementById('wdg-open').addEventListener('click', ()=>{
+          const it = PAGES.find(p=>p.id===id);
+          if (!it) return;
+          if (isInternalCertPage(id)) window.open(CERTS_TXT, '_blank', 'noopener');
+          else if (isInternalIntroPage(id)) window.open(KNOW_TXT, '_blank', 'noopener');
+          else window.open(it.url, '_blank', 'noopener');
+        });
+      }, 2500);
+    })();
   </script>
+
+  <!-- SVG filter p/ WATER TEXT -->
+  <svg width="0" height="0" style="position:absolute;left:-9999px;top:-9999px">
+    <filter id="aab-water-ripple">
+      <feTurbulence type="fractalNoise" baseFrequency="0.007 0.012" numOctaves="2" seed="7" result="noise">
+        <animate attributeName="baseFrequency" dur="8s" values="0.007 0.012; 0.010 0.016; 0.007 0.012" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
 </body>
 </html>
