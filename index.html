@@ -1,942 +1,819 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfólio — AAB Produções</title>
-  <meta name="color-scheme" content="dark light">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A clean, modern portfolio using a blue and black design scheme." />
+  <title>Aetherial Horizon Portfolio</title>
+  <!-- Font: Inter (Used for a modern, clean look) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMD/CDQd/8D9gK+jZ+z/n+wA9r5o8r/yC/yS9LwGfB6i7fR7d/J8P0zT3L7F9g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
   <style>
-    /* ===== THEME TOKENS (escuro / claro) ===== */
-    body{ margin:0; font:14.5px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; }
-    body[data-theme="dark"]{
-      --bg:#0b0d12; --panel:#0f131b; --muted:#97a0b0; --text:#e6ebf2;
-      --accent:#00e0ff; --accent-2:#00ff87; --border:#1a2230;
-      --soft:#111826; --soft-2:#0f1722; --glowA: rgba(0,224,255,.06); --glowB: rgba(0,224,255,.15);
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      background:radial-gradient(1200px 800px at -10% -20%, #101525 0%, var(--bg) 50%, #0a0d13 100%);
-      color:var(--text);
-    }
-    body[data-theme="light"]{
-      --bg:#f5f7fb; --panel:#ffffff; --muted:#5d6778; --text:#0e1726;
-      --accent:#007bff; --accent-2:#21c97a; --border:#dfe6ee;
-      --soft:#f2f6fb; --soft-2:#eef3fa; --glowA: rgba(0,123,255,.08); --glowB: rgba(0,123,255,.25);
-      --shadow: 0 10px 30px rgba(10,35,80,.10);
-      background:linear-gradient(180deg, #f7faff 0%, #edf3fb 100%);
-      color:var(--text);
-    }
-    :root{ color-scheme: light dark }
-    *{ box-sizing: border-box }
-    .app{ display:flex; min-height:100dvh; gap:0 }
+    /* ================================
+       RESET AND AETHERIAL HORIZON COLORS
+    ================================ */
+    :root {
+      /* Base Colors (Near Black, Charcoal) */
+      --bg-dark: #0D1117; 
+      --bg-deep-charcoal: #161B22;
+      --bg-section: rgba(22, 27, 34, 0.7); /* Slightly lighter charcoal with transparency */
+      --bg-sidebar: rgba(13, 17, 23, 0.85); /* Darker sidebar background */
 
-    /* ===== SIDEBAR ===== */
-    .sidebar{
-      width: 300px; max-width: 85vw; background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 95%, transparent) 0%, var(--panel) 100%);
-      border-right:1px solid var(--border); position:relative; box-shadow: var(--shadow);
-      display:flex; flex-direction:column; min-width:240px;
-    }
-    .brand{ padding:16px 16px 8px; border-bottom:1px solid var(--border) }
-    .brand h1{ margin:0; font-size:18px; letter-spacing:.3px; display:flex; align-items:center; gap:8px }
-    .badge{ font-size:11px; padding:2px 8px; border:1px solid var(--border); border-radius:999px; color:var(--muted) }
+      /* Blue Accents */
+      --color-accent-vibrant: #00D4FF; /* Vibrant electric blue (Active/Hover) */
+      --color-accent-muted: #007ACC; /* Muted blue (Borders, Secondary) */
 
-    .filter-wrap{ padding:8px 12px; border-bottom:1px solid var(--border) }
-    .filter{
-      width:100%; padding:8px 10px; border-radius:10px;
-      border:1px solid color-mix(in oklab, var(--border) 80%, transparent);
-      background:var(--soft); color:inherit; outline:none
-    }
+      /* Text Colors */
+      --color-text-primary: #F0F6FC; /* Light white/gray */
+      --color-text-secondary: #93B2CC; /* Muted blue/gray */
 
-    .about{
-      padding:12px 16px; border-bottom:1px solid var(--border);
-      display:grid; grid-template-columns:40px 1fr; gap:12px; align-items:center;
+      /* Structure/UI */
+      --border-color: #30363D; /* Subtle divider/border color */
+      --primary-font: 'Inter', sans-serif;
     }
-    .avatar{
-      width:40px; height:40px;
-      border-radius:12px;
-      object-fit:cover;
-      display:block;
-      box-shadow:0 0 0 2px color-mix(in oklab, var(--accent) 35%, transparent);
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
+      scroll-behavior: smooth;
     }
-    .about h2{ margin:0; font-size:14px }
-    .about p{ margin:.25rem 0 0; font-size:12.5px; color:var(--muted) }
-
-    nav{ padding:10px 8px 14px 8px; overflow:auto; flex:1 }
-    .link{
-      appearance:none; width:100%; text-align:left; border:0; background:transparent; color:var(--text);
-      padding:12px 14px; margin:6px; border-radius:14px; cursor:pointer; position:relative; outline:none; display:flex; align-items:center; gap:10px;
-      transition: transform .15s ease, background .25s ease, box-shadow .25s ease;
-      overflow: hidden;
+    body {
+      min-height: 100vh;
+      font-family: var(--primary-font), sans-serif;
+      background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-deep-charcoal) 100%);
+      color: var(--color-text-primary);
+      overflow-x: hidden; position: relative;
     }
-    .link:hover{ background:var(--soft); transform: translateX(2px) }
-    .link:focus-visible{ box-shadow: 0 0 0 2px var(--glowB) }
-    .link:active{ transform: translateX(1px) scale(.99) }
-
-    .link .dot{ width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent-2)); opacity:.9; box-shadow:0 0 12px color-mix(in oklab, var(--accent) 50%, transparent) }
-    .link .label{ flex:1 }
-    .link .open{
-      opacity:.8; font-size:12px; padding:2px 8px; border-radius:999px;
-      border:1px solid color-mix(in oklab, var(--border) 80%, transparent);
-      background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 70%, transparent), transparent);
+    /* ==================================
+       SIDEBAR
+    =================================== */
+    .sidebar {
+      width: 280px;
+      background: var(--bg-sidebar);
+      backdrop-filter: blur(10px);
+      color: var(--color-text-primary);
+      display: flex; flex-direction: column;
+      transition: width 0.3s ease;
+      position: fixed; top: 0; left: 0; bottom: 0;
+      border-right: 1px solid var(--border-color);
+      box-shadow: 6px 0 15px rgba(0, 0, 0, 0.5);
+      z-index: 1000; padding: 20px 0;
     }
-
-    /* Spotlight dinâmico (coordenadas via --x/--y) */
-    .link::after{
-      content:""; position:absolute; inset:-1px; border-radius:14px; pointer-events:none;
-      background: radial-gradient(140px 80px at var(--x,50%) var(--y,50%),
-        color-mix(in oklab, var(--accent) 18%, transparent),
-        transparent 60%);
-      opacity: 0; transition: opacity .25s ease;
+    .toggle-btn {
+      position: absolute; top: 15px; right: -25px;
+      background: var(--color-accent-muted); color: var(--bg-dark);
+      border: none; border-radius: 50%;
+      width: 45px; height: 45px; cursor: pointer;
+      transition: transform 0.2s, background 0.3s; font-size: 18px;
+      box-shadow: 0 0 10px rgba(0, 122, 204, 0.4);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1100;
     }
-    .link:hover::after{ opacity:.6 }
-
-    /* Ripple no clique */
-    .link::before{
-      content:""; position:absolute; width:12px; height:12px; border-radius:50%; pointer-events:none; opacity:0; transform:scale(0);
-      background: color-mix(in oklab, var(--accent) 55%, transparent);
-      filter: blur(1px);
+    .toggle-btn:hover { background: var(--color-accent-vibrant); transform: scale(1.05); }
+    .toggle-btn svg { transition: transform 0.3s ease; }
+    .menu {
+      list-style: none; padding: 60px 0 0; flex: 1;
+      display: flex; flex-direction: column;
     }
-    @keyframes aab-ripple{ from{ transform:translate(var(--rx,0), var(--ry,0)) scale(0); opacity:.35 } to{ transform:translate(var(--rx,0), var(--ry,0)) scale(16); opacity:0 } }
-    .link.juice-rippling::before{ animation: aab-ripple .55s ease-out forwards; }
-
-    .link.active{
-      background:linear-gradient(180deg, var(--soft-2), var(--soft));
-      border:1px solid color-mix(in oklab, var(--accent) 30%, var(--border));
-      box-shadow:
-        inset 0 0 0 1px color-mix(in oklab, var(--accent) 35%, transparent),
-        inset 0 0 24px var(--glowA),
-        0 6px 22px rgba(0,0,0,.08);
+    .menu li {
+      transition: background 0.3s, transform 0.3s;
+      margin: 0; border-radius: 0;
+      border-left: 3px solid transparent;
     }
-    @keyframes aab-pulse{ 0%{ transform:scale(.9); opacity:.7 } 50%{ transform:scale(1.15); opacity:1 } 100%{ transform:scale(.9); opacity:.7 } }
-    .link.active .dot{ animation: aab-pulse 1.8s ease-in-out infinite }
-
-    .hint{ margin:8px 14px 0; color:var(--muted); font-size:12px }
-
-    /* Resizer */
-    .resizer{ position:absolute; right:-3px; top:0; width:6px; height:100%; cursor: col-resize; background: transparent; }
-    .resizer::after{ content:""; position:absolute; inset:0; opacity:0; transition:.2s; background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 40%, transparent), transparent 60%) }
-    .resizer:hover::after, .resizing .resizer::after{ opacity:.6 }
-
-    /* ===== MAIN PANE ===== */
-    .main{ flex:1; min-width:0; position:relative; display:flex; flex-direction:column }
-    .toolbar{
-      display:flex; gap:8px; align-items:center; justify-content:space-between;
-      padding:10px 12px; border-bottom:1px solid var(--border); background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
+    .menu li a {
+      display: flex; align-items: center;
+      color: var(--color-text-secondary);
+      text-decoration: none; font-size: 15px;
+      font-weight: 400; padding: 15px 20px;
+      transition: color 0.3s;
     }
-    .toolbar .left, .toolbar .right{ display:flex; gap:8px; align-items:center; flex-wrap:wrap }
-    .btn{ color:var(--text); background:var(--soft); border:1px solid color-mix(in oklab, var(--border) 80%, transparent); padding:8px 10px; border-radius:12px; cursor:pointer; user-select:none }
-    .btn:hover{ filter:brightness(1.03) }
-    .btn:focus-visible{ outline:none; box-shadow: 0 0 0 2px var(--glowB) }
-    .title{ font-size:13px; color:var(--muted) }
-    .title strong{ color:var(--text) }
-    .viewer{ position:relative; flex:1; min-height:0 }
-    iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; background:var(--bg) }
-    .loading{
-      position:absolute; inset:0; display:grid; place-items:center; pointer-events:none;
-      background: radial-gradient(600px 300px at 50% -10%, var(--glowA), transparent 40%);
+    .menu li a i {
+      font-size: 18px; width: 30px; text-align: center;
+      margin-right: 10px;
     }
-    .spinner{
-      width:56px; height:56px; border-radius:50%; border:3px solid rgba(127,127,127,.18);
-      border-top-color: var(--accent); border-right-color: var(--accent-2);
-      animation: spin 1s linear infinite; filter: drop-shadow(0 0 14px color-mix(in oklab, var(--accent) 45%, transparent));
+    .menu li:hover {
+      background: rgba(0, 122, 204, 0.1);
+      border-left-color: var(--color-accent-muted);
     }
-    @keyframes spin{ to{ transform:rotate(360deg) } }
-
-    .footer{
-      padding:8px 12px; border-top:1px solid var(--border); color:var(--muted); font-size:12px;
-      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));
+    .menu li:hover a { color: var(--color-text-primary); }
+    .menu li.active {
+      border-left-color: var(--color-accent-vibrant);
+      background: rgba(0, 212, 255, 0.08);
     }
-
-    /* ===== MOBILE ===== */
-    .hamburger{ display:none }
-    @media (max-width: 860px){
-      .app{ flex-direction:column }
-      .sidebar{ width:100% !important; border-right:0; border-bottom:1px solid var(--border) }
-      .resizer{ display:none }
-      .hamburger{ display:inline-flex }
-      nav{ display:none }
-      .sidebar.open nav{ display:block; max-height:60vh }
+    .menu li.active a {
+      color: var(--color-accent-vibrant);
+      font-weight: 500;
     }
-
-    /* ===== GLASS ===== */
-    @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
-      .sidebar,
-      .toolbar,
-      .footer {
-        background: color-mix(in oklab, var(--panel) 65%, transparent);
-        border-color: color-mix(in oklab, var(--border) 60%, transparent);
-        -webkit-backdrop-filter: blur(14px) saturate(140%) brightness(1.05);
-        backdrop-filter: blur(14px) saturate(140%) brightness(1.05);
-        box-shadow: 0 8px 30px rgba(0,0,0,.20);
-      }
-      .link{
-        background: color-mix(in oklab, var(--soft) 50%, transparent);
-        border: 1px solid color-mix(in oklab, var(--border) 70%, transparent);
-      }
-      .link:hover{
-        background: color-mix(in oklab, var(--soft) 75%, transparent);
-        box-shadow: 0 6px 20px rgba(0,0,0,.20), inset 0 0 0 1px color-mix(in oklab, var(--accent) 12%, transparent);
-      }
-      .link.active{
-        background: color-mix(in oklab, var(--soft-2) 80%, transparent);
-      }
+    /* Collapsed State */
+    .sidebar.closed { width: 70px; }
+    .sidebar.closed .menu li a span { display: none; }
+    .sidebar.closed .menu li a { justify-content: center; padding: 15px 0; }
+    .sidebar.closed .menu li a i { margin-right: 0; }
+    .sidebar.closed .preset-themes,
+    .sidebar.closed .color-grid { display: none; }
+    .sidebar.closed .language-btn { width: 45px; height: 45px; padding: 0; border-radius: 50%; }
+    .sidebar.closed .language-btn span { display: none; }
+    /* BUTTONS / CONTROLS */
+    .controls-wrapper {
+      padding: 10px 20px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
     }
-    @supports not ((backdrop-filter: blur(10px))) {
-      .sidebar, .toolbar, .footer {
-        background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 80%, transparent), var(--panel));
-      }
+    .language-btn {
+      display: flex; align-items: center; justify-content: center;
+      margin: 15px auto;
+      background: transparent; color: var(--color-text-secondary);
+      padding: 10px 20px; border: 1px solid var(--color-accent-muted);
+      border-radius: 5px; text-decoration: none;
+      font-weight: 500; cursor: pointer; width: 100%;
+      transition: all 0.3s ease;
     }
-    .sidebar, .toolbar, .footer{
-      border: 1px solid color-mix(in oklab, var(--border) 80%, transparent);
+    .language-btn:hover {
+      background: var(--color-accent-muted); color: var(--bg-dark);
+      border-color: var(--color-accent-muted);
     }
-
-    /* ===== WATER TEXT ===== */
-    .water-text{
-      position: relative;
-      display: inline-block;
-      font-weight: 800;
-      letter-spacing: .3px;
-      background:
-        radial-gradient(120% 180% at 50% 0%, color-mix(in oklab, var(--accent) 75%, #fff) 0%, transparent 60%) ,
-        conic-gradient(from 180deg at 50% 50%, var(--accent), var(--accent-2), var(--accent), var(--accent-2));
-      background-size: 160% 160%, 200% 200%;
-      background-position: 50% 0%, 50% 50%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: url(#aab-water-ripple);
-      text-shadow:
-        0 1px 0 rgba(255,255,255,.18),
-        0 10px 30px color-mix(in oklab, var(--accent) 20%, transparent);
-      animation: aab-water-move 8s ease-in-out infinite;
+    .color-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 5px; padding: 5px 0;
     }
-    @keyframes aab-water-move{
-      0%   { background-position: 50% 0%, 45% 50% }
-      50%  { background-position: 52% 20%, 55% 60% }
-      100% { background-position: 50% 0%, 45% 50% }
+    .color-option {
+      width: 100%; height: 25px; cursor: pointer;
+      border: 2px solid transparent; border-radius: 4px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .water-text::after{
-      content:"";
-      position:absolute; inset:0;
-      background: linear-gradient(115deg, transparent 40%, rgba(255,255,255,.45) 50%, transparent 60%);
-      mix-blend-mode: screen;
-      transform: translateX(-120%);
-      animation: aab-water-glare 3.8s ease-in-out infinite;
-      pointer-events:none;
+    .color-option:hover {
+      transform: scale(1.1); border-color: var(--color-accent-vibrant);
     }
-    @keyframes aab-water-glare{
-      0%, 60%   { transform: translateX(-120%) }
-      80%       { transform: translateX(0%) }
-      100%      { transform: translateX(120%) }
+    .preset-themes h4 {
+      font-size: 13px; color: var(--color-text-secondary);
+      margin: 10px 0 5px; text-align: center;
     }
-
-    /* ===== THEME PRESETS (além de dark/light) ===== */
-    body[data-theme="neon"]{
-      --bg:#07080d; --panel:#0b0f17; --muted:#8aa0b8; --text:#e7f5ff;
-      --accent:#00e0ff; --accent-2:#00ff87; --border:#1a2a3a;
-      --soft:#0e1420; --soft-2:#0b1220; --glowA: rgba(0,224,255,.10); --glowB: rgba(0,224,255,.28);
-      --shadow: 0 10px 30px rgba(0,0,0,.45);
-      background: radial-gradient(1400px 900px at -10% -20%, #0d1324 0%, var(--bg) 55%, #080b12 100%);
-      color:var(--text);
+    .theme-btn {
+      margin: 3px 0; width: 100%; border: none;
+      border-radius: 5px; padding: 6px; cursor: pointer;
+      font-size: 12px; font-weight: 500; transition: filter 0.3s;
+      color: var(--color-text-primary);
     }
-    body[data-theme="sunset"]{
-      --bg:#1a1215; --panel:#23161b; --muted:#f2c8cc; --text:#ffe9ef;
-      --accent:#ff7a59; --accent-2:#ff4f93; --border:#3a1d2a;
-      --soft:#2a1820; --soft-2:#21131a; --glowA: rgba(255,122,89,.12); --glowB: rgba(255,79,147,.30);
-      --shadow: 0 10px 30px rgba(0,0,0,.40);
-      background: linear-gradient(180deg, #2a1620 0%, #1a1215 100%);
-      color:var(--text);
+    .theme-btn:hover { filter: brightness(1.2); }
+    /* MAIN CONTAINER */
+    .main-container {
+      margin-left: 280px; padding: 30px;
+      transition: margin-left 0.3s ease;
     }
-    body[data-theme="ocean"]{
-      --bg:#081417; --panel:#0c1b20; --muted:#a7c8cf; --text:#e8fbff;
-      --accent:#00bcd4; --accent-2:#00ffa8; --border:#143239;
-      --soft:#0d2228; --soft-2:#0c1d23; --glowA: rgba(0,188,212,.12); --glowB: rgba(0,255,168,.28);
-      --shadow: 0 10px 30px rgba(0,0,0,.40);
-      background: linear-gradient(180deg, #0b1e24 0%, #081417 100%);
-      color:var(--text);
+    .sidebar.closed ~ .main-container { margin-left: 70px; }
+    section {
+      padding: 40px 30px; margin-bottom: 40px;
+      border-radius: 8px; background: var(--bg-section);
+      backdrop-filter: blur(5px); opacity: 0;
+      transform: translateY(20px); transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      min-height: 60vh;
+      border: 1px solid var(--border-color);
     }
-    body[data-theme="forest"]{
-      --bg:#0c120e; --panel:#101a13; --muted:#aecbb3; --text:#e9fff0;
-      --accent:#2bd576; --accent-2:#00c16a; --border:#1b2a20;
-      --soft:#122217; --soft-2:#0f1c14; --glowA: rgba(43,213,118,.10); --glowB: rgba(0,193,106,.28);
-      --shadow: 0 10px 30px rgba(0,0,0,.38);
-      background: radial-gradient(1200px 800px at 110% -20%, #12261a 0%, var(--bg) 55%, #0a130e 100%);
-      color:var(--text);
+    section.in-view {
+      opacity: 1; transform: translateY(0);
     }
-    body[data-theme="grape"]{
-      --bg:#110b18; --panel:#160e22; --muted:#c9b5da; --text:#f8ecff;
-      --accent:#9b5cff; --accent-2:#ff67d2; --border:#2b1745;
-      --soft:#1a1030; --soft-2:#150d27; --glowA: rgba(155,92,255,.12); --glowB: rgba(255,103,210,.30);
-      --shadow: 0 10px 30px rgba(0,0,0,.42);
-      background: linear-gradient(180deg, #1a1030 0%, #110b18 100%);
-      color:var(--text);
+    h1 {
+      font-size: 32px; color: var(--color-accent-vibrant);
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--color-accent-muted);
+      padding-bottom: 10px; font-weight: 700;
     }
-    #themePreset option[value="neon"]   { background:#0b0f17; color:#00e0ff }
-    #themePreset option[value="sunset"] { background:#23161b; color:#ff7a59 }
-    #themePreset option[value="ocean"]  { background:#0c1b20; color:#00bcd4 }
-    #themePreset option[value="forest"] { background:#101a13; color:#2bd576 }
-    #themePreset option[value="grape"]  { background:#160e22; color:#9b5cff }
+    h2 {
+      font-size: 24px; color: var(--color-text-secondary);
+      font-weight: 400; margin-bottom: 15px;
+    }
+    a.main-btn {
+      display: inline-flex; align-items: center;
+      background: transparent;
+      color: var(--color-accent-vibrant);
+      padding: 10px 18px;
+      border: 1px solid var(--color-accent-muted);
+      border-radius: 5px;
+      text-decoration: none; font-weight: 500; margin: 8px;
+      font-size: 15px; transition: all 0.3s ease;
+    }
+    a.main-btn:hover {
+      background: var(--color-accent-muted);
+      color: var(--bg-dark);
+      box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+      transform: translateY(-2px);
+    }
+    a.main-btn:active { transform: translateY(0); }
+    a.main-btn i { margin-right: 8px; font-size: 16px; }
+    /* CERTIFICATES SECTION STYLES */
+    .certificates-container {
+      display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;
+    }
+    .certificates-list {
+      flex: 1 1 200px;
+      border-right: 1px solid var(--border-color);
+      padding-right: 15px;
+    }
+    .certificate-display {
+      flex: 3 1 300px;
+      padding-left: 15px;
+    }
+    .certificate-item {
+      padding: 10px; margin-bottom: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      color: var(--color-text-primary);
+    }
+    .certificate-item:hover {
+      background: var(--color-accent-muted);
+      border-color: var(--color-accent-vibrant);
+      color: var(--bg-dark);
+    }
+    .cert-nav-btn {
+      background: var(--color-accent-muted);
+      border: none; color: var(--bg-dark);
+      padding: 8px 15px; border-radius: 4px;
+      cursor: pointer; font-weight: bold;
+      transition: background 0.2s;
+    }
+    .cert-nav-btn:hover { background: var(--color-accent-vibrant); }
+    /* CLOCK */
+    #clock {
+      position: fixed; bottom: 20px; right: 20px;
+      width: 120px; height: 50px; background: var(--bg-deep-charcoal);
+      border: 1px solid var(--color-accent-muted);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+      color: var(--color-accent-vibrant); font-size: 20px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 6px; z-index: 999;
+    }
+    #clock:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+    }
+    /* Dynamic Content */
+    .knowledge-wrapper {
+      display: flex; justify-content: space-between; gap: 30px;
+    }
+    .knowledge-wrapper > div { flex: 1; }
+    #whoImIContainer {
+      padding-left: 20px; border-left: 2px solid var(--color-accent-muted);
+    }
+    .animated-patterns-grid .pattern-item iframe {
+      width: 100%; height: 80vh; border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .knowledge-wrapper { flex-direction: column; }
+      #whoImIContainer { border-left: none; padding-left: 0; padding-top: 20px; border-top: 1px solid var(--border-color); }
+    }
+    @media (max-width: 768px) {
+      .main-container { margin-left: 70px; padding: 15px; }
+      .sidebar { width: 70px; }
+      .sidebar:not(.closed) { width: 200px; }
+      .sidebar:not(.closed) ~ .main-container { margin-left: 200px; }
+      .sidebar.closed ~ .main-container { margin-left: 70px; }
+      .toggle-btn { top: 15px; right: -20px; }
+      .certificates-list { flex: 1 1 100%; border-right: none; padding-right: 0; }
+      .certificate-display { flex: 1 1 100%; padding-left: 0; }
+    }
   </style>
 </head>
-<body data-theme="dark">
-  <div class="app" id="app">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <h1>
-          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-            <path fill="url(#g)" d="M12 2L2 7l10 5 10-5-10-5Zm0 7L2 4v13l10 5 10-5V4l-10 5Z"/><defs>
-              <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-                <stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#00ff87"/>
-              </linearGradient>
-            </defs>
-          </svg>
-          <span class="water-text">Portfólio</span> <span class="badge">AAB</span>
-        </h1>
-      </div>
+<body>
+  <!-- SIDEBAR -->
+  <div class="sidebar closed" id="sidebar">
+    <button class="toggle-btn" id="toggleBtn" aria-label="Toggle Sidebar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 11-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z"/>
+      </svg>
+    </button>
+    <ul class="menu" id="menuList" role="navigation" aria-label="Sidebar Menu">
+      <li class="active"><a href="#profile" data-locale="profileTitle"><i class="fa-solid fa-user"></i><span data-locale="profileTitle">Profile</span></a></li>
+      <li><a href="#social" data-locale="socialTitle"><i class="fa-solid fa-share-nodes"></i><span data-locale="socialTitle">Social</span></a></li>
+      <li><a href="#projects" data-locale="projectsTitle"><i class="fa-solid fa-list-check"></i><span data-locale="projectsTitle">Projects</span></a></li>
+      <li><a href="#contact" data-locale="contactTitle"><i class="fa-solid fa-paper-plane"></i><span data-locale="contactTitle">Contact</span></a></li>
+      <li><a href="#certificates" data-locale="certificatesTitle"><i class="fa-solid fa-certificate"></i><span data-locale="certificatesTitle">Certificates</span></a></li>
+      <li><a href="#animatedPatterns" data-locale="animatedPatternsTitle"><i class="fa-solid fa-wave-square"></i><span data-locale="animatedPatternsTitle">Animated Patterns</span></a></li>
+      <li><a href="#htmlGames" data-locale="htmlGames"><i class="fa-solid fa-gamepad"></i><span data-locale="htmlGames">HTML Games</span></a></li>
+      <li><a href="#mp3Visualizer" data-locale="mp3Visualizer"><i class="fa-solid fa-headphones"></i><span data-locale="mp3Visualizer">MP3 Visualizer</span></a></li>
+    </ul>
 
-      <!-- Busca no menu -->
-      <div class="filter-wrap">
-        <input id="filter" class="filter" type="search" placeholder="Filtrar…">
-      </div>
-
-      <div class="about">
-        <img
-          class="avatar"
-          src="https://aabproducoes.github.io/Links/images/292440780_2225688030932761_1836941331334930994_n.webp.png"
-          alt="Foto de perfil de Antonio Augusto Barbaro"
-          loading="lazy" decoding="async"
-        />
-        <div>
-          <h2>Antonio A. Barbaro</h2>
-          <p>Fotografia, HTML5/Games e projetos criativos — <strong>AAB Produções</strong>.</p>
+    <div class="controls-wrapper">
+      <button class="language-btn" id="languageBtn"><i class="fa-solid fa-globe"></i> <span>Lang: EN</span></button>
+      <div class="preset-themes">
+        <h4>Theme Presets</h4>
+        <div style="display:flex; gap: 5px;">
+          <button class="theme-btn" style="background:#007ACC; color:var(--bg-dark);" data-theme="blue-dark">Blue Dark</button>
+          <button class="theme-btn" style="background:#4CAF50; color:var(--bg-dark);" data-theme="green-dark">Green Dark</button>
+          <button class="theme-btn" style="background:#9E9E9E; color:var(--bg-dark);" data-theme="gray-dark">Gray Dark</button>
         </div>
       </div>
-
-      <button class="btn hamburger" aria-controls="menu" aria-expanded="false" id="burger">☰ Menu</button>
-      <nav id="menu" aria-label="Seções"><!-- items via JS --></nav>
-
-      <div class="hint" id="hintText">Dicas: 1–9 para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar</div>
-      <div class="resizer" id="resizer" title="Arraste para redimensionar (duplo clique reseta)"></div>
-    </aside>
-
-    <!-- Main -->
-    <main class="main">
-      <div class="toolbar">
-        <div class="left">
-          <span class="title">Visualizando: <strong id="currentTitle">—</strong></span>
-        </div>
-        <div class="right">
-          <!-- Selector de presets -->
-          <select class="btn" id="themePreset" title="Tema (preset)">
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-            <option value="neon">Neon</option>
-            <option value="sunset">Sunset</option>
-            <option value="ocean">Ocean</option>
-            <option value="forest">Forest</option>
-            <option value="grape">Grape</option>
-          </select>
-
-          <button class="btn" id="themeToggle" aria-pressed="false" title="Alternar tema">Tema: Escuro</button>
-          <button class="btn" id="openNew">Abrir em nova aba</button>
-          <button class="btn" id="copyLink">Copiar link</button>
-          <button class="btn" id="reload">Recarregar</button>
-          <button class="btn" id="hardReload" title="Ignora cache">Hard</button>
-        </div>
+      <h4 style="margin-top: 15px;">Manual Background Color</h4>
+      <div class="color-grid">
+        <!-- Manual color options use the default gradient dark for consistent contrast -->
+        <div class="color-option" data-color="#0D1117" style="background-color: #0D1117;"></div>
+        <div class="color-option" data-color="#161B22" style="background-color: #161B22;"></div>
+        <div class="color-option" data-color="#37474f" style="background-color: #37474f;"></div>
+        <div class="color-option" data-color="#3e2723" style="background-color: #3e2723;"></div>
       </div>
-
-      <div class="viewer">
-        <div class="loading" id="loading" aria-hidden="true"><div class="spinner" role="status" aria-label="Carregando"></div></div>
-        <iframe id="frame" title="Visualização do portfólio" referrerpolicy="no-referrer"
-                src="https://aabproducoes.github.io/Links/blender-projects.html"></iframe>
-      </div>
-
-      <div class="footer">
-        Feito com ❤ — Tema claro/escuro, presets, sidebar redimensionável e atalhos. Se alguma página bloquear <em>iframe</em>, use “Abrir em nova aba”.
-      </div>
-    </main>
+    </div>
   </div>
 
-  <script>
-    /* ===== CONFIG INTRO/KNOWLEDGE ===== */
-    const INTRO_BACK_TARGET = 'blender-projects'; // mude para o ID desejado
-    const KNOW_BASE = "https://aabproducoes.github.io/Links/KnowledgeList/";
-    const KNOW_TXT  = KNOW_BASE + "KnowledgeList.txt";
+  <!-- MAIN CONTAINER -->
+  <div class="main-container" id="mainContainer">
+    <section id="profile">
+      <h1 data-locale="profileTitle">Profile</h1>
+      <h2 data-locale="knowledgeListTitle">Knowledge List</h2>
+      <div class="knowledge-wrapper">
+        <div id="knowledgeList"></div>
+        <div id="whoImIContainer"></div>
+      </div>
+    </section>
+    <section id="social">
+      <h1 data-locale="socialTitle">Social</h1>
+      <div>
+        <!-- Social links are valid external URLs -->
+        <a href="https://www.facebook.com" target="_blank" class="main-btn"><i class="fa-brands fa-facebook"></i><span data-locale="facebook">Facebook</span></a>
+        <a href="https://www.instagram.com" target="_blank" class="main-btn"><i class="fa-brands fa-instagram"></i><span data-locale="instagram">Instagram</span></a>
+      </div>
+    </section>
+    <section id="projects">
+      <h1 data-locale="projectsTitle">Projects</h1>
+      <div>
+        <!-- Project links are now placeholders (#) as they pointed to missing external files -->
+        <a href="#" class="main-btn"><i class="fa-solid fa-cube"></i><span data-locale="blenderProjects">Blender Projects</span></a>
+        <a href="#" class="main-btn"><i class="fa-solid fa-palette"></i><span data-locale="gimpProjects">Gimp Projects</span></a>
+        <a href="#" class="main-btn"><i class="fa-solid fa-video"></i><span data-locale="blenderAnimations">Blender Animations</span></a>
+        <a href="#" class="main-btn"><i class="fa-solid fa-wand-magic-sparkles"></i><span data-locale="animatedBackground">Animated Background</span></a>
+      </div>
+    </section>
+    <section id="contact">
+      <h1 data-locale="contactTitle">Contact</h1>
+      <div>
+        <!-- Contact links are valid external URLs -->
+        <a href="https://wa.me/54984181968" target="_blank" class="main-btn"><i class="fa-brands fa-whatsapp"></i><span data-locale="whatsapp">WhatsApp</span></a>
+        <a href="mailto:aaugusto444@gmail.com" class="main-btn"><i class="fa-solid fa-envelope"></i><span data-locale="email">Email</span></a>
+      </div>
+    </section>
+    <!-- Certificates Section -->
+    <section id="certificates">
+      <h1 data-locale="certificatesTitle">Certificates</h1>
+      <div class="certificates-container">
+        <div id="certificatesList" class="certificates-list"></div>
+        <div id="certificateDisplay" class="certificate-display">
+          <p style="color:var(--color-text-secondary);">Select a certificate to display</p>
+        </div>
+      </div>
+    </section>
+    <!-- Visual Content Sections: Using accessible placeholder URLs for iframes -->
+    <section id="animatedPatterns">
+      <h1 data-locale="animatedPatternsTitle">Animated Patterns</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://placehold.co/600x400/0D1117/007ACC?text=Animated+Pattern+Placeholder" title="Animated Background Pattern"></iframe>
+          <p style="color:var(--color-text-secondary);">Animated Pattern Placeholder</p>
+        </div>
+      </div>
+    </section>
+    <section id="htmlGames">
+      <h1 data-locale="htmlGames">HTML Games</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://placehold.co/600x400/0D1117/007ACC?text=HTML+Game+Placeholder" title="HTML Game Example"></iframe>
+          <p style="color:var(--color-text-secondary);">HTML Game Placeholder</p>
+        </div>
+      </div>
+    </section>
+    <section id="mp3Visualizer">
+      <h1 data-locale="mp3Visualizer">MP3 Player Visualizer</h1>
+      <div class="animated-patterns-grid">
+        <div class="pattern-item">
+          <iframe src="https://placehold.co/600x400/0D1117/007ACC?text=MP3+Visualizer+Placeholder" title="MP3 Visualizer Example"></iframe>
+          <p style="color:var(--color-text-secondary);">MP3 Visualizer Placeholder</p>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- CLOCK -->
+  <div id="clock"></div>
 
-    /* ===== DATA ===== */
-    const PAGES = [
-      { id:"intro",               key:1, title:"Intro",                         url:"__internal_intro__" },
-      { id:"blender-projects",    key:2, title:"Blender — Projects",            url:"https://aabproducoes.github.io/Links/blender-projects.html" },
-      { id:"blender-animations",  key:3, title:"Blender — Animations",          url:"https://aabproducoes.github.io/Links/blender-animations.html" },
-      { id:"gimp-projects",       key:4, title:"GIMP — Projects",               url:"https://aabproducoes.github.io/Links/gimp-projects.html" },
-      { id:"music-visualizer",    key:5, title:"Music Player — Visualizer",     url:"https://aabproducoes.github.io/Links/music_player-visualizer.html" },
-      { id:"best-shots",          key:6, title:"Best Shots — Carousel",         url:"https://aabproducoes.github.io/Links/best-shots-img-caroussell.html" },
-      { id:"animated-background", key:7, title:"Animated Background",           url:"https://aabproducoes.github.io/Links/animated-background.html" },
-      { id:"html-play",           key:8, title:"HTML Games — Play",             url:"https://aabproducoes.github.io/Links/HTML_games/HTML-play.html" },
-      { id:"translation",         key:9, title:"Translation",                   url:"https://aabproducoes.github.io/Links/Translation/translation.html" },
-      { id:"certificados",        key:0, title:"Certificados",                  url:"__internal_certificados__" }
+  <script>
+    // --- MOCKED DATA FOR SELF-CONTAINED OPERATION ---
+    
+    // 1. Mock Knowledge List Data (Replacing KnowledgeList.txt)
+    const mockKnowledgeList = [
+      'Frontend Development (React, Angular, Vue) || Desenvolvimento Frontend (React, Angular, Vue)',
+      'Backend Development (Node.js, Express, Python) || Desenvolvimento Backend (Node.js, Express, Python)',
+      'Database Management (SQL, Firestore) || Gerenciamento de Banco de Dados (SQL, Firestore)',
+      '3D Modeling (Blender) || Modelagem 3D (Blender)',
+      'Graphic Design (Gimp, Photoshop) || Design Gráfico (Gimp, Photoshop)'
     ];
 
-    const CERTS_BASE = "https://aabproducoes.github.io/Links/Certificados/";
-    const CERTS_TXT  = CERTS_BASE + "CertificadosList.txt";
-
-    const els = {
-      app: document.getElementById('app'),
-      sidebar: document.getElementById('sidebar'),
-      menu: document.getElementById('menu'),
-      frame: document.getElementById('frame'),
-      loading: document.getElementById('loading'),
-      currentTitle: document.getElementById('currentTitle'),
-      openNew: document.getElementById('openNew'),
-      copyLink: document.getElementById('copyLink'),
-      reload: document.getElementById('reload'),
-      hardReload: document.getElementById('hardReload'),
-      burger: document.getElementById('burger'),
-      resizer: document.getElementById('resizer'),
-      themeToggle: document.getElementById('themeToggle'),
-      body: document.body,
-      hintText: document.getElementById('hintText'),
-      filter: document.getElementById('filter')
+    // 2. Mock Who Am I Text (Replacing whoImI_en/pt.txt)
+    const mockWhoImIText = {
+        en: "I am a versatile digital creator and developer with expertise spanning from modern frontend frameworks to professional 3D design. My passion lies in building engaging, functional, and visually appealing applications and art assets. I focus on clean code and robust architecture.",
+        pt: "Sou um criador digital e desenvolvedor versátil com experiência que abrange desde frameworks de frontend modernos até design 3D profissional. Minha paixão é construir aplicações e ativos de arte envolventes, funcionais e visualmente atraentes. Eu me concentro em código limpo e arquitetura robusta."
     };
 
-    const STORE = {
-      current: 'aab.portfolio.current',
-      theme: 'aab.portfolio.theme',
-      width: 'aab.portfolio.sidebarWidth'
+    // 3. Mock Certificates Data (Replacing CertificadosList.txt)
+    // Using widely accessible PDF samples to demonstrate functionality.
+    const mockCertificatesList = [
+        { fullPath: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', titlePT: 'Certificado de Programação Web', titleEN: 'Web Programming Certificate' },
+        { fullPath: 'https://www.africau.edu/images/default/sample.pdf', titlePT: 'Certificado de Modelagem 3D', titleEN: '3D Modeling Certificate' },
+        { fullPath: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', titlePT: 'Certificado de Análise de Dados', titleEN: 'Data Analysis Certificate' }
+    ];
+    // ---------------------------------------------------
+
+    // Global variables for certificate navigation
+    let certificatesArray = [];
+    let currentCertificateIndex = 0;
+
+    // TRANSLATIONS (EN / PT)
+    const translations = {
+      en: {
+        profileTitle: 'Profile', socialTitle: 'Social', projectsTitle: 'Projects', contactTitle: 'Contact', certificatesTitle: 'Certificates',
+        knowledgeListTitle: 'Knowledge List', animatedPatternsTitle: 'Animated Patterns', htmlGames: 'HTML Games', mp3Visualizer: 'MP3 Visualizer',
+        facebook: 'Facebook', instagram: 'Instagram', blenderProjects: 'Blender Projects', gimpProjects: 'Gimp Projects', blenderAnimations: 'Blender Animations',
+        animatedBackground: 'Animated Background', whatsapp: 'WhatsApp', email: 'Email'
+      },
+      pt: {
+        profileTitle: 'Perfil', socialTitle: 'Social', projectsTitle: 'Projetos', contactTitle: 'Contato', certificatesTitle: 'Certificados',
+        knowledgeListTitle: 'Lista de Conhecimento', animatedPatternsTitle: 'Padrões Animados', htmlGames: 'Jogos HTML', mp3Visualizer: 'Visualizador MP3',
+        facebook: 'Facebook', instagram: 'Instagram', blenderProjects: 'Projetos Blender', gimpProjects: 'Projetos Gimp', blenderAnimations: 'Animações Blender',
+        animatedBackground: 'Fundo Animado', whatsapp: 'WhatsApp', email: 'Email'
+      }
+    };
+    let currentLanguage = 'en';
+
+    // THEME PRESETS (Updated for the blue/black design)
+    const themePresets = {
+      'blue-dark': {
+        '--bg-dark': '#0D1117',
+        '--bg-deep-charcoal': '#161B22',
+        '--color-accent-vibrant': '#00D4FF',
+        '--color-accent-muted': '#007ACC',
+        '--color-text-primary': '#F0F6FC',
+      },
+      'green-dark': {
+        '--bg-dark': '#101614',
+        '--bg-deep-charcoal': '#1C2720',
+        '--color-accent-vibrant': '#4CAF50',
+        '--color-accent-muted': '#00695C',
+        '--color-text-primary': '#F0F6FC',
+      },
+      'gray-dark': {
+        '--bg-dark': '#1E1E1E',
+        '--bg-deep-charcoal': '#2D2D2D',
+        '--color-accent-vibrant': '#FFFFFF',
+        '--color-accent-muted': '#9E9E9E',
+        '--color-text-primary': '#E0E0E0',
+      }
     };
 
-    /* ===== THEME PRESETS LOGIC ===== */
-    const THEME_PRESETS = ['dark','light','neon','sunset','ocean','forest','grape'];
+    // Sidebar toggle function
+    const toggleBtn = document.getElementById('toggleBtn');
+    const sidebar = document.getElementById('sidebar');
 
-    function setThemeAttr(name){
-      document.body.setAttribute('data-theme', name);
-      const isDarkBtn = (name === 'dark');
-      els.themeToggle?.setAttribute('aria-pressed', String(isDarkBtn));
-      if (els.themeToggle) els.themeToggle.textContent = 'Tema: ' + (isDarkBtn ? 'Escuro' : 'Claro');
-      const sel = document.getElementById('themePreset');
-      if (sel && sel.value !== name) sel.value = name;
+    function updateMenuItems() {
+        const isClosed = sidebar.classList.contains('closed');
+        document.querySelectorAll('#menuList li a').forEach(a => {
+            const span = a.querySelector('span');
+            if (span) {
+                span.style.display = isClosed ? 'none' : 'inline';
+            }
+        });
+        const langSpan = languageBtn.querySelector('span');
+        if (langSpan) langSpan.style.display = isClosed ? 'none' : 'inline';
     }
 
-    function applyTheme(name){
-      const preset = THEME_PRESETS.includes(name) ? name : (name === 'light' ? 'light' : 'dark');
-      setThemeAttr(preset);
-      localStorage.setItem(STORE.theme, preset);
-    }
+    function toggleSidebar() {
+      sidebar.classList.toggle('closed');
+      const isClosed = sidebar.classList.contains('closed');
+      
+      const newWidth = isClosed ? '70px' : '280px';
+      const newMargin = isClosed ? '70px' : '280px';
 
-    function initTheme(){
-      const urlPreset = new URLSearchParams(location.search).get('theme');
-      const saved = urlPreset || localStorage.getItem(STORE.theme) || 'dark';
-      applyTheme(saved);
-    }
+      sidebar.style.width = newWidth;
+      document.getElementById('mainContainer').style.marginLeft = newMargin;
+      
+      const svgIcon = toggleBtn.querySelector('svg');
+      svgIcon.style.transform = isClosed ? 'rotate(180deg)' : 'rotate(0deg)';
 
-    function populateThemePreset(){
-      const sel = document.getElementById('themePreset');
-      if (!sel) return;
-      const saved = localStorage.getItem(STORE.theme) || 'dark';
-      if (THEME_PRESETS.includes(saved)) sel.value = saved;
-      sel.addEventListener('change', (e)=>{
-        const v = e.target.value;
-        applyTheme(v);
-        const cur = getCurrentId();
-        if (isInternalCertPage(cur)) loadPage('certificados', false);
-        if (isInternalIntroPage(cur)) loadPage('intro', false);
+      updateMenuItems();
+    }
+    toggleBtn.addEventListener('click', toggleSidebar);
+
+    // Initial check for mobile to ensure collapsed state
+    if (window.innerWidth < 768) {
+        sidebar.classList.add('closed');
+        document.getElementById('mainContainer').style.marginLeft = '70px';
+    }
+    
+    // Mobile: Collapse sidebar after menu click
+    document.querySelectorAll('#menuList li a').forEach(a => {
+      a.addEventListener('click', () => {
+        if (window.innerWidth < 768 && !sidebar.classList.contains('closed')) {
+          toggleSidebar();
+        }
       });
-    }
+    });
 
-    window.addEventListener('keydown', (e)=>{
-      if (e.shiftKey && (e.key.toLowerCase() === 't')) {
-        const cur = localStorage.getItem(STORE.theme) || 'dark';
-        const idx = THEME_PRESETS.indexOf(cur);
-        const next = THEME_PRESETS[(idx + 1) % THEME_PRESETS.length];
-        applyTheme(next);
-        const id = getCurrentId();
-        if (isInternalCertPage(id)) loadPage('certificados', false);
-        if (isInternalIntroPage(id)) loadPage('intro', false);
+    // Language Toggle & Update
+    const languageBtn = document.getElementById('languageBtn');
+    languageBtn.addEventListener('click', async () => {
+      currentLanguage = (currentLanguage === 'en') ? 'pt' : 'en';
+      updateLanguage();
+      // Re-run population functions to update translated content
+      populateKnowledgeList();
+      populateWhoImI();
+      populateCertificatesList(); 
+      // If a certificate is currently displayed, re-render it with the new title
+      if (document.getElementById('certificateDisplay').querySelector('iframe')) {
+        displayCertificateAtIndex(currentCertificateIndex, false);
       }
     });
 
-    /* ===== MENU RENDER ===== */
-    function renderMenu(){
-      els.menu.innerHTML = '';
-      PAGES.forEach(p=>{
-        const btn = document.createElement('button');
-        btn.className = 'link';
-        btn.dataset.id = p.id;
-        btn.dataset.key = String(p.key);
-        btn.innerHTML =
-          '<span class="dot" aria-hidden="true"></span>'+
-          '<span class="label">'+p.title+'</span>'+
-          '<span class="open">'+(p.key ? p.key : '')+'</span>';
-
-        // clique normal
-        btn.addEventListener('click', ()=>loadPage(p.id));
-
-        // middle-click
-        btn.addEventListener('auxclick', (e)=>{
-          if (e.button === 1) {
-            if (p.url === "__internal_certificados__") window.open(CERTS_TXT, '_blank', 'noopener');
-            else if (p.url === "__internal_intro__") window.open(KNOW_TXT, '_blank', 'noopener');
-            else window.open(p.url, '_blank', 'noopener');
-          }
-        });
-        // Ctrl/Cmd+click
-        btn.addEventListener('click', (e)=>{
-          if (e.ctrlKey || e.metaKey) {
-            if (p.url === "__internal_certificados__") window.open(CERTS_TXT, '_blank', 'noopener');
-            else if (p.url === "__internal_intro__") window.open(KNOW_TXT, '_blank', 'noopener');
-            else window.open(p.url, '_blank', 'noopener');
-            e.preventDefault();
-          }
-        });
-
-        // JUICE: spotlight + ripple
-        btn.addEventListener('mousemove', (e)=>{
-          const r = btn.getBoundingClientRect();
-          const x = ((e.clientX - r.left) / r.width) * 100;
-          const y = ((e.clientY - r.top)  / r.height)* 100;
-          btn.style.setProperty('--x', x + '%');
-          btn.style.setProperty('--y', y + '%');
-        });
-        btn.addEventListener('mouseleave', ()=>{
-          btn.style.removeProperty('--x'); btn.style.removeProperty('--y');
-        });
-        btn.addEventListener('mousedown', (e)=>{
-          const r = btn.getBoundingClientRect();
-          const rx = (e.clientX - r.left) + 'px';
-          const ry = (e.clientY - r.top)  + 'px';
-          btn.style.setProperty('--rx', 'calc(' + rx + ' - 6px)');
-          btn.style.setProperty('--ry', 'calc(' + ry + ' - 6px)');
-          btn.classList.remove('juice-rippling'); void btn.offsetWidth; btn.classList.add('juice-rippling');
-          setTimeout(()=>btn.classList.remove('juice-rippling'), 600);
-        }, { passive:true });
-
-        btn.title = p.title;
-
-        els.menu.appendChild(btn);
-      });
-
-      const keys = PAGES.map(p=>p.key).filter(k=>k>0);
-      const first = Math.min.apply(null, keys);
-      const last  = Math.max.apply(null, keys);
-      els.hintText.textContent = 'Dicas: '+first+'–'+last+' para trocar • ↑/↓ navegam • Enter abre • Arraste a borda para redimensionar';
-
-      // Ping de status
-      (function markStatus(){
-        PAGES.forEach(p=>{
-          if (p.url === "__internal_certificados__" || p.url === "__internal_intro__") return;
-          const label = els.menu.querySelector('.link[data-id="'+p.id+'"] .label');
-          if (!label) return;
-          fetch(p.url, { method:'HEAD' })
-            .then(()=>{ label.textContent = label.textContent.replace(/^([🟢🔴]\s)?/, '🟢 '); })
-            .catch(()=>{ label.textContent = label.textContent.replace(/^([🟢🔴]\s)?/, '🔴 '); });
-        });
-      })();
-    }
-
-    /* ===== MENU FILTER ===== */
-    function attachMenuFilter(){
-      if (!els.filter) return;
-      els.filter.addEventListener('input', function(){
-        const q = this.value.toLowerCase().trim();
-        document.querySelectorAll('#menu .link').forEach(btn=>{
-          const label = btn.querySelector('.label')?.textContent.toLowerCase() || '';
-          btn.style.display = label.includes(q) ? '' : 'none';
-        });
+    function updateLanguage() {
+      const langSpan = languageBtn.querySelector('span');
+      if (langSpan) langSpan.textContent = `Lang: ${currentLanguage.toUpperCase()}`;
+      
+      // Update all elements with data-locale attribute
+      document.querySelectorAll('[data-locale]').forEach(el => {
+        const key = el.getAttribute('data-locale');
+        if (translations[currentLanguage][key]) {
+          // Update the text content of the element itself (for h1/h2/span)
+          el.textContent = translations[currentLanguage][key];
+        }
       });
     }
 
-    /* ===== STATE ===== */
-    function setActive(id){
-      document.querySelectorAll('.link').forEach(b=>b.classList.toggle('active', b.dataset.id === id));
-    }
-    function getCurrentId(){
-      const h = (location.hash || '').replace('#','').trim();
-      if (PAGES.find(p=>p.id===h)) return h;
-      const saved = localStorage.getItem(STORE.current);
-      if (PAGES.find(p=>p.id===saved)) return saved;
-      return PAGES[0].id; // Intro como padrão
-    }
-    function isInternalCertPage(id){
-      const p = PAGES.find(x=>x.id===id);
-      return p && p.url === "__internal_certificados__";
-    }
-    function isInternalIntroPage(id){
-      const p = PAGES.find(x=>x.id===id);
-      return p && p.url === "__internal_intro__";
+    // Load Knowledge List (Using Mock Data)
+    function populateKnowledgeList() {
+      const knowledgeListDiv = document.getElementById('knowledgeList');
+      knowledgeListDiv.innerHTML = '';
+      
+      mockKnowledgeList.forEach(line => {
+        // Line format: English || Portuguese
+        const parts = line.split('||').map(p => p.trim());
+        const englishText = parts[0] || line;
+        const portugueseText = parts[1] || line;
+        
+        const p = document.createElement('p');
+        p.style.marginBottom = '8px';
+        p.style.color = 'var(--color-text-secondary)';
+        p.textContent = (currentLanguage === 'en') ? englishText : portugueseText;
+        knowledgeListDiv.appendChild(p);
+      });
     }
 
-    /* ===== LOAD ===== */
-    async function loadPage(id, pushHash=true){
-      const item = PAGES.find(p=>p.id===id); if(!item) return;
+    // Load "Who Am I" text (Using Mock Data)
+    function populateWhoImI() {
+      const whoImIContainer = document.getElementById('whoImIContainer');
+      const text = mockWhoImIText[currentLanguage];
+      whoImIContainer.textContent = text || "Content unavailable.";
+      whoImIContainer.style.color = 'var(--color-text-primary)';
+      whoImIContainer.style.lineHeight = '1.6';
+    }
 
-      // spinner ON
-      els.loading.removeAttribute('aria-hidden'); els.loading.style.opacity = '1';
-
-      setActive(id);
-      els.currentTitle.textContent = item.title;
-      localStorage.setItem(STORE.current, id);
-      if (pushHash) history.replaceState(null, "", '#'+id);
-
-      try{
-        if (isInternalCertPage(id)){
-          const html = await buildCertificatesPage();
-          els.frame.srcdoc = html;
-        } else if (isInternalIntroPage(id)){
-          const html = await buildIntroPage();
-          els.frame.srcdoc = html;
-        } else {
-          els.frame.removeAttribute('srcdoc');
-          els.frame.src = item.url;
+    // Fetch Certificates List (Using Mock Data)
+    function fetchCertificatesList() {
+      // Mock data is already in the required format, just return it
+      return mockCertificatesList.map(cert => {
+        let finalUrl = cert.fullPath;
+        if (!cert.fullPath.includes('#')) {
+            finalUrl = cert.fullPath + '#page=1';
         }
-      } catch(err){
-        const safe = escapeHTML(String((err && err.message) ? err.message : err || 'Erro desconhecido'));
-        els.frame.srcdoc = errorGenericHTML('Não foi possível carregar o conteúdo', safe);
-      }
-
-      // fechar menu mobile
-      if (els.sidebar.classList.contains('open')) toggleMenu(false);
+        return {
+            fullPath: finalUrl,
+            pdfName: cert.fullPath.substring(cert.fullPath.lastIndexOf('/') + 1),
+            titlePT: cert.titlePT,
+            titleEN: cert.titleEN
+        };
+      });
     }
 
-    /* Spinner OFF quando iframe termina de carregar */
-    els.frame.addEventListener('load', ()=>{
-      els.loading.style.transition = 'opacity .35s ease';
-      els.loading.style.opacity = '0';
-      setTimeout(()=>els.loading.setAttribute('aria-hidden','true'), 360);
-      const id = getCurrentId();
-      const current = PAGES.find(p=>p.id===id);
-      if (current) document.title = 'Portfólio — '+current.title;
-    });
+    // Create a list of certificate titles; on click, display the certificate in full view.
+    function populateCertificatesList() {
+      const listContainer = document.getElementById('certificatesList');
+      listContainer.style.display = 'block'; 
+      listContainer.innerHTML = '';
+      
+      const list = fetchCertificatesList();
+      certificatesArray = list; // Store globally for navigation
 
-    /* ===== KEYBOARD ===== */
-    window.addEventListener('keydown', (e)=>{
-      const keyNum = Number(e.key);
-      if (keyNum>=1 && keyNum<=9){
-        const p = PAGES.find(pg=>pg.key===keyNum);
-        if (p){
-          const target = document.querySelector('.link[data-id="'+p.id+'"]');
-          if (target){ target.focus(); loadPage(p.id); }
-        }
+      if (list.length === 0) {
+        listContainer.innerHTML = `<p style="color: var(--color-text-secondary);">No certificates found or failed to load.</p>`;
         return;
       }
-      const links = Array.from(document.querySelectorAll('.link'));
-      const idx = links.findIndex(el=>el.classList.contains('active'));
-      if (['ArrowDown','j','J'].includes(e.key)){
-        const next = links[Math.min(idx+1, links.length-1)];
-        if (next){ next.focus(); loadPage(next.dataset.id); }
-      } else if (['ArrowUp','k','K'].includes(e.key)){
-        const prev = links[Math.max(idx-1, 0)];
-        if (prev){ prev.focus(); loadPage(prev.dataset.id); }
-      } else if (e.key === 'Enter'){
-        const active = links[idx] || links[0];
-        if (active) loadPage(active.dataset.id);
-      }
-    });
-
-    /* ===== TOOLBAR BUTTONS ===== */
-    els.openNew.addEventListener('click', ()=>{
-      const id = getCurrentId();
-      const item = PAGES.find(p=>p.id===id);
-      if (!item) return;
-      if (isInternalCertPage(id)) window.open(CERTS_TXT, '_blank', 'noopener');
-      else if (isInternalIntroPage(id)) window.open(KNOW_TXT, '_blank', 'noopener');
-      else window.open(item.url, '_blank', 'noopener');
-    });
-
-    els.copyLink.addEventListener('click', async ()=>{
-      const id = getCurrentId();
-      const share = location.origin+location.pathname+'#'+id;
-      try{
-        await navigator.clipboard.writeText(share);
-        els.copyLink.textContent = 'Copiado!';
-        setTimeout(()=>els.copyLink.textContent='Copiar link', 1200);
-      }catch{
-        prompt('Copie o link:', share);
-      }
-    });
-
-    // Recarregar + Hard reload
-    els.reload.addEventListener('click', ()=>{
-      const id = getCurrentId();
-      const it = PAGES.find(p=>p.id===id);
-      if (!it) return;
-      if (isInternalCertPage(id)) {
-        buildCertificatesPage().then(html=>{ els.frame.srcdoc = html; });
-      } else if (isInternalIntroPage(id)) {
-        buildIntroPage().then(html=>{ els.frame.srcdoc = html; });
-      } else {
-        try { els.frame.contentWindow.location.reload(); }
-        catch { els.frame.src = it.url; }
-      }
-    });
-    els.hardReload.addEventListener('click', ()=>{
-      const id = getCurrentId();
-      const it = PAGES.find(p=>p.id===id);
-      if (!it) return;
-      if (isInternalCertPage(id)) {
-        buildCertificatesPage().then(html=>{ els.frame.srcdoc = html; });
-      } else if (isInternalIntroPage(id)) {
-        buildIntroPage().then(html=>{ els.frame.srcdoc = html; });
-      } else {
-        const base = (it.url||'').split('#')[0].split('?')[0];
-        els.frame.removeAttribute('srcdoc');
-        els.frame.src = base + '?ts=' + Date.now();
-      }
-    });
-
-    /* ===== THEME TOGGLE (compat com presets) ===== */
-    els.themeToggle.addEventListener('click', ()=>{
-      const cur = document.body.getAttribute('data-theme') || 'dark';
-      const next = (cur === 'dark') ? 'light' : 'dark';
-      applyTheme(next);
-      const id = getCurrentId();
-      if (isInternalCertPage(id)) loadPage('certificados', false);
-      if (isInternalIntroPage(id)) loadPage('intro', false);
-    });
-
-    /* ===== MOBILE MENU ===== */
-    function toggleMenu(force){
-      const open = typeof force === 'boolean' ? force : !els.sidebar.classList.contains('open');
-      els.sidebar.classList.toggle('open', open);
-      els.burger?.setAttribute('aria-expanded', String(open));
-    }
-    els.burger?.addEventListener('click', ()=>toggleMenu());
-
-    /* ===== SIDEBAR RESIZE ===== */
-    (function sidebarResize(){
-      const MIN = 240, MAX = 520;
-      const saved = parseInt(localStorage.getItem(STORE.width)||'', 10);
-      if (!Number.isNaN(saved)) els.sidebar.style.width = Math.max(MIN, Math.min(MAX, saved)) + 'px';
-
-      let resizing = false;
-      const onPointerMove = (e)=>{
-        if (!resizing) return;
-        const rect = els.sidebar.getBoundingClientRect();
-        const newW = Math.max(MIN, Math.min(MAX, Math.round(e.clientX - rect.left)));
-        els.sidebar.style.width = newW + 'px';
-      };
-      const stop = ()=>{
-        if (!resizing) return;
-        resizing = false;
-        document.removeEventListener('pointermove', onPointerMove);
-        document.removeEventListener('pointerup', stop);
-        els.app.classList.remove('resizing');
-        const w = parseInt(els.sidebar.style.width,10);
-        if (!Number.isNaN(w)) localStorage.setItem(STORE.width, String(w));
-      };
-      els.resizer.addEventListener('pointerdown', (e)=>{
-        if (window.matchMedia('(max-width: 860px)').matches) return;
-        resizing = true; e.preventDefault();
-        els.app.classList.add('resizing');
-        document.addEventListener('pointermove', onPointerMove);
-        document.addEventListener('pointerup', stop);
-      });
-      els.resizer.addEventListener('dblclick', ()=>{
-        els.sidebar.style.width = '300px';
-        localStorage.setItem(STORE.width, '300');
-      });
-    })();
-
-    /* ===== UTIL ===== */
-    function escapeHTML(str){
-      return String(str).replace(/[&<>"']/g, function(m){
-        return { "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m];
-      });
-    }
-
-    function errorGenericHTML(title, msg){
-      const theme = document.body.getAttribute('data-theme') || 'dark';
-      return (
-        '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'+
-        '<title>Erro</title>'+
-        '<style>'+
-        'body[data-theme="dark"]{--bg:#0b0d12;--text:#e6ebf2;--muted:#97a0b0;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
-        'body[data-theme="light"]{--bg:#f5f7fb;--text:#0e1726;--muted:#5d6778;background:var(--bg);color:var(--text);font:14px/1.5 system-ui}'+
-        '.wrap{max-width:900px;margin:0 auto;padding:18px} code{background:rgba(127,127,127,.15);padding:2px 6px;border-radius:6px} a{color:inherit}'+
-        '</style></head><body data-theme="'+escapeHTML(theme)+'"><div class="wrap">'+
-        '<h1>'+escapeHTML(title)+'</h1>'+
-        '<p class="hint">Detalhe: <code>'+escapeHTML(msg)+'</code></p>'+
-        '</div></body></html>'
-      );
-    }
-
-    /* ===== CERTIFICADOS ===== */
-    async function buildCertificatesPage(){
-      const theme = document.body.getAttribute('data-theme') || 'dark';
-      const resp = await fetch(CERTS_TXT, { cache: 'no-cache' });
-      if (!resp.ok) throw new Error('Falha ao carregar a lista ('+resp.status+')');
-      const text = await resp.text();
-
-      const lines = text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-      const items = [];
-      for (let i=0;i<lines.length;i++){
-        const line = lines[i];
-        const mPdf = line.match(/(?:^|\s)([^\s]+\.pdf)(?:\s|$)/i);
-        if (!mPdf) continue;
-        const pdfName = mPdf[1];
-        const url = /^https?:\/\//i.test(pdfName) ? pdfName : (CERTS_BASE + pdfName);
-
-        let desc = '';
-        const mDescSpaced = line.match(/\s-\s(.*?)\s-\s/);
-        if (mDescSpaced && mDescSpaced[1]) desc = mDescSpaced[1].trim();
-        else {
-          const mDescLoose = line.match(/-(.*?)-/);
-          if (mDescLoose && mDescLoose[1]) desc = mDescLoose[1].trim();
+      
+      list.forEach((cert, index) => {
+        if (cert.fullPath) {
+          const listItem = document.createElement('div');
+          listItem.classList.add('certificate-item');
+          const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
+          listItem.textContent = title;
+          listItem.addEventListener('click', function() {
+            displayCertificateAtIndex(index);
+          });
+          listContainer.appendChild(listItem);
         }
-        const display = desc || decodeURIComponent(pdfName.replace(/^.*\//,'').replace(/\.pdf$/i,''));
-        items.push({ url, display, tooltip: desc });
+      });
+      // Reset display container if list is being shown
+      const displayContainer = document.getElementById('certificateDisplay');
+      if (displayContainer.querySelector('iframe') === null) {
+          displayContainer.innerHTML = `<p style="color:var(--color-text-secondary);">Select a certificate to display</p>`;
       }
-
-      var cards = '';
-      for (let i=0;i<items.length;i++){
-        const it = items[i];
-        const title = escapeHTML(it.tooltip || it.display);
-        cards += ''
-          + '<div class="card" title="'+title+'" style="background:linear-gradient(180deg,color-mix(in oklab,var(--panel) 85%,transparent),var(--panel));border:1px solid var(--border);border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px">'
-          +   '<div class="icon" style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#21c97a);display:grid;place-items:center;color:#fff;font-weight:700">PDF</div>'
-          +   '<div class="title" style="flex:1;min-width:0"><a href="'+escapeHTML(it.url)+'" title="'+title+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+escapeHTML(it.display)+'</a></div>'
-          + '</div>';
-      }
-
-      const css =
-        'html,body{height:100%}'+
-        'body[data-theme="dark"]{--bg:#0b0d12;--panel:#0f131b;--text:#e6ebf2;--muted:#97a0b0;--accent:#00e0ff;--border:#1a2230;--soft:#111826;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
-        'body[data-theme="light"]{--bg:#f5f7fb;--panel:#ffffff;--text:#0e1726;--muted:#5d6778;--accent:#007bff;--border:#dfe6ee;--soft:#f2f6fb;background:var(--bg);color:var(--text);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
-        '.wrap{max-width:1100px;margin:0 auto;padding:18px}'+
-        'h1{margin:0 0 8px 0;font-size:16px}'+
-        'p.sub{margin:0 0 16px 0;color:var(--muted)}'+
-        '.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}'+
-        '.hint{color:var(--muted);font-size:12px;margin-top:8px}';
-
-      const doc =
-        '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'+
-        '<meta name="viewport" content="width=device-width, initial-scale=1">'+
-        '<title>Certificados</title><style>'+css+'</style></head>'+
-        '<body data-theme="'+escapeHTML(theme)+'"><div class="wrap">'+
-        '<h1>Certificados</h1>'+
-        '<p class="sub">Passe o mouse para ver a descrição (entre hífens) como dica de ferramenta.</p>'+
-        (items.length ? '<div class="grid">'+cards+'</div>' : '<p class="hint">Nenhum PDF encontrado em <code>CertificadosList.txt</code>. Verifique o conteúdo.</p>')+
-        '<p class="hint">Fonte: <a href="'+escapeHTML(CERTS_TXT)+'" target="_blank" rel="noopener">CertificadosList.txt</a></p>'+
-        '</div></body></html>';
-
-      return doc;
     }
 
-    /* ===== INTRO (lê KnowledgeList.txt; pega texto depois de ||) ===== */
-    async function buildIntroPage(){
-      const theme = document.body.getAttribute('data-theme') || 'dark';
-      const resp = await fetch(KNOW_TXT, { cache: 'no-cache' });
-      if (!resp.ok) throw new Error('Falha ao carregar KnowledgeList ('+resp.status+')');
-      const text = await resp.text();
+    // Display the selected certificate in full view with header and navigation arrows.
+    function displayCertificateAtIndex(index, hideList = true) {
+      if (!certificatesArray.length) return;
 
-      const lines = text.split(/\r?\n/);
-      const items = [];
-      for (let i=0;i<lines.length;i++){
-        const raw = (lines[i]||'').trim();
-        if (!raw || raw.startsWith('#')) continue;
-        const parts = raw.split('||');
-        if (parts.length < 2) continue;
-        const after = parts.slice(1).join('||').trim();
-        if (after) items.push(after);
+      currentCertificateIndex = index;
+      const cert = certificatesArray[index];
+      const title = currentLanguage === 'en' ? cert.titleEN : cert.titlePT;
+      
+      const listContainer = document.getElementById('certificatesList');
+      const displayContainer = document.getElementById('certificateDisplay');
+
+      if (hideList) {
+        // Only hide the list if this is the initial click from the list view
+        listContainer.style.display = 'none';
+        displayContainer.style.flex = '1 0 100%';
+        displayContainer.style.paddingLeft = '0'; // Use full width
       }
 
-      let lis = '';
-      for (let i=0;i<items.length;i++){
-        lis += '<li>'+escapeHTML(items[i])+'</li>';
+      displayContainer.innerHTML = ''; // Clear previous content
+      
+      // 1. Create header container with navigation
+      const headerDiv = document.createElement('div');
+      headerDiv.style.display = 'flex';
+      headerDiv.style.alignItems = 'center';
+      headerDiv.style.justifyContent = 'space-between';
+      headerDiv.style.marginBottom = '15px';
+      
+      // Previous button
+      const prevButton = document.createElement('button');
+      prevButton.classList.add('cert-nav-btn');
+      prevButton.textContent = '← Prev';
+      prevButton.addEventListener('click', function() {
+        let newIndex = currentCertificateIndex - 1;
+        if (newIndex < 0) newIndex = certificatesArray.length - 1;
+        displayCertificateAtIndex(newIndex, false);
+      });
+      
+      // Title element
+      const titleElem = document.createElement('div');
+      titleElem.textContent = title;
+      titleElem.style.flex = '1';
+      titleElem.style.textAlign = 'center';
+      titleElem.style.fontWeight = '500';
+      titleElem.style.color = 'var(--color-accent-vibrant)';
+      
+      // Next button
+      const nextButton = document.createElement('button');
+      nextButton.classList.add('cert-nav-btn');
+      nextButton.textContent = 'Next →';
+      nextButton.addEventListener('click', function() {
+        let newIndex = currentCertificateIndex + 1;
+        if (newIndex >= certificatesArray.length) newIndex = 0;
+        displayCertificateAtIndex(newIndex, false);
+      });
+      
+      // Back to list button
+      const backButton = document.createElement('button');
+      backButton.classList.add('cert-nav-btn');
+      backButton.textContent = 'Back to List';
+      backButton.style.marginTop = '15px';
+      backButton.style.width = '100%';
+      backButton.addEventListener('click', function() {
+        listContainer.style.display = 'block';
+        displayContainer.innerHTML = `<p style="color:var(--color-text-secondary);">Select a certificate to display</p>`;
+        displayContainer.style.flex = '3 1 300px';
+        displayContainer.style.paddingLeft = '15px';
+      });
+      
+      headerDiv.appendChild(prevButton);
+      headerDiv.appendChild(titleElem);
+      headerDiv.appendChild(nextButton);
+      
+      displayContainer.appendChild(headerDiv);
+      
+      // 2. Create the iframe for the certificate PDF
+      let url = cert.fullPath;
+      if (!url.includes('toolbar=0')) {
+        url = url + (url.includes('#') ? '&' : '#') + 'toolbar=0&navpanes=0';
       }
+      
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.setAttribute('loading', 'lazy');
+      iframe.style.width = '100%';
+      iframe.style.height = '80vh';
+      iframe.style.border = '1px solid var(--border-color)';
+      iframe.style.borderRadius = '4px';
 
-      const css =
-        'html,body{height:100%}'+
-        'body[data-theme="dark"]{--bg:#0b0d12;--panel:#0f131b;--text:#e6ebf2;--muted:#97a0b0;--accent:#00e0ff;--border:#1a2230;--soft:#111826;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
-        'body[data-theme="light"]{--bg:#f5f7fb;--panel:#ffffff;--text:#0e1726;--muted:#5d6778;--accent:#007bff;--border:#dfe6ee;--soft:#f2f6fb;background:var(--bg);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Noto Sans"}'+
-        '.wrap{max-width:1000px;margin:0 auto;padding:24px}'+
-        '.hero{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:14px}'+
-        '.title{font-size:22px;margin:0}'+
-        '.muted{color:var(--muted)}'+
-        '.glass{background: color-mix(in oklab, var(--panel) 70%, transparent); border:1px solid var(--border); border-radius:16px; padding:16px;'+
-          'box-shadow:0 8px 30px rgba(0,0,0,.15);'+
-          'backdrop-filter: blur(12px) saturate(140%) brightness(1.05); -webkit-backdrop-filter: blur(12px) saturate(140%) brightness(1.05);}'+
-        '.btn{display:inline-block;padding:10px 14px;border-radius:12px;border:1px solid color-mix(in oklab, var(--border) 80%, transparent);'+
-          'text-decoration:none;color:inherit;background:linear-gradient(180deg, color-mix(in oklab, var(--soft) 70%, transparent), transparent);'+
-          'box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--accent) 20%, transparent);}'+
-        'ul{margin:0;padding-left:20px}'+
-        'li{margin:6px 0}';
-
-      const backHref = '#'+encodeURIComponent(INTRO_BACK_TARGET);
-
-      const doc =
-        '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">'+
-        '<meta name="viewport" content="width=device-width, initial-scale=1">'+
-        '<title>Intro</title><style>'+css+'</style></head>'+
-        '<body data-theme="'+escapeHTML(theme)+'">'+
-        '<div class="wrap">'+
-          '<div class="hero">'+
-            '<h1 class="title">Intro <span class="muted">— Knowledge List</span></h1>'+
-            '<a class="btn" href="'+backHref+'" target="_top" rel="noopener">⟵ Back to Resume</a>'+
-          '</div>'+
-          '<div class="glass">'+
-            (items.length ? ('<ul>'+lis+'</ul>') : '<p class="muted">Nenhuma linha válida encontrada após <code>||</code>.</p>')+
-          '</div>'+
-          '<p class="muted" style="margin-top:10px">Fonte: <a href="'+escapeHTML(KNOW_TXT)+'" target="_blank" rel="noopener">'+escapeHTML(KNOW_TXT)+'</a></p>'+
-        '</div>'+
-        '</body></html>';
-
-      return doc;
+      displayContainer.appendChild(iframe);
+      displayContainer.appendChild(backButton);
     }
 
-    /* ===== INIT ===== */
-    renderMenu();
-    attachMenuFilter();
-    initTheme();            // lê também ?theme=...
-    populateThemePreset();  // sincroniza o <select>
+    // CLOCK
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      document.getElementById("clock").textContent = hours + ":" + minutes + ":" + seconds;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    window.addEventListener('hashchange', ()=>{
-      const id = getCurrentId();
-      loadPage(id, false);
+    // Change background color (grid)
+    const gradientDark = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bg-deep-charcoal').trim();
+    document.querySelectorAll('.color-option').forEach(option => {
+      option.addEventListener('click', function () {
+        const color = this.getAttribute('data-color');
+        document.body.style.background = `linear-gradient(160deg, ${color} 0%, ${gradientDark} 100%)`;
+      });
     });
-    loadPage(getCurrentId());
 
-    /* WATCHDOG anti-iframe bloqueado */
-    (function watchdog(){
-      let ok = false;
-      function mark(){ ok = true; }
-      els.frame.addEventListener('load', mark, { once:true });
-      setInterval(()=>{
-        if (ok) return;
-        if (document.getElementById('wdg-overlay')) return;
-        const overlay = document.createElement('div');
-        overlay.id = 'wdg-overlay';
-        overlay.style.cssText = 'position:absolute;inset:0;display:grid;place-items:center;padding:24px;'+
-          'background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 85%, transparent), var(--panel));'+
-          'border-top:1px solid var(--border);color:var(--muted);text-align:center';
-        const id = getCurrentId();
-        overlay.innerHTML = '<div style="max-width:720px">'+
-          '<h2 style="margin:0 0 8px;color:var(--text);font-size:16px">Não foi possível exibir dentro do iframe</h2>'+
-          '<p style="margin:0 0 12px">Alguns sites bloqueiam incorporação (X-Frame-Options). Abra em nova aba.</p>'+
-          '<button id="wdg-open" class="btn">Abrir em nova aba</button></div>';
-        els.frame.parentElement.appendChild(overlay);
-        document.getElementById('wdg-open').addEventListener('click', ()=>{
-          const it = PAGES.find(p=>p.id===id);
-          if (!it) return;
-          if (isInternalCertPage(id)) window.open(CERTS_TXT, '_blank', 'noopener');
-          else if (isInternalIntroPage(id)) window.open(KNOW_TXT, '_blank', 'noopener');
-          else window.open(it.url, '_blank', 'noopener');
-        });
-      }, 2500);
-    })();
+    // Apply theme preset
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const themeName = btn.getAttribute('data-theme');
+        const selectedTheme = themePresets[themeName];
+        if (!selectedTheme) return;
+        
+        // Apply theme colors to CSS variables
+        for (let varName in selectedTheme) {
+          document.documentElement.style.setProperty(varName, selectedTheme[varName]);
+        }
+        
+        // Re-apply background gradient using the new variables
+        document.body.style.background = `linear-gradient(160deg, ${selectedTheme['--bg-dark']} 0%, ${selectedTheme['--bg-deep-charcoal']} 100%)`;
+      });
+    });
+
+    // SCROLL SPY
+    const sections = document.querySelectorAll('section');
+    const navLi = document.querySelectorAll('.menu li');
+    const observerOptions = { threshold: 0.2 };
+    
+    // Intersection Observer for the section fade-in animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+    sections.forEach(section => observer.observe(section));
+
+    // Scroll listener for the active menu item
+    function activateMenuOnScroll() {
+      let currentSection = '';
+      const offset = 120; // Adjusted for fixed header offset
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - offset;
+        const sectionHeight = section.clientHeight;
+        
+        if (window.pageYOffset >= sectionTop && window.pageYOffset < (sectionTop + sectionHeight)) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+
+      // Handle hitting the very bottom of the page
+      if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 5) {
+        currentSection = sections[sections.length - 1].getAttribute('id');
+      }
+
+      navLi.forEach(li => {
+        li.classList.remove('active');
+        const a = li.querySelector('a');
+        if (a && a.getAttribute('href') === `#${currentSection}`) {
+          li.classList.add('active');
+        }
+      });
+    }
+    window.addEventListener('scroll', activateMenuOnScroll);
+
+    // INITIALIZATION
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set initial state for the closed sidebar elements
+      updateMenuItems(); 
+      
+      // Load and update content (using mock data)
+      updateLanguage();
+      populateKnowledgeList();
+      populateWhoImI();
+      populateCertificatesList();
+      
+      // Set initial scroll state
+      activateMenuOnScroll();
+    });
   </script>
-
-  <!-- SVG filter p/ WATER TEXT -->
-  <svg width="0" height="0" style="position:absolute;left:-9999px;top:-9999px">
-    <filter id="aab-water-ripple">
-      <feTurbulence type="fractalNoise" baseFrequency="0.007 0.012" numOctaves="2" seed="7" result="noise">
-        <animate attributeName="baseFrequency" dur="8s" values="0.007 0.012; 0.010 0.016; 0.007 0.012" repeatCount="indefinite"/>
-      </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <defs>
-      <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0" stop-color="#00e0ff"/><stop offset="1" stop-color="#00ff87"/>
-      </linearGradient>
-    </defs>
-  </svg>
 </body>
 </html>
