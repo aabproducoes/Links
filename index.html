@@ -3,68 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Links - Mobile-First</title>
+    <title>AAB Produções | Links & Projetos</title>
     <style>
         /* ------------------------------------ */
-        /* 2. ESTILOS CSS (style.css incorporado) */
+        /* 2. ESTILOS CSS (Tema Blue & Gold + Animação) */
         /* ------------------------------------ */
         
-        /* Configurações Globais e Mobile-First */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9; /* Fundo suave */
-            color: #333;
+        :root {
+            --color-primary: #007bff; /* Azul vibrante */
+            --color-secondary: #FFD700; /* Dourado */
+            --color-background: #f4f7fa;
+            --color-text: #212529;
+            --color-card-bg: white;
+            --color-link-bg: #e9f2ff;
+            --color-link-hover: #0056b3;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            transition: background-color 0.5s ease; /* Transição sutil no background */
+        }
+
+        /* HEADER E MENU */
         header {
-            background-color: #007bff; /* Cor primária (Azul) */
+            background-color: var(--color-primary);
             color: white;
-            padding: 15px;
+            padding: 15px 20px;
             display: flex;
-            justify-content: space-between; /* Logo e botão de menu em extremidades opostas */
+            justify-content: space-between;
             align-items: center;
-            position: sticky; /* Menu fixo no topo ao rolar */
+            position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: var(--shadow-light);
         }
 
         .logo {
-            font-size: 1.5em;
+            font-size: 1.6em;
             font-weight: bold;
+            color: var(--color-secondary);
         }
 
-        /* Menu Interativo (Botão) */
         #menu-toggle {
             background: none;
-            border: none;
+            border: 2px solid white;
+            border-radius: 5px;
             color: white;
-            font-size: 1.5em;
+            font-size: 1.4em;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
-            display: block; /* Visível no mobile */
+            transition: all 0.3s ease;
+            display: block;
+        }
+        #menu-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Menu Interativo (Links) */
         #main-nav {
             position: absolute;
-            top: 100%; /* Abaixo do header */
+            top: 100%; 
             left: 0;
             right: 0;
-            background-color: #0069d9; /* Cor um pouco mais escura que o header */
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-            transform: translateY(0); /* Posição inicial (embaixo do header) */
+            background-color: #0069d9;
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease-in-out; 
+            transform-origin: top;
+            transform: scaleY(1);
             opacity: 1;
         }
 
         .nav-hidden {
-            /* Estado escondido: move e torna transparente */
-            transform: translateY(-100%); 
+            transform: scaleY(0); 
             opacity: 0;
             height: 0;
             overflow: hidden;
-            /* Ajuste para que o esconder fique abaixo do header. Valor aproximado da altura do header. */
-            top: 60px; 
         }
 
         #main-nav ul {
@@ -80,99 +98,131 @@
             text-decoration: none;
             color: white;
             border-bottom: 1px solid #0056b3;
-        }
-
-        #main-nav li:last-child a {
-            border-bottom: none;
+            transition: background-color 0.2s, color 0.2s;
         }
 
         #main-nav li a:hover {
             background-color: #0056b3;
+            color: var(--color-secondary);
         }
 
-        /* Conteúdo Principal */
+        /* CONTEÚDO PRINCIPAL E CARDS */
         main {
             padding: 20px;
             display: flex;
-            flex-direction: column; /* Pilha de seções */
+            flex-direction: column;
             gap: 20px;
         }
 
         .card {
-            background-color: white;
+            background-color: var(--color-card-bg);
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
         }
 
         .card h2 {
-            color: #007bff;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 5px;
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 8px;
             margin-bottom: 15px;
         }
+        
+        /* Ícones nos Títulos */
+        .card h2 .icon {
+            margin-right: 8px;
+            color: var(--color-secondary);
+        }
 
-        /* Estilo dos Links */
+        /* ESTILO DOS LINKS (Juice!) */
         .link-item {
-            display: block; /* Cada link ocupa uma linha inteira */
+            display: flex; /* Usar flexbox para alinhar ícone e texto */
+            align-items: center;
             text-decoration: none;
-            color: #333;
-            padding: 10px 15px;
-            margin: 8px 0;
-            background-color: #e9ecef; /* Cor de fundo suave para o link */
-            border-radius: 4px;
-            transition: background-color 0.2s;
+            color: var(--color-text);
+            padding: 12px 18px;
+            margin: 10px 0;
+            background-color: var(--color-link-bg);
+            border-radius: 6px;
             font-weight: bold;
+            transition: all 0.2s ease-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--color-primary);
+        }
+
+        .link-item .link-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+            color: var(--color-primary);
+            transition: color 0.2s;
         }
 
         .link-item:hover {
-            background-color: #dee2e6; /* Escurece um pouco ao passar o mouse */
+            background-color: #d1e2ff;
+            color: var(--color-link-hover);
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            border-left: 5px solid var(--color-secondary);
+        }
+        .link-item:hover .link-icon {
+            color: var(--color-secondary); /* Ícone fica dourado no hover */
         }
 
-        /* Media Query: Desktop/Tablet */
+        .link-item:active {
+            transform: scale(0.98);
+        }
+        
+        /* ANIMAÇÃO DE ENTRADA (FADE-IN) */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            /* Estado inicial para animação */
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        /* Atraso para que as cartas apareçam em sequência */
+        #profile { animation-delay: 0.1s; }
+        #projetos { animation-delay: 0.3s; }
+        #jogos { animation-delay: 0.5s; }
+        #social { animation-delay: 0.7s; }
+        #contato { animation-delay: 0.9s; }
+
+
+        /* MEDIA QUERY: Desktop/Tablet */
         @media (min-width: 768px) {
-            /* Esconde o botão de menu no desktop */
-            #menu-toggle {
-                display: none;
-            }
-
-            /* Mostra o menu de navegação no desktop */
-            #main-nav {
-                position: static; /* Volta à posição normal na linha do header */
-                display: block;
-                transform: none;
-                opacity: 1;
-                height: auto;
-            }
-
-            /* Alinha o menu horizontalmente */
-            #main-nav ul {
-                display: flex;
-                gap: 20px; /* Espaçamento entre os links */
-            }
-
-            #main-nav li a {
-                border-bottom: none;
-                padding: 5px 10px;
-                background: none;
-            }
+            #menu-toggle { display: none; }
+            #main-nav { position: static; transform: none; opacity: 1; height: auto; }
+            #main-nav ul { display: flex; gap: 20px; }
+            #main-nav li a { border-bottom: none; padding: 5px 10px; background: none; color: white; }
             
-            header {
-                padding: 15px 30px;
+            #main-nav li a:hover {
+                background: none;
+                color: var(--color-secondary);
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             }
 
+            header { padding: 15px 40px; }
             main {
                 padding: 30px;
-                max-width: 900px; /* Limita a largura no desktop */
+                max-width: 1000px;
                 margin: 0 auto;
                 display: grid;
-                grid-template-columns: repeat(2, 1fr); /* 2 colunas no desktop */
+                grid-template-columns: repeat(3, 1fr);
                 gap: 30px;
             }
             
-            #profile {
-                grid-column: 1 / -1; /* Ocupa a largura total */
-            }
+            #profile { grid-column: 1 / -1; }
+            #jogos { grid-column: 1 / span 1; }
+            #social { grid-column: 2 / span 1; }
+            #contato { grid-column: 3 / span 1; }
         }
     </style>
 </head>
@@ -192,34 +242,33 @@
 
     <main>
         <section id="profile" class="card">
-            <h2>👤 Perfil</h2>
+            <h2><span class="icon">👤</span> Perfil</h2>
             <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
         </section>
 
         <section id="projetos" class="card">
-            <h2>🎨 Projetos</h2>
-            <a href="blender-projects.html" class="link-item">Blender Projects</a>
-            <a href="gimp-projects.html" class="link-item">Gimp Projects</a>
-            <a href="blender-animations.html" class="link-item">Blender Animations</a>
-            <a href="animated-background.html" class="link-item">Animated Background</a>
+            <h2><span class="icon">🎨</span> Projetos</h2>
+            <a href="blender-projects.html" class="link-item"><span class="link-icon">🧊</span> Blender Projects</a>
+            <a href="gimp-projects.html" class="link-item"><span class="link-icon">🖼️</span> Gimp Projects</a>
+            <a href="blender-animations.html" class="link-item"><span class="link-icon">🎬</span> Blender Animations</a>
+            <a href="animated-background.html" class="link-item"><span class="link-icon">✨</span> Animated Background</a>
         </section>
 
         <section id="jogos" class="card">
-            <h2>🎮 Jogos & Música</h2>
-            <a href="HTML-play.html" class="link-item">HTML Games</a>
-            <a href="music_player-visualizer.html" class="link-item">MP3 Player Visualizer</a>
+            <h2><span class="icon">🕹️</span> Jogos & Música</h2>
+            <a href="HTML_games/HTML-play.html" class="link-item"><span class="link-icon">🎮</span> HTML Games</a>
+            <a href="music_player-visualizer.html" class="link-item"><span class="link-icon">🎧</span> MP3 Player Visualizer</a>
         </section>
 
         <section id="social" class="card">
-            <h2>🌐 Redes Sociais</h2>
-            <a href="https://www.facebook.com" class="link-item external">Facebook</a>
-            <a href="https://www.instagram.com" class="link-item external">Instagram</a>
+            <h2><span class="icon">🌐</span> Redes Sociais</h2>
+            <a href="https://www.instagram.com/aabpr0ducoes/" class="link-item external"><span class="link-icon">📸</span> Instagram (@aabpr0ducoes)</a>
         </section>
         
         <section id="contato" class="card">
-            <h2>📧 Contato</h2>
-            <a href="https://wa.me/54984181968" class="link-item external">WhatsApp</a>
-            <a href="mailto:aaugusto444@gmail.com" class="link-item external">Email</a>
+            <h2><span class="icon">📞</span> Contato</h2>
+            <a href="https://wa.me/54984181968" class="link-item external"><span class="link-icon">💬</span> WhatsApp</a>
+            <a href="mailto:aaugusto444@gmail.com" class="link-item external"><span class="link-icon">📧</span> Email</a>
         </section>
     </main>
     
@@ -228,11 +277,22 @@
             const nav = document.getElementById('main-nav');
             const button = this;
             
-            // Alterna a classe que esconde/mostra o menu
             nav.classList.toggle('nav-hidden');
-            
-            // Alterna o texto do botão (☰ para ✕ e vice-versa)
             button.textContent = button.textContent === '☰' ? '✕' : '☰';
+
+            // Garante que o menu esconde ao clicar em um link (no mobile)
+            const navLinks = nav.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.onclick = function() {
+                    // Pequeno delay para permitir o scroll antes de fechar a nav
+                    setTimeout(() => {
+                        if (!nav.classList.contains('nav-hidden')) {
+                            nav.classList.add('nav-hidden');
+                            button.textContent = '☰';
+                        }
+                    }, 300); 
+                };
+            });
         };
     </script>
 </body>
