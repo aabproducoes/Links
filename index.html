@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Links - Blue & Gold</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* ------------------------------------ */
         /* 2. ESTILOS CSS (Tema Blue & Gold) */
         /* ------------------------------------ */
-        
+
         /* Variáveis de Cores (Juice!) */
         :root {
             --color-primary: #007bff; /* Azul vibrante */
@@ -19,20 +20,23 @@
             --color-link-bg: #e9f2ff; /* Azul claro para links */
             --color-link-hover: #0056b3; /* Azul escuro no hover */
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --clock-height: 50px; /* Altura definida para o relógio */
+            --clock-dot-color: #ffd700; /* Dourado para os pontos ativos */
+            --clock-dot-inactive: #007cff33; /* Azul transparente para inativos */
         }
 
-        /* Configurações Globais e Mobile-First */
+        /* Configurações Globais e Nova Fonte */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', 'Arial', sans-serif; /* FONTE ALTERADA */
             margin: 0;
-            padding: 0;
+            padding: 0 0 var(--clock-height) 0; /* Espaço na parte inferior para o relógio fixo */
             background-color: var(--color-background);
             color: var(--color-text);
             line-height: 1.6;
         }
 
         /* ------------------------------------ */
-        /* HEADER E MENU (Corrigido e Interativo) */
+        /* HEADER E MENU (Centralizado) */
         /* ------------------------------------ */
         header {
             background-color: var(--color-primary);
@@ -51,7 +55,20 @@
             font-size: 1.6em;
             font-weight: bold;
             color: var(--color-secondary); /* Logo em Dourado */
+            flex-grow: 1; /* Permite que o logo cresça */
+            text-align: center; /* CENTRALIZA O LOGO NO MOBILE */
         }
+        
+        /* Oculta o logo no mobile/tablet para não competir com o menu centralizado */
+        @media (max-width: 767px) {
+            .logo {
+                position: absolute; /* Ajuste para o menu ficar centralizado */
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 101;
+            }
+        }
+
 
         /* Menu Toggle Button */
         #menu-toggle {
@@ -65,6 +82,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             display: block;
+            z-index: 102; /* Garante que o toggle fique sobre o logo no mobile */
         }
         #menu-toggle:hover {
             background-color: rgba(255, 255, 255, 0.2);
@@ -112,7 +130,7 @@
         }
 
         /* ------------------------------------ */
-        /* CONTEÚDO PRINCIPAL E CARDS */
+        /* CONTEÚDO PRINCIPAL E LINKS */
         /* ------------------------------------ */
         main {
             padding: 20px;
@@ -139,9 +157,6 @@
             margin-bottom: 15px;
         }
 
-        /* ------------------------------------ */
-        /* ESTILO DOS LINKS (Juice!) */
-        /* ------------------------------------ */
         .link-item {
             display: block;
             text-decoration: none;
@@ -150,22 +165,22 @@
             margin: 10px 0;
             background-color: var(--color-link-bg);
             border-radius: 6px;
-            font-weight: bold;
-            transition: all 0.2s ease-out; /* Transição para interatividade */
+            font-weight: 600;
+            transition: all 0.2s ease-out;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid var(--color-primary); /* Barra lateral Azul */
+            border-left: 5px solid var(--color-primary);
         }
 
         .link-item:hover {
-            background-color: #d1e2ff; /* Azul mais intenso no hover */
+            background-color: #d1e2ff;
             color: var(--color-link-hover);
-            transform: scale(1.02); /* Pequeno aumento de escala ('Juice') */
+            transform: scale(1.02);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            border-left: 5px solid var(--color-secondary); /* Barra lateral muda para Dourado */
+            border-left: 5px solid var(--color-secondary);
         }
 
         .link-item:active {
-            transform: scale(0.98); /* Efeito de clique */
+            transform: scale(0.98);
         }
 
         /* ------------------------------------ */
@@ -176,33 +191,44 @@
                 display: none;
             }
 
+            header {
+                padding: 15px 40px;
+            }
+
+            .logo {
+                flex-grow: 0; /* Reset */
+                text-align: left;
+                position: static;
+                transform: none;
+            }
+            
             #main-nav {
                 position: static;
                 transform: none;
                 opacity: 1;
                 height: auto;
+                flex-grow: 1; /* Permite que o nav preencha o espaço central */
             }
 
             #main-nav ul {
                 display: flex;
                 gap: 20px;
+                justify-content: center; /* CENTRALIZA O MENU DE NAVEGAÇÃO NO DESKTOP */
+                margin: 0 auto;
+                max-width: 600px;
             }
 
             #main-nav li a {
                 border-bottom: none;
                 padding: 5px 10px;
                 background: none;
-                color: white; /* Corrigido para ser visível no header */
+                color: white;
             }
             
             #main-nav li a:hover {
                 background: none;
-                color: var(--color-secondary); /* Dourado no hover do desktop */
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Pequeno brilho */
-            }
-
-            header {
-                padding: 15px 40px;
+                color: var(--color-secondary);
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             }
 
             main {
@@ -210,7 +236,7 @@
                 max-width: 1000px;
                 margin: 0 auto;
                 display: grid;
-                grid-template-columns: repeat(3, 1fr); /* 3 colunas no desktop */
+                grid-template-columns: repeat(3, 1fr);
                 gap: 30px;
             }
             
@@ -218,11 +244,74 @@
                 grid-column: 1 / -1; 
             }
             
-            /* Ajuste o layout para que "Jogos" e "Contato" fiquem juntos */
             #jogos { grid-column: 1 / span 1; }
             #social { grid-column: 2 / span 1; }
             #contato { grid-column: 3 / span 1; }
         }
+        
+        /* ------------------------------------ */
+        /* RELÓGIO BINÁRIO (NOVO) */
+        /* ------------------------------------ */
+        #binary-clock {
+            position: fixed; /* Fixa na parte inferior */
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--clock-height); /* 50px de altura */
+            background-color: var(--color-primary); /* Azul */
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 5px;
+            z-index: 1000;
+            font-size: 0.8em; /* Ajusta o tamanho da fonte da label */
+            color: white;
+        }
+
+        .binary-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 1fr;
+        }
+        
+        .binary-column-label {
+             /* Remove padding e margin extras, foca no texto */
+            margin: 0 0 2px 0;
+            font-size: 0.6em; 
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .dot-container {
+            display: flex;
+            gap: 2px;
+            height: 15px; /* Altura fixa para os pontos */
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--clock-dot-inactive);
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--clock-dot-color); /* Dourado */
+            box-shadow: 0 0 5px var(--color-secondary);
+        }
+
+        /* Esconde a coluna do segundo (SS) em telas muito pequenas */
+        @media (max-width: 480px) {
+            #seconds-col {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -271,21 +360,56 @@
         </section>
     </main>
     
+    <div id="binary-clock">
+        <div class="binary-column">
+            <span class="binary-column-label">Hora (HH)</span>
+            <div class="dot-container" id="hh">
+                <div class="dot" data-weight="16"></div>
+                <div class="dot" data-weight="8"></div>
+                <div class="dot" data-weight="4"></div>
+                <div class="dot" data-weight="2"></div>
+                <div class="dot" data-weight="1"></div>
+            </div>
+        </div>
+
+        <div class="binary-column">
+            <span class="binary-column-label">Minuto (MM)</span>
+            <div class="dot-container" id="mm">
+                <div class="dot" data-weight="32"></div>
+                <div class="dot" data-weight="16"></div>
+                <div class="dot" data-weight="8"></div>
+                <div class="dot" data-weight="4"></div>
+                <div class="dot" data-weight="2"></div>
+                <div class="dot" data-weight="1"></div>
+            </div>
+        </div>
+
+        <div class="binary-column" id="seconds-col">
+            <span class="binary-column-label">Segundo (SS)</span>
+            <div class="dot-container" id="ss">
+                <div class="dot" data-weight="32"></div>
+                <div class="dot" data-weight="16"></div>
+                <div class="dot" data-weight="8"></div>
+                <div class="dot" data-weight="4"></div>
+                <div class="dot" data-weight="2"></div>
+                <div class="dot" data-weight="1"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Script de Toggle do Menu (Mantido)
         document.getElementById('menu-toggle').onclick = function() {
             const nav = document.getElementById('main-nav');
             const button = this;
             
-            // Alterna a classe que esconde/mostra o menu
             nav.classList.toggle('nav-hidden');
-            
-            // Alterna o texto do botão (☰ para ✕ e vice-versa)
-            button.textContent = button.textContent === '☰' ? '✕' : '☰';
+            button.textContent = nav.classList.contains('nav-hidden') ? '☰' : '✕';
 
-            // Garante que o menu esconde ao clicar em um link (no mobile)
             const navLinks = nav.querySelectorAll('a');
             navLinks.forEach(link => {
                 link.onclick = function() {
+                    // Verifica se o menu está visível (i.e., nav-hidden não está presente)
                     if (!nav.classList.contains('nav-hidden')) {
                         nav.classList.add('nav-hidden');
                         button.textContent = '☰';
@@ -293,6 +417,41 @@
                 };
             });
         };
+
+        // NOVO SCRIPT PARA O RELÓGIO BINÁRIO
+        function updateBinaryClock() {
+            const now = new Date();
+            let h = now.getHours();
+            let m = now.getMinutes();
+            let s = now.getSeconds();
+
+            // Função para converter um número para sua representação binária e atualizar os pontos
+            function updateColumn(value, columnId) {
+                const dots = document.getElementById(columnId).querySelectorAll('.dot');
+                
+                dots.forEach(dot => {
+                    const weight = parseInt(dot.getAttribute('data-weight'));
+                    
+                    // Verifica se o peso binário está "ativo" no valor
+                    if (value >= weight) {
+                        dot.classList.add('active');
+                        value -= weight;
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+
+            // Atualiza as colunas de hora, minuto e segundo
+            updateColumn(h, 'hh');
+            updateColumn(m, 'mm');
+            updateColumn(s, 'ss');
+        }
+
+        // Atualiza a cada 1 segundo (1000ms)
+        setInterval(updateBinaryClock, 1000);
+        // Chama a função imediatamente para evitar um segundo de atraso ao carregar
+        updateBinaryClock();
     </script>
 </body>
 </html>
