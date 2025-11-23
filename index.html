@@ -7,10 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         /* ------------------------------------ */
-        /* 2. ESTILOS CSS (Tema Blue & Gold) */
+        /* 1. VARIÁVEIS DE COR E TEMA */
         /* ------------------------------------ */
 
-        /* Variáveis de Cores (Juice!) */
+        /* Variáveis Padrão (Light Mode) */
         :root {
             --color-primary: #007bff; /* Azul vibrante */
             --color-secondary: #FFD700; /* Dourado */
@@ -20,23 +20,52 @@
             --color-link-bg: #e9f2ff; /* Azul claro para links */
             --color-link-hover: #0056b3; /* Azul escuro no hover */
             --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --clock-height: 50px; /* Altura definida para o relógio */
-            --clock-dot-color: #ffd700; /* Dourado para os pontos ativos */
-            --clock-dot-inactive: #007cff33; /* Azul transparente para inativos */
+            --clock-height: 50px;
+            --clock-dot-color: #ffd700;
+            --clock-dot-inactive: #007cff33;
         }
 
-        /* Configurações Globais e Nova Fonte */
+        /* Variáveis de Modo Escuro (Dark Mode) */
+        .dark-mode {
+            --color-primary: #3f9bff; /* Azul um pouco mais claro para contraste */
+            --color-secondary: #FFD700; 
+            --color-background: #121212; /* Fundo escuro */
+            --color-text: #e0e0e0; /* Texto claro */
+            --color-card-bg: #1e1e1e; /* Card escuro */
+            --color-link-bg: #2a2a40; /* Link azul escuro */
+            --color-link-hover: #ffffff; /* Hover do link em branco */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.5);
+            --clock-dot-inactive: #e0e0e033;
+        }
+
+        /* Aplicações específicas do Dark Mode */
+        .dark-mode .card h2 {
+            color: var(--color-secondary); /* Títulos em dourado no Dark Mode */
+        }
+        .dark-mode .link-item {
+            border-left-color: var(--color-secondary); /* Barra lateral principal do link em dourado */
+        }
+        .dark-mode .link-item:hover {
+            background-color: #3b3b5c;
+            border-left-color: var(--color-primary); /* No hover a barra lateral muda para o azul claro */
+        }
+
+
+        /* ------------------------------------ */
+        /* 2. CONFIGURAÇÕES GLOBAIS E BODY */
+        /* ------------------------------------ */
         body {
-            font-family: 'Poppins', 'Arial', sans-serif; /* FONTE ALTERADA */
+            font-family: 'Poppins', 'Arial', sans-serif; 
             margin: 0;
             padding: 0 0 var(--clock-height) 0; /* Espaço na parte inferior para o relógio fixo */
             background-color: var(--color-background);
             color: var(--color-text);
             line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s; /* Transição suave para o Dark Mode */
         }
 
         /* ------------------------------------ */
-        /* HEADER E MENU (Centralizado) */
+        /* 3. HEADER E NAVEGAÇÃO (Centralizada) */
         /* ------------------------------------ */
         header {
             background-color: var(--color-primary);
@@ -49,29 +78,25 @@
             top: 0;
             z-index: 100;
             box-shadow: var(--shadow-light);
+            transition: background-color 0.3s;
         }
 
         .logo {
             font-size: 1.6em;
             font-weight: bold;
-            color: var(--color-secondary); /* Logo em Dourado */
-            flex-grow: 1; /* Permite que o logo cresça */
-            text-align: center; /* CENTRALIZA O LOGO NO MOBILE */
+            color: var(--color-secondary); 
+            flex-grow: 1; 
+            text-align: center;
         }
         
-        /* Oculta o logo no mobile/tablet para não competir com o menu centralizado */
-        @media (max-width: 767px) {
-            .logo {
-                position: absolute; /* Ajuste para o menu ficar centralizado */
-                left: 50%;
-                transform: translateX(-50%);
-                z-index: 101;
-            }
+        /* Contêiner para os botões de controle */
+        .header-controls {
+            display: flex;
+            gap: 10px;
         }
 
-
-        /* Menu Toggle Button */
-        #menu-toggle {
+        /* Estilo comum para os botões de controle (Menu Toggle e Dark Mode Toggle) */
+        .control-button {
             background: none;
             border: 2px solid white;
             border-radius: 5px;
@@ -81,14 +106,17 @@
             height: 40px;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: block;
-            z-index: 102; /* Garante que o toggle fique sobre o logo no mobile */
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 102; /* Garante que os botões fiquem sobre o logo no mobile */
         }
-        #menu-toggle:hover {
+        .control-button:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
 
-        /* Menu Interativo (Dropdown) */
+        /* Menu Dropdown (Mobile) */
         #main-nav {
             position: absolute;
             top: 100%; 
@@ -126,11 +154,11 @@
 
         #main-nav li a:hover {
             background-color: #0056b3;
-            color: var(--color-secondary); /* Dourado no hover do menu */
+            color: var(--color-secondary);
         }
 
         /* ------------------------------------ */
-        /* CONTEÚDO PRINCIPAL E LINKS */
+        /* 4. CONTEÚDO PRINCIPAL E CARDS */
         /* ------------------------------------ */
         main {
             padding: 20px;
@@ -144,15 +172,15 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s;
         }
         .card:hover {
-            transform: translateY(-5px); /* Efeito 'Juice' no Card */
+            transform: translateY(-5px); 
         }
 
         .card h2 {
             color: var(--color-primary);
-            border-bottom: 2px solid var(--color-secondary); /* Separador Dourado */
+            border-bottom: 2px solid var(--color-secondary);
             padding-bottom: 8px;
             margin-bottom: 15px;
         }
@@ -166,7 +194,7 @@
             background-color: var(--color-link-bg);
             border-radius: 6px;
             font-weight: 600;
-            transition: all 0.2s ease-out;
+            transition: all 0.2s ease-out, background-color 0.3s, color 0.3s;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             border-left: 5px solid var(--color-primary);
         }
@@ -184,9 +212,71 @@
         }
 
         /* ------------------------------------ */
-        /* MEDIA QUERY: Desktop/Tablet */
+        /* 5. RELÓGIO BINÁRIO (FIXO) */
+        /* ------------------------------------ */
+        #binary-clock {
+            position: fixed; 
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--clock-height); /* Altura: 50px */
+            background-color: var(--color-primary);
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 5px;
+            z-index: 1000;
+            font-size: 0.8em;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .binary-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 1fr;
+        }
+        
+        .binary-column-label {
+            margin: 0 0 2px 0;
+            font-size: 0.6em; 
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        .dot-container {
+            display: flex;
+            gap: 2px;
+            height: 15px;
+        }
+        
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--clock-dot-inactive);
+            transition: background-color 0.2s;
+        }
+
+        .dot.active {
+            background-color: var(--clock-dot-color);
+            box-shadow: 0 0 5px var(--color-secondary);
+        }
+
+
+        /* ------------------------------------ */
+        /* 6. MEDIA QUERY: Desktop/Tablet */
         /* ------------------------------------ */
         @media (min-width: 768px) {
+            
+            /* Ajuste do Header para centralizar a navegação */
+            .header-controls {
+                order: 3; /* Move os controles para a direita */
+            }
             #menu-toggle {
                 display: none;
             }
@@ -196,10 +286,11 @@
             }
 
             .logo {
-                flex-grow: 0; /* Reset */
+                flex-grow: 0;
                 text-align: left;
                 position: static;
                 transform: none;
+                order: 1; /* Logo à esquerda */
             }
             
             #main-nav {
@@ -207,13 +298,14 @@
                 transform: none;
                 opacity: 1;
                 height: auto;
-                flex-grow: 1; /* Permite que o nav preencha o espaço central */
+                flex-grow: 1;
+                order: 2; /* Menu no centro */
             }
 
             #main-nav ul {
                 display: flex;
                 gap: 20px;
-                justify-content: center; /* CENTRALIZA O MENU DE NAVEGAÇÃO NO DESKTOP */
+                justify-content: center; /* CENTRALIZA O MENU DE NAVEGAÇÃO */
                 margin: 0 auto;
                 max-width: 600px;
             }
@@ -231,6 +323,7 @@
                 text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
             }
 
+            /* Layout de Grid para Cards no Desktop */
             main {
                 padding: 30px;
                 max-width: 1000px;
@@ -240,69 +333,10 @@
                 gap: 30px;
             }
             
-            #profile {
-                grid-column: 1 / -1; 
-            }
-            
+            #profile { grid-column: 1 / -1; }
             #jogos { grid-column: 1 / span 1; }
             #social { grid-column: 2 / span 1; }
             #contato { grid-column: 3 / span 1; }
-        }
-        
-        /* ------------------------------------ */
-        /* RELÓGIO BINÁRIO (NOVO) */
-        /* ------------------------------------ */
-        #binary-clock {
-            position: fixed; /* Fixa na parte inferior */
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: var(--clock-height); /* 50px de altura */
-            background-color: var(--color-primary); /* Azul */
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 5px;
-            z-index: 1000;
-            font-size: 0.8em; /* Ajusta o tamanho da fonte da label */
-            color: white;
-        }
-
-        .binary-column {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 1fr;
-        }
-        
-        .binary-column-label {
-             /* Remove padding e margin extras, foca no texto */
-            margin: 0 0 2px 0;
-            font-size: 0.6em; 
-            font-weight: 300;
-            text-transform: uppercase;
-        }
-
-        .dot-container {
-            display: flex;
-            gap: 2px;
-            height: 15px; /* Altura fixa para os pontos */
-        }
-        
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--clock-dot-inactive);
-            transition: background-color 0.2s;
-        }
-
-        .dot.active {
-            background-color: var(--clock-dot-color); /* Dourado */
-            box-shadow: 0 0 5px var(--color-secondary);
         }
 
         /* Esconde a coluna do segundo (SS) em telas muito pequenas */
@@ -311,13 +345,15 @@
                 display: none;
             }
         }
-
     </style>
 </head>
 <body>
     <header>
         <div class="logo">AAB Links</div>
-        <button id="menu-toggle" aria-label="Abrir Menu">☰</button>
+        <div class="header-controls">
+            <button id="theme-toggle" class="control-button" aria-label="Alternar Tema Escuro">🌙</button>
+            <button id="menu-toggle" class="control-button" aria-label="Abrir Menu">☰</button>
+        </div>
         <nav id="main-nav" class="nav-hidden">
             <ul>
                 <li><a href="#projetos">Projetos</a></li>
@@ -398,7 +434,51 @@
     </div>
 
     <script>
-        // Script de Toggle do Menu (Mantido)
+        // ------------------------------------
+        // 1. LÓGICA DO DARK MODE
+        // ------------------------------------
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const storageKey = 'theme-preference';
+
+        function setDark(isDark) {
+            if (isDark) {
+                body.classList.add('dark-mode');
+                themeToggle.textContent = '☀️'; // Sol para voltar ao modo claro
+                localStorage.setItem(storageKey, 'dark');
+            } else {
+                body.classList.remove('dark-mode');
+                themeToggle.textContent = '🌙'; // Lua para ir ao modo escuro
+                localStorage.setItem(storageKey, 'light');
+            }
+        }
+
+        // Inicializa o tema ao carregar a página
+        function initTheme() {
+            const storedTheme = localStorage.getItem(storageKey);
+            
+            if (storedTheme) {
+                // Se houver preferência no Local Storage
+                setDark(storedTheme === 'dark');
+            } else {
+                // Se não houver, usa a preferência do sistema operacional (automático)
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setDark(prefersDark);
+            }
+        }
+
+        // Alterna o tema ao clicar no botão
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.contains('dark-mode');
+            setDark(!isDark);
+        });
+
+        initTheme(); // Chama para configurar o tema
+
+
+        // ------------------------------------
+        // 2. LÓGICA DO MENU
+        // ------------------------------------
         document.getElementById('menu-toggle').onclick = function() {
             const nav = document.getElementById('main-nav');
             const button = this;
@@ -409,48 +489,49 @@
             const navLinks = nav.querySelectorAll('a');
             navLinks.forEach(link => {
                 link.onclick = function() {
-                    // Verifica se o menu está visível (i.e., nav-hidden não está presente)
                     if (!nav.classList.contains('nav-hidden')) {
                         nav.classList.add('nav-hidden');
-                        button.textContent = '☰';
+                        document.getElementById('menu-toggle').textContent = '☰';
                     }
                 };
             });
         };
 
-        // NOVO SCRIPT PARA O RELÓGIO BINÁRIO
+        // ------------------------------------
+        // 3. LÓGICA DO RELÓGIO BINÁRIO
+        // ------------------------------------
         function updateBinaryClock() {
             const now = new Date();
             let h = now.getHours();
             let m = now.getMinutes();
             let s = now.getSeconds();
 
-            // Função para converter um número para sua representação binária e atualizar os pontos
             function updateColumn(value, columnId) {
                 const dots = document.getElementById(columnId).querySelectorAll('.dot');
                 
-                dots.forEach(dot => {
-                    const weight = parseInt(dot.getAttribute('data-weight'));
-                    
-                    // Verifica se o peso binário está "ativo" no valor
-                    if (value >= weight) {
+                // Mapeia os pesos binários (ex: [16, 8, 4, 2, 1] para HH)
+                const weights = Array.from(dots).map(d => parseInt(d.getAttribute('data-weight'))).sort((a, b) => b - a);
+
+                let tempValue = value;
+                
+                dots.forEach((dot, index) => {
+                    const weight = weights[index];
+
+                    if (tempValue >= weight) {
                         dot.classList.add('active');
-                        value -= weight;
+                        tempValue -= weight;
                     } else {
                         dot.classList.remove('active');
                     }
                 });
             }
 
-            // Atualiza as colunas de hora, minuto e segundo
             updateColumn(h, 'hh');
             updateColumn(m, 'mm');
             updateColumn(s, 'ss');
         }
 
-        // Atualiza a cada 1 segundo (1000ms)
         setInterval(updateBinaryClock, 1000);
-        // Chama a função imediatamente para evitar um segundo de atraso ao carregar
         updateBinaryClock();
     </script>
 </body>
