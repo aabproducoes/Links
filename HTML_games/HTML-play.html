@@ -1,298 +1,169 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Links - Blue & Gold</title>
-    <style>
-        /* ------------------------------------ */
-        /* 2. ESTILOS CSS (Tema Blue & Gold) */
-        /* ------------------------------------ */
-        
-        /* Variáveis de Cores (Juice!) */
-        :root {
-            --color-primary: #007bff; /* Azul vibrante */
-            --color-secondary: #FFD700; /* Dourado */
-            --color-background: #f4f7fa; /* Fundo muito claro */
-            --color-text: #212529; /* Texto escuro */
-            --color-card-bg: white;
-            --color-link-bg: #e9f2ff; /* Azul claro para links */
-            --color-link-hover: #0056b3; /* Azul escuro no hover */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+ <meta charset="UTF-8">
+  <title>Gaming Skills Showcase</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: #1d1f21;
+      color: #c5c8c6;
+    }
 
-        /* Configurações Globais e Mobile-First */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--color-background);
-            color: var(--color-text);
-            line-height: 1.6;
-        }
+    header {
+      text-align: center;
+      padding: 2rem;
+      background: #282a2e;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    }
 
-        /* ------------------------------------ */
-        /* HEADER E MENU (Corrigido e Interativo) */
-        /* ------------------------------------ */
-        header {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-light);
-        }
+    header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      letter-spacing: 0.1rem;
+      color: #f92672;
+    }
+    /* Menu Styles */
 
-        .logo {
-            font-size: 1.6em;
-            font-weight: bold;
-            color: var(--color-secondary); /* Logo em Dourado */
-        }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 1rem;
+    }
 
-        /* Menu Toggle Button */
-        #menu-toggle {
-            background: none;
-            border: 2px solid white;
-            border-radius: 5px;
-            color: white;
-            font-size: 1.4em;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: block;
-        }
-        #menu-toggle:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
+    .menu a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      text-decoration: none;
+@@ -42,64 +42,92 @@
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+      cursor: pointer;
+    }
 
-        /* Menu Interativo (Dropdown) */
-        #main-nav {
-            position: absolute;
-            top: 100%; 
-            left: 0;
-            right: 0;
-            background-color: #0069d9;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease-in-out; /* Efeito 'Juice' */
-            transform-origin: top;
-            transform: scaleY(1);
-            opacity: 1;
-        }
+    .menu a:hover {
+      background: #a6e22e;
+      color: #373b41;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 12px #a6e22e, 0 0 24px #a6e22e;
+    }
+    /* Staggered animation delays for each menu item */
+    .menu a:nth-child(1)  { animation-delay: 0.1s; }
+    .menu a:nth-child(2)  { animation-delay: 0.2s; }
+    .menu a:nth-child(3)  { animation-delay: 0.3s; }
+    .menu a:nth-child(4)  { animation-delay: 0.4s; }
+    .menu a:nth-child(5)  { animation-delay: 0.5s; }
+    .menu a:nth-child(6)  { animation-delay: 0.6s; }
+    .menu a:nth-child(7)  { animation-delay: 0.7s; }
+    .menu a:nth-child(8)  { animation-delay: 0.8s; }
+    .menu a:nth-child(9)  { animation-delay: 0.9s; }
+    .menu a:nth-child(10) { animation-delay: 1s; }
+    .menu a:nth-child(11) { animation-delay: 1.1s; }
+    .menu a:nth-child(12) { animation-delay: 1.2s; }
+    .menu a:nth-child(13) { animation-delay: 1.3s; }
+    .menu a:nth-child(14) { animation-delay: 1.4s; }
+    .menu a:nth-child(15) { animation-delay: 1.5s; }
+    
 
-        .nav-hidden {
-            transform: scaleY(0); 
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-        }
+    .menu a:nth-child(n) { animation-delay: calc(0.1s * var(--i)); }
 
-        #main-nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            text-align: center;
-        }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    
+    /* Responsive Design */
 
-        #main-nav li a {
-            display: block;
-            padding: 15px;
-            text-decoration: none;
-            color: white;
-            border-bottom: 1px solid #0056b3;
-            transition: background-color 0.2s, color 0.2s;
-        }
+    #game-frame {
+      display: block;
+      width: 90%;
+      height: 600px;
+      margin: 2rem auto;
+      border: 3px solid #444;
+      border-radius: 10px;
+      background: #000;
+    }
 
-        #main-nav li a:hover {
-            background-color: #0056b3;
-            color: var(--color-secondary); /* Dourado no hover do menu */
-        }
+    @media (max-width: 600px) {
+      .menu {
+        flex-direction: column;
+        align-items: center;
+      }
 
-        /* ------------------------------------ */
-        /* CONTEÚDO PRINCIPAL E CARDS */
-        /* ------------------------------------ */
-        main {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+      .menu a {
+        width: 100%;
+        width: 90%;
+        text-align: center;
+      }
 
-        .card {
-            background-color: var(--color-card-bg);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px); /* Efeito 'Juice' no Card */
-        }
-
-        .card h2 {
-            color: var(--color-primary);
-            border-bottom: 2px solid var(--color-secondary); /* Separador Dourado */
-            padding-bottom: 8px;
-            margin-bottom: 15px;
-        }
-
-        /* ------------------------------------ */
-        /* ESTILO DOS LINKS (Juice!) */
-        /* ------------------------------------ */
-        .link-item {
-            display: block;
-            text-decoration: none;
-            color: var(--color-text);
-            padding: 12px 18px;
-            margin: 10px 0;
-            background-color: var(--color-link-bg);
-            border-radius: 6px;
-            font-weight: bold;
-            transition: all 0.2s ease-out; /* Transição para interatividade */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid var(--color-primary); /* Barra lateral Azul */
-        }
-
-        .link-item:hover {
-            background-color: #d1e2ff; /* Azul mais intenso no hover */
-            color: var(--color-link-hover);
-            transform: scale(1.02); /* Pequeno aumento de escala ('Juice') */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            border-left: 5px solid var(--color-secondary); /* Barra lateral muda para Dourado */
-        }
-
-        .link-item:active {
-            transform: scale(0.98); /* Efeito de clique */
-        }
-
-        /* ------------------------------------ */
-        /* MEDIA QUERY: Desktop/Tablet */
-        /* ------------------------------------ */
-        @media (min-width: 768px) {
-            #menu-toggle {
-                display: none;
-            }
-
-            #main-nav {
-                position: static;
-                transform: none;
-                opacity: 1;
-                height: auto;
-            }
-
-            #main-nav ul {
-                display: flex;
-                gap: 20px;
-            }
-
-            #main-nav li a {
-                border-bottom: none;
-                padding: 5px 10px;
-                background: none;
-                color: white; /* Corrigido para ser visível no header */
-            }
-            
-            #main-nav li a:hover {
-                background: none;
-                color: var(--color-secondary); /* Dourado no hover do desktop */
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* Pequeno brilho */
-            }
-
-            header {
-                padding: 15px 40px;
-            }
-
-            main {
-                padding: 30px;
-                max-width: 1000px;
-                margin: 0 auto;
-                display: grid;
-                grid-template-columns: repeat(3, 1fr); /* 3 colunas no desktop */
-                gap: 30px;
-            }
-            
-            #profile {
-                grid-column: 1 / -1; 
-            }
-            
-            /* Ajuste o layout para que "Jogos" e "Contato" fiquem juntos */
-            #jogos { grid-column: 1 / span 1; }
-            #social { grid-column: 2 / span 1; }
-            #contato { grid-column: 3 / span 1; }
-        }
-    </style>
+      #game-frame {
+        height: 400px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <div class="logo">AAB Links</div>
-        <button id="menu-toggle" aria-label="Abrir Menu">☰</button>
-        <nav id="main-nav" class="nav-hidden">
-            <ul>
-                <li><a href="#projetos">Projetos</a></li>
-                <li><a href="#jogos">Jogos/Visualizers</a></li>
-                <li><a href="#social">Redes Sociais</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1>Gaming Skills Showcase</h1>
+  </header>
+  <nav class="menu">
+    <!-- Each menu item is generated from a URL. The button label is the file name after the last "\" -->
+    <a href="https://aabproducoes.github.io\Links\HTML_games\BgAnimation1.html">BgAnimation1.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\AdvancedClickerIdleGame\AdvancedClickerIdleGame1.0.html">AdvancedClickerIdleGame1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\BKPK_FGT_game\BKPK_FGT_game1.0.html">BKPK_FGT_game1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\CupWars\Cupwars_01.html">Cupwars_01.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\DiceRollUnlocker\DiceRollUnlocker1.0.html">DiceRollUnlocker1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\HEX_city\Hex_city1.0.html">Hex_city1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IDLE-FRUITS\IDLEfruits1-0.html">IDLEfruits1-0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IDLE-FRUITS\IDLEfruits1-1.html">IDLEfruits1-1.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IDLE-FRUITS\IDLEfruits1-2.html">IDLEfruits1-2.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\IdleRPGBossBattle\IdleRPGBossBattle1.0.html">IdleRPGBossBattle1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\Match3\match31.0.html">match31.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\PatternNumberGenerator\PatternNumberGenerator1.0.html">PatternNumberGenerator1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\PatternNumberGenerator\PatternNumberGenerator2.0.html">PatternNumberGenerator2.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\PolygonTowerDefense\PolygonTowerDefense1.0.html">PolygonTowerDefense1.0.html</a>
+    <a href="https://aabproducoes.github.io\Links\HTML_games\TowerDefense_AI-Invasion\TowerDefense_AI-Invasion1.0.html">TowerDefense_AI-Invasion1.0.html</a>
 
-    <main>
-        <section id="profile" class="card">
-            <h2>👤 Perfil</h2>
-            <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
-        </section>
+  <nav class="menu" id="menu">
+    <!-- These links will trigger iframe content load -->
+  </nav>
 
-        <section id="projetos" class="card">
-            <h2>🎨 Projetos</h2>
-            <a href="blender-projects.html" class="link-item">Blender Projects</a>
-            <a href="gimp-projects.html" class="link-item">Gimp Projects</a>
-            <a href="blender-animations.html" class="link-item">Blender Animations</a>
-            <a href="animated-background.html" class="link-item">Animated Background</a>
-        </section>
+  <!-- Iframe container for rendering games below -->
+  <iframe id="game-frame" src="" frameborder="0"></iframe>
 
-        <section id="jogos" class="card">
-            <h2>🎮 Jogos & Música</h2>
-            <a href="HTML_games/HTML-play.html" class="link-item">HTML Games</a>
-            <a href="music_player-visualizer.html" class="link-item">MP3 Player Visualizer</a>
-        </section>
+  <script>
+    const games = [
+      "BgAnimation1.html",
+      "AdvancedClickerIdleGame/AdvancedClickerIdleGame1.0.html",
+      "BKPK_FGT_game/BKPK_FGT_game1.0.html",
+      "CupWars/Cupwars_01.html",
+      "DiceRollUnlocker/DiceRollUnlocker1.0.html",
+      "HEX_city/Hex_city1.0.html",
+      "IDLE-FRUITS/IDLEfruits1-0.html",
+      "IDLE-FRUITS/IDLEfruits1-1.html",
+      "IDLE-FRUITS/IDLEfruits1-2.html",
+      "IdleRPGBossBattle/IdleRPGBossBattle1.0.html",
+      "Match3/match31.0.html",
+      "PatternNumberGenerator/PatternNumberGenerator1.0.html",
+      "PatternNumberGenerator/PatternNumberGenerator2.0.html",
+      "PolygonTowerDefense/PolygonTowerDefense1.0.html",
+      "TowerDefense_AI-Invasion/TowerDefense_AI-Invasion1.0.html"
+    ];
 
-        <section id="social" class="card">
-            <h2>🌐 Redes Sociais</h2>
-            <a href="https://www.instagram.com/aabpr0ducoes/" class="link-item external">Instagram (@aabpr0ducoes)</a>
-        </section>
-        
-        <section id="contato" class="card">
-            <h2>📧 Contato</h2>
-            <a href="https://wa.me/54984181968" class="link-item external">WhatsApp</a>
-            <a href="mailto:aaugusto444@gmail.com" class="link-item external">Email</a>
-        </section>
-    </main>
-    
-    <script>
-        document.getElementById('menu-toggle').onclick = function() {
-            const nav = document.getElementById('main-nav');
-            const button = this;
-            
-            // Alterna a classe que esconde/mostra o menu
-            nav.classList.toggle('nav-hidden');
-            
-            // Alterna o texto do botão (☰ para ✕ e vice-versa)
-            button.textContent = button.textContent === '☰' ? '✕' : '☰'; 
+    const menu = document.getElementById("menu");
+    const iframe = document.getElementById("game-frame");
 
-            // Garante que o menu esconde ao clicar em um link (no mobile)
-            const navLinks = nav.querySelectorAll('a');
-            navLinks.forEach(link => {
-                link.onclick = function() {
-                    if (!nav.classList.contains('nav-hidden')) {
-                        nav.classList.add('nav-hidden');
-                        button.textContent = '☰';
-                    }
-                };
-            });
-        };
-    </script>
+    games.forEach((game, i) => {
+      const a = document.createElement("a");
+      a.textContent = game.split("/").pop(); // Show only filename
+      a.style.setProperty("--i", i + 1); // for staggered animation delay
+      a.addEventListener("click", () => {
+        iframe.src = `https://aabproducoes.github.io/Links/HTML_games/${game}`;
+      });
+      menu.appendChild(a);
+    });
+  </script>
 </body>
 </html>
