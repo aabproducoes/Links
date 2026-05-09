@@ -3,34 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAB Links - Living 3D</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>AAB Links - Neon Glass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #00c8ff;
-            --secondary: #ffd166;
-            --purple: #8a5cff;
+            --bg-1: #07111f;
+            --bg-2: #102a54;
+            --bg-3: #1e0645;
+            --text: #ecf7ff;
+            --muted: #a9bfd3;
+            --primary: #00d9ff;
+            --secondary: #ffd86b;
             --pink: #ff4fd8;
-            --bg: #050912;
-            --text: #f1fbff;
-            --muted: #9fb6c9;
-            --glass: rgba(10, 22, 42, 0.62);
-            --glass-strong: rgba(8, 18, 34, 0.82);
-            --border: rgba(255, 255, 255, 0.16);
-            --shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
-            --clock-height: 58px;
-            --mx: 0;
-            --my: 0;
+            --card: rgba(255, 255, 255, 0.10);
+            --card-border: rgba(255, 255, 255, 0.22);
+            --link-bg: rgba(0, 217, 255, 0.10);
+            --link-hover: rgba(255, 216, 107, 0.18);
+            --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+            --clock-height: 62px;
+            --clock-dot-active: #ffd86b;
+            --clock-dot-inactive: rgba(255, 255, 255, 0.18);
         }
 
         .light-mode {
-            --bg: #eef7ff;
-            --text: #071321;
-            --muted: #53697d;
-            --glass: rgba(255, 255, 255, 0.66);
-            --glass-strong: rgba(255, 255, 255, 0.84);
-            --border: rgba(0, 55, 120, 0.14);
-            --shadow: 0 24px 70px rgba(0, 90, 180, 0.16);
+            --bg-1: #eaf7ff;
+            --bg-2: #d7efff;
+            --bg-3: #fff3c4;
+            --text: #102033;
+            --muted: #496173;
+            --primary: #0077ff;
+            --secondary: #ffb700;
+            --pink: #d92fc4;
+            --card: rgba(255, 255, 255, 0.62);
+            --card-border: rgba(0, 119, 255, 0.22);
+            --link-bg: rgba(0, 119, 255, 0.08);
+            --link-hover: rgba(255, 183, 0, 0.20);
+            --shadow: 0 22px 70px rgba(30, 85, 140, 0.18);
+            --clock-dot-inactive: rgba(0, 119, 255, 0.20);
         }
 
         * {
@@ -45,165 +54,80 @@
             margin: 0;
             min-height: 100vh;
             padding-bottom: var(--clock-height);
-            overflow-x: hidden;
             font-family: 'Poppins', Arial, sans-serif;
             color: var(--text);
             background:
-                radial-gradient(circle at calc(50% + var(--mx) * 14px) calc(20% + var(--my) * 10px), rgba(0, 200, 255, 0.36), transparent 28%),
-                radial-gradient(circle at calc(82% - var(--mx) * 18px) calc(32% - var(--my) * 12px), rgba(138, 92, 255, 0.3), transparent 32%),
-                radial-gradient(circle at calc(25% + var(--mx) * 22px) calc(82% - var(--my) * 12px), rgba(255, 79, 216, 0.18), transparent 28%),
-                var(--bg);
-            perspective: 1200px;
+                radial-gradient(circle at 15% 15%, rgba(0, 217, 255, 0.32), transparent 28%),
+                radial-gradient(circle at 85% 10%, rgba(255, 79, 216, 0.25), transparent 28%),
+                radial-gradient(circle at 50% 90%, rgba(255, 216, 107, 0.18), transparent 32%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
+            overflow-x: hidden;
         }
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            z-index: -5;
             pointer-events: none;
             background-image:
-                linear-gradient(rgba(255,255,255,0.038) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.038) 1px, transparent 1px);
+                linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
             background-size: 52px 52px;
-            transform: translate3d(calc(var(--mx) * -14px), calc(var(--my) * -14px), 0) scale(1.08);
-            mask-image: linear-gradient(to bottom, black, transparent 82%);
+            mask-image: radial-gradient(circle at center, black, transparent 78%);
+            opacity: 0.55;
+            animation: gridMove 18s linear infinite;
         }
 
         body::after {
             content: "";
             position: fixed;
-            inset: -30%;
-            z-index: -6;
+            width: 420px;
+            height: 420px;
+            right: -120px;
+            bottom: 40px;
             pointer-events: none;
-            background: conic-gradient(from 0deg, transparent, rgba(0,200,255,0.18), transparent, rgba(255,209,102,0.12), transparent, rgba(255,79,216,0.14), transparent);
-            animation: cosmicSpin 28s linear infinite;
-            filter: blur(20px);
+            background: radial-gradient(circle, rgba(0,217,255,0.22), transparent 65%);
+            filter: blur(8px);
+            animation: floatOrb 8s ease-in-out infinite alternate;
         }
 
-        @keyframes cosmicSpin {
-            from { transform: rotate(0deg) scale(1.2); }
-            to { transform: rotate(360deg) scale(1.2); }
+        @keyframes gridMove {
+            from { transform: translateY(0); }
+            to { transform: translateY(52px); }
         }
-
-        .scene {
-            position: fixed;
-            inset: 0;
-            z-index: -2;
-            pointer-events: none;
-            overflow: hidden;
-            perspective: 1000px;
-        }
-
-        #particle-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -3;
-            pointer-events: none;
-            opacity: 0.95;
-            mix-blend-mode: screen;
-        }
-
-        .light-mode #particle-canvas {
-            opacity: 0.65;
-            mix-blend-mode: multiply;
-        }
-
-        .orb, .geo {
-            position: absolute;
-            transform-style: preserve-3d;
-            will-change: transform;
-        }
-
-        .orb {
-            border-radius: 50%;
-            filter: blur(var(--blur, 0px));
-            opacity: var(--opacity, 0.75);
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), var(--color), transparent 68%);
-            box-shadow: 0 0 60px var(--color);
-            animation: floatOrb var(--speed) ease-in-out infinite alternate;
-        }
-
-        .orb.one { width: 190px; height: 190px; left: 5%; top: 16%; --color: rgba(0,200,255,0.55); --speed: 8s; --blur: 1px; }
-        .orb.two { width: 120px; height: 120px; right: 9%; top: 18%; --color: rgba(255,209,102,0.5); --speed: 10s; --blur: 2px; }
-        .orb.three { width: 260px; height: 260px; left: 68%; top: 68%; --color: rgba(138,92,255,0.45); --speed: 12s; --blur: 5px; --opacity: 0.45; }
 
         @keyframes floatOrb {
-            from { transform: translate3d(calc(var(--mx) * 20px), calc(var(--my) * 18px), -80px) rotate(0deg); }
-            to { transform: translate3d(calc(var(--mx) * -30px), calc(var(--my) * -24px - 28px), 80px) rotate(12deg); }
-        }
-
-        .geo {
-            width: var(--size);
-            height: var(--size);
-            border: 1px solid rgba(255,255,255,0.22);
-            background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(255,255,255,0.02), rgba(255,79,216,0.1));
-            backdrop-filter: blur(4px);
-            box-shadow: inset 0 0 24px rgba(255,255,255,0.04), 0 0 30px rgba(0,200,255,0.08);
-            animation: driftGeo var(--speed) ease-in-out infinite alternate;
-            filter: blur(var(--blur, 0));
-            opacity: var(--opacity, 0.75);
-        }
-
-        .geo.triangle {
-            clip-path: polygon(50% 0, 100% 100%, 0 100%);
-        }
-
-        .geo.hex {
-            clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
-        }
-
-        .geo.g1 { --size: 90px; --speed: 9s; left: 14%; top: 64%; }
-        .geo.g2 { --size: 130px; --speed: 12s; right: 18%; top: 44%; --blur: 1px; }
-        .geo.g3 { --size: 70px; --speed: 7s; left: 42%; top: 20%; --opacity: 0.55; }
-        .geo.g4 { --size: 160px; --speed: 14s; left: 78%; top: 10%; --blur: 2px; --opacity: 0.42; }
-        .geo.g5 { --size: 110px; --speed: 11s; left: 8%; top: 36%; --opacity: 0.48; }
-
-        @keyframes driftGeo {
-            from { transform: translate3d(calc(var(--mx) * -35px), calc(var(--my) * -22px), -120px) rotateX(45deg) rotateY(10deg) rotateZ(0deg); }
-            to { transform: translate3d(calc(var(--mx) * 36px), calc(var(--my) * 24px - 34px), 80px) rotateX(58deg) rotateY(45deg) rotateZ(90deg); }
+            from { transform: translate(-20px, 0) scale(1); }
+            to { transform: translate(-70px, -90px) scale(1.18); }
         }
 
         header {
             position: sticky;
             top: 0;
-            z-index: 50;
+            z-index: 100;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 16px 22px;
-            background: var(--glass-strong);
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-            transform: translateZ(80px);
+            gap: 18px;
+            padding: 18px 22px;
+            border-bottom: 1px solid var(--card-border);
+            background: rgba(5, 12, 26, 0.62);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 8px 34px rgba(0,0,0,0.22);
+        }
+
+        .light-mode header {
+            background: rgba(255, 255, 255, 0.62);
         }
 
         .logo {
-            flex: 1;
-            text-align: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2.8rem, 8vw, 6rem);
-            font-weight: 800;
-            line-height: 0.9;
-            letter-spacing: -0.03em;
-            color: var(--text);
-            text-shadow: 0 0 40px rgba(0, 200, 255, 0.18);
-        }
-
-        .logo::after {
-            content: "DIGITAL CREATIVE PORTAL";
-            display: block;
-            margin-top: 14px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.14em;
-            font-weight: 600;
-            letter-spacing: 0.55em;
-            color: var(--muted);
-            text-transform: uppercase;
+            font-size: clamp(1.35rem, 3vw, 2rem);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--secondary);
+            text-shadow: 0 0 16px rgba(255, 216, 107, 0.7), 0 0 28px rgba(0, 217, 255, 0.25);
+            white-space: nowrap;
         }
 
         .header-controls {
@@ -215,21 +139,20 @@
         .control-button {
             width: 44px;
             height: 44px;
-            border: 1px solid var(--border);
-            border-radius: 15px;
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
             color: var(--text);
-            background: rgba(255,255,255,0.08);
             cursor: pointer;
             font-size: 1.25rem;
-            display: grid;
-            place-items: center;
-            transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+            background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+            box-shadow: 0 0 22px rgba(0, 217, 255, 0.15);
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
         }
 
         .control-button:hover {
-            transform: translateY(-3px) translateZ(20px) scale(1.06);
-            background: rgba(0,200,255,0.18);
-            box-shadow: 0 0 26px rgba(0,200,255,0.25);
+            transform: translateY(-2px) scale(1.04);
+            border-color: var(--primary);
+            box-shadow: 0 0 24px rgba(0, 217, 255, 0.42);
         }
 
         #main-nav {
@@ -237,238 +160,153 @@
             top: 100%;
             left: 14px;
             right: 14px;
-            overflow: hidden;
-            border: 1px solid var(--border);
+            padding: 12px;
+            background: rgba(6, 13, 30, 0.86);
+            border: 1px solid var(--card-border);
             border-radius: 0 0 24px 24px;
-            background: var(--glass-strong);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(18px);
             transform-origin: top;
-            transform: scaleY(1);
-            opacity: 1;
             transition: transform 0.28s ease, opacity 0.28s ease;
-            box-shadow: var(--shadow);
+        }
+
+        .light-mode #main-nav {
+            background: rgba(255, 255, 255, 0.82);
         }
 
         .nav-hidden {
-            transform: scaleY(0) !important;
-            opacity: 0 !important;
-            height: 0;
+            transform: scaleY(0.75) translateY(-10px);
+            opacity: 0;
+            pointer-events: none;
         }
 
         #main-nav ul {
             list-style: none;
+            padding: 0;
             margin: 0;
-            padding: 12px;
-            text-align: center;
+            display: grid;
+            gap: 8px;
         }
 
         #main-nav a {
             display: block;
-            padding: 14px 16px;
             color: var(--text);
             text-decoration: none;
             font-weight: 700;
-            border-radius: 15px;
-            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.06);
+            transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
         }
 
         #main-nav a:hover {
             color: var(--secondary);
-            background: rgba(0,200,255,0.13);
-            transform: translateX(6px);
-        }
-
-        section {
-            scroll-margin-top: 120px;
+            background: rgba(0, 217, 255, 0.14);
+            transform: translateX(4px);
         }
 
         main {
-            width: min(1180px, calc(100% - 48px));
+            width: min(1120px, calc(100% - 32px));
             margin: 0 auto;
-            padding: 90px 0 110px;
+            padding: 34px 0;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 38px;
-            transform-style: preserve-3d;
-            transform: rotateX(calc(var(--my) * -0.9deg)) rotateY(calc(var(--mx) * 0.9deg));
-            transition: transform 0.7s cubic-bezier(.16,1,.3,1);
-        }
-
-        main::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            z-index: -4;
-            pointer-events: none;
-            background:
-                repeating-linear-gradient(135deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 18px),
-                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06), transparent 18%),
-                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.045), transparent 22%);
-            opacity: 0.65;
-            animation: patternFloat 18s ease-in-out infinite alternate;
-        }
-
-        @keyframes patternFloat {
-            from { transform: translate3d(-18px, -12px, 0) scale(1.04); }
-            to { transform: translate3d(18px, 14px, 0) scale(1.08); }
+            gap: 22px;
         }
 
         .card {
             position: relative;
-            min-height: 250px;
             overflow: hidden;
-            padding: clamp(34px, 5vw, 64px);
-            border: 1px solid rgba(255,255,255,0.14);
-            border-radius: 42px;
-            background:
-                linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.035)),
-                radial-gradient(circle at 10% 0%, rgba(255,255,255,0.12), transparent 28%);
-            backdrop-filter: blur(28px) saturate(170%);
-            box-shadow:
-                0 36px 100px rgba(0,0,0,0.44),
-                inset 0 1px 0 rgba(255,255,255,0.14);
-            transform-style: preserve-3d;
-            transition:
-                transform 0.7s cubic-bezier(.16,1,.3,1),
-                border-color 0.45s ease,
-                box-shadow 0.45s ease,
-                background 0.45s ease,
-                filter 0.45s ease;
-            will-change: transform;
+            padding: 24px;
+            border-radius: 28px;
+            background: linear-gradient(135deg, var(--card), rgba(255,255,255,0.045));
+            border: 1px solid var(--card-border);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(18px);
+            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
         }
 
         .card::before {
             content: "";
             position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(135deg, rgba(255,255,255,0.18), transparent 34%),
-                radial-gradient(circle at calc(50% + var(--mx) * 35px) calc(50% + var(--my) * 35px), rgba(0,200,255,0.2), transparent 45%);
+            inset: -2px;
             pointer-events: none;
-        }
-
-        .card::after {
-            content: "";
-            position: absolute;
-            width: 180px;
-            height: 180px;
-            right: -70px;
-            top: -70px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,209,102,0.24), transparent 66%);
-            transform: translateZ(-60px);
-            pointer-events: none;
+            background: linear-gradient(120deg, transparent 15%, rgba(0,217,255,0.22), transparent 40%, rgba(255,216,107,0.16), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.28s ease;
         }
 
         .card:hover {
-            transform: translateY(-16px) scale(1.018);
-            border-color: rgba(255,255,255,0.28);
-            filter: brightness(1.06);
-            background:
-                linear-gradient(145deg, rgba(255,255,255,0.16), rgba(255,255,255,0.055)),
-                radial-gradient(circle at 10% 0%, rgba(0,200,255,0.16), transparent 30%);
-            box-shadow:
-                0 58px 140px rgba(0,0,0,0.52),
-                0 0 54px rgba(0,200,255,0.13),
-                inset 0 1px 0 rgba(255,255,255,0.2);
+            transform: translateY(-8px);
+            border-color: rgba(0, 217, 255, 0.55);
+            box-shadow: 0 30px 90px rgba(0,0,0,0.42), 0 0 30px rgba(0, 217, 255, 0.14);
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card > * {
             position: relative;
             z-index: 1;
-            transform: translateZ(38px);
         }
 
         .card h2 {
-            margin: 0 0 26px;
+            margin: 0 0 16px;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(2rem, 4vw, 4.5rem);
-            line-height: 0.92;
-            letter-spacing: -0.06em;
-            color: var(--text);
-            text-shadow: 0 0 32px rgba(255,255,255,0.1);
-        }
-
-        .card h2::after {
-            content: "";
-            display: block;
-            width: 70px;
-            height: 3px;
-            margin-top: 10px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--pink));
-            box-shadow: 0 0 18px rgba(0,200,255,0.45);
-        }
-
-        .card p {
-            margin: 0;
-            max-width: 760px;
-            font-size: clamp(1rem, 1.3vw, 1.15rem);
-            line-height: 1.9;
-            color: var(--muted);
-        }
-
-        .link-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin: 16px 0;
-            padding: 22px 26px;
-            color: var(--text);
-            text-decoration: none;
-            font-size: clamp(1.05rem, 1.4vw, 1.22rem);
-            font-weight: 700;
-            border-radius: 26px;
-            border: 1px solid rgba(255,255,255,0.12);
-            background:
-                linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.035)),
-                radial-gradient(circle at left, rgba(0,200,255,0.11), transparent 45%);
-            transition:
-                transform 0.55s cubic-bezier(.16,1,.3,1),
-                background 0.38s ease,
-                border-color 0.38s ease,
-                box-shadow 0.38s ease,
-                letter-spacing 0.38s ease;
-            transform-style: preserve-3d;
-        }
-
-        .link-item::after {
-            content: "↗";
-            color: var(--secondary);
-            opacity: 0.8;
-            transform: translateZ(24px);
-            transition: transform 0.22s ease;
-        }
-
-        .link-item:hover {
-            letter-spacing: 0.02em;
-            background:
-                linear-gradient(135deg, rgba(0,200,255,0.2), rgba(138,92,255,0.14), rgba(255,255,255,0.1)),
-                radial-gradient(circle at right, rgba(255,209,102,0.14), transparent 45%);
-            border-color: rgba(255,255,255,0.28);
-            transform: translateY(-8px) translateX(4px) scale(1.025);
-            box-shadow:
-                0 28px 60px rgba(0,0,0,0.32),
-                0 0 32px rgba(0,200,255,0.14);
-        }
-
-        .link-item:hover::after {
-            transform: translate3d(4px, -4px, 34px);
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            text-shadow: 0 0 16px rgba(0, 217, 255, 0.45);
         }
 
         #profile {
-            min-height: 230px;
+            min-height: 190px;
             display: flex;
             flex-direction: column;
             justify-content: center;
         }
 
         #profile h2 {
-            font-size: clamp(2.4rem, 6vw, 5rem);
-            line-height: 0.9;
-            margin-bottom: 28px;
+            font-size: clamp(1.6rem, 4vw, 2.55rem);
+        }
+
+        #profile p {
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 12px 0;
+            padding: 14px 16px;
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.13);
+            border-radius: 18px;
+            background: var(--link-bg);
+            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .link-item::after {
+            content: "↗";
+            color: var(--secondary);
+            opacity: 0.72;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        .link-item:hover {
+            transform: translateX(7px) scale(1.015);
+            background: var(--link-hover);
+            border-color: var(--secondary);
+            box-shadow: 0 0 22px rgba(255, 216, 107, 0.18);
+        }
+
+        .link-item:hover::after {
+            transform: translate(3px, -3px);
+            opacity: 1;
         }
 
         #binary-clock {
@@ -482,29 +320,29 @@
             align-items: center;
             justify-content: space-around;
             padding: 0 10px;
-            color: var(--text);
-            background: var(--glass-strong);
-            border-top: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 -12px 42px rgba(0,0,0,0.28);
+            background: rgba(4, 10, 24, 0.78);
+            border-top: 1px solid var(--card-border);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 -10px 36px rgba(0,0,0,0.26);
+        }
+
+        .light-mode #binary-clock {
+            background: rgba(255, 255, 255, 0.72);
         }
 
         .binary-column {
-            height: 100%;
-            min-width: 90px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            gap: 5px;
         }
 
         .binary-column-label {
-            margin-bottom: 4px;
+            font-size: 0.63rem;
             color: var(--muted);
-            font-size: 0.62rem;
-            font-weight: 700;
-            letter-spacing: 0.09em;
             text-transform: uppercase;
+            letter-spacing: 0.08em;
         }
 
         .dot-container {
@@ -516,29 +354,19 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.16);
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-        }
-
-        .light-mode .dot {
-            background: rgba(0, 80, 180, 0.18);
+            background: var(--clock-dot-inactive);
+            transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
         }
 
         .dot.active {
             transform: scale(1.25);
-            background: var(--secondary);
-            box-shadow: 0 0 10px var(--secondary), 0 0 24px rgba(255,209,102,0.55);
+            background: var(--clock-dot-active);
+            box-shadow: 0 0 10px var(--secondary), 0 0 22px rgba(255, 216, 107, 0.5);
         }
 
         @media (min-width: 768px) {
             header {
                 padding: 18px 42px;
-            }
-
-            .logo {
-                flex: 0 0 auto;
-                text-align: left;
-                order: 1;
             }
 
             #menu-toggle {
@@ -547,421 +375,65 @@
 
             #main-nav {
                 position: static;
-                flex: 1;
-                order: 2;
-                height: auto !important;
-                opacity: 1 !important;
-                transform: none !important;
-                border: none;
+                transform: none;
+                opacity: 1;
+                pointer-events: auto;
+                padding: 0;
+                border: 0;
                 border-radius: 0;
                 background: transparent;
-                box-shadow: none;
                 backdrop-filter: none;
+                flex: 1;
             }
 
             #main-nav ul {
                 display: flex;
                 justify-content: center;
-                align-items: center;
                 gap: 12px;
-                padding: 0;
             }
 
             #main-nav a {
-                padding: 9px 13px;
-                font-size: 0.9rem;
+                background: transparent;
+                padding: 10px 14px;
             }
 
             #main-nav a:hover {
-                transform: translateY(-3px) translateZ(20px);
+                transform: translateY(-2px);
             }
 
             main {
-                padding: 76px 0;
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+                grid-template-columns: repeat(3, 1fr);
+                gap: 26px;
+                padding: 46px 0;
             }
 
             #profile {
                 grid-column: 1 / -1;
             }
-
-            #profile h2 {
-                font-size: clamp(4rem, 9vw, 8.5rem);
-            }
         }
 
-        @media (max-width: 480px) {
-            #seconds-col { display: none; }
-            .binary-column { min-width: auto; }
-            .card { min-height: auto; padding: 21px; border-radius: 24px; }
-            .orb.one { width: 130px; height: 130px; }
-            .orb.three { width: 180px; height: 180px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+        @media (max-width: 520px) {
+            .logo {
+                font-size: 1.15rem;
             }
 
-            main, body::before {
-                transform: none !important;
+            main {
+                width: min(100% - 22px, 1120px);
+                padding-top: 22px;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            #seconds-col {
+                display: none;
             }
         }
-    
-
-        .theme-badge {
-            position: fixed;
-            right: 18px;
-            bottom: calc(var(--clock-height) + 16px);
-            z-index: 900;
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: 999px;
-            color: var(--text);
-            background: var(--glass-strong);
-            backdrop-filter: blur(18px);
-            box-shadow: 0 12px 38px rgba(0,0,0,0.28);
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            opacity: 0.78;
-            pointer-events: none;
-        }
-
-        .theme-badge strong {
-            color: var(--secondary);
-        }
-
-        body.theme-cyber-city {
-            --primary: #00c8ff;
-            --secondary: #ffd166;
-            --purple: #8a5cff;
-            --pink: #ff4fd8;
-            --bg: #050912;
-        }
-
-        body.theme-space-nebula {
-            --primary: #7dd3fc;
-            --secondary: #c084fc;
-            --purple: #6d28d9;
-            --pink: #fb7185;
-            --bg: #03000f;
-        }
-
-        body.theme-synthwave-sunset {
-            --primary: #ff4fd8;
-            --secondary: #ffd166;
-            --purple: #7c3aed;
-            --pink: #ff7a18;
-            --bg: #16051f;
-        }
-
-        body.theme-matrix-rain {
-            --primary: #00ff88;
-            --secondary: #b8ff5c;
-            --purple: #00aa55;
-            --pink: #44ffcc;
-            --bg: #020805;
-        }
-
-        body.theme-crystalline-geometry {
-            --primary: #8be9fd;
-            --secondary: #ffffff;
-            --purple: #a78bfa;
-            --pink: #67e8f9;
-            --bg: #07111f;
-        }
-
-        body.theme-electric-storm {
-            --primary: #9ae6ff;
-            --secondary: #fef08a;
-            --purple: #4f46e5;
-            --pink: #ffffff;
-            --bg: #030712;
-        }
-
-        body.theme-liquid-plasma {
-            --primary: #22d3ee;
-            --secondary: #fb7185;
-            --purple: #a855f7;
-            --pink: #f97316;
-            --bg: #09051a;
-        }
-
-        body.theme-fractal-tunnel {
-            --primary: #00f5d4;
-            --secondary: #fee440;
-            --purple: #9b5de5;
-            --pink: #f15bb5;
-            --bg: #04000a;
-        }
-
-
-        .showcase-card {
-            overflow: visible;
-        }
-
-        .project-card {
-            position: relative;
-            margin: 22px 0;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
-            overflow: hidden;
-            transition: transform 0.5s cubic-bezier(.16,1,.3,1), box-shadow 0.4s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-6px) scale(1.01);
-            box-shadow: 0 25px 80px rgba(0,0,0,0.35), 0 0 40px rgba(0,200,255,0.08);
-        }
-
-        .project-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 24px;
-            cursor: pointer;
-        }
-
-        .project-header h3 {
-            margin: 0 0 12px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: -0.03em;
-        }
-
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .tech-tags span {
-            padding: 7px 12px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: var(--secondary);
-            backdrop-filter: blur(8px);
-        }
-
-        .expand-btn {
-            width: 52px;
-            height: 52px;
-            border-radius: 18px;
-            border: 1px solid rgba(255,255,255,0.15);
-            background: rgba(255,255,255,0.08);
-            color: var(--text);
-            font-size: 1.6rem;
-            cursor: pointer;
-            transition: transform 0.35s ease, background 0.35s ease;
-        }
-
-        .project-card.active .expand-btn {
-            transform: rotate(45deg);
-            background: rgba(0,200,255,0.16);
-        }
-
-        .project-preview {
-            display: grid;
-            grid-template-rows: 0fr;
-            transition: grid-template-rows 0.55s cubic-bezier(.16,1,.3,1);
-        }
-
-        .project-preview > * {
-            overflow: hidden;
-        }
-
-        .project-card.active .project-preview {
-            grid-template-rows: 1fr;
-        }
-
-        .project-preview > div,
-        .project-preview > p,
-        .project-preview > a {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.45s ease, transform 0.45s ease;
-        }
-
-        .project-card.active .project-preview > div,
-        .project-card.active .project-preview > p,
-        .project-card.active .project-preview > a {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .preview-visual {
-            position: relative;
-            height: 260px;
-            margin: 0 24px;
-            border-radius: 28px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: radial-gradient(circle at center, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-        }
-
-        .preview-blender {
-            background:
-                radial-gradient(circle at center, rgba(0,200,255,0.18), transparent 45%),
-                linear-gradient(135deg, #091420, #0b1831, #140c22);
-        }
-
-        .preview-grid {
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            transform: perspective(600px) rotateX(75deg) scale(2);
-            transform-origin: center top;
-            animation: gridMove 7s linear infinite;
-        }
-
-        @keyframes gridMove {
-            from { transform: perspective(600px) rotateX(75deg) translateY(0) scale(2); }
-            to { transform: perspective(600px) rotateX(75deg) translateY(40px) scale(2); }
-        }
-
-        .floating-cube {
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            left: 50%;
-            top: 50%;
-            transform-style: preserve-3d;
-            transform: translate(-50%, -50%) rotateX(45deg) rotateY(45deg);
-            animation: cubeSpin 8s linear infinite;
-            background: linear-gradient(135deg, rgba(0,200,255,0.9), rgba(138,92,255,0.8));
-            box-shadow: 0 0 50px rgba(0,200,255,0.5);
-        }
-
-        @keyframes cubeSpin {
-            from { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
-            to { transform: translate(-50%, -50%) rotateX(360deg) rotateY(360deg); }
-        }
-
-        .preview-gimp {
-            background: linear-gradient(135deg, #13091f, #250d2b, #12071c);
-        }
-
-        .plasma-ring {
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            border: 8px solid rgba(255,79,216,0.5);
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            filter: blur(2px);
-            animation: pulseRing 4s ease-in-out infinite;
-        }
-
-        .plasma-ring.second {
-            width: 120px;
-            height: 120px;
-            border-color: rgba(0,200,255,0.6);
-            animation-delay: -2s;
-        }
-
-        @keyframes pulseRing {
-            0%,100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) scale(1.2) rotate(180deg); }
-        }
-
-        .preview-bg {
-            background: linear-gradient(135deg, #060b18, #111f3f, #0c1024);
-        }
-
-        .wave {
-            position: absolute;
-            left: -10%;
-            width: 120%;
-            height: 60px;
-            border-radius: 50%;
-            border: 2px solid rgba(0,200,255,0.3);
-            animation: waveMove 8s linear infinite;
-        }
-
-        .wave:nth-child(1) { top: 25%; }
-        .wave.second { top: 45%; animation-duration: 6s; }
-        .wave.third { top: 65%; animation-duration: 10s; }
-
-        @keyframes waveMove {
-            from { transform: translateX(-8%) scaleY(1); }
-            50% { transform: translateX(8%) scaleY(1.4); }
-            to { transform: translateX(-8%) scaleY(1); }
-        }
-
-        .project-preview p {
-            margin: 24px;
-            color: var(--muted);
-            line-height: 1.8;
-        }
-
-        .launch-btn {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 24px 24px;
-            padding: 18px 26px;
-            border-radius: 22px;
-            overflow: hidden;
-            color: white;
-            text-decoration: none;
-            font-weight: 800;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, rgba(0,200,255,0.25), rgba(138,92,255,0.25));
-            border: 1px solid rgba(255,255,255,0.14);
-            transition: transform 0.35s ease, box-shadow 0.35s ease;
-        }
-
-        .launch-btn:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 20px 50px rgba(0,200,255,0.25);
-        }
-
-        .launch-beam {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
-            transform: translateX(-120%);
-            transition: transform 0.6s ease;
-        }
-
-        .launch-btn:hover .launch-beam {
-            transform: translateX(120%);
-        }
-
-</style>
+    </style>
 </head>
 <body>
-    <canvas id="particle-canvas" aria-hidden="true"></canvas>
-
-    <div class="scene" aria-hidden="true">
-        <div class="orb one"></div>
-        <div class="orb two"></div>
-        <div class="orb three"></div>
-        <div class="geo triangle g1"></div>
-        <div class="geo hex g2"></div>
-        <div class="geo g3"></div>
-        <div class="geo triangle g4"></div>
-        <div class="geo hex g5"></div>
-    </div>
-
     <header>
         <div class="logo">AAB Links</div>
         <div class="header-controls">
@@ -984,94 +456,12 @@
             <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
         </section>
 
-        <section id="projetos" class="card showcase-card">
+        <section id="projetos" class="card">
             <h2>🎨 Projetos</h2>
-
-            <div class="project-card">
-                <div class="project-header">
-                    <div>
-                        <h3>Blender Projects</h3>
-                        <div class="tech-tags">
-                            <span>3D</span>
-                            <span>Cycles</span>
-                            <span>Procedural</span>
-                        </div>
-                    </div>
-                    <button class="expand-btn">+</button>
-                </div>
-
-                <div class="project-preview">
-                    <div class="preview-visual preview-blender">
-                        <div class="preview-glow"></div>
-                        <div class="preview-grid"></div>
-                        <div class="floating-cube"></div>
-                    </div>
-
-                    <p>Procedural worlds, cinematic renders, animated environments and experimental geometry art.</p>
-
-                    <a href="blender-projects.html" class="launch-btn">
-                        <span>Launch Project</span>
-                        <div class="launch-beam"></div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-header">
-                    <div>
-                        <h3>Gimp Projects</h3>
-                        <div class="tech-tags">
-                            <span>Graphics</span>
-                            <span>FX</span>
-                            <span>Wallpaper</span>
-                        </div>
-                    </div>
-                    <button class="expand-btn">+</button>
-                </div>
-
-                <div class="project-preview">
-                    <div class="preview-visual preview-gimp">
-                        <div class="plasma-ring"></div>
-                        <div class="plasma-ring second"></div>
-                    </div>
-
-                    <p>Digital artwork, cyber wallpapers, abstract compositions and visual experimentation.</p>
-
-                    <a href="gimp-projects.html" class="launch-btn">
-                        <span>Launch Project</span>
-                        <div class="launch-beam"></div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="project-card">
-                <div class="project-header">
-                    <div>
-                        <h3>Animated Backgrounds</h3>
-                        <div class="tech-tags">
-                            <span>Canvas</span>
-                            <span>Particles</span>
-                            <span>Generative</span>
-                        </div>
-                    </div>
-                    <button class="expand-btn">+</button>
-                </div>
-
-                <div class="project-preview">
-                    <div class="preview-visual preview-bg">
-                        <div class="wave"></div>
-                        <div class="wave second"></div>
-                        <div class="wave third"></div>
-                    </div>
-
-                    <p>Living procedural scenes with neon effects, reactive particles and cinematic atmospheres.</p>
-
-                    <a href="animated-background.html" class="launch-btn">
-                        <span>Launch Project</span>
-                        <div class="launch-beam"></div>
-                    </a>
-                </div>
-            </div>
+            <a href="blender-projects.html" class="link-item">Blender Projects</a>
+            <a href="gimp-projects.html" class="link-item">Gimp Projects</a>
+            <a href="blender-animations.html" class="link-item">Blender Animations</a>
+            <a href="animated-background.html" class="link-item">Animated Background</a>
         </section>
 
         <section id="jogos" class="card">
@@ -1092,8 +482,6 @@
         </section>
     </main>
     
-    <div class="theme-badge">Theme: <strong id="theme-name">Cyber City</strong> | R Random</div>
-
     <div id="binary-clock">
         <div class="binary-column">
             <span class="binary-column-label">Hora</span>
@@ -1137,15 +525,9 @@
         const storageKey = 'theme-preference';
 
         function setLight(isLight) {
-            if (isLight) {
-                body.classList.add('light-mode');
-                themeToggle.textContent = '🌙';
-                localStorage.setItem(storageKey, 'light');
-            } else {
-                body.classList.remove('light-mode');
-                themeToggle.textContent = '☀️';
-                localStorage.setItem(storageKey, 'dark');
-            }
+            body.classList.toggle('light-mode', isLight);
+            themeToggle.textContent = isLight ? '🌙' : '☀️';
+            localStorage.setItem(storageKey, isLight ? 'light' : 'dark');
         }
 
         function initTheme() {
@@ -1153,576 +535,50 @@
             if (storedTheme) {
                 setLight(storedTheme === 'light');
             } else {
-                const prefersLight = !window.matchMedia('(prefers-color-scheme: dark)').matches;
-                setLight(prefersLight);
+                setLight(false);
             }
         }
 
         themeToggle.addEventListener('click', () => {
-            const isLight = body.classList.contains('light-mode');
-            setLight(!isLight);
+            setLight(!body.classList.contains('light-mode'));
         });
 
         initTheme();
 
-        document.getElementById('menu-toggle').onclick = function() {
-            const nav = document.getElementById('main-nav');
-            const button = this;
-            nav.classList.toggle('nav-hidden');
-            button.textContent = nav.classList.contains('nav-hidden') ? '☰' : '✕';
+        const nav = document.getElementById('main-nav');
+        const menuButton = document.getElementById('menu-toggle');
 
-            nav.querySelectorAll('a').forEach(link => {
-                link.onclick = function() {
-                    if (!nav.classList.contains('nav-hidden')) {
-                        nav.classList.add('nav-hidden');
-                        document.getElementById('menu-toggle').textContent = '☰';
-                    }
-                };
-            });
+        menuButton.onclick = function() {
+            nav.classList.toggle('nav-hidden');
+            menuButton.textContent = nav.classList.contains('nav-hidden') ? '☰' : '✕';
         };
+
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 768) {
+                    nav.classList.add('nav-hidden');
+                    menuButton.textContent = '☰';
+                }
+            });
+        });
 
         function updateBinaryClock() {
             const now = new Date();
-            const h = now.getHours();
-            const m = now.getMinutes();
-            const s = now.getSeconds();
+            updateColumn(now.getHours(), 'hh');
+            updateColumn(now.getMinutes(), 'mm');
+            updateColumn(now.getSeconds(), 'ss');
+        }
 
-            function updateColumn(value, columnId) {
-                const dots = document.getElementById(columnId).querySelectorAll('.dot');
-                const weights = Array.from(dots).map(d => parseInt(d.dataset.weight)).sort((a, b) => b - a);
-                let tempValue = value;
-
-                dots.forEach((dot, index) => {
-                    const weight = weights[index];
-                    if (tempValue >= weight) {
-                        dot.classList.add('active');
-                        tempValue -= weight;
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            }
-
-            updateColumn(h, 'hh');
-            updateColumn(m, 'mm');
-            updateColumn(s, 'ss');
+        function updateColumn(value, columnId) {
+            const dots = document.getElementById(columnId).querySelectorAll('.dot');
+            dots.forEach(dot => {
+                const weight = Number(dot.dataset.weight);
+                dot.classList.toggle('active', (value & weight) === weight);
+            });
         }
 
         setInterval(updateBinaryClock, 1000);
         updateBinaryClock();
-
-        let targetX = 0;
-        let targetY = 0;
-        let currentX = 0;
-        let currentY = 0;
-
-        function updateMouseVars(clientX, clientY) {
-            targetX = (clientX / window.innerWidth - 0.5) * 2;
-            targetY = (clientY / window.innerHeight - 0.5) * 2;
-        }
-
-        window.addEventListener('mousemove', e => updateMouseVars(e.clientX, e.clientY));
-        window.addEventListener('touchmove', e => {
-            if (e.touches[0]) updateMouseVars(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-
-        function animatePerspective() {
-            currentX += (targetX - currentX) * 0.06;
-            currentY += (targetY - currentY) * 0.06;
-            document.documentElement.style.setProperty('--mx', currentX.toFixed(4));
-            document.documentElement.style.setProperty('--my', currentY.toFixed(4));
-            requestAnimationFrame(animatePerspective);
-        }
-        animatePerspective();
-
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                card.style.transform = `rotateX(${-y * 9}deg) rotateY(${x * 11}deg) translateY(-8px) translateZ(30px)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = '';
-            });
-        });
-
-        // Living Particle Background
-        const particleCanvas = document.getElementById('particle-canvas');
-        const pctx = particleCanvas.getContext('2d');
-        const particleMouse = { x: -9999, y: -9999, vx: 0, vy: 0 };
-        let particles = [];
-        let symbols = [];
-        let stars = [];
-        let lastMouseX = particleMouse.x;
-        let lastMouseY = particleMouse.y;
-        let particleTime = 0;
-
-        const themes = [
-            {
-                id: 'cyber-city',
-                name: 'Cyber City',
-                glyphs: ['▥', '▦', '▨', '▣', '01', 'AAB', '⌁', '◇'],
-                mode: 'city',
-                density: 1,
-                lineDistance: 130
-            },
-            {
-                id: 'space-nebula',
-                name: 'Space Nebula',
-                glyphs: ['✦', '✧', '•', '☄', '◇', '○', '✺'],
-                mode: 'nebula',
-                density: 1.15,
-                lineDistance: 115
-            },
-            {
-                id: 'synthwave-sunset',
-                name: 'Synthwave Sunset',
-                glyphs: ['◢', '◣', '▱', '◇', 'SUN', '80s', '△'],
-                mode: 'sunset',
-                density: 0.9,
-                lineDistance: 105
-            },
-            {
-                id: 'matrix-rain',
-                name: 'Matrix Rain',
-                glyphs: ['0', '1', 'ア', 'カ', 'サ', 'テ', 'ラ', 'AAB'],
-                mode: 'matrix',
-                density: 1.25,
-                lineDistance: 80
-            },
-            {
-                id: 'crystalline-geometry',
-                name: 'Crystalline Geometry',
-                glyphs: ['◇', '⬡', '△', '▽', '◆', '◌', '✧'],
-                mode: 'crystal',
-                density: 1,
-                lineDistance: 155
-            },
-            {
-                id: 'electric-storm',
-                name: 'Electric Storm',
-                glyphs: ['⚡', '⌁', '×', '+', '✦', '⟡'],
-                mode: 'storm',
-                density: 1.1,
-                lineDistance: 145
-            },
-            {
-                id: 'liquid-plasma',
-                name: 'Liquid Plasma',
-                glyphs: ['◌', '○', '●', '≈', '∞', '◇', '✧'],
-                mode: 'plasma',
-                density: 1.05,
-                lineDistance: 125
-            },
-            {
-                id: 'fractal-tunnel',
-                name: 'Fractal Tunnel',
-                glyphs: ['⬡', '◇', '△', '✦', '∞', '01', '◈'],
-                mode: 'tunnel',
-                density: 1.2,
-                lineDistance: 150
-            }
-        ];
-
-        let currentThemeIndex = 0;
-        let currentTheme = themes[currentThemeIndex];
-        let glyphs = currentTheme.glyphs;
-
-        function resizeParticleCanvas() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            particleCanvas.width = Math.floor(window.innerWidth * dpr);
-            particleCanvas.height = Math.floor(window.innerHeight * dpr);
-            particleCanvas.style.width = window.innerWidth + 'px';
-            particleCanvas.style.height = window.innerHeight + 'px';
-            pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            createParticleField();
-        }
-
-        function createParticleField() {
-            const area = window.innerWidth * window.innerHeight;
-            const particleCount = Math.floor(Math.min(130, Math.max(55, Math.floor(area / 11000))) * currentTheme.density);
-            const starCount = Math.floor(Math.min(180, Math.max(70, Math.floor(area / 8000))) * currentTheme.density);
-            const symbolCount = Math.floor(Math.min(34, Math.max(14, Math.floor(area / 43000))) * currentTheme.density);
-
-            particles = Array.from({ length: particleCount }, () => ({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                vx: (Math.random() - 0.5) * 0.42,
-                vy: (Math.random() - 0.5) * 0.42,
-                r: Math.random() * 1.8 + 0.8,
-                depth: Math.random() * 0.8 + 0.25,
-                pulse: Math.random() * Math.PI * 2
-            }));
-
-            stars = Array.from({ length: starCount }, () => ({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                z: Math.random() * 0.95 + 0.05,
-                twinkle: Math.random() * Math.PI * 2,
-                speed: Math.random() * 0.08 + 0.02
-            }));
-
-            symbols = Array.from({ length: symbolCount }, () => ({
-                x: Math.random() * window.innerWidth,
-                y: Math.random() * window.innerHeight,
-                vx: (Math.random() - 0.5) * 0.22,
-                vy: (Math.random() - 0.5) * 0.22,
-                size: Math.random() * 16 + 12,
-                rot: Math.random() * Math.PI * 2,
-                spin: (Math.random() - 0.5) * 0.008,
-                text: glyphs[Math.floor(Math.random() * glyphs.length)],
-                depth: Math.random() * 0.8 + 0.35
-            }));
-        }
-
-        function updateParticleMouse(x, y) {
-            particleMouse.vx = x - lastMouseX;
-            particleMouse.vy = y - lastMouseY;
-            particleMouse.x = x;
-            particleMouse.y = y;
-            lastMouseX = x;
-            lastMouseY = y;
-        }
-
-        window.addEventListener('mousemove', e => updateParticleMouse(e.clientX, e.clientY));
-        window.addEventListener('touchmove', e => {
-            if (e.touches[0]) updateParticleMouse(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-        window.addEventListener('mouseleave', () => {
-            particleMouse.x = -9999;
-            particleMouse.y = -9999;
-        });
-
-        function wrapObject(obj, pad = 60) {
-            if (obj.x < -pad) obj.x = window.innerWidth + pad;
-            if (obj.x > window.innerWidth + pad) obj.x = -pad;
-            if (obj.y < -pad) obj.y = window.innerHeight + pad;
-            if (obj.y > window.innerHeight + pad) obj.y = -pad;
-        }
-
-        function drawLivingParticles() {
-            particleTime += 0.01;
-            pctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-            const dark = !body.classList.contains('light-mode');
-            const primary = dark ? '0, 200, 255' : '0, 95, 210';
-            const gold = dark ? '255, 209, 102' : '255, 160, 0';
-            const pink = dark ? '255, 79, 216' : '130, 70, 255';
-
-            // Procedural theme layer
-            drawThemeLayer(currentTheme.mode, primary, gold, pink, dark);
-
-            // Subtle starfield depth
-            for (const star of stars) {
-                star.twinkle += 0.025 + star.z * 0.02;
-                star.y += star.speed * star.z;
-                star.x += Math.sin(particleTime + star.z * 8) * 0.018;
-                if (star.y > window.innerHeight + 8) {
-                    star.y = -8;
-                    star.x = Math.random() * window.innerWidth;
-                }
-
-                const alpha = (0.08 + star.z * 0.35) * (0.55 + Math.sin(star.twinkle) * 0.45);
-                pctx.beginPath();
-                pctx.fillStyle = `rgba(255,255,255,${alpha})`;
-                pctx.arc(star.x + currentX * star.z * -26, star.y + currentY * star.z * -18, star.z * 1.4, 0, Math.PI * 2);
-                pctx.fill();
-            }
-
-            // Drifting particles and mouse-reactive energy field
-            for (const p of particles) {
-                const dx = p.x - particleMouse.x;
-                const dy = p.y - particleMouse.y;
-                const dist = Math.hypot(dx, dy);
-                const fieldRadius = 170;
-
-                if (dist < fieldRadius) {
-                    const force = (1 - dist / fieldRadius) * 2.2;
-                    const angle = Math.atan2(dy, dx);
-                    p.vx += Math.cos(angle) * force * 0.13 + particleMouse.vx * 0.002;
-                    p.vy += Math.sin(angle) * force * 0.13 + particleMouse.vy * 0.002;
-                }
-
-                p.vx += Math.sin(particleTime * 1.4 + p.pulse) * 0.006;
-                p.vy += Math.cos(particleTime * 1.2 + p.pulse) * 0.006;
-                p.vx *= 0.985;
-                p.vy *= 0.985;
-                p.x += p.vx * p.depth;
-                p.y += p.vy * p.depth;
-                wrapObject(p, 30);
-            }
-
-            // Connecting lines
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const a = particles[i];
-                    const b = particles[j];
-                    const dx = a.x - b.x;
-                    const dy = a.y - b.y;
-                    const dist = Math.hypot(dx, dy);
-                    const maxDist = currentTheme.lineDistance;
-
-                    if (dist < maxDist) {
-                        const alpha = (1 - dist / maxDist) * 0.26 * Math.min(a.depth, b.depth);
-                        const gradient = pctx.createLinearGradient(a.x, a.y, b.x, b.y);
-                        gradient.addColorStop(0, `rgba(${primary},${alpha})`);
-                        gradient.addColorStop(1, `rgba(${pink},${alpha * 0.75})`);
-                        pctx.strokeStyle = gradient;
-                        pctx.lineWidth = 0.7;
-                        pctx.beginPath();
-                        pctx.moveTo(a.x + currentX * a.depth * -18, a.y + currentY * a.depth * -12);
-                        pctx.lineTo(b.x + currentX * b.depth * -18, b.y + currentY * b.depth * -12);
-                        pctx.stroke();
-                    }
-                }
-            }
-
-            // Energy field ring around mouse
-            if (particleMouse.x > -100) {
-                const radius = 72 + Math.sin(particleTime * 5) * 8;
-                const ring = pctx.createRadialGradient(particleMouse.x, particleMouse.y, 8, particleMouse.x, particleMouse.y, radius * 2.2);
-                ring.addColorStop(0, `rgba(${primary},0.18)`);
-                ring.addColorStop(0.45, `rgba(${pink},0.08)`);
-                ring.addColorStop(1, 'rgba(255,255,255,0)');
-                pctx.fillStyle = ring;
-                pctx.beginPath();
-                pctx.arc(particleMouse.x, particleMouse.y, radius * 2.2, 0, Math.PI * 2);
-                pctx.fill();
-
-                pctx.strokeStyle = `rgba(${gold},0.28)`;
-                pctx.lineWidth = 1;
-                pctx.beginPath();
-                pctx.arc(particleMouse.x, particleMouse.y, radius, 0, Math.PI * 2);
-                pctx.stroke();
-            }
-
-            // Particle bodies
-            for (const p of particles) {
-                const glow = 0.45 + Math.sin(particleTime * 3 + p.pulse) * 0.25;
-                const x = p.x + currentX * p.depth * -18;
-                const y = p.y + currentY * p.depth * -12;
-                pctx.beginPath();
-                pctx.fillStyle = `rgba(${primary},${0.38 + glow * 0.28})`;
-                pctx.shadowColor = `rgba(${primary},0.75)`;
-                pctx.shadowBlur = 12 * p.depth;
-                pctx.arc(x, y, p.r * p.depth + 0.6, 0, Math.PI * 2);
-                pctx.fill();
-                pctx.shadowBlur = 0;
-            }
-
-            // Floating symbols/shapes
-            pctx.textAlign = 'center';
-            pctx.textBaseline = 'middle';
-            for (const s of symbols) {
-                const dx = s.x - particleMouse.x;
-                const dy = s.y - particleMouse.y;
-                const dist = Math.hypot(dx, dy);
-                if (dist < 150) {
-                    const force = (1 - dist / 150) * 1.4;
-                    s.vx += Math.cos(Math.atan2(dy, dx)) * force * 0.07;
-                    s.vy += Math.sin(Math.atan2(dy, dx)) * force * 0.07;
-                }
-
-                s.vx *= 0.99;
-                s.vy *= 0.99;
-                s.x += s.vx * s.depth;
-                s.y += s.vy * s.depth;
-                s.rot += s.spin;
-                wrapObject(s, 90);
-
-                const x = s.x + currentX * s.depth * -34;
-                const y = s.y + currentY * s.depth * -24;
-                pctx.save();
-                pctx.translate(x, y);
-                pctx.rotate(s.rot);
-                pctx.font = `${s.size * s.depth}px Orbitron, monospace`;
-                pctx.fillStyle = `rgba(${gold},${0.12 + s.depth * 0.28})`;
-                pctx.shadowColor = `rgba(${gold},0.45)`;
-                pctx.shadowBlur = 16;
-                pctx.fillText(s.text, 0, 0);
-                pctx.restore();
-                pctx.shadowBlur = 0;
-            }
-
-            requestAnimationFrame(drawLivingParticles);
-        }
-
-        function drawThemeLayer(mode, primary, gold, pink, dark) {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
-            pctx.save();
-
-            if (mode === 'city') {
-                const horizon = h * 0.62;
-                for (let i = 0; i < 42; i++) {
-                    const bw = 20 + (i % 5) * 13;
-                    const x = (i * 48 + (particleTime * 18) % 48) - 60;
-                    const bh = 60 + Math.sin(i * 1.7) * 35 + (i % 7) * 18;
-                    pctx.fillStyle = `rgba(${primary},${0.045 + (i % 3) * 0.018})`;
-                    pctx.fillRect(x, horizon - bh, bw, bh);
-                    pctx.strokeStyle = `rgba(${gold},0.08)`;
-                    for (let y = horizon - bh + 8; y < horizon; y += 14) pctx.strokeRect(x + 5, y, 4, 3);
-                }
-            }
-
-            if (mode === 'nebula') {
-                for (let i = 0; i < 5; i++) {
-                    const x = w * (0.2 + i * 0.17) + Math.sin(particleTime + i) * 90;
-                    const y = h * (0.3 + Math.sin(i) * 0.25) + Math.cos(particleTime * 0.8 + i) * 60;
-                    const g = pctx.createRadialGradient(x, y, 0, x, y, Math.min(w, h) * 0.38);
-                    g.addColorStop(0, `rgba(${i % 2 ? pink : primary},0.12)`);
-                    g.addColorStop(1, 'rgba(0,0,0,0)');
-                    pctx.fillStyle = g;
-                    pctx.fillRect(0, 0, w, h);
-                }
-            }
-
-            if (mode === 'sunset') {
-                const cx = w * 0.5;
-                const cy = h * 0.48;
-                const r = Math.min(w, h) * 0.22;
-                const g = pctx.createRadialGradient(cx, cy, 0, cx, cy, r);
-                g.addColorStop(0, `rgba(${gold},0.32)`);
-                g.addColorStop(0.55, `rgba(${pink},0.18)`);
-                g.addColorStop(1, 'rgba(0,0,0,0)');
-                pctx.fillStyle = g;
-                pctx.beginPath();
-                pctx.arc(cx, cy, r, 0, Math.PI * 2);
-                pctx.fill();
-                pctx.strokeStyle = `rgba(${primary},0.16)`;
-                for (let y = h * 0.58; y < h; y += 28) {
-                    pctx.beginPath();
-                    pctx.moveTo(0, y);
-                    pctx.lineTo(w, y + Math.sin(particleTime + y) * 7);
-                    pctx.stroke();
-                }
-            }
-
-            if (mode === 'matrix') {
-                pctx.font = '15px monospace';
-                for (let x = 0; x < w; x += 22) {
-                    const offset = (particleTime * 90 + x * 3) % (h + 160);
-                    for (let y = -160; y < h; y += 28) {
-                        const yy = (y + offset) % (h + 160) - 80;
-                        const char = Math.random() > 0.5 ? '1' : '0';
-                        pctx.fillStyle = `rgba(${primary},${0.04 + Math.random() * 0.08})`;
-                        pctx.fillText(char, x + Math.sin(yy * 0.02) * 4, yy);
-                    }
-                }
-            }
-
-            if (mode === 'crystal') {
-                pctx.strokeStyle = `rgba(${primary},0.12)`;
-                for (let i = 0; i < 18; i++) {
-                    const x = (Math.sin(i * 9.1 + particleTime) * 0.5 + 0.5) * w;
-                    const y = (Math.cos(i * 5.4 + particleTime * 0.7) * 0.5 + 0.5) * h;
-                    pctx.beginPath();
-                    for (let a = 0; a < Math.PI * 2; a += Math.PI / 3) {
-                        const px = x + Math.cos(a + particleTime * 0.2) * (45 + i % 4 * 18);
-                        const py = y + Math.sin(a + particleTime * 0.2) * (45 + i % 4 * 18);
-                        if (a === 0) pctx.moveTo(px, py); else pctx.lineTo(px, py);
-                    }
-                    pctx.closePath();
-                    pctx.stroke();
-                }
-            }
-
-            if (mode === 'storm') {
-                pctx.strokeStyle = `rgba(${gold},${0.15 + Math.random() * 0.16})`;
-                pctx.lineWidth = 1.4;
-                for (let i = 0; i < 4; i++) {
-                    const startX = ((i * 260 + particleTime * 70) % (w + 300)) - 150;
-                    pctx.beginPath();
-                    pctx.moveTo(startX, 0);
-                    let x = startX;
-                    for (let y = 0; y < h * 0.75; y += 38) {
-                        x += (Math.random() - 0.5) * 55;
-                        pctx.lineTo(x, y);
-                    }
-                    pctx.stroke();
-                }
-            }
-
-            if (mode === 'plasma') {
-                for (let i = 0; i < 12; i++) {
-                    const x = (Math.sin(particleTime * 0.8 + i * 1.4) * 0.5 + 0.5) * w;
-                    const y = (Math.cos(particleTime * 0.9 + i * 1.9) * 0.5 + 0.5) * h;
-                    const g = pctx.createRadialGradient(x, y, 0, x, y, 160);
-                    g.addColorStop(0, `rgba(${i % 2 ? pink : primary},0.09)`);
-                    g.addColorStop(1, 'rgba(0,0,0,0)');
-                    pctx.fillStyle = g;
-                    pctx.fillRect(0, 0, w, h);
-                }
-            }
-
-            if (mode === 'tunnel') {
-                pctx.translate(w / 2, h / 2);
-                pctx.rotate(particleTime * 0.08);
-                for (let r = 40; r < Math.max(w, h); r += 42) {
-                    pctx.strokeStyle = `rgba(${r % 84 === 0 ? gold : primary},${0.22 - r / Math.max(w, h) * 0.14})`;
-                    pctx.beginPath();
-                    for (let a = 0; a <= Math.PI * 2 + 0.2; a += 0.2) {
-                        const wave = Math.sin(a * 6 + particleTime * 3 + r * 0.02) * 10;
-                        const x = Math.cos(a) * (r + wave);
-                        const y = Math.sin(a) * (r + wave);
-                        if (a === 0) pctx.moveTo(x, y); else pctx.lineTo(x, y);
-                    }
-                    pctx.stroke();
-                }
-            }
-
-            pctx.restore();
-        }
-
-        function applyTheme(index) {
-            document.body.classList.remove(...themes.map(t => 'theme-' + t.id));
-            currentThemeIndex = ((index % themes.length) + themes.length) % themes.length;
-            currentTheme = themes[currentThemeIndex];
-            glyphs = currentTheme.glyphs;
-            document.body.classList.add('theme-' + currentTheme.id);
-            const label = document.getElementById('theme-name');
-            if (label) label.textContent = currentTheme.name;
-            createParticleField();
-        }
-
-        function randomTheme() {
-            let next = Math.floor(Math.random() * themes.length);
-            if (next === currentThemeIndex) next = (next + 1) % themes.length;
-            applyTheme(next);
-        }
-
-        window.addEventListener('keydown', e => {
-            const key = e.key.toLowerCase();
-            if (key === 'r' || key === ' ') randomTheme();
-            if (key >= '1' && key <= '8') applyTheme(Number(key) - 1);
-        });
-
-        window.addEventListener('click', e => {
-            if (e.shiftKey) randomTheme();
-        });
-
-        window.addEventListener('resize', resizeParticleCanvas);
-        applyTheme(0);
-        resizeParticleCanvas();
-        drawLivingParticles();
-
-        // Expandable Project Cards
-        document.querySelectorAll('.project-card').forEach(card => {
-            const header = card.querySelector('.project-header');
-            header.addEventListener('click', () => {
-                const active = card.classList.contains('active');
-
-                document.querySelectorAll('.project-card').forEach(c => {
-                    c.classList.remove('active');
-                });
-
-                if (!active) {
-                    card.classList.add('active');
-                }
-            });
-        });
     </script>
 </body>
 </html>
