@@ -95,6 +95,22 @@
             perspective: 1000px;
         }
 
+        #particle-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -3;
+            pointer-events: none;
+            opacity: 0.95;
+            mix-blend-mode: screen;
+        }
+
+        .light-mode #particle-canvas {
+            opacity: 0.65;
+            mix-blend-mode: multiply;
+        }
+
         .orb, .geo {
             position: absolute;
             transform-style: preserve-3d;
@@ -593,9 +609,100 @@
                 transform: none !important;
             }
         }
-    </style>
+    
+
+        .theme-badge {
+            position: fixed;
+            right: 18px;
+            bottom: calc(var(--clock-height) + 16px);
+            z-index: 900;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--text);
+            background: var(--glass-strong);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 12px 38px rgba(0,0,0,0.28);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.78;
+            pointer-events: none;
+        }
+
+        .theme-badge strong {
+            color: var(--secondary);
+        }
+
+        body.theme-cyber-city {
+            --primary: #00c8ff;
+            --secondary: #ffd166;
+            --purple: #8a5cff;
+            --pink: #ff4fd8;
+            --bg: #050912;
+        }
+
+        body.theme-space-nebula {
+            --primary: #7dd3fc;
+            --secondary: #c084fc;
+            --purple: #6d28d9;
+            --pink: #fb7185;
+            --bg: #03000f;
+        }
+
+        body.theme-synthwave-sunset {
+            --primary: #ff4fd8;
+            --secondary: #ffd166;
+            --purple: #7c3aed;
+            --pink: #ff7a18;
+            --bg: #16051f;
+        }
+
+        body.theme-matrix-rain {
+            --primary: #00ff88;
+            --secondary: #b8ff5c;
+            --purple: #00aa55;
+            --pink: #44ffcc;
+            --bg: #020805;
+        }
+
+        body.theme-crystalline-geometry {
+            --primary: #8be9fd;
+            --secondary: #ffffff;
+            --purple: #a78bfa;
+            --pink: #67e8f9;
+            --bg: #07111f;
+        }
+
+        body.theme-electric-storm {
+            --primary: #9ae6ff;
+            --secondary: #fef08a;
+            --purple: #4f46e5;
+            --pink: #ffffff;
+            --bg: #030712;
+        }
+
+        body.theme-liquid-plasma {
+            --primary: #22d3ee;
+            --secondary: #fb7185;
+            --purple: #a855f7;
+            --pink: #f97316;
+            --bg: #09051a;
+        }
+
+        body.theme-fractal-tunnel {
+            --primary: #00f5d4;
+            --secondary: #fee440;
+            --purple: #9b5de5;
+            --pink: #f15bb5;
+            --bg: #04000a;
+        }
+</style>
 </head>
 <body>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+
     <div class="scene" aria-hidden="true">
         <div class="orb one"></div>
         <div class="orb two"></div>
@@ -655,6 +762,8 @@
         </section>
     </main>
     
+    <div class="theme-badge">Theme: <strong id="theme-name">Cyber City</strong> | R Random</div>
+
     <div id="binary-clock">
         <div class="binary-column">
             <span class="binary-column-label">Hora</span>
@@ -808,6 +917,466 @@
                 card.style.transform = '';
             });
         });
+
+        // Living Particle Background
+        const particleCanvas = document.getElementById('particle-canvas');
+        const pctx = particleCanvas.getContext('2d');
+        const particleMouse = { x: -9999, y: -9999, vx: 0, vy: 0 };
+        let particles = [];
+        let symbols = [];
+        let stars = [];
+        let lastMouseX = particleMouse.x;
+        let lastMouseY = particleMouse.y;
+        let particleTime = 0;
+
+        const themes = [
+            {
+                id: 'cyber-city',
+                name: 'Cyber City',
+                glyphs: ['▥', '▦', '▨', '▣', '01', 'AAB', '⌁', '◇'],
+                mode: 'city',
+                density: 1,
+                lineDistance: 130
+            },
+            {
+                id: 'space-nebula',
+                name: 'Space Nebula',
+                glyphs: ['✦', '✧', '•', '☄', '◇', '○', '✺'],
+                mode: 'nebula',
+                density: 1.15,
+                lineDistance: 115
+            },
+            {
+                id: 'synthwave-sunset',
+                name: 'Synthwave Sunset',
+                glyphs: ['◢', '◣', '▱', '◇', 'SUN', '80s', '△'],
+                mode: 'sunset',
+                density: 0.9,
+                lineDistance: 105
+            },
+            {
+                id: 'matrix-rain',
+                name: 'Matrix Rain',
+                glyphs: ['0', '1', 'ア', 'カ', 'サ', 'テ', 'ラ', 'AAB'],
+                mode: 'matrix',
+                density: 1.25,
+                lineDistance: 80
+            },
+            {
+                id: 'crystalline-geometry',
+                name: 'Crystalline Geometry',
+                glyphs: ['◇', '⬡', '△', '▽', '◆', '◌', '✧'],
+                mode: 'crystal',
+                density: 1,
+                lineDistance: 155
+            },
+            {
+                id: 'electric-storm',
+                name: 'Electric Storm',
+                glyphs: ['⚡', '⌁', '×', '+', '✦', '⟡'],
+                mode: 'storm',
+                density: 1.1,
+                lineDistance: 145
+            },
+            {
+                id: 'liquid-plasma',
+                name: 'Liquid Plasma',
+                glyphs: ['◌', '○', '●', '≈', '∞', '◇', '✧'],
+                mode: 'plasma',
+                density: 1.05,
+                lineDistance: 125
+            },
+            {
+                id: 'fractal-tunnel',
+                name: 'Fractal Tunnel',
+                glyphs: ['⬡', '◇', '△', '✦', '∞', '01', '◈'],
+                mode: 'tunnel',
+                density: 1.2,
+                lineDistance: 150
+            }
+        ];
+
+        let currentThemeIndex = 0;
+        let currentTheme = themes[currentThemeIndex];
+        let glyphs = currentTheme.glyphs;
+
+        function resizeParticleCanvas() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            particleCanvas.width = Math.floor(window.innerWidth * dpr);
+            particleCanvas.height = Math.floor(window.innerHeight * dpr);
+            particleCanvas.style.width = window.innerWidth + 'px';
+            particleCanvas.style.height = window.innerHeight + 'px';
+            pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            createParticleField();
+        }
+
+        function createParticleField() {
+            const area = window.innerWidth * window.innerHeight;
+            const particleCount = Math.floor(Math.min(130, Math.max(55, Math.floor(area / 11000))) * currentTheme.density);
+            const starCount = Math.floor(Math.min(180, Math.max(70, Math.floor(area / 8000))) * currentTheme.density);
+            const symbolCount = Math.floor(Math.min(34, Math.max(14, Math.floor(area / 43000))) * currentTheme.density);
+
+            particles = Array.from({ length: particleCount }, () => ({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 0.42,
+                vy: (Math.random() - 0.5) * 0.42,
+                r: Math.random() * 1.8 + 0.8,
+                depth: Math.random() * 0.8 + 0.25,
+                pulse: Math.random() * Math.PI * 2
+            }));
+
+            stars = Array.from({ length: starCount }, () => ({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                z: Math.random() * 0.95 + 0.05,
+                twinkle: Math.random() * Math.PI * 2,
+                speed: Math.random() * 0.08 + 0.02
+            }));
+
+            symbols = Array.from({ length: symbolCount }, () => ({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 0.22,
+                vy: (Math.random() - 0.5) * 0.22,
+                size: Math.random() * 16 + 12,
+                rot: Math.random() * Math.PI * 2,
+                spin: (Math.random() - 0.5) * 0.008,
+                text: glyphs[Math.floor(Math.random() * glyphs.length)],
+                depth: Math.random() * 0.8 + 0.35
+            }));
+        }
+
+        function updateParticleMouse(x, y) {
+            particleMouse.vx = x - lastMouseX;
+            particleMouse.vy = y - lastMouseY;
+            particleMouse.x = x;
+            particleMouse.y = y;
+            lastMouseX = x;
+            lastMouseY = y;
+        }
+
+        window.addEventListener('mousemove', e => updateParticleMouse(e.clientX, e.clientY));
+        window.addEventListener('touchmove', e => {
+            if (e.touches[0]) updateParticleMouse(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+        window.addEventListener('mouseleave', () => {
+            particleMouse.x = -9999;
+            particleMouse.y = -9999;
+        });
+
+        function wrapObject(obj, pad = 60) {
+            if (obj.x < -pad) obj.x = window.innerWidth + pad;
+            if (obj.x > window.innerWidth + pad) obj.x = -pad;
+            if (obj.y < -pad) obj.y = window.innerHeight + pad;
+            if (obj.y > window.innerHeight + pad) obj.y = -pad;
+        }
+
+        function drawLivingParticles() {
+            particleTime += 0.01;
+            pctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+            const dark = !body.classList.contains('light-mode');
+            const primary = dark ? '0, 200, 255' : '0, 95, 210';
+            const gold = dark ? '255, 209, 102' : '255, 160, 0';
+            const pink = dark ? '255, 79, 216' : '130, 70, 255';
+
+            // Procedural theme layer
+            drawThemeLayer(currentTheme.mode, primary, gold, pink, dark);
+
+            // Subtle starfield depth
+            for (const star of stars) {
+                star.twinkle += 0.025 + star.z * 0.02;
+                star.y += star.speed * star.z;
+                star.x += Math.sin(particleTime + star.z * 8) * 0.018;
+                if (star.y > window.innerHeight + 8) {
+                    star.y = -8;
+                    star.x = Math.random() * window.innerWidth;
+                }
+
+                const alpha = (0.08 + star.z * 0.35) * (0.55 + Math.sin(star.twinkle) * 0.45);
+                pctx.beginPath();
+                pctx.fillStyle = `rgba(255,255,255,${alpha})`;
+                pctx.arc(star.x + currentX * star.z * -26, star.y + currentY * star.z * -18, star.z * 1.4, 0, Math.PI * 2);
+                pctx.fill();
+            }
+
+            // Drifting particles and mouse-reactive energy field
+            for (const p of particles) {
+                const dx = p.x - particleMouse.x;
+                const dy = p.y - particleMouse.y;
+                const dist = Math.hypot(dx, dy);
+                const fieldRadius = 170;
+
+                if (dist < fieldRadius) {
+                    const force = (1 - dist / fieldRadius) * 2.2;
+                    const angle = Math.atan2(dy, dx);
+                    p.vx += Math.cos(angle) * force * 0.13 + particleMouse.vx * 0.002;
+                    p.vy += Math.sin(angle) * force * 0.13 + particleMouse.vy * 0.002;
+                }
+
+                p.vx += Math.sin(particleTime * 1.4 + p.pulse) * 0.006;
+                p.vy += Math.cos(particleTime * 1.2 + p.pulse) * 0.006;
+                p.vx *= 0.985;
+                p.vy *= 0.985;
+                p.x += p.vx * p.depth;
+                p.y += p.vy * p.depth;
+                wrapObject(p, 30);
+            }
+
+            // Connecting lines
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const a = particles[i];
+                    const b = particles[j];
+                    const dx = a.x - b.x;
+                    const dy = a.y - b.y;
+                    const dist = Math.hypot(dx, dy);
+                    const maxDist = currentTheme.lineDistance;
+
+                    if (dist < maxDist) {
+                        const alpha = (1 - dist / maxDist) * 0.26 * Math.min(a.depth, b.depth);
+                        const gradient = pctx.createLinearGradient(a.x, a.y, b.x, b.y);
+                        gradient.addColorStop(0, `rgba(${primary},${alpha})`);
+                        gradient.addColorStop(1, `rgba(${pink},${alpha * 0.75})`);
+                        pctx.strokeStyle = gradient;
+                        pctx.lineWidth = 0.7;
+                        pctx.beginPath();
+                        pctx.moveTo(a.x + currentX * a.depth * -18, a.y + currentY * a.depth * -12);
+                        pctx.lineTo(b.x + currentX * b.depth * -18, b.y + currentY * b.depth * -12);
+                        pctx.stroke();
+                    }
+                }
+            }
+
+            // Energy field ring around mouse
+            if (particleMouse.x > -100) {
+                const radius = 72 + Math.sin(particleTime * 5) * 8;
+                const ring = pctx.createRadialGradient(particleMouse.x, particleMouse.y, 8, particleMouse.x, particleMouse.y, radius * 2.2);
+                ring.addColorStop(0, `rgba(${primary},0.18)`);
+                ring.addColorStop(0.45, `rgba(${pink},0.08)`);
+                ring.addColorStop(1, 'rgba(255,255,255,0)');
+                pctx.fillStyle = ring;
+                pctx.beginPath();
+                pctx.arc(particleMouse.x, particleMouse.y, radius * 2.2, 0, Math.PI * 2);
+                pctx.fill();
+
+                pctx.strokeStyle = `rgba(${gold},0.28)`;
+                pctx.lineWidth = 1;
+                pctx.beginPath();
+                pctx.arc(particleMouse.x, particleMouse.y, radius, 0, Math.PI * 2);
+                pctx.stroke();
+            }
+
+            // Particle bodies
+            for (const p of particles) {
+                const glow = 0.45 + Math.sin(particleTime * 3 + p.pulse) * 0.25;
+                const x = p.x + currentX * p.depth * -18;
+                const y = p.y + currentY * p.depth * -12;
+                pctx.beginPath();
+                pctx.fillStyle = `rgba(${primary},${0.38 + glow * 0.28})`;
+                pctx.shadowColor = `rgba(${primary},0.75)`;
+                pctx.shadowBlur = 12 * p.depth;
+                pctx.arc(x, y, p.r * p.depth + 0.6, 0, Math.PI * 2);
+                pctx.fill();
+                pctx.shadowBlur = 0;
+            }
+
+            // Floating symbols/shapes
+            pctx.textAlign = 'center';
+            pctx.textBaseline = 'middle';
+            for (const s of symbols) {
+                const dx = s.x - particleMouse.x;
+                const dy = s.y - particleMouse.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < 150) {
+                    const force = (1 - dist / 150) * 1.4;
+                    s.vx += Math.cos(Math.atan2(dy, dx)) * force * 0.07;
+                    s.vy += Math.sin(Math.atan2(dy, dx)) * force * 0.07;
+                }
+
+                s.vx *= 0.99;
+                s.vy *= 0.99;
+                s.x += s.vx * s.depth;
+                s.y += s.vy * s.depth;
+                s.rot += s.spin;
+                wrapObject(s, 90);
+
+                const x = s.x + currentX * s.depth * -34;
+                const y = s.y + currentY * s.depth * -24;
+                pctx.save();
+                pctx.translate(x, y);
+                pctx.rotate(s.rot);
+                pctx.font = `${s.size * s.depth}px Orbitron, monospace`;
+                pctx.fillStyle = `rgba(${gold},${0.12 + s.depth * 0.28})`;
+                pctx.shadowColor = `rgba(${gold},0.45)`;
+                pctx.shadowBlur = 16;
+                pctx.fillText(s.text, 0, 0);
+                pctx.restore();
+                pctx.shadowBlur = 0;
+            }
+
+            requestAnimationFrame(drawLivingParticles);
+        }
+
+        function drawThemeLayer(mode, primary, gold, pink, dark) {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            pctx.save();
+
+            if (mode === 'city') {
+                const horizon = h * 0.62;
+                for (let i = 0; i < 42; i++) {
+                    const bw = 20 + (i % 5) * 13;
+                    const x = (i * 48 + (particleTime * 18) % 48) - 60;
+                    const bh = 60 + Math.sin(i * 1.7) * 35 + (i % 7) * 18;
+                    pctx.fillStyle = `rgba(${primary},${0.045 + (i % 3) * 0.018})`;
+                    pctx.fillRect(x, horizon - bh, bw, bh);
+                    pctx.strokeStyle = `rgba(${gold},0.08)`;
+                    for (let y = horizon - bh + 8; y < horizon; y += 14) pctx.strokeRect(x + 5, y, 4, 3);
+                }
+            }
+
+            if (mode === 'nebula') {
+                for (let i = 0; i < 5; i++) {
+                    const x = w * (0.2 + i * 0.17) + Math.sin(particleTime + i) * 90;
+                    const y = h * (0.3 + Math.sin(i) * 0.25) + Math.cos(particleTime * 0.8 + i) * 60;
+                    const g = pctx.createRadialGradient(x, y, 0, x, y, Math.min(w, h) * 0.38);
+                    g.addColorStop(0, `rgba(${i % 2 ? pink : primary},0.12)`);
+                    g.addColorStop(1, 'rgba(0,0,0,0)');
+                    pctx.fillStyle = g;
+                    pctx.fillRect(0, 0, w, h);
+                }
+            }
+
+            if (mode === 'sunset') {
+                const cx = w * 0.5;
+                const cy = h * 0.48;
+                const r = Math.min(w, h) * 0.22;
+                const g = pctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+                g.addColorStop(0, `rgba(${gold},0.32)`);
+                g.addColorStop(0.55, `rgba(${pink},0.18)`);
+                g.addColorStop(1, 'rgba(0,0,0,0)');
+                pctx.fillStyle = g;
+                pctx.beginPath();
+                pctx.arc(cx, cy, r, 0, Math.PI * 2);
+                pctx.fill();
+                pctx.strokeStyle = `rgba(${primary},0.16)`;
+                for (let y = h * 0.58; y < h; y += 28) {
+                    pctx.beginPath();
+                    pctx.moveTo(0, y);
+                    pctx.lineTo(w, y + Math.sin(particleTime + y) * 7);
+                    pctx.stroke();
+                }
+            }
+
+            if (mode === 'matrix') {
+                pctx.font = '15px monospace';
+                for (let x = 0; x < w; x += 22) {
+                    const offset = (particleTime * 90 + x * 3) % (h + 160);
+                    for (let y = -160; y < h; y += 28) {
+                        const yy = (y + offset) % (h + 160) - 80;
+                        const char = Math.random() > 0.5 ? '1' : '0';
+                        pctx.fillStyle = `rgba(${primary},${0.04 + Math.random() * 0.08})`;
+                        pctx.fillText(char, x + Math.sin(yy * 0.02) * 4, yy);
+                    }
+                }
+            }
+
+            if (mode === 'crystal') {
+                pctx.strokeStyle = `rgba(${primary},0.12)`;
+                for (let i = 0; i < 18; i++) {
+                    const x = (Math.sin(i * 9.1 + particleTime) * 0.5 + 0.5) * w;
+                    const y = (Math.cos(i * 5.4 + particleTime * 0.7) * 0.5 + 0.5) * h;
+                    pctx.beginPath();
+                    for (let a = 0; a < Math.PI * 2; a += Math.PI / 3) {
+                        const px = x + Math.cos(a + particleTime * 0.2) * (45 + i % 4 * 18);
+                        const py = y + Math.sin(a + particleTime * 0.2) * (45 + i % 4 * 18);
+                        if (a === 0) pctx.moveTo(px, py); else pctx.lineTo(px, py);
+                    }
+                    pctx.closePath();
+                    pctx.stroke();
+                }
+            }
+
+            if (mode === 'storm') {
+                pctx.strokeStyle = `rgba(${gold},${0.15 + Math.random() * 0.16})`;
+                pctx.lineWidth = 1.4;
+                for (let i = 0; i < 4; i++) {
+                    const startX = ((i * 260 + particleTime * 70) % (w + 300)) - 150;
+                    pctx.beginPath();
+                    pctx.moveTo(startX, 0);
+                    let x = startX;
+                    for (let y = 0; y < h * 0.75; y += 38) {
+                        x += (Math.random() - 0.5) * 55;
+                        pctx.lineTo(x, y);
+                    }
+                    pctx.stroke();
+                }
+            }
+
+            if (mode === 'plasma') {
+                for (let i = 0; i < 12; i++) {
+                    const x = (Math.sin(particleTime * 0.8 + i * 1.4) * 0.5 + 0.5) * w;
+                    const y = (Math.cos(particleTime * 0.9 + i * 1.9) * 0.5 + 0.5) * h;
+                    const g = pctx.createRadialGradient(x, y, 0, x, y, 160);
+                    g.addColorStop(0, `rgba(${i % 2 ? pink : primary},0.09)`);
+                    g.addColorStop(1, 'rgba(0,0,0,0)');
+                    pctx.fillStyle = g;
+                    pctx.fillRect(0, 0, w, h);
+                }
+            }
+
+            if (mode === 'tunnel') {
+                pctx.translate(w / 2, h / 2);
+                pctx.rotate(particleTime * 0.08);
+                for (let r = 40; r < Math.max(w, h); r += 42) {
+                    pctx.strokeStyle = `rgba(${r % 84 === 0 ? gold : primary},${0.22 - r / Math.max(w, h) * 0.14})`;
+                    pctx.beginPath();
+                    for (let a = 0; a <= Math.PI * 2 + 0.2; a += 0.2) {
+                        const wave = Math.sin(a * 6 + particleTime * 3 + r * 0.02) * 10;
+                        const x = Math.cos(a) * (r + wave);
+                        const y = Math.sin(a) * (r + wave);
+                        if (a === 0) pctx.moveTo(x, y); else pctx.lineTo(x, y);
+                    }
+                    pctx.stroke();
+                }
+            }
+
+            pctx.restore();
+        }
+
+        function applyTheme(index) {
+            document.body.classList.remove(...themes.map(t => 'theme-' + t.id));
+            currentThemeIndex = ((index % themes.length) + themes.length) % themes.length;
+            currentTheme = themes[currentThemeIndex];
+            glyphs = currentTheme.glyphs;
+            document.body.classList.add('theme-' + currentTheme.id);
+            const label = document.getElementById('theme-name');
+            if (label) label.textContent = currentTheme.name;
+            createParticleField();
+        }
+
+        function randomTheme() {
+            let next = Math.floor(Math.random() * themes.length);
+            if (next === currentThemeIndex) next = (next + 1) % themes.length;
+            applyTheme(next);
+        }
+
+        window.addEventListener('keydown', e => {
+            const key = e.key.toLowerCase();
+            if (key === 'r' || key === ' ') randomTheme();
+            if (key >= '1' && key <= '8') applyTheme(Number(key) - 1);
+        });
+
+        window.addEventListener('click', e => {
+            if (e.shiftKey) randomTheme();
+        });
+
+        window.addEventListener('resize', resizeParticleCanvas);
+        applyTheme(0);
+        resizeParticleCanvas();
+        drawLivingParticles();
     </script>
 </body>
 </html>
