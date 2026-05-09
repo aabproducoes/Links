@@ -698,6 +698,254 @@
             --pink: #f15bb5;
             --bg: #04000a;
         }
+
+
+        .showcase-card {
+            overflow: visible;
+        }
+
+        .project-card {
+            position: relative;
+            margin: 22px 0;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(.16,1,.3,1), box-shadow 0.4s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 25px 80px rgba(0,0,0,0.35), 0 0 40px rgba(0,200,255,0.08);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 24px;
+            cursor: pointer;
+        }
+
+        .project-header h3 {
+            margin: 0 0 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: -0.03em;
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .tech-tags span {
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--secondary);
+            backdrop-filter: blur(8px);
+        }
+
+        .expand-btn {
+            width: 52px;
+            height: 52px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: var(--text);
+            font-size: 1.6rem;
+            cursor: pointer;
+            transition: transform 0.35s ease, background 0.35s ease;
+        }
+
+        .project-card.active .expand-btn {
+            transform: rotate(45deg);
+            background: rgba(0,200,255,0.16);
+        }
+
+        .project-preview {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.55s cubic-bezier(.16,1,.3,1);
+        }
+
+        .project-preview > * {
+            overflow: hidden;
+        }
+
+        .project-card.active .project-preview {
+            grid-template-rows: 1fr;
+        }
+
+        .project-preview > div,
+        .project-preview > p,
+        .project-preview > a {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        .project-card.active .project-preview > div,
+        .project-card.active .project-preview > p,
+        .project-card.active .project-preview > a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .preview-visual {
+            position: relative;
+            height: 260px;
+            margin: 0 24px;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: radial-gradient(circle at center, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+        }
+
+        .preview-blender {
+            background:
+                radial-gradient(circle at center, rgba(0,200,255,0.18), transparent 45%),
+                linear-gradient(135deg, #091420, #0b1831, #140c22);
+        }
+
+        .preview-grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            transform: perspective(600px) rotateX(75deg) scale(2);
+            transform-origin: center top;
+            animation: gridMove 7s linear infinite;
+        }
+
+        @keyframes gridMove {
+            from { transform: perspective(600px) rotateX(75deg) translateY(0) scale(2); }
+            to { transform: perspective(600px) rotateX(75deg) translateY(40px) scale(2); }
+        }
+
+        .floating-cube {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            left: 50%;
+            top: 50%;
+            transform-style: preserve-3d;
+            transform: translate(-50%, -50%) rotateX(45deg) rotateY(45deg);
+            animation: cubeSpin 8s linear infinite;
+            background: linear-gradient(135deg, rgba(0,200,255,0.9), rgba(138,92,255,0.8));
+            box-shadow: 0 0 50px rgba(0,200,255,0.5);
+        }
+
+        @keyframes cubeSpin {
+            from { transform: translate(-50%, -50%) rotateX(0deg) rotateY(0deg); }
+            to { transform: translate(-50%, -50%) rotateX(360deg) rotateY(360deg); }
+        }
+
+        .preview-gimp {
+            background: linear-gradient(135deg, #13091f, #250d2b, #12071c);
+        }
+
+        .plasma-ring {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 8px solid rgba(255,79,216,0.5);
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(2px);
+            animation: pulseRing 4s ease-in-out infinite;
+        }
+
+        .plasma-ring.second {
+            width: 120px;
+            height: 120px;
+            border-color: rgba(0,200,255,0.6);
+            animation-delay: -2s;
+        }
+
+        @keyframes pulseRing {
+            0%,100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            50% { transform: translate(-50%, -50%) scale(1.2) rotate(180deg); }
+        }
+
+        .preview-bg {
+            background: linear-gradient(135deg, #060b18, #111f3f, #0c1024);
+        }
+
+        .wave {
+            position: absolute;
+            left: -10%;
+            width: 120%;
+            height: 60px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,200,255,0.3);
+            animation: waveMove 8s linear infinite;
+        }
+
+        .wave:nth-child(1) { top: 25%; }
+        .wave.second { top: 45%; animation-duration: 6s; }
+        .wave.third { top: 65%; animation-duration: 10s; }
+
+        @keyframes waveMove {
+            from { transform: translateX(-8%) scaleY(1); }
+            50% { transform: translateX(8%) scaleY(1.4); }
+            to { transform: translateX(-8%) scaleY(1); }
+        }
+
+        .project-preview p {
+            margin: 24px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        .launch-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 24px 24px;
+            padding: 18px 26px;
+            border-radius: 22px;
+            overflow: hidden;
+            color: white;
+            text-decoration: none;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, rgba(0,200,255,0.25), rgba(138,92,255,0.25));
+            border: 1px solid rgba(255,255,255,0.14);
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 20px 50px rgba(0,200,255,0.25);
+        }
+
+        .launch-beam {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+            transform: translateX(-120%);
+            transition: transform 0.6s ease;
+        }
+
+        .launch-btn:hover .launch-beam {
+            transform: translateX(120%);
+        }
+
 </style>
 </head>
 <body>
@@ -736,12 +984,94 @@
             <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
         </section>
 
-        <section id="projetos" class="card">
+        <section id="projetos" class="card showcase-card">
             <h2>🎨 Projetos</h2>
-            <a href="blender-projects.html" class="link-item">Blender Projects</a>
-            <a href="gimp-projects.html" class="link-item">Gimp Projects</a>
-            <a href="blender-animations.html" class="link-item">Blender Animations</a>
-            <a href="animated-background.html" class="link-item">Animated Background</a>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h3>Blender Projects</h3>
+                        <div class="tech-tags">
+                            <span>3D</span>
+                            <span>Cycles</span>
+                            <span>Procedural</span>
+                        </div>
+                    </div>
+                    <button class="expand-btn">+</button>
+                </div>
+
+                <div class="project-preview">
+                    <div class="preview-visual preview-blender">
+                        <div class="preview-glow"></div>
+                        <div class="preview-grid"></div>
+                        <div class="floating-cube"></div>
+                    </div>
+
+                    <p>Procedural worlds, cinematic renders, animated environments and experimental geometry art.</p>
+
+                    <a href="blender-projects.html" class="launch-btn">
+                        <span>Launch Project</span>
+                        <div class="launch-beam"></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h3>Gimp Projects</h3>
+                        <div class="tech-tags">
+                            <span>Graphics</span>
+                            <span>FX</span>
+                            <span>Wallpaper</span>
+                        </div>
+                    </div>
+                    <button class="expand-btn">+</button>
+                </div>
+
+                <div class="project-preview">
+                    <div class="preview-visual preview-gimp">
+                        <div class="plasma-ring"></div>
+                        <div class="plasma-ring second"></div>
+                    </div>
+
+                    <p>Digital artwork, cyber wallpapers, abstract compositions and visual experimentation.</p>
+
+                    <a href="gimp-projects.html" class="launch-btn">
+                        <span>Launch Project</span>
+                        <div class="launch-beam"></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-header">
+                    <div>
+                        <h3>Animated Backgrounds</h3>
+                        <div class="tech-tags">
+                            <span>Canvas</span>
+                            <span>Particles</span>
+                            <span>Generative</span>
+                        </div>
+                    </div>
+                    <button class="expand-btn">+</button>
+                </div>
+
+                <div class="project-preview">
+                    <div class="preview-visual preview-bg">
+                        <div class="wave"></div>
+                        <div class="wave second"></div>
+                        <div class="wave third"></div>
+                    </div>
+
+                    <p>Living procedural scenes with neon effects, reactive particles and cinematic atmospheres.</p>
+
+                    <a href="animated-background.html" class="launch-btn">
+                        <span>Launch Project</span>
+                        <div class="launch-beam"></div>
+                    </a>
+                </div>
+            </div>
         </section>
 
         <section id="jogos" class="card">
@@ -1377,6 +1707,22 @@
         applyTheme(0);
         resizeParticleCanvas();
         drawLivingParticles();
+
+        // Expandable Project Cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            const header = card.querySelector('.project-header');
+            header.addEventListener('click', () => {
+                const active = card.classList.contains('active');
+
+                document.querySelectorAll('.project-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+
+                if (!active) {
+                    card.classList.add('active');
+                }
+            });
+        });
     </script>
 </body>
 </html>
