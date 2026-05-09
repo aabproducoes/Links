@@ -1,584 +1,433 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AAB Links - Neon Glass</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-1: #07111f;
-            --bg-2: #102a54;
-            --bg-3: #1e0645;
-            --text: #ecf7ff;
-            --muted: #a9bfd3;
-            --primary: #00d9ff;
-            --secondary: #ffd86b;
-            --pink: #ff4fd8;
-            --card: rgba(255, 255, 255, 0.10);
-            --card-border: rgba(255, 255, 255, 0.22);
-            --link-bg: rgba(0, 217, 255, 0.10);
-            --link-hover: rgba(255, 216, 107, 0.18);
-            --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-            --clock-height: 62px;
-            --clock-dot-active: #ffd86b;
-            --clock-dot-inactive: rgba(255, 255, 255, 0.18);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAB Produções</title>
 
-        .light-mode {
-            --bg-1: #eaf7ff;
-            --bg-2: #d7efff;
-            --bg-3: #fff3c4;
-            --text: #102033;
-            --muted: #496173;
-            --primary: #0077ff;
-            --secondary: #ffb700;
-            --pink: #d92fc4;
-            --card: rgba(255, 255, 255, 0.62);
-            --card-border: rgba(0, 119, 255, 0.22);
-            --link-bg: rgba(0, 119, 255, 0.08);
-            --link-hover: rgba(255, 183, 0, 0.20);
-            --shadow: 0 22px 70px rgba(30, 85, 140, 0.18);
-            --clock-dot-inactive: rgba(0, 119, 255, 0.20);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        html {
-            scroll-behavior: smooth;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            padding-bottom: var(--clock-height);
-            font-family: 'Poppins', Arial, sans-serif;
-            color: var(--text);
-            background:
-                radial-gradient(circle at 15% 15%, rgba(0, 217, 255, 0.32), transparent 28%),
-                radial-gradient(circle at 85% 10%, rgba(255, 79, 216, 0.25), transparent 28%),
-                radial-gradient(circle at 50% 90%, rgba(255, 216, 107, 0.18), transparent 32%),
-                linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, var(--bg-3));
-            overflow-x: hidden;
-        }
+body{
+    font-family:'Inter',sans-serif;
+    background:#050505;
+    color:white;
+    overflow:hidden;
+}
 
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
-            background-size: 52px 52px;
-            mask-image: radial-gradient(circle at center, black, transparent 78%);
-            opacity: 0.55;
-            animation: gridMove 18s linear infinite;
-        }
+/* BACKGROUND */
 
-        body::after {
-            content: "";
-            position: fixed;
-            width: 420px;
-            height: 420px;
-            right: -120px;
-            bottom: 40px;
-            pointer-events: none;
-            background: radial-gradient(circle, rgba(0,217,255,0.22), transparent 65%);
-            filter: blur(8px);
-            animation: floatOrb 8s ease-in-out infinite alternate;
-        }
+.bg{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at top left,#2563eb44,transparent 30%),
+        radial-gradient(circle at bottom right,#00ffff22,transparent 30%),
+        linear-gradient(135deg,#050505,#0a1020,#050505);
+    z-index:-3;
+}
 
-        @keyframes gridMove {
-            from { transform: translateY(0); }
-            to { transform: translateY(52px); }
-        }
+.grid{
+    position:fixed;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+    background-size:50px 50px;
+    animation:gridMove 10s linear infinite;
+    z-index:-2;
+}
 
-        @keyframes floatOrb {
-            from { transform: translate(-20px, 0) scale(1); }
-            to { transform: translate(-70px, -90px) scale(1.18); }
-        }
+@keyframes gridMove{
+    from{
+        transform:translateY(0px);
+    }
+    to{
+        transform:translateY(50px);
+    }
+}
 
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 18px;
-            padding: 18px 22px;
-            border-bottom: 1px solid var(--card-border);
-            background: rgba(5, 12, 26, 0.62);
-            backdrop-filter: blur(18px);
-            box-shadow: 0 8px 34px rgba(0,0,0,0.22);
-        }
+/* MAIN LAYOUT */
 
-        .light-mode header {
-            background: rgba(255, 255, 255, 0.62);
-        }
+.container{
+    display:flex;
+    width:100vw;
+    height:100vh;
+}
 
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.35rem, 3vw, 2rem);
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: var(--secondary);
-            text-shadow: 0 0 16px rgba(255, 216, 107, 0.7), 0 0 28px rgba(0, 217, 255, 0.25);
-            white-space: nowrap;
-        }
+/* LEFT PANEL */
 
-        .header-controls {
-            display: flex;
-            gap: 10px;
-            order: 3;
-        }
+.sidebar{
+    width:33.333%;
+    min-width:320px;
+    background:rgba(0,0,0,0.4);
+    border-right:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    overflow-y:auto;
+    padding:40px;
+    z-index:2;
+}
 
-        .control-button {
-            width: 44px;
-            height: 44px;
-            border: 1px solid var(--card-border);
-            border-radius: 14px;
-            color: var(--text);
-            cursor: pointer;
-            font-size: 1.25rem;
-            background: linear-gradient(135deg, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
-            box-shadow: 0 0 22px rgba(0, 217, 255, 0.15);
-            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
-        }
+.logo{
+    font-size:3rem;
+    font-weight:900;
+    margin-bottom:15px;
 
-        .control-button:hover {
-            transform: translateY(-2px) scale(1.04);
-            border-color: var(--primary);
-            box-shadow: 0 0 24px rgba(0, 217, 255, 0.42);
-        }
+    background:linear-gradient(90deg,#fff,#60a5fa,#00ffff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-        #main-nav {
-            position: absolute;
-            top: 100%;
-            left: 14px;
-            right: 14px;
-            padding: 12px;
-            background: rgba(6, 13, 30, 0.86);
-            border: 1px solid var(--card-border);
-            border-radius: 0 0 24px 24px;
-            backdrop-filter: blur(18px);
-            transform-origin: top;
-            transition: transform 0.28s ease, opacity 0.28s ease;
-        }
+.subtitle{
+    color:#cbd5e1;
+    line-height:1.7;
+    margin-bottom:40px;
+}
 
-        .light-mode #main-nav {
-            background: rgba(255, 255, 255, 0.82);
-        }
+/* BUTTONS */
 
-        .nav-hidden {
-            transform: scaleY(0.75) translateY(-10px);
-            opacity: 0;
-            pointer-events: none;
-        }
+.links{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
 
-        #main-nav ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            gap: 8px;
-        }
+.btn{
+    width:100%;
+    padding:22px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
+    color:white;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.4s;
+    position:relative;
+    overflow:hidden;
+}
 
-        #main-nav a {
-            display: block;
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 700;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: rgba(255,255,255,0.06);
-            transition: background 0.22s ease, color 0.22s ease, transform 0.22s ease;
-        }
+.btn:hover{
+    transform:translateX(8px);
+    border-color:#60a5fa;
+    box-shadow:
+        0 0 20px #2563eb55,
+        0 0 40px #00ffff22;
+}
 
-        #main-nav a:hover {
-            color: var(--secondary);
-            background: rgba(0, 217, 255, 0.14);
-            transform: translateX(4px);
-        }
+.btn::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,transparent,#ffffff22,transparent);
+    transform:translateX(-100%);
+}
 
-        main {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 34px 0;
-            display: grid;
-            gap: 22px;
-        }
+.btn:hover::before{
+    animation:shine 1s forwards;
+}
 
-        .card {
-            position: relative;
-            overflow: hidden;
-            padding: 24px;
-            border-radius: 28px;
-            background: linear-gradient(135deg, var(--card), rgba(255,255,255,0.045));
-            border: 1px solid var(--card-border);
-            box-shadow: var(--shadow);
-            backdrop-filter: blur(18px);
-            transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
-        }
+@keyframes shine{
+    to{
+        transform:translateX(100%);
+    }
+}
 
-        .card::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            pointer-events: none;
-            background: linear-gradient(120deg, transparent 15%, rgba(0,217,255,0.22), transparent 40%, rgba(255,216,107,0.16), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.28s ease;
-        }
+/* ACTIVE BUTTON */
 
-        .card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(0, 217, 255, 0.55);
-            box-shadow: 0 30px 90px rgba(0,0,0,0.42), 0 0 30px rgba(0, 217, 255, 0.14);
-        }
+.btn.active{
 
-        .card:hover::before {
-            opacity: 1;
-        }
+    border-color:#00ffff;
 
-        .card > * {
-            position: relative;
-            z-index: 1;
-        }
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,0.45),
+            rgba(0,255,255,0.18)
+        );
 
-        .card h2 {
-            margin: 0 0 16px;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 0.05em;
-            color: var(--primary);
-            text-shadow: 0 0 16px rgba(0, 217, 255, 0.45);
-        }
+    box-shadow:
+        0 0 20px #00ffff66,
+        0 0 50px #2563eb55;
 
-        #profile {
-            min-height: 190px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    transform:translateX(10px) scale(1.02);
+}
 
-        #profile h2 {
-            font-size: clamp(1.6rem, 4vw, 2.55rem);
-        }
+.btn.active::after{
 
-        #profile p {
-            max-width: 760px;
-            color: var(--muted);
-            font-size: 1.05rem;
-        }
+    content:'';
 
-        .link-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin: 12px 0;
-            padding: 14px 16px;
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 700;
-            border: 1px solid rgba(255,255,255,0.13);
-            border-radius: 18px;
-            background: var(--link-bg);
-            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-        }
+    position:absolute;
 
-        .link-item::after {
-            content: "↗";
-            color: var(--secondary);
-            opacity: 0.72;
-            transition: transform 0.2s ease, opacity 0.2s ease;
-        }
+    left:0;
+    top:0;
+    bottom:0;
 
-        .link-item:hover {
-            transform: translateX(7px) scale(1.015);
-            background: var(--link-hover);
-            border-color: var(--secondary);
-            box-shadow: 0 0 22px rgba(255, 216, 107, 0.18);
-        }
+    width:4px;
 
-        .link-item:hover::after {
-            transform: translate(3px, -3px);
-            opacity: 1;
-        }
+    background:#00ffff;
 
-        #binary-clock {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            z-index: 1000;
-            width: 100%;
-            height: var(--clock-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 10px;
-            background: rgba(4, 10, 24, 0.78);
-            border-top: 1px solid var(--card-border);
-            backdrop-filter: blur(16px);
-            box-shadow: 0 -10px 36px rgba(0,0,0,0.26);
-        }
+    box-shadow:0 0 15px #00ffff;
+}
 
-        .light-mode #binary-clock {
-            background: rgba(255, 255, 255, 0.72);
-        }
+/* RIGHT CONTENT */
 
-        .binary-column {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
+.viewer{
+    width:66.666%;
+    position:relative;
+    background:#000;
+}
 
-        .binary-column-label {
-            font-size: 0.63rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
+iframe{
+    width:100%;
+    height:100%;
+    border:none;
+    opacity:0;
+    transform:scale(1.02);
+    transition:0.6s;
+}
 
-        .dot-container {
-            display: flex;
-            gap: 5px;
-        }
+iframe.active{
+    opacity:1;
+    transform:scale(1);
+}
 
-        .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--clock-dot-inactive);
-            transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-        }
+/* DEFAULT CONTENT */
 
-        .dot.active {
-            transform: scale(1.25);
-            background: var(--clock-dot-active);
-            box-shadow: 0 0 10px var(--secondary), 0 0 22px rgba(255, 216, 107, 0.5);
-        }
+.default{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:40px;
+    pointer-events:none;
+}
 
-        @media (min-width: 768px) {
-            header {
-                padding: 18px 42px;
-            }
+.default h1{
+    font-size:5rem;
+    font-weight:900;
+    margin-bottom:20px;
 
-            #menu-toggle {
-                display: none;
-            }
+    background:linear-gradient(90deg,#ffffff,#60a5fa,#00ffff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
 
-            #main-nav {
-                position: static;
-                transform: none;
-                opacity: 1;
-                pointer-events: auto;
-                padding: 0;
-                border: 0;
-                border-radius: 0;
-                background: transparent;
-                backdrop-filter: none;
-                flex: 1;
-            }
+.default p{
+    color:#cbd5e1;
+    font-size:1.2rem;
+    max-width:700px;
+    line-height:1.8;
+}
 
-            #main-nav ul {
-                display: flex;
-                justify-content: center;
-                gap: 12px;
-            }
+/* PARTICLES */
 
-            #main-nav a {
-                background: transparent;
-                padding: 10px 14px;
-            }
+.particle{
+    position:fixed;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:#60a5fa;
+    opacity:0.4;
+    pointer-events:none;
+    animation:float linear infinite;
+}
 
-            #main-nav a:hover {
-                transform: translateY(-2px);
-            }
+@keyframes float{
+    from{
+        transform:translateY(100vh);
+    }
+    to{
+        transform:translateY(-10vh);
+    }
+}
 
-            main {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 26px;
-                padding: 46px 0;
-            }
+/* MOBILE */
 
-            #profile {
-                grid-column: 1 / -1;
-            }
-        }
+@media(max-width:900px){
 
-        @media (max-width: 520px) {
-            .logo {
-                font-size: 1.15rem;
-            }
+    .container{
+        flex-direction:column;
+    }
 
-            main {
-                width: min(100% - 22px, 1120px);
-                padding-top: 22px;
-            }
+    .sidebar{
+        width:100%;
+        height:45%;
+        min-width:auto;
+        border-right:none;
+        border-bottom:1px solid rgba(255,255,255,0.08);
+    }
 
-            .card {
-                padding: 20px;
-                border-radius: 22px;
-            }
+    .viewer{
+        width:100%;
+        height:55%;
+    }
 
-            #seconds-col {
-                display: none;
-            }
-        }
-    </style>
+    .default h1{
+        font-size:3rem;
+    }
+}
+
+</style>
 </head>
 <body>
-    <header>
-        <div class="logo">AAB Links</div>
-        <div class="header-controls">
-            <button id="theme-toggle" class="control-button" aria-label="Alternar Tema">☀️</button>
-            <button id="menu-toggle" class="control-button" aria-label="Abrir Menu">☰</button>
-        </div>
-        <nav id="main-nav" class="nav-hidden">
-            <ul>
-                <li><a href="#projetos">Projetos</a></li>
-                <li><a href="#jogos">Jogos/Visualizers</a></li>
-                <li><a href="#social">Redes Sociais</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section id="profile" class="card">
-            <h2>👤 Perfil</h2>
-            <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
-        </section>
+<div class="bg"></div>
+<div class="grid"></div>
 
-        <section id="projetos" class="card">
-            <h2>🎨 Projetos</h2>
-            <a href="blender-projects.html" class="link-item">Blender Projects</a>
-            <a href="gimp-projects.html" class="link-item">Gimp Projects</a>
-            <a href="blender-animations.html" class="link-item">Blender Animations</a>
-            <a href="animated-background.html" class="link-item">Animated Background</a>
-        </section>
+<div class="container">
 
-        <section id="jogos" class="card">
-            <h2>🎮 Jogos & Música</h2>
-            <a href="HTML_games/HTML-play.html" class="link-item">HTML Games</a>
-            <a href="music_player-visualizer.html" class="link-item">MP3 Player Visualizer</a>
-        </section>
+    <!-- LEFT SIDE -->
+    <div class="sidebar">
 
-        <section id="social" class="card">
-            <h2>🌐 Redes Sociais</h2>
-            <a href="https://www.instagram.com/aabpr0ducoes/" class="link-item external">Instagram (@aabpr0ducoes)</a>
-        </section>
-        
-        <section id="contato" class="card">
-            <h2>📧 Contato</h2>
-            <a href="https://wa.me/54984181968" class="link-item external">WhatsApp</a>
-            <a href="mailto:aaugusto444@gmail.com" class="link-item external">Email</a>
-        </section>
-    </main>
-    
-    <div id="binary-clock">
-        <div class="binary-column">
-            <span class="binary-column-label">Hora</span>
-            <div class="dot-container" id="hh">
-                <div class="dot" data-weight="16"></div>
-                <div class="dot" data-weight="8"></div>
-                <div class="dot" data-weight="4"></div>
-                <div class="dot" data-weight="2"></div>
-                <div class="dot" data-weight="1"></div>
-            </div>
+        <div class="logo">AAB</div>
+
+        <div class="subtitle">
+            Procedural Art • HTML Games • Blender • Interactive Backgrounds • Experimental Visual Experiences
         </div>
 
-        <div class="binary-column">
-            <span class="binary-column-label">Minuto</span>
-            <div class="dot-container" id="mm">
-                <div class="dot" data-weight="32"></div>
-                <div class="dot" data-weight="16"></div>
-                <div class="dot" data-weight="8"></div>
-                <div class="dot" data-weight="4"></div>
-                <div class="dot" data-weight="2"></div>
-                <div class="dot" data-weight="1"></div>
-            </div>
+        <div class="links">
+
+            <!-- NORMAL LINKS -->
+
+            <button class="btn"
+                onclick="window.open('https://wa.me/54984181968','_blank')">
+                WhatsApp
+            </button>
+
+            <button class="btn"
+                onclick="window.location.href='mailto:AntonioAugustoB@protonmail.com'">
+                Email
+            </button>
+
+            <button class="btn"
+                onclick="window.open('https://www.instagram.com/aabpr0ducoes','_blank')">
+                Instagram
+            </button>
+
+            <!-- EMBED LINKS -->
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/blender-projects.html')">
+                Blender Projects
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/blender-animations.html')">
+                Blender Animations
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/animated-background.html')">
+                Animated Backgrounds
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/HTML_games/HTML-play.html')">
+                HTML Games
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/music_player-visualizer.html')">
+                Music Visualizer
+            </button>
+
         </div>
 
-        <div class="binary-column" id="seconds-col">
-            <span class="binary-column-label">Segundo</span>
-            <div class="dot-container" id="ss">
-                <div class="dot" data-weight="32"></div>
-                <div class="dot" data-weight="16"></div>
-                <div class="dot" data-weight="8"></div>
-                <div class="dot" data-weight="4"></div>
-                <div class="dot" data-weight="2"></div>
-                <div class="dot" data-weight="1"></div>
-            </div>
-        </div>
     </div>
 
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        const storageKey = 'theme-preference';
+    <!-- RIGHT SIDE -->
 
-        function setLight(isLight) {
-            body.classList.toggle('light-mode', isLight);
-            themeToggle.textContent = isLight ? '🌙' : '☀️';
-            localStorage.setItem(storageKey, isLight ? 'light' : 'dark');
-        }
+    <div class="viewer">
 
-        function initTheme() {
-            const storedTheme = localStorage.getItem(storageKey);
-            if (storedTheme) {
-                setLight(storedTheme === 'light');
-            } else {
-                setLight(false);
-            }
-        }
+        <div class="default" id="defaultText">
 
-        themeToggle.addEventListener('click', () => {
-            setLight(!body.classList.contains('light-mode'));
+            <h1>AAB PRODUÇÕES</h1>
+
+            <p>
+                Click a project on the left to open it directly inside the page.
+                Explore procedural art, interactive experiences, HTML games,
+                futuristic animations, and experimental visual systems.
+            </p>
+
+        </div>
+
+        <iframe id="frame"></iframe>
+
+    </div>
+
+</div>
+
+<script>
+
+/* PARTICLES */
+
+for(let i=0;i<80;i++){
+
+    const p=document.createElement('div');
+
+    p.className='particle';
+
+    p.style.left=Math.random()*100+'vw';
+
+    p.style.top=Math.random()*100+'vh';
+
+    p.style.animationDuration=(5+Math.random()*10)+'s';
+
+    p.style.animationDelay=Math.random()*5+'s';
+
+    p.style.opacity=Math.random();
+
+    document.body.appendChild(p);
+}
+
+/* PAGE VIEWER */
+
+const frame=document.getElementById('frame');
+const defaultText=document.getElementById('defaultText');
+
+function openPage(button,url){
+
+    defaultText.style.display='none';
+
+    /* REMOVE ACTIVE */
+
+    document.querySelectorAll('.project-btn')
+        .forEach(btn=>{
+            btn.classList.remove('active');
         });
 
-        initTheme();
+    /* ADD ACTIVE */
 
-        const nav = document.getElementById('main-nav');
-        const menuButton = document.getElementById('menu-toggle');
+    button.classList.add('active');
 
-        menuButton.onclick = function() {
-            nav.classList.toggle('nav-hidden');
-            menuButton.textContent = nav.classList.contains('nav-hidden') ? '☰' : '✕';
+    /* TRANSITION */
+
+    frame.classList.remove('active');
+
+    setTimeout(()=>{
+
+        frame.src=url;
+
+        frame.onload=()=>{
+
+            frame.classList.add('active');
         };
 
-        nav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth < 768) {
-                    nav.classList.add('nav-hidden');
-                    menuButton.textContent = '☰';
-                }
-            });
-        });
+    },200);
+}
 
-        function updateBinaryClock() {
-            const now = new Date();
-            updateColumn(now.getHours(), 'hh');
-            updateColumn(now.getMinutes(), 'mm');
-            updateColumn(now.getSeconds(), 'ss');
-        }
+</script>
 
-        function updateColumn(value, columnId) {
-            const dots = document.getElementById(columnId).querySelectorAll('.dot');
-            dots.forEach(dot => {
-                const weight = Number(dot.dataset.weight);
-                dot.classList.toggle('active', (value & weight) === weight);
-            });
-        }
-
-        setInterval(updateBinaryClock, 1000);
-        updateBinaryClock();
-    </script>
 </body>
 </html>
