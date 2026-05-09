@@ -3,233 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Links - Blue & Gold</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>AAB Links - Neon Glass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ------------------------------------ */
-        /* 1. VARIÁVEIS DE COR E TEMA */
-        /* ------------------------------------ */
-
-        /* Variáveis Padrão (Light Mode) */
         :root {
-            --color-primary: #007bff; /* Azul vibrante */
-            --color-secondary: #FFD700; /* Dourado */
-            --color-background: #f4f7fa; /* Fundo muito claro */
-            --color-text: #212529; /* Texto escuro */
-            --color-card-bg: white;
-            --color-link-bg: #e9f2ff; /* Azul claro para links */
-            --color-link-hover: #0056b3; /* Azul escuro no hover */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --clock-height: 50px;
-            --clock-dot-color: #ffd700;
-            --clock-dot-inactive: #007cff33;
+            --color-primary: #00aaff;
+            --color-secondary: #ffd166;
+            --color-accent: #8a5cff;
+            --color-background: #06111f;
+            --color-text: #ecf7ff;
+            --color-muted: #a9bdd2;
+            --color-card-bg: rgba(12, 30, 54, 0.68);
+            --color-link-bg: rgba(0, 170, 255, 0.09);
+            --color-link-hover: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.16);
+            --shadow-light: 0 20px 60px rgba(0, 0, 0, 0.38);
+            --clock-height: 58px;
+            --clock-dot-color: #ffd166;
+            --clock-dot-inactive: rgba(255, 255, 255, 0.16);
         }
 
-        /* Variáveis de Modo Escuro (Dark Mode) */
-        .dark-mode {
-            --color-primary: #3f9bff; /* Azul um pouco mais claro para contraste */
-            --color-secondary: #FFD700; 
-            --color-background: #121212; /* Fundo escuro */
-            --color-text: #e0e0e0; /* Texto claro */
-            --color-card-bg: #1e1e1e; /* Card escuro */
-            --color-link-bg: #2a2a40; /* Link azul escuro */
-            --color-link-hover: #ffffff; /* Hover do link em branco */
-            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.5);
-            --clock-dot-inactive: #e0e0e033;
+        .light-mode {
+            --color-primary: #006dff;
+            --color-secondary: #ffb703;
+            --color-accent: #6c3cff;
+            --color-background: #eef6ff;
+            --color-text: #0b1728;
+            --color-muted: #4f6078;
+            --color-card-bg: rgba(255, 255, 255, 0.72);
+            --color-link-bg: rgba(0, 109, 255, 0.08);
+            --glass-border: rgba(0, 35, 80, 0.12);
+            --shadow-light: 0 18px 50px rgba(0, 80, 180, 0.16);
+            --clock-dot-inactive: rgba(0, 109, 255, 0.2);
         }
 
-        /* Aplicações específicas do Dark Mode */
-        .dark-mode .card h2 {
-            color: var(--color-secondary); /* Títulos em dourado no Dark Mode */
-        }
-        .dark-mode .link-item {
-            border-left-color: var(--color-secondary); /* Barra lateral principal do link em dourado */
-        }
-        .dark-mode .link-item:hover {
-            background-color: #3b3b5c;
-            border-left-color: var(--color-primary); /* No hover a barra lateral muda para o azul claro */
+        * {
+            box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
 
-        /* ------------------------------------ */
-        /* 2. CONFIGURAÇÕES GLOBAIS E BODY */
-        /* ------------------------------------ */
         body {
-            font-family: 'Poppins', 'Arial', sans-serif; 
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
-            padding: 0 0 var(--clock-height) 0; /* Espaço na parte inferior para o relógio fixo */
-            background-color: var(--color-background);
+            min-height: 100vh;
+            padding: 0 0 var(--clock-height) 0;
             color: var(--color-text);
             line-height: 1.6;
-            transition: background-color 0.3s, color 0.3s; /* Transição suave para o Dark Mode */
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(0, 170, 255, 0.32), transparent 28%),
+                radial-gradient(circle at 90% 20%, rgba(138, 92, 255, 0.28), transparent 32%),
+                radial-gradient(circle at 50% 90%, rgba(255, 209, 102, 0.12), transparent 34%),
+                var(--color-background);
+            transition: background-color 0.35s, color 0.35s;
         }
 
-        /* ------------------------------------ */
-        /* 3. HEADER E NAVEGAÇÃO (Centralizada) */
-        /* ------------------------------------ */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, black, transparent 88%);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -30%;
+            pointer-events: none;
+            background: conic-gradient(from 0deg, transparent, rgba(0,170,255,0.12), transparent, rgba(255,209,102,0.1), transparent);
+            animation: ambientSpin 22s linear infinite;
+            z-index: -3;
+        }
+
+        @keyframes ambientSpin {
+            from { transform: rotate(0deg) scale(1.2); }
+            to { transform: rotate(360deg) scale(1.2); }
+        }
+
         header {
-            background-color: var(--color-primary);
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: var(--shadow-light);
-            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 22px;
+            background: rgba(5, 16, 32, 0.72);
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.26);
+        }
+
+        .light-mode header {
+            background: rgba(255, 255, 255, 0.68);
         }
 
         .logo {
-            font-size: 1.6em;
-            font-weight: bold;
-            color: var(--color-secondary); 
-            flex-grow: 1; 
+            position: relative;
+            flex: 1;
             text-align: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(1.25rem, 4vw, 1.8rem);
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--color-secondary);
+            text-shadow: 0 0 16px rgba(255, 209, 102, 0.55);
         }
-        
-        /* Contêiner para os botões de controle */
+
+        .logo::after {
+            content: "PORTAL";
+            display: block;
+            margin-top: -2px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.42em;
+            letter-spacing: 0.35em;
+            color: var(--color-muted);
+        }
+
         .header-controls {
             display: flex;
             gap: 10px;
+            order: 3;
         }
 
-        /* Estilo comum para os botões de controle (Menu Toggle e Dark Mode Toggle) */
         .control-button {
-            background: none;
-            border: 2px solid white;
-            border-radius: 5px;
-            color: white;
-            font-size: 1.4em;
-            width: 40px;
-            height: 40px;
+            width: 43px;
+            height: 43px;
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            color: var(--color-text);
+            background: rgba(255, 255, 255, 0.08);
             cursor: pointer;
-            transition: all 0.3s ease;
-            line-height: 1;
+            font-size: 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 102; /* Garante que os botões fiquem sobre o logo no mobile */
-        }
-        .control-button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.04);
         }
 
-        /* Menu Dropdown (Mobile) */
+        .control-button:hover {
+            transform: translateY(-2px) scale(1.04);
+            background: rgba(0, 170, 255, 0.18);
+            box-shadow: 0 0 18px rgba(0, 170, 255, 0.24);
+        }
+
         #main-nav {
             position: absolute;
-            top: 100%; 
-            left: 0;
-            right: 0;
-            background-color: #0069d9;
-            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.3s ease-in-out; /* Efeito 'Juice' */
+            top: 100%;
+            left: 14px;
+            right: 14px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            border-radius: 0 0 22px 22px;
+            background: rgba(5, 16, 32, 0.9);
+            backdrop-filter: blur(18px);
             transform-origin: top;
             transform: scaleY(1);
             opacity: 1;
+            transition: transform 0.28s ease, opacity 0.28s ease;
+            box-shadow: var(--shadow-light);
+        }
+
+        .light-mode #main-nav {
+            background: rgba(255, 255, 255, 0.88);
         }
 
         .nav-hidden {
-            transform: scaleY(0); 
-            opacity: 0;
+            transform: scaleY(0) !important;
+            opacity: 0 !important;
             height: 0;
-            overflow: hidden;
         }
 
         #main-nav ul {
             list-style: none;
-            padding: 0;
+            padding: 12px;
             margin: 0;
             text-align: center;
         }
 
         #main-nav li a {
             display: block;
-            padding: 15px;
+            padding: 14px 16px;
+            color: var(--color-text);
             text-decoration: none;
-            color: white;
-            border-bottom: 1px solid #0056b3;
-            transition: background-color 0.2s, color 0.2s;
+            font-weight: 700;
+            border-radius: 14px;
+            transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
         }
 
         #main-nav li a:hover {
-            background-color: #0056b3;
             color: var(--color-secondary);
+            background: rgba(0, 170, 255, 0.13);
+            transform: translateX(5px);
         }
 
-        /* ------------------------------------ */
-        /* 4. CONTEÚDO PRINCIPAL E CARDS */
-        /* ------------------------------------ */
         main {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 34px 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 22px;
         }
 
         .card {
-            background-color: var(--color-card-bg);
-            padding: 20px;
-            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            padding: 24px;
+            border: 1px solid var(--glass-border);
+            border-radius: 26px;
+            background: var(--color-card-bg);
+            backdrop-filter: blur(18px);
             box-shadow: var(--shadow-light);
-            transition: transform 0.3s ease, background-color 0.3s, box-shadow 0.3s;
+            transition: transform 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
         }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.16), transparent 35%, rgba(0,170,255,0.09));
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            right: -60px;
+            top: -60px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,170,255,0.28), transparent 65%);
+            pointer-events: none;
+        }
+
         .card:hover {
-            transform: translateY(-5px); 
+            transform: translateY(-8px);
+            border-color: rgba(255, 209, 102, 0.42);
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42), 0 0 28px rgba(0, 170, 255, 0.16);
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 1;
         }
 
         .card h2 {
-            color: var(--color-primary);
-            border-bottom: 2px solid var(--color-secondary);
-            padding-bottom: 8px;
-            margin-bottom: 15px;
+            margin: 0 0 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.18rem;
+            color: var(--color-secondary);
+            letter-spacing: 0.04em;
+        }
+
+        .card h2::after {
+            content: "";
+            display: block;
+            width: 64px;
+            height: 3px;
+            margin-top: 9px;
+            border-radius: 99px;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+            box-shadow: 0 0 16px rgba(0, 170, 255, 0.55);
+        }
+
+        .card p {
+            color: var(--color-muted);
+            margin: 0;
         }
 
         .link-item {
-            display: block;
-            text-decoration: none;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 12px 0;
+            padding: 14px 16px;
             color: var(--color-text);
-            padding: 12px 18px;
-            margin: 10px 0;
-            background-color: var(--color-link-bg);
-            border-radius: 6px;
-            font-weight: 600;
-            transition: all 0.2s ease-out, background-color 0.3s, color 0.3s;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            border-left: 5px solid var(--color-primary);
+            background: var(--color-link-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 4px solid var(--color-primary);
+            border-radius: 17px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: transform 0.24s ease, background 0.24s ease, border-color 0.24s ease, color 0.24s ease;
+        }
+
+        .link-item::after {
+            content: "↗";
+            color: var(--color-secondary);
+            opacity: 0.75;
+            transition: transform 0.24s ease;
         }
 
         .link-item:hover {
-            background-color: #d1e2ff;
             color: var(--color-link-hover);
-            transform: scale(1.02);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            border-left: 5px solid var(--color-secondary);
+            background: linear-gradient(90deg, rgba(0,170,255,0.24), rgba(138,92,255,0.18));
+            border-color: rgba(255, 209, 102, 0.55);
+            transform: translateX(5px) scale(1.015);
+        }
+
+        .link-item:hover::after {
+            transform: translate(3px, -3px);
         }
 
         .link-item:active {
-            transform: scale(0.98);
+            transform: scale(0.985);
         }
 
-        /* ------------------------------------ */
-        /* 5. RELÓGIO BINÁRIO (FIXO) */
-        /* ------------------------------------ */
+        #profile {
+            min-height: 210px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        #profile h2 {
+            font-size: clamp(1.35rem, 4vw, 2rem);
+        }
+
         #binary-clock {
-            position: fixed; 
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: var(--clock-height); /* Altura: 50px */
-            background-color: var(--color-primary);
-            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+            height: var(--clock-height);
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: space-around;
-            padding: 0 5px;
-            z-index: 1000;
-            font-size: 0.8em;
-            color: white;
-            transition: background-color 0.3s;
+            padding: 0 10px;
+            color: var(--color-text);
+            background: rgba(5, 16, 32, 0.82);
+            border-top: 1px solid var(--glass-border);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.28);
+        }
+
+        .light-mode #binary-clock {
+            background: rgba(255, 255, 255, 0.78);
         }
 
         .binary-column {
@@ -238,111 +364,106 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            width: 1fr;
+            min-width: 90px;
         }
-        
+
         .binary-column-label {
-            margin: 0 0 2px 0;
-            font-size: 0.6em; 
-            font-weight: 300;
+            margin: 0 0 4px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            color: var(--color-muted);
             text-transform: uppercase;
         }
 
         .dot-container {
             display: flex;
-            gap: 2px;
-            height: 15px;
+            gap: 5px;
         }
-        
+
         .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
             background-color: var(--clock-dot-inactive);
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, box-shadow 0.2s, transform 0.2s;
         }
 
         .dot.active {
+            transform: scale(1.22);
             background-color: var(--clock-dot-color);
-            box-shadow: 0 0 5px var(--color-secondary);
+            box-shadow: 0 0 10px var(--clock-dot-color), 0 0 20px rgba(255, 209, 102, 0.45);
         }
 
-
-        /* ------------------------------------ */
-        /* 6. MEDIA QUERY: Desktop/Tablet */
-        /* ------------------------------------ */
         @media (min-width: 768px) {
-            
-            /* Ajuste do Header para centralizar a navegação */
-            .header-controls {
-                order: 3; /* Move os controles para a direita */
+            header {
+                padding: 18px 42px;
             }
+
+            .logo {
+                flex: 0 0 auto;
+                text-align: left;
+                order: 1;
+            }
+
             #menu-toggle {
                 display: none;
             }
 
-            header {
-                padding: 15px 40px;
-            }
-
-            .logo {
-                flex-grow: 0;
-                text-align: left;
-                position: static;
-                transform: none;
-                order: 1; /* Logo à esquerda */
-            }
-            
             #main-nav {
                 position: static;
-                transform: none;
-                opacity: 1;
-                height: auto;
-                flex-grow: 1;
-                order: 2; /* Menu no centro */
+                flex: 1;
+                order: 2;
+                transform: none !important;
+                opacity: 1 !important;
+                height: auto !important;
+                border: none;
+                border-radius: 0;
+                background: transparent !important;
+                box-shadow: none;
+                backdrop-filter: none;
             }
 
             #main-nav ul {
                 display: flex;
-                gap: 20px;
-                justify-content: center; /* CENTRALIZA O MENU DE NAVEGAÇÃO */
-                margin: 0 auto;
-                max-width: 600px;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                padding: 0;
             }
 
             #main-nav li a {
-                border-bottom: none;
-                padding: 5px 10px;
-                background: none;
-                color: white;
-            }
-            
-            #main-nav li a:hover {
-                background: none;
-                color: var(--color-secondary);
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+                padding: 9px 13px;
+                font-size: 0.9rem;
             }
 
-            /* Layout de Grid para Cards no Desktop */
-            main {
-                padding: 30px;
-                max-width: 1000px;
-                margin: 0 auto;
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 30px;
+            #main-nav li a:hover {
+                transform: translateY(-2px);
             }
-            
-            #profile { grid-column: 1 / -1; }
-            #jogos { grid-column: 1 / span 1; }
-            #social { grid-column: 2 / span 1; }
-            #contato { grid-column: 3 / span 1; }
+
+            main {
+                padding: 48px 0;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 26px;
+            }
+
+            #profile {
+                grid-column: 1 / -1;
+            }
         }
 
-        /* Esconde a coluna do segundo (SS) em telas muito pequenas */
         @media (max-width: 480px) {
             #seconds-col {
                 display: none;
+            }
+
+            .binary-column {
+                min-width: auto;
+            }
+
+            .card {
+                padding: 20px;
+                border-radius: 22px;
             }
         }
     </style>
@@ -351,7 +472,7 @@
     <header>
         <div class="logo">AAB Links</div>
         <div class="header-controls">
-            <button id="theme-toggle" class="control-button" aria-label="Alternar Tema Escuro">🌙</button>
+            <button id="theme-toggle" class="control-button" aria-label="Alternar Tema">☀️</button>
             <button id="menu-toggle" class="control-button" aria-label="Abrir Menu">☰</button>
         </div>
         <nav id="main-nav" class="nav-hidden">
@@ -367,7 +488,7 @@
     <main>
         <section id="profile" class="card">
             <h2>👤 Perfil</h2>
-            <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</br>black require regret news pelican  render borrow spawn allow client response coconut title jazz puppy cupboard public setup flower scorpion pulse shove horror foam  </p>
+            <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
         </section>
 
         <section id="projetos" class="card">
@@ -398,7 +519,7 @@
     
     <div id="binary-clock">
         <div class="binary-column">
-            <span class="binary-column-label">Hora (HH)</span>
+            <span class="binary-column-label">Hora</span>
             <div class="dot-container" id="hh">
                 <div class="dot" data-weight="16"></div>
                 <div class="dot" data-weight="8"></div>
@@ -409,7 +530,7 @@
         </div>
 
         <div class="binary-column">
-            <span class="binary-column-label">Minuto (MM)</span>
+            <span class="binary-column-label">Minuto</span>
             <div class="dot-container" id="mm">
                 <div class="dot" data-weight="32"></div>
                 <div class="dot" data-weight="16"></div>
@@ -421,7 +542,7 @@
         </div>
 
         <div class="binary-column" id="seconds-col">
-            <span class="binary-column-label">Segundo (SS)</span>
+            <span class="binary-column-label">Segundo</span>
             <div class="dot-container" id="ss">
                 <div class="dot" data-weight="32"></div>
                 <div class="dot" data-weight="16"></div>
@@ -434,55 +555,42 @@
     </div>
 
     <script>
-        // ------------------------------------
-        // 1. LÓGICA DO DARK MODE
-        // ------------------------------------
         const themeToggle = document.getElementById('theme-toggle');
         const body = document.body;
         const storageKey = 'theme-preference';
 
-        function setDark(isDark) {
-            if (isDark) {
-                body.classList.add('dark-mode');
-                themeToggle.textContent = '☀️'; // Sol para voltar ao modo claro
-                localStorage.setItem(storageKey, 'dark');
-            } else {
-                body.classList.remove('dark-mode');
-                themeToggle.textContent = '🌙'; // Lua para ir ao modo escuro
+        function setLight(isLight) {
+            if (isLight) {
+                body.classList.add('light-mode');
+                themeToggle.textContent = '🌙';
                 localStorage.setItem(storageKey, 'light');
+            } else {
+                body.classList.remove('light-mode');
+                themeToggle.textContent = '☀️';
+                localStorage.setItem(storageKey, 'dark');
             }
         }
 
-        // Inicializa o tema ao carregar a página
         function initTheme() {
             const storedTheme = localStorage.getItem(storageKey);
-            
             if (storedTheme) {
-                // Se houver preferência no Local Storage
-                setDark(storedTheme === 'dark');
+                setLight(storedTheme === 'light');
             } else {
-                // Se não houver, usa a preferência do sistema operacional (automático)
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                setDark(prefersDark);
+                const prefersLight = !window.matchMedia('(prefers-color-scheme: dark)').matches;
+                setLight(prefersLight);
             }
         }
 
-        // Alterna o tema ao clicar no botão
         themeToggle.addEventListener('click', () => {
-            const isDark = body.classList.contains('dark-mode');
-            setDark(!isDark);
+            const isLight = body.classList.contains('light-mode');
+            setLight(!isLight);
         });
 
-        initTheme(); // Chama para configurar o tema
+        initTheme();
 
-
-        // ------------------------------------
-        // 2. LÓGICA DO MENU
-        // ------------------------------------
         document.getElementById('menu-toggle').onclick = function() {
             const nav = document.getElementById('main-nav');
             const button = this;
-            
             nav.classList.toggle('nav-hidden');
             button.textContent = nav.classList.contains('nav-hidden') ? '☰' : '✕';
 
@@ -497,26 +605,19 @@
             });
         };
 
-        // ------------------------------------
-        // 3. LÓGICA DO RELÓGIO BINÁRIO
-        // ------------------------------------
         function updateBinaryClock() {
             const now = new Date();
-            let h = now.getHours();
-            let m = now.getMinutes();
-            let s = now.getSeconds();
+            const h = now.getHours();
+            const m = now.getMinutes();
+            const s = now.getSeconds();
 
             function updateColumn(value, columnId) {
                 const dots = document.getElementById(columnId).querySelectorAll('.dot');
-                
-                // Mapeia os pesos binários (ex: [16, 8, 4, 2, 1] para HH)
                 const weights = Array.from(dots).map(d => parseInt(d.getAttribute('data-weight'))).sort((a, b) => b - a);
-
                 let tempValue = value;
-                
+
                 dots.forEach((dot, index) => {
                     const weight = weights[index];
-
                     if (tempValue >= weight) {
                         dot.classList.add('active');
                         tempValue -= weight;
