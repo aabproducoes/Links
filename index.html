@@ -23,30 +23,16 @@
             --my: 0;
         }
 
-        .light-mode {
-            --bg: #eef7ff;
-            --text: #071321;
-            --muted: #53697d;
-            --glass: rgba(255, 255, 255, 0.66);
-            --glass-strong: rgba(255, 255, 255, 0.84);
-            --border: rgba(0, 55, 120, 0.14);
-            --shadow: 0 24px 70px rgba(0, 90, 180, 0.16);
-        }
-
         * {
             box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
         }
 
         body {
             margin: 0;
             min-height: 100vh;
-            padding-bottom: var(--clock-height);
             overflow-x: hidden;
-            font-family: 'Poppins', Arial, sans-serif;
+            padding-bottom: var(--clock-height);
+            font-family: 'Poppins', sans-serif;
             color: var(--text);
             background:
                 radial-gradient(circle at calc(50% + var(--mx) * 14px) calc(20% + var(--my) * 10px), rgba(0, 200, 255, 0.36), transparent 28%),
@@ -70,22 +56,6 @@
             mask-image: linear-gradient(to bottom, black, transparent 82%);
         }
 
-        body::after {
-            content: "";
-            position: fixed;
-            inset: -30%;
-            z-index: -6;
-            pointer-events: none;
-            background: conic-gradient(from 0deg, transparent, rgba(0,200,255,0.18), transparent, rgba(255,209,102,0.12), transparent, rgba(255,79,216,0.14), transparent);
-            animation: cosmicSpin 28s linear infinite;
-            filter: blur(20px);
-        }
-
-        @keyframes cosmicSpin {
-            from { transform: rotate(0deg) scale(1.2); }
-            to { transform: rotate(360deg) scale(1.2); }
-        }
-
         .scene {
             position: fixed;
             inset: 0;
@@ -95,59 +65,45 @@
             perspective: 1000px;
         }
 
-        .orb, .geo {
-            position: absolute;
-            transform-style: preserve-3d;
-            will-change: transform;
-        }
-
         .orb {
+            position: absolute;
             border-radius: 50%;
-            filter: blur(var(--blur, 0px));
-            opacity: var(--opacity, 0.75);
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), var(--color), transparent 68%);
-            box-shadow: 0 0 60px var(--color);
-            animation: floatOrb var(--speed) ease-in-out infinite alternate;
+            filter: blur(2px);
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(0,200,255,0.5), transparent 68%);
+            box-shadow: 0 0 60px rgba(0,200,255,0.5);
+            animation: floatOrb 10s ease-in-out infinite alternate;
         }
 
-        .orb.one { width: 190px; height: 190px; left: 5%; top: 16%; --color: rgba(0,200,255,0.55); --speed: 8s; --blur: 1px; }
-        .orb.two { width: 120px; height: 120px; right: 9%; top: 18%; --color: rgba(255,209,102,0.5); --speed: 10s; --blur: 2px; }
-        .orb.three { width: 260px; height: 260px; left: 68%; top: 68%; --color: rgba(138,92,255,0.45); --speed: 12s; --blur: 5px; --opacity: 0.45; }
+        .orb.one {
+            width: 190px;
+            height: 190px;
+            left: 5%;
+            top: 16%;
+        }
+
+        .orb.two {
+            width: 120px;
+            height: 120px;
+            right: 9%;
+            top: 18%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,209,102,0.5), transparent 68%);
+        }
+
+        .orb.three {
+            width: 260px;
+            height: 260px;
+            left: 68%;
+            top: 68%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(138,92,255,0.45), transparent 68%);
+        }
 
         @keyframes floatOrb {
-            from { transform: translate3d(calc(var(--mx) * 20px), calc(var(--my) * 18px), -80px) rotate(0deg); }
-            to { transform: translate3d(calc(var(--mx) * -30px), calc(var(--my) * -24px - 28px), 80px) rotate(12deg); }
-        }
-
-        .geo {
-            width: var(--size);
-            height: var(--size);
-            border: 1px solid rgba(255,255,255,0.22);
-            background: linear-gradient(135deg, rgba(0,200,255,0.1), rgba(255,255,255,0.02), rgba(255,79,216,0.1));
-            backdrop-filter: blur(4px);
-            box-shadow: inset 0 0 24px rgba(255,255,255,0.04), 0 0 30px rgba(0,200,255,0.08);
-            animation: driftGeo var(--speed) ease-in-out infinite alternate;
-            filter: blur(var(--blur, 0));
-            opacity: var(--opacity, 0.75);
-        }
-
-        .geo.triangle {
-            clip-path: polygon(50% 0, 100% 100%, 0 100%);
-        }
-
-        .geo.hex {
-            clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
-        }
-
-        .geo.g1 { --size: 90px; --speed: 9s; left: 14%; top: 64%; }
-        .geo.g2 { --size: 130px; --speed: 12s; right: 18%; top: 44%; --blur: 1px; }
-        .geo.g3 { --size: 70px; --speed: 7s; left: 42%; top: 20%; --opacity: 0.55; }
-        .geo.g4 { --size: 160px; --speed: 14s; left: 78%; top: 10%; --blur: 2px; --opacity: 0.42; }
-        .geo.g5 { --size: 110px; --speed: 11s; left: 8%; top: 36%; --opacity: 0.48; }
-
-        @keyframes driftGeo {
-            from { transform: translate3d(calc(var(--mx) * -35px), calc(var(--my) * -22px), -120px) rotateX(45deg) rotateY(10deg) rotateZ(0deg); }
-            to { transform: translate3d(calc(var(--mx) * 36px), calc(var(--my) * 24px - 34px), 80px) rotateX(58deg) rotateY(45deg) rotateZ(90deg); }
+            from {
+                transform: translate3d(calc(var(--mx) * 20px), calc(var(--my) * 18px), -80px);
+            }
+            to {
+                transform: translate3d(calc(var(--mx) * -30px), calc(var(--my) * -24px - 28px), 80px);
+            }
         }
 
         header {
@@ -155,117 +111,29 @@
             top: 0;
             z-index: 50;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 16px;
-            padding: 16px 22px;
+            align-items: center;
+            padding: 18px 28px;
             background: var(--glass-strong);
-            border-bottom: 1px solid var(--border);
             backdrop-filter: blur(20px);
-            box-shadow: 0 12px 40px rgba(0,0,0,0.28);
-            transform: translateZ(80px);
+            border-bottom: 1px solid var(--border);
         }
 
         .logo {
-            flex: 1;
-            text-align: center;
             font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.25rem, 4vw, 1.9rem);
+            font-size: 1.8rem;
             font-weight: 800;
-            letter-spacing: 0.08em;
             color: var(--secondary);
-            text-shadow: 0 0 18px rgba(255, 209, 102, 0.55), 0 0 36px rgba(0, 200, 255, 0.25);
-        }
-
-        .logo::after {
-            content: "LIVING 3D PORTAL";
-            display: block;
-            margin-top: -2px;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.38em;
-            letter-spacing: 0.33em;
-            color: var(--muted);
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 10px;
-            order: 3;
-        }
-
-        .control-button {
-            width: 44px;
-            height: 44px;
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            color: var(--text);
-            background: rgba(255,255,255,0.08);
-            cursor: pointer;
-            font-size: 1.25rem;
-            display: grid;
-            place-items: center;
-            transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
-        }
-
-        .control-button:hover {
-            transform: translateY(-3px) translateZ(20px) scale(1.06);
-            background: rgba(0,200,255,0.18);
-            box-shadow: 0 0 26px rgba(0,200,255,0.25);
-        }
-
-        #main-nav {
-            position: absolute;
-            top: 100%;
-            left: 14px;
-            right: 14px;
-            overflow: hidden;
-            border: 1px solid var(--border);
-            border-radius: 0 0 24px 24px;
-            background: var(--glass-strong);
-            backdrop-filter: blur(20px);
-            transform-origin: top;
-            transform: scaleY(1);
-            opacity: 1;
-            transition: transform 0.28s ease, opacity 0.28s ease;
-            box-shadow: var(--shadow);
-        }
-
-        .nav-hidden {
-            transform: scaleY(0) !important;
-            opacity: 0 !important;
-            height: 0;
-        }
-
-        #main-nav ul {
-            list-style: none;
-            margin: 0;
-            padding: 12px;
-            text-align: center;
-        }
-
-        #main-nav a {
-            display: block;
-            padding: 14px 16px;
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 15px;
-            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease;
-        }
-
-        #main-nav a:hover {
-            color: var(--secondary);
-            background: rgba(0,200,255,0.13);
-            transform: translateX(6px);
+            text-shadow: 0 0 18px rgba(255,209,102,0.5);
         }
 
         main {
             width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 42px 0;
+            margin: auto;
+            padding: 50px 0;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 26px;
+            gap: 28px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             transform-style: preserve-3d;
             transform: rotateX(calc(var(--my) * -1.2deg)) rotateY(calc(var(--mx) * 1.2deg));
             transition: transform 0.15s ease-out;
@@ -273,17 +141,15 @@
 
         .card {
             position: relative;
-            min-height: 190px;
             overflow: hidden;
-            padding: 25px;
-            border: 1px solid var(--border);
+            padding: 28px;
             border-radius: 30px;
             background: var(--glass);
             backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
             box-shadow: var(--shadow);
             transform-style: preserve-3d;
-            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-            will-change: transform;
+            transition: transform 0.25s ease;
         }
 
         .card::before {
@@ -291,143 +157,65 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(135deg, rgba(255,255,255,0.18), transparent 34%),
-                radial-gradient(circle at calc(50% + var(--mx) * 35px) calc(50% + var(--my) * 35px), rgba(0,200,255,0.2), transparent 45%);
+                linear-gradient(135deg, rgba(255,255,255,0.16), transparent 35%),
+                radial-gradient(circle at calc(50% + var(--mx) * 35px) calc(50% + var(--my) * 35px), rgba(0,200,255,0.18), transparent 45%);
             pointer-events: none;
-        }
-
-        .card::after {
-            content: "";
-            position: absolute;
-            width: 180px;
-            height: 180px;
-            right: -70px;
-            top: -70px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,209,102,0.24), transparent 66%);
-            transform: translateZ(-60px);
-            pointer-events: none;
-        }
-
-        .card:hover {
-            border-color: rgba(255,209,102,0.42);
-            box-shadow: 0 32px 90px rgba(0,0,0,0.5), 0 0 34px rgba(0,200,255,0.16);
-        }
-
-        .card > * {
-            position: relative;
-            z-index: 1;
-            transform: translateZ(38px);
         }
 
         .card h2 {
-            margin: 0 0 16px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.18rem;
-            letter-spacing: 0.04em;
+            position: relative;
+            z-index: 2;
+            margin-top: 0;
             color: var(--secondary);
-            text-shadow: 0 0 14px rgba(255,209,102,0.36);
-        }
-
-        .card h2::after {
-            content: "";
-            display: block;
-            width: 70px;
-            height: 3px;
-            margin-top: 10px;
-            border-radius: 999px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--pink));
-            box-shadow: 0 0 18px rgba(0,200,255,0.45);
+            font-family: 'Orbitron', sans-serif;
         }
 
         .card p {
-            margin: 0;
+            position: relative;
+            z-index: 2;
             color: var(--muted);
         }
 
         .link-item {
             position: relative;
+            z-index: 2;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 10px;
+            align-items: center;
             margin: 12px 0;
             padding: 14px 16px;
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 700;
             border-radius: 18px;
+            text-decoration: none;
+            color: var(--text);
+            background: rgba(0,200,255,0.09);
             border: 1px solid rgba(255,255,255,0.1);
             border-left: 4px solid var(--primary);
-            background: rgba(0,200,255,0.09);
-            transition: transform 0.22s ease, background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
-            transform-style: preserve-3d;
-        }
-
-        .link-item::after {
-            content: "↗";
-            color: var(--secondary);
-            opacity: 0.8;
-            transform: translateZ(24px);
-            transition: transform 0.22s ease;
+            transition: all 0.25s ease;
         }
 
         .link-item:hover {
-            background: linear-gradient(90deg, rgba(0,200,255,0.25), rgba(138,92,255,0.17));
-            border-color: rgba(255,209,102,0.5);
-            transform: translateX(7px) translateZ(24px) scale(1.02);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.18);
-        }
-
-        .link-item:hover::after {
-            transform: translate3d(4px, -4px, 34px);
-        }
-
-        #profile {
-            min-height: 230px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        #profile h2 {
-            font-size: clamp(1.45rem, 4vw, 2.25rem);
+            transform: translateX(6px) translateZ(20px) scale(1.02);
+            background: linear-gradient(90deg, rgba(0,200,255,0.25), rgba(138,92,255,0.16));
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
         }
 
         #binary-clock {
             position: fixed;
             bottom: 0;
-            left: 0;
-            z-index: 1000;
             width: 100%;
             height: var(--clock-height);
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            padding: 0 10px;
-            color: var(--text);
             background: var(--glass-strong);
+            backdrop-filter: blur(18px);
             border-top: 1px solid var(--border);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 -12px 42px rgba(0,0,0,0.28);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
         }
 
         .binary-column {
-            height: 100%;
-            min-width: 90px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-        }
-
-        .binary-column-label {
-            margin-bottom: 4px;
-            color: var(--muted);
-            font-size: 0.62rem;
-            font-weight: 700;
-            letter-spacing: 0.09em;
-            text-transform: uppercase;
         }
 
         .dot-container {
@@ -439,310 +227,158 @@
             width: 10px;
             height: 10px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.16);
-            transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-        }
-
-        .light-mode .dot {
-            background: rgba(0, 80, 180, 0.18);
+            background: rgba(255,255,255,0.14);
+            transition: all 0.2s;
         }
 
         .dot.active {
-            transform: scale(1.25);
             background: var(--secondary);
-            box-shadow: 0 0 10px var(--secondary), 0 0 24px rgba(255,209,102,0.55);
-        }
-
-        @media (min-width: 768px) {
-            header {
-                padding: 18px 42px;
-            }
-
-            .logo {
-                flex: 0 0 auto;
-                text-align: left;
-                order: 1;
-            }
-
-            #menu-toggle {
-                display: none;
-            }
-
-            #main-nav {
-                position: static;
-                flex: 1;
-                order: 2;
-                height: auto !important;
-                opacity: 1 !important;
-                transform: none !important;
-                border: none;
-                border-radius: 0;
-                background: transparent;
-                box-shadow: none;
-                backdrop-filter: none;
-            }
-
-            #main-nav ul {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 12px;
-                padding: 0;
-            }
-
-            #main-nav a {
-                padding: 9px 13px;
-                font-size: 0.9rem;
-            }
-
-            #main-nav a:hover {
-                transform: translateY(-3px) translateZ(20px);
-            }
-
-            main {
-                padding: 52px 0;
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            #profile {
-                grid-column: 1 / -1;
-            }
+            transform: scale(1.25);
+            box-shadow: 0 0 12px var(--secondary);
         }
 
         @media (max-width: 480px) {
-            #seconds-col { display: none; }
-            .binary-column { min-width: auto; }
-            .card { min-height: auto; padding: 21px; border-radius: 24px; }
-            .orb.one { width: 130px; height: 130px; }
-            .orb.three { width: 180px; height: 180px; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-
-            main, body::before {
-                transform: none !important;
+            #seconds-col {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
-    <div class="scene" aria-hidden="true">
-        <div class="orb one"></div>
-        <div class="orb two"></div>
-        <div class="orb three"></div>
-        <div class="geo triangle g1"></div>
-        <div class="geo hex g2"></div>
-        <div class="geo g3"></div>
-        <div class="geo triangle g4"></div>
-        <div class="geo hex g5"></div>
-    </div>
 
-    <header>
-        <div class="logo">AAB Links</div>
-        <div class="header-controls">
-            <button id="theme-toggle" class="control-button" aria-label="Alternar Tema">☀️</button>
-            <button id="menu-toggle" class="control-button" aria-label="Abrir Menu">☰</button>
-        </div>
-        <nav id="main-nav" class="nav-hidden">
-            <ul>
-                <li><a href="#projetos">Projetos</a></li>
-                <li><a href="#jogos">Jogos/Visualizers</a></li>
-                <li><a href="#social">Redes Sociais</a></li>
-                <li><a href="#contato">Contato</a></li>
-            </ul>
-        </nav>
-    </header>
+<div class="scene">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+    <div class="orb three"></div>
+</div>
 
-    <main>
-        <section id="profile" class="card">
-            <h2>👤 Perfil</h2>
-            <p>Seja bem-vindo(a) à minha coletânea de links e projetos. Navegue pelas seções abaixo!</p>
-        </section>
+<header>
+    <div class="logo">AAB Links</div>
+</header>
 
-        <section id="projetos" class="card">
-            <h2>🎨 Projetos</h2>
-            <a href="blender-projects.html" class="link-item">Blender Projects</a>
-            <a href="gimp-projects.html" class="link-item">Gimp Projects</a>
-            <a href="blender-animations.html" class="link-item">Blender Animations</a>
-            <a href="animated-background.html" class="link-item">Animated Background</a>
-        </section>
+<main>
 
-        <section id="jogos" class="card">
-            <h2>🎮 Jogos & Música</h2>
-            <a href="HTML_games/HTML-play.html" class="link-item">HTML Games</a>
-            <a href="music_player-visualizer.html" class="link-item">MP3 Player Visualizer</a>
-        </section>
+<section class="card">
+    <h2>👤 Perfil</h2>
+    <p>Seja bem-vindo(a) à minha coletânea de links e projetos.</p>
+</section>
 
-        <section id="social" class="card">
-            <h2>🌐 Redes Sociais</h2>
-            <a href="https://www.instagram.com/aabpr0ducoes/" class="link-item external">Instagram (@aabpr0ducoes)</a>
-        </section>
-        
-        <section id="contato" class="card">
-            <h2>📧 Contato</h2>
-            <a href="https://wa.me/54984181968" class="link-item external">WhatsApp</a>
-            <a href="mailto:aaugusto444@gmail.com" class="link-item external">Email</a>
-        </section>
-    </main>
-    
-    <div id="binary-clock">
-        <div class="binary-column">
-            <span class="binary-column-label">Hora</span>
-            <div class="dot-container" id="hh">
-                <div class="dot" data-weight="16"></div>
-                <div class="dot" data-weight="8"></div>
-                <div class="dot" data-weight="4"></div>
-                <div class="dot" data-weight="2"></div>
-                <div class="dot" data-weight="1"></div>
-            </div>
-        </div>
+<section class="card">
+    <h2>🎨 Projetos</h2>
+    <a href="#" class="link-item">Blender Projects</a>
+    <a href="#" class="link-item">Gimp Projects</a>
+    <a href="#" class="link-item">Animated Background</a>
+</section>
 
-        <div class="binary-column">
-            <span class="binary-column-label">Minuto</span>
-            <div class="dot-container" id="mm">
-                <div class="dot" data-weight="32"></div>
-                <div class="dot" data-weight="16"></div>
-                <div class="dot" data-weight="8"></div>
-                <div class="dot" data-weight="4"></div>
-                <div class="dot" data-weight="2"></div>
-                <div class="dot" data-weight="1"></div>
-            </div>
-        </div>
+<section class="card">
+    <h2>🎮 Jogos</h2>
+    <a href="#" class="link-item">HTML Games</a>
+    <a href="#" class="link-item">MP3 Visualizer</a>
+</section>
 
-        <div class="binary-column" id="seconds-col">
-            <span class="binary-column-label">Segundo</span>
-            <div class="dot-container" id="ss">
-                <div class="dot" data-weight="32"></div>
-                <div class="dot" data-weight="16"></div>
-                <div class="dot" data-weight="8"></div>
-                <div class="dot" data-weight="4"></div>
-                <div class="dot" data-weight="2"></div>
-                <div class="dot" data-weight="1"></div>
-            </div>
+</main>
+
+<div id="binary-clock">
+    <div class="binary-column">
+        <span>Hora</span>
+        <div class="dot-container" id="hh">
+            <div class="dot" data-weight="16"></div>
+            <div class="dot" data-weight="8"></div>
+            <div class="dot" data-weight="4"></div>
+            <div class="dot" data-weight="2"></div>
+            <div class="dot" data-weight="1"></div>
         </div>
     </div>
 
-    <script>
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        const storageKey = 'theme-preference';
+    <div class="binary-column">
+        <span>Min</span>
+        <div class="dot-container" id="mm">
+            <div class="dot" data-weight="32"></div>
+            <div class="dot" data-weight="16"></div>
+            <div class="dot" data-weight="8"></div>
+            <div class="dot" data-weight="4"></div>
+            <div class="dot" data-weight="2"></div>
+            <div class="dot" data-weight="1"></div>
+        </div>
+    </div>
+</div>
 
-        function setLight(isLight) {
-            if (isLight) {
-                body.classList.add('light-mode');
-                themeToggle.textContent = '🌙';
-                localStorage.setItem(storageKey, 'light');
-            } else {
-                body.classList.remove('light-mode');
-                themeToggle.textContent = '☀️';
-                localStorage.setItem(storageKey, 'dark');
-            }
-        }
+<script>
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
 
-        function initTheme() {
-            const storedTheme = localStorage.getItem(storageKey);
-            if (storedTheme) {
-                setLight(storedTheme === 'light');
-            } else {
-                const prefersLight = !window.matchMedia('(prefers-color-scheme: dark)').matches;
-                setLight(prefersLight);
-            }
-        }
+    function updateMouseVars(clientX, clientY) {
+        targetX = (clientX / window.innerWidth - 0.5) * 2;
+        targetY = (clientY / window.innerHeight - 0.5) * 2;
+    }
 
-        themeToggle.addEventListener('click', () => {
-            const isLight = body.classList.contains('light-mode');
-            setLight(!isLight);
+    window.addEventListener('mousemove', e => {
+        updateMouseVars(e.clientX, e.clientY);
+    });
+
+    function animatePerspective() {
+        currentX += (targetX - currentX) * 0.06;
+        currentY += (targetY - currentY) * 0.06;
+
+        document.documentElement.style.setProperty('--mx', currentX.toFixed(4));
+        document.documentElement.style.setProperty('--my', currentY.toFixed(4));
+
+        requestAnimationFrame(animatePerspective);
+    }
+
+    animatePerspective();
+
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+            card.style.transform =
+                `rotateX(${-y * 9}deg)
+                 rotateY(${x * 11}deg)
+                 translateY(-8px)
+                 translateZ(30px)`;
         });
 
-        initTheme();
-
-        document.getElementById('menu-toggle').onclick = function() {
-            const nav = document.getElementById('main-nav');
-            const button = this;
-            nav.classList.toggle('nav-hidden');
-            button.textContent = nav.classList.contains('nav-hidden') ? '☰' : '✕';
-
-            nav.querySelectorAll('a').forEach(link => {
-                link.onclick = function() {
-                    if (!nav.classList.contains('nav-hidden')) {
-                        nav.classList.add('nav-hidden');
-                        document.getElementById('menu-toggle').textContent = '☰';
-                    }
-                };
-            });
-        };
-
-        function updateBinaryClock() {
-            const now = new Date();
-            const h = now.getHours();
-            const m = now.getMinutes();
-            const s = now.getSeconds();
-
-            function updateColumn(value, columnId) {
-                const dots = document.getElementById(columnId).querySelectorAll('.dot');
-                const weights = Array.from(dots).map(d => parseInt(d.dataset.weight)).sort((a, b) => b - a);
-                let tempValue = value;
-
-                dots.forEach((dot, index) => {
-                    const weight = weights[index];
-                    if (tempValue >= weight) {
-                        dot.classList.add('active');
-                        tempValue -= weight;
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-            }
-
-            updateColumn(h, 'hh');
-            updateColumn(m, 'mm');
-            updateColumn(s, 'ss');
-        }
-
-        setInterval(updateBinaryClock, 1000);
-        updateBinaryClock();
-
-        let targetX = 0;
-        let targetY = 0;
-        let currentX = 0;
-        let currentY = 0;
-
-        function updateMouseVars(clientX, clientY) {
-            targetX = (clientX / window.innerWidth - 0.5) * 2;
-            targetY = (clientY / window.innerHeight - 0.5) * 2;
-        }
-
-        window.addEventListener('mousemove', e => updateMouseVars(e.clientX, e.clientY));
-        window.addEventListener('touchmove', e => {
-            if (e.touches[0]) updateMouseVars(e.touches[0].clientX, e.touches[0].clientY);
-        }, { passive: true });
-
-        function animatePerspective() {
-            currentX += (targetX - currentX) * 0.06;
-            currentY += (targetY - currentY) * 0.06;
-            document.documentElement.style.setProperty('--mx', currentX.toFixed(4));
-            document.documentElement.style.setProperty('--my', currentY.toFixed(4));
-            requestAnimationFrame(animatePerspective);
-        }
-        animatePerspective();
-
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left) / rect.width - 0.5;
-                const y = (e.clientY - rect.top) / rect.height - 0.5;
-                card.style.transform = `rotateX(${-y * 9}deg) rotateY(${x * 11}deg) translateY(-8px) translateZ(30px)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = '';
-            });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
         });
-    </script>
+    });
+
+    function updateBinaryClock() {
+        const now = new Date();
+
+        function updateColumn(value, columnId) {
+            const dots = document.getElementById(columnId).querySelectorAll('.dot');
+            const weights = Array.from(dots)
+                .map(d => parseInt(d.dataset.weight))
+                .sort((a, b) => b - a);
+
+            let tempValue = value;
+
+            dots.forEach((dot, index) => {
+                const weight = weights[index];
+
+                if (tempValue >= weight) {
+                    dot.classList.add('active');
+                    tempValue -= weight;
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        updateColumn(now.getHours(), 'hh');
+        updateColumn(now.getMinutes(), 'mm');
+    }
+
+    setInterval(updateBinaryClock, 1000);
+    updateBinaryClock();
+</script>
+
 </body>
 </html>
