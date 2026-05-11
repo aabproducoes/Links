@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -177,6 +177,80 @@ body{
     box-shadow:0 0 15px #00ffff;
 }
 
+/* QR COUNTER */
+
+.qr-counter{
+    margin-top:30px;
+    padding:22px;
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(0,255,255,0.12),
+            rgba(37,99,235,0.15)
+        );
+
+    border:1px solid rgba(0,255,255,0.25);
+
+    color:#e0ffff;
+
+    font-weight:800;
+
+    text-align:center;
+
+    box-shadow:
+        0 0 25px #00ffff22,
+        inset 0 0 20px rgba(255,255,255,0.03);
+
+    position:relative;
+    overflow:hidden;
+}
+
+.qr-counter::before{
+    content:'';
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.08),
+            transparent
+        );
+
+    transform:translateX(-100%);
+    animation:counterShine 4s linear infinite;
+}
+
+@keyframes counterShine{
+    to{
+        transform:translateX(100%);
+    }
+}
+
+.qr-title{
+    font-size:1rem;
+    letter-spacing:2px;
+    opacity:0.9;
+}
+
+.qr-number{
+    margin-top:12px;
+    font-size:3rem;
+    font-weight:900;
+
+    background:linear-gradient(90deg,#ffffff,#00ffff,#60a5fa);
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    text-shadow:
+        0 0 15px #00ffff88,
+        0 0 30px #2563eb55;
+}
+
 /* RIGHT CONTENT */
 
 .viewer{
@@ -288,6 +362,7 @@ iframe.active{
 <div class="container">
 
     <!-- LEFT SIDE -->
+
     <div class="sidebar">
 
         <div class="logo">AAB</div>
@@ -341,6 +416,20 @@ iframe.active{
                 onclick="openPage(this,'https://aabproducoes.github.io/Links/music_player-visualizer.html')">
                 Music Visualizer
             </button>
+
+        </div>
+
+        <!-- QR COUNTER -->
+
+        <div class="qr-counter">
+
+            <div class="qr-title">
+                QR CODES READ
+            </div>
+
+            <div class="qr-number" id="qrCount">
+                0
+            </div>
 
         </div>
 
@@ -426,6 +515,44 @@ function openPage(button,url){
 
     },200);
 }
+
+/* QR COUNTER */
+
+async function loadQrCount(){
+
+    try{
+
+        const response=await fetch(
+            'qrcount.txt?cache=' + Date.now()
+        );
+
+        if(!response.ok){
+
+            throw new Error('qrcount.txt not found');
+        }
+
+        const text=await response.text();
+
+        const count=text.trim();
+
+        document.getElementById('qrCount').textContent=
+            count || '0';
+
+    }catch(error){
+
+        document.getElementById('qrCount').textContent='0';
+
+        console.warn(error);
+    }
+}
+
+/* INITIAL LOAD */
+
+loadQrCount();
+
+/* AUTO UPDATE */
+
+setInterval(loadQrCount,3000);
 
 </script>
 
