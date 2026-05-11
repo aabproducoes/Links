@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -177,7 +177,7 @@ body{
     box-shadow:0 0 15px #00ffff;
 }
 
-/* QR COUNTER */
+/* PROFILE COUNTER */
 
 .qr-counter{
     margin-top:30px;
@@ -234,21 +234,7 @@ body{
     font-size:1rem;
     letter-spacing:2px;
     opacity:0.9;
-}
-
-.qr-number{
-    margin-top:12px;
-    font-size:3rem;
-    font-weight:900;
-
-    background:linear-gradient(90deg,#ffffff,#00ffff,#60a5fa);
-
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-
-    text-shadow:
-        0 0 15px #00ffff88,
-        0 0 30px #2563eb55;
+    margin-bottom:15px;
 }
 
 /* RIGHT CONTENT */
@@ -419,17 +405,24 @@ iframe.active{
 
         </div>
 
-        <!-- QR COUNTER -->
+        <!-- PROFILE COUNTER -->
 
         <div class="qr-counter">
 
             <div class="qr-title">
-                QR CODES READ
+                PROFILE VIEWS
             </div>
 
-            <div class="qr-number" id="qrCount">
-                0
-            </div>
+            <img
+                src="https://komarev.com/ghpvc/?username=aabproducoes&style=for-the-badge&color=00ffff"
+                alt="Profile Views"
+                style="
+                    max-width:100%;
+                    filter:
+                        drop-shadow(0 0 10px #00ffff88)
+                        drop-shadow(0 0 25px #2563eb88);
+                "
+            >
 
         </div>
 
@@ -515,44 +508,6 @@ function openPage(button,url){
 
     },200);
 }
-
-/* QR COUNTER */
-
-async function loadQrCount(){
-
-    try{
-
-        const response=await fetch(
-            'qrcount.txt?cache=' + Date.now()
-        );
-
-        if(!response.ok){
-
-            throw new Error('qrcount.txt not found');
-        }
-
-        const text=await response.text();
-
-        const count=text.trim();
-
-        document.getElementById('qrCount').textContent=
-            count || '0';
-
-    }catch(error){
-
-        document.getElementById('qrCount').textContent='0';
-
-        console.warn(error);
-    }
-}
-
-/* INITIAL LOAD */
-
-loadQrCount();
-
-/* AUTO UPDATE */
-
-setInterval(loadQrCount,3000);
 
 </script>
 
