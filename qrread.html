@@ -1,23 +1,15 @@
-<?php
-$file = "qrcount.txt";
-
-if (!file_exists($file)) {
-    file_put_contents($file, "0");
-}
-
-$count = intval(trim(file_get_contents($file)));
-$count++;
-
-file_put_contents($file, $count);
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>QR Code Read</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>QR Read</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -25,99 +17,376 @@ file_put_contents($file, $count);
 }
 
 body{
-    min-height:100vh;
-    background:
-        radial-gradient(circle at top,#00ffff44,transparent 35%),
-        linear-gradient(135deg,#020617,#000);
+    font-family:'Inter',sans-serif;
+    background:#050505;
+    overflow:hidden;
     color:white;
-    font-family:Arial,sans-serif;
+    min-height:100vh;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    text-align:center;
-    overflow:hidden;
 }
+
+/* BACKGROUND */
+
+.bg{
+    position:fixed;
+    inset:0;
+
+    background:
+        radial-gradient(circle at top left,#2563eb44,transparent 30%),
+        radial-gradient(circle at bottom right,#00ffff22,transparent 30%),
+        linear-gradient(135deg,#050505,#0a1020,#050505);
+
+    z-index:-3;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+
+    background-size:50px 50px;
+
+    animation:gridMove 10s linear infinite;
+
+    z-index:-2;
+}
+
+@keyframes gridMove{
+
+    from{
+        transform:translateY(0px);
+    }
+
+    to{
+        transform:translateY(50px);
+    }
+}
+
+/* CARD */
 
 .card{
+
     width:90%;
-    max-width:520px;
-    padding:45px;
-    border-radius:30px;
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(0,255,255,0.3);
-    box-shadow:
-        0 0 40px rgba(0,255,255,0.25),
-        inset 0 0 30px rgba(255,255,255,0.04);
+    max-width:650px;
+
+    padding:50px;
+
+    border-radius:35px;
+
+    background:rgba(0,0,0,0.45);
+
+    border:1px solid rgba(255,255,255,0.08);
+
     backdrop-filter:blur(15px);
+
+    text-align:center;
+
+    position:relative;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 0 40px #2563eb33,
+        0 0 80px #00ffff11;
 }
 
-h1{
-    font-size:3rem;
+.card::before{
+
+    content:'';
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.04),
+            transparent
+        );
+
+    transform:translateX(-100%);
+
+    animation:shine 6s linear infinite;
+}
+
+@keyframes shine{
+
+    to{
+        transform:translateX(100%);
+    }
+}
+
+/* TITLE */
+
+.title{
+
+    font-size:4rem;
+
+    font-weight:900;
+
     margin-bottom:15px;
-    background:linear-gradient(90deg,#fff,#00ffff,#60a5fa);
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #60a5fa,
+            #00ffff
+        );
+
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
-p{
+.subtitle{
+
     color:#cbd5e1;
-    font-size:1.2rem;
-    line-height:1.6;
-    margin-bottom:30px;
+
+    line-height:1.8;
+
+    font-size:1.15rem;
+
+    margin-bottom:40px;
+}
+
+/* COUNTER */
+
+.counter-box{
+
+    padding:35px;
+
+    border-radius:30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,0.25),
+            rgba(0,255,255,0.08)
+        );
+
+    border:1px solid rgba(0,255,255,0.2);
+
+    margin-bottom:40px;
+
+    box-shadow:
+        inset 0 0 25px rgba(255,255,255,0.03),
+        0 0 35px rgba(0,255,255,0.15);
+}
+
+.counter-label{
+
+    font-size:1rem;
+
+    letter-spacing:3px;
+
+    color:#94a3b8;
+
+    margin-bottom:15px;
 }
 
 .counter{
-    font-size:1rem;
-    color:#94a3b8;
-    margin-bottom:10px;
+
+    font-size:5rem;
+
+    font-weight:900;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #00ffff,
+            #60a5fa
+        );
+
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    text-shadow:
+        0 0 25px #00ffff55,
+        0 0 50px #2563eb55;
 }
 
-.number{
-    font-size:4rem;
-    font-weight:900;
-    color:#00ffff;
-    text-shadow:0 0 25px #00ffff;
-}
+/* BUTTON */
 
 .btn{
-    margin-top:35px;
+
     display:inline-block;
-    padding:18px 28px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#2563eb,#00ffff);
+
+    padding:20px 35px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #00ffff
+        );
+
     color:white;
+
+    font-weight:800;
+
     text-decoration:none;
-    font-weight:bold;
-    box-shadow:0 0 25px #00ffff55;
-    transition:0.3s;
+
+    transition:0.35s;
+
+    box-shadow:
+        0 0 25px #00ffff44;
 }
 
 .btn:hover{
-    transform:scale(1.08);
+
+    transform:translateY(-5px) scale(1.04);
+
+    box-shadow:
+        0 0 40px #00ffff88;
 }
+
+/* PARTICLES */
+
+.particle{
+
+    position:fixed;
+
+    width:4px;
+    height:4px;
+
+    border-radius:50%;
+
+    background:#60a5fa;
+
+    opacity:0.4;
+
+    pointer-events:none;
+
+    animation:float linear infinite;
+}
+
+@keyframes float{
+
+    from{
+        transform:translateY(100vh);
+    }
+
+    to{
+        transform:translateY(-10vh);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .title{
+        font-size:2.7rem;
+    }
+
+    .counter{
+        font-size:3.5rem;
+    }
+
+    .card{
+        padding:35px;
+    }
+}
+
 </style>
 </head>
-
 <body>
 
+<div class="bg"></div>
+<div class="grid"></div>
+
 <div class="card">
-    <h1>QR Code Read</h1>
 
-    <p>
-        Thanks for scanning the QR code.
-        Your visit has been counted successfully.
-    </p>
-
-    <div class="counter">Total QR Codes Read</div>
-
-    <div class="number">
-        <?php echo $count; ?>
+    <div class="title">
+        QR READ
     </div>
 
-    <a class="btn" href="index.html">
-        Open AAB Produções
+    <div class="subtitle">
+        Thanks for scanning the QR code.<br>
+        Your visit has been successfully counted.
+    </div>
+
+    <div class="counter-box">
+
+        <div class="counter-label">
+            TOTAL QR READS
+        </div>
+
+        <div class="counter" id="counter">
+            ...
+        </div>
+
+    </div>
+
+    <a class="btn"
+       href="https://aabproducoes.github.io/Links/index.html">
+
+       OPEN AAB PRODUÇÕES
+
     </a>
+
 </div>
+
+<script>
+
+/* PARTICLES */
+
+for(let i=0;i<90;i++){
+
+    const p=document.createElement('div');
+
+    p.className='particle';
+
+    p.style.left=Math.random()*100+'vw';
+
+    p.style.top=Math.random()*100+'vh';
+
+    p.style.animationDuration=(5+Math.random()*10)+'s';
+
+    p.style.animationDelay=Math.random()*5+'s';
+
+    p.style.opacity=Math.random();
+
+    document.body.appendChild(p);
+}
+
+/* COUNTER */
+
+async function increaseCounter(){
+
+    try{
+
+        const response = await fetch(
+            'https://api.countapi.xyz/hit/aabproducoes/qrread'
+        );
+
+        const data = await response.json();
+
+        document.getElementById('counter').textContent =
+            data.value;
+
+    }catch(err){
+
+        console.log(err);
+
+        document.getElementById('counter').textContent =
+            'ERROR';
+    }
+}
+
+increaseCounter();
+
+</script>
 
 </body>
 </html>
