@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Fixed Music Visualizer</title>
+<title>NCS Visualizer Stable</title>
 
 <style>
 html,body{
@@ -21,8 +21,8 @@ html,body{
     inset:0;
     width:100vw;
     height:100vh;
-    z-index:0;
     background:#000;
+    z-index:0;
 }
 
 #controls{
@@ -32,7 +32,7 @@ html,body{
     transform:translateX(-50%);
     z-index:9999;
 
-    background:rgba(0,0,0,.65);
+    background:rgba(0,0,0,.7);
     backdrop-filter:blur(12px);
 
     border:1px solid rgba(255,255,255,.15);
@@ -139,33 +139,6 @@ html,body{
     padding:2px 8px;
 }
 
-#equalizerControls{
-    margin-top:12px;
-}
-
-.eq-sliders{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-}
-
-.eq-slider{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    font-size:11px;
-}
-
-.eq-slider input{
-    -webkit-appearance:slider-vertical;
-    width:8px;
-    height:100px;
-}
-
-.drop-highlight-green{
-    outline:5px solid lime;
-}
-
 @media(max-width:800px){
 
     #controls{
@@ -197,14 +170,8 @@ html,body{
             <option value="circles">Circles</option>
             <option value="radial">Radial</option>
             <option value="spiral">Spiral</option>
-            <option value="equalizer">Equalizer</option>
             <option value="waveform">Waveform</option>
             <option value="dots">Dots</option>
-            <option value="triangles">Triangles</option>
-            <option value="rectangles">Rectangles</option>
-            <option value="stars">Stars</option>
-            <option value="rings">Rings</option>
-            <option value="treeFractal">Tree Fractal</option>
         </select>
 
         <span id="fileName"></span>
@@ -223,9 +190,18 @@ html,body{
 
         <button id="nextBtn">⏭</button>
 
-        <input id="progress" type="range" min="0" max="100" value="0">
+        <input id="progress"
+               type="range"
+               min="0"
+               max="100"
+               value="0">
 
-        <input id="volume" type="range" min="0" max="1" step="0.01" value="1">
+        <input id="volume"
+               type="range"
+               min="0"
+               max="1"
+               step="0.01"
+               value="1">
 
         <button id="shuffleBtn">🔀</button>
 
@@ -234,33 +210,28 @@ html,body{
     <div id="colorControls">
 
         <div>
+
             <span>Main:</span>
 
-            <div id="visualizerColors" class="color-container"></div>
+            <div id="visualizerColors"
+                 class="color-container"></div>
 
-            <button id="addVisualizerColor" class="add-color">
+            <button id="addVisualizerColor"
+                    class="add-color">
                 +
             </button>
+
         </div>
-
-    </div>
-
-    <div id="equalizerControls">
-
-        <h3 style="text-align:center;">
-            Equalizer
-        </h3>
-
-        <div id="eqSliders" class="eq-sliders"></div>
 
     </div>
 
 </div>
 
-<audio id="audio" crossorigin="anonymous"></audio>
+<audio id="audio"
+       crossorigin="anonymous"></audio>
 
 <script>
-/* ---------------- PLAYLIST ---------------- */
+/* ---------------- RELIABLE PLAYLIST ---------------- */
 
 let playlist=[
 {
@@ -268,27 +239,14 @@ let playlist=[
     url:"https://archive.org/download/deaf-kev-invincible-ncs-release_202403/DEAF%20KEV%20-%20Invincible%20%5BNCS%20Release%5D.mp3"
 },
 {
-    name:"Cartoon – On & On",
-    url:"https://archive.org/download/CartoonOnOnft.DanielLevi/Cartoon%20-%20On%20%26%20On%20%28ft.%20Daniel%20Levi%29.mp3"
-},
-{
     name:"Alan Walker – Spectre",
-    url:"https://archive.org/download/alan-walker-spectre-ncs-release/Alan%20Walker%20-%20Spectre%20%5BNCS%20Release%5D.mp3"
-},
-{
-    name:"Tobu – Hope",
-    url:"https://archive.org/download/TobuHope/Tobu%20-%20Hope.mp3"
-},
-{
-    name:"Jim Yosef – Firefly",
-    url:"https://archive.org/download/JimYosefFirefly/Jim%20Yosef%20-%20Firefly.mp3"
+    url:"https://archive.org/download/soundcloud-184757886/Alan%20Walker%20-%20Spectre%20%5BNCS%20Release%5D.mp3"
 }
 ];
 
 let currentTrackIndex=0;
 let shuffle=false;
 let startedAnimation=false;
-let shouldAutoPlay=false;
 
 const $=id=>document.getElementById(id);
 
@@ -321,7 +279,6 @@ let audioCtx;
 let source;
 let analyser;
 let data;
-let filters=[];
 
 /* ---------------- COLORS ---------------- */
 
@@ -398,21 +355,6 @@ function initAudio(){
     source=
         audioCtx.createMediaElementSource(audio);
 
-    filters=[
-        60,170,310,600,
-        1000,3000,6000,12000
-    ].map(freq=>{
-
-        const b=
-            audioCtx.createBiquadFilter();
-
-        b.type='peaking';
-        b.frequency.value=freq;
-        b.gain.value=0;
-
-        return b;
-    });
-
     analyser=
         audioCtx.createAnalyser();
 
@@ -422,61 +364,9 @@ function initAudio(){
         analyser.frequencyBinCount
     );
 
-    let node=source;
-
-    filters.forEach(f=>{
-
-        node.connect(f);
-
-        node=f;
-    });
-
-    node.connect(analyser);
+    source.connect(analyser);
 
     analyser.connect(audioCtx.destination);
-
-    buildEQ();
-}
-
-/* ---------------- EQ ---------------- */
-
-function buildEQ(){
-
-    const box=$('eqSliders');
-
-    if(box.children.length)return;
-
-    const labels=[
-        '60','170','310','600',
-        '1k','3k','6k','12k'
-    ];
-
-    labels.forEach((lbl,i)=>{
-
-        const wrap=document.createElement('div');
-        wrap.className='eq-slider';
-
-        const slider=document.createElement('input');
-
-        slider.type='range';
-        slider.min=-12;
-        slider.max=12;
-        slider.step=.1;
-        slider.value=0;
-
-        slider.oninput=()=>{
-
-            filters[i].gain.value=
-                Number(slider.value);
-        };
-
-        const text=document.createElement('span');
-        text.textContent=lbl;
-
-        wrap.append(slider,text);
-
-        box.appendChild(wrap);
-    });
 }
 
 /* ---------------- VISUALIZERS ---------------- */
@@ -542,7 +432,6 @@ circles:d=>{
         );
 
         ctx.strokeStyle=gradient();
-
         ctx.stroke();
     }
 },
@@ -571,7 +460,6 @@ radial:d=>{
         );
 
         ctx.strokeStyle=gradient();
-
         ctx.stroke();
     }
 },
@@ -590,7 +478,6 @@ spiral:d=>{
     for(const v of d){
 
         a+=0.2;
-
         r+=v/255*3;
 
         ctx.lineTo(
@@ -603,8 +490,6 @@ spiral:d=>{
     ctx.lineWidth=3;
     ctx.stroke();
 },
-
-equalizer:d=>vis.bars(d),
 
 waveform:d=>{
 
@@ -651,161 +536,6 @@ dots:d=>{
         ctx.fillStyle=gradient();
         ctx.fill();
     }
-},
-
-triangles:d=>{
-
-    ctx.clearRect(0,0,WIDTH,HEIGHT);
-
-    for(let i=0;i<12;i++){
-
-        const x=Math.random()*WIDTH;
-        const y=Math.random()*HEIGHT;
-        const s=d[i]*1.5;
-
-        ctx.beginPath();
-
-        ctx.moveTo(x,y-s);
-        ctx.lineTo(x-s,y+s);
-        ctx.lineTo(x+s,y+s);
-
-        ctx.closePath();
-
-        ctx.fillStyle=gradient();
-        ctx.fill();
-    }
-},
-
-rectangles:d=>{
-
-    ctx.clearRect(0,0,WIDTH,HEIGHT);
-
-    const cols=12;
-    const rows=8;
-
-    const w=WIDTH/cols;
-    const h=HEIGHT/rows;
-
-    for(let i=0;i<cols;i++){
-
-        for(let j=0;j<rows;j++){
-
-            const idx=(i*rows+j)%d.length;
-
-            const s=d[idx]/255;
-
-            ctx.fillStyle=gradient();
-
-            ctx.fillRect(
-                i*w+w*(1-s)/2,
-                j*h+h*(1-s)/2,
-                w*s,
-                h*s
-            );
-        }
-    }
-},
-
-stars:d=>{
-
-    ctx.clearRect(0,0,WIDTH,HEIGHT);
-
-    const outer=d[5]+100;
-    const inner=outer*0.45;
-
-    const cx=WIDTH/2;
-    const cy=HEIGHT/2;
-
-    ctx.beginPath();
-
-    for(let i=0;i<10;i++){
-
-        const r=i%2?inner:outer;
-
-        const a=
-            i*Math.PI/5-Math.PI/2;
-
-        ctx.lineTo(
-            cx+Math.cos(a)*r,
-            cy+Math.sin(a)*r
-        );
-    }
-
-    ctx.closePath();
-
-    ctx.fillStyle=gradient();
-    ctx.fill();
-},
-
-rings:d=>{
-
-    ctx.clearRect(0,0,WIDTH,HEIGHT);
-
-    for(let i=1;i<=10;i++){
-
-        ctx.beginPath();
-
-        ctx.arc(
-            WIDTH/2,
-            HEIGHT/2,
-            i*30+d[i],
-            0,
-            Math.PI*2
-        );
-
-        ctx.strokeStyle=gradient();
-
-        ctx.stroke();
-    }
-},
-
-treeFractal:d=>{
-
-    ctx.clearRect(0,0,WIDTH,HEIGHT);
-
-    const amp=
-        d.reduce((a,b)=>a+b,0)
-        /(d.length*255);
-
-    ctx.save();
-
-    ctx.translate(WIDTH/2,HEIGHT);
-
-    function draw(l,a,dep){
-
-        if(dep<=0)return;
-
-        ctx.beginPath();
-
-        ctx.moveTo(0,0);
-
-        ctx.lineTo(0,-l);
-
-        ctx.strokeStyle=gradient();
-        ctx.lineWidth=dep/2;
-
-        ctx.stroke();
-
-        ctx.translate(0,-l);
-
-        ctx.save();
-        ctx.rotate(a+amp);
-        draw(l*0.7,a,dep-1);
-        ctx.restore();
-
-        ctx.save();
-        ctx.rotate(-a+amp);
-        draw(l*0.7,a,dep-1);
-        ctx.restore();
-    }
-
-    draw(
-        120+amp*100,
-        Math.PI/5,
-        9
-    );
-
-    ctx.restore();
 }
 
 };
@@ -824,7 +554,9 @@ function animate(){
 
         analyser.getByteFrequencyData(data);
 
-        vis[currentViz](data);
+        if(vis[currentViz]){
+            vis[currentViz](data);
+        }
     }
 
     requestAnimationFrame(animate);
@@ -839,9 +571,11 @@ function startAnimation(){
     animate();
 }
 
-/* ---------------- PLAYLIST ---------------- */
+/* ---------------- PLAYER ---------------- */
 
 const playlistSelect=$('playlistSelect');
+
+let autoplayAfterLoad=false;
 
 function refreshPlaylist(){
 
@@ -862,54 +596,49 @@ function refreshPlaylist(){
 
 function updatePlayButton(){
 
-    $('playBtn').textContent=
+    $('playBtn').textContent =
         audio.paused ? '▶' : '⏸';
 }
 
 function loadTrack(i,autoplay=false){
 
-    currentTrackIndex=
-        (i+playlist.length)%playlist.length;
+    currentTrackIndex =
+        (i + playlist.length) % playlist.length;
 
-    const track=
-        playlist[currentTrackIndex];
+    autoplayAfterLoad = autoplay;
 
-    shouldAutoPlay=autoplay;
+    const track = playlist[currentTrackIndex];
 
-    $('fileName').textContent=
-        'Loading: '+track.name;
+    $('fileName').textContent =
+        'Loading: ' + track.name;
 
-    playlistSelect.value=currentTrackIndex;
+    playlistSelect.value =
+        currentTrackIndex;
 
     audio.pause();
 
-    audio.removeAttribute('src');
+    audio.src = track.url;
 
     audio.load();
 
-    audio.src=track.url;
-
-    audio.load();
-
-    $('progress').value=0;
+    $('progress').value = 0;
 
     updatePlayButton();
 }
 
-async function playCurrent(){
+async function safePlay(){
 
     try{
 
         initAudio();
 
-        if(audioCtx.state==='suspended'){
-
+        if(audioCtx.state === 'suspended'){
             await audioCtx.resume();
         }
 
         await audio.play();
 
-        $('fileName').textContent=
+        $('fileName').textContent =
             playlist[currentTrackIndex].name;
 
         startAnimation();
@@ -920,8 +649,8 @@ async function playCurrent(){
 
         console.error(err);
 
-        $('fileName').textContent=
-            'Click play again';
+        $('fileName').textContent =
+            'Song failed.';
     }
 }
 
@@ -961,7 +690,28 @@ function prevTrack(){
     );
 }
 
-/* ---------------- EVENTS ---------------- */
+audio.oncanplay=()=>{
+
+    if(autoplayAfterLoad){
+
+        autoplayAfterLoad=false;
+
+        safePlay();
+
+    }else{
+
+        $('fileName').textContent =
+            playlist[currentTrackIndex].name;
+    }
+};
+
+audio.onerror=()=>{
+
+    autoplayAfterLoad=false;
+
+    $('fileName').textContent =
+        'This song URL failed.';
+};
 
 playlistSelect.onchange=()=>{
 
@@ -975,7 +725,7 @@ $('playBtn').onclick=()=>{
 
     if(audio.paused){
 
-        playCurrent();
+        safePlay();
 
     }else{
 
@@ -986,6 +736,8 @@ $('playBtn').onclick=()=>{
 };
 
 $('stopBtn').onclick=()=>{
+
+    autoplayAfterLoad=false;
 
     audio.pause();
 
@@ -1002,8 +754,8 @@ $('shuffleBtn').onclick=()=>{
 
     shuffle=!shuffle;
 
-    $('shuffleBtn').style.opacity=
-        shuffle?1:.4;
+    $('shuffleBtn').style.opacity =
+        shuffle ? 1 : .4;
 };
 
 $('volume').oninput=e=>{
@@ -1012,129 +764,30 @@ $('volume').oninput=e=>{
         Number(e.target.value);
 };
 
-audio.addEventListener(
-    'canplay',
-    ()=>{
+audio.onended=()=>{
 
-        if(shouldAutoPlay){
+    nextTrack();
+};
 
-            shouldAutoPlay=false;
+audio.addEventListener('timeupdate',()=>{
 
-            playCurrent();
-        }
+    if(audio.duration){
+
+        $('progress').value =
+            (audio.currentTime/audio.duration)
+            *100;
     }
-);
+});
 
-audio.addEventListener(
-    'ended',
-    ()=>{
+$('progress').addEventListener('input',()=>{
 
-        nextTrack();
+    if(audio.duration){
+
+        audio.currentTime =
+            ($('progress').value/100)
+            *audio.duration;
     }
-);
-
-audio.addEventListener(
-    'timeupdate',
-    ()=>{
-
-        if(audio.duration){
-
-            $('progress').value=
-                (audio.currentTime/audio.duration)
-                *100;
-        }
-    }
-);
-
-$('progress').addEventListener(
-    'input',
-    ()=>{
-
-        if(audio.duration){
-
-            audio.currentTime=
-                ($('progress').value/100)
-                *audio.duration;
-        }
-    }
-);
-
-/* ---------------- DRAG DROP ---------------- */
-
-document.addEventListener(
-    'dragover',
-    e=>{
-
-        e.preventDefault();
-
-        document.body.classList.add(
-            'drop-highlight-green'
-        );
-    }
-);
-
-document.addEventListener(
-    'dragleave',
-    ()=>{
-
-        document.body.classList.remove(
-            'drop-highlight-green'
-        );
-    }
-);
-
-document.addEventListener(
-    'drop',
-    async e=>{
-
-        e.preventDefault();
-
-        document.body.classList.remove(
-            'drop-highlight-green'
-        );
-
-        const files=[
-            ...e.dataTransfer.files
-        ];
-
-        for(const file of files){
-
-            if(file.type.startsWith('audio/')){
-
-                const url=
-                    URL.createObjectURL(file);
-
-                playlist.push({
-                    name:file.name,
-                    url
-                });
-            }
-
-            if(file.name.endsWith('.txt')){
-
-                const text=
-                    await file.text();
-
-                text.split(/\r?\n/)
-                .forEach(line=>{
-
-                    const url=line.trim();
-
-                    if(url){
-
-                        playlist.push({
-                            name:
-                                url.split('/').pop(),
-                            url
-                        });
-                    }
-                });
-            }
-        }
-
-        refreshPlaylist();
-    }
-);
+});
 
 /* ---------------- START ---------------- */
 
