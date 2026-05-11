@@ -2,106 +2,529 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>QR Read</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AAB Produções</title>
 
-<script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
 <style>
-body{
+
+*{
     margin:0;
-    min-height:100vh;
-    background:linear-gradient(135deg,#020617,#000);
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    background:#050505;
     color:white;
-    font-family:Arial,sans-serif;
+    overflow:hidden;
+}
+
+/* BACKGROUND */
+
+.bg{
+    position:fixed;
+    inset:0;
+    background:
+        radial-gradient(circle at top left,#2563eb44,transparent 30%),
+        radial-gradient(circle at bottom right,#00ffff22,transparent 30%),
+        linear-gradient(135deg,#050505,#0a1020,#050505);
+    z-index:-3;
+}
+
+.grid{
+    position:fixed;
+    inset:0;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);
+    background-size:50px 50px;
+    animation:gridMove 10s linear infinite;
+    z-index:-2;
+}
+
+@keyframes gridMove{
+    from{
+        transform:translateY(0px);
+    }
+    to{
+        transform:translateY(50px);
+    }
+}
+
+/* MAIN LAYOUT */
+
+.container{
     display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
+    width:100vw;
+    height:100vh;
 }
 
-.card{
-    width:90%;
-    max-width:520px;
-    padding:45px;
-    border-radius:30px;
-    background:rgba(255,255,255,0.07);
-    border:1px solid rgba(0,255,255,0.3);
-    box-shadow:0 0 40px rgba(0,255,255,0.25);
+/* LEFT PANEL */
+
+.sidebar{
+    width:33.333%;
+    min-width:320px;
+    background:rgba(0,0,0,0.4);
+    border-right:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    overflow-y:auto;
+    padding:40px;
+    z-index:2;
 }
 
-h1{
+.logo{
     font-size:3rem;
-    color:#00ffff;
-}
-
-p{
-    color:#cbd5e1;
-    font-size:1.2rem;
-}
-
-.label{
-    margin-top:30px;
-    color:#94a3b8;
-    letter-spacing:2px;
-}
-
-#counter{
-    font-size:5rem;
     font-weight:900;
-    color:#00ffff;
-    text-shadow:0 0 25px #00ffff;
+    margin-bottom:15px;
+
+    background:linear-gradient(90deg,#fff,#60a5fa,#00ffff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.subtitle{
+    color:#cbd5e1;
+    line-height:1.7;
+    margin-bottom:40px;
+}
+
+/* BUTTONS */
+
+.links{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
 }
 
 .btn{
-    margin-top:30px;
-    display:inline-block;
-    padding:18px 28px;
-    border-radius:18px;
-    background:linear-gradient(135deg,#2563eb,#00ffff);
+    width:100%;
+    padding:22px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.05);
     color:white;
-    text-decoration:none;
-    font-weight:bold;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.4s;
+    position:relative;
+    overflow:hidden;
 }
+
+.btn:hover{
+    transform:translateX(8px);
+    border-color:#60a5fa;
+    box-shadow:
+        0 0 20px #2563eb55,
+        0 0 40px #00ffff22;
+}
+
+.btn::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,transparent,#ffffff22,transparent);
+    transform:translateX(-100%);
+}
+
+.btn:hover::before{
+    animation:shine 1s forwards;
+}
+
+@keyframes shine{
+    to{
+        transform:translateX(100%);
+    }
+}
+
+/* ACTIVE BUTTON */
+
+.btn.active{
+
+    border-color:#00ffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,0.45),
+            rgba(0,255,255,0.18)
+        );
+
+    box-shadow:
+        0 0 20px #00ffff66,
+        0 0 50px #2563eb55;
+
+    transform:translateX(10px) scale(1.02);
+}
+
+.btn.active::after{
+
+    content:'';
+
+    position:absolute;
+
+    left:0;
+    top:0;
+    bottom:0;
+
+    width:4px;
+
+    background:#00ffff;
+
+    box-shadow:0 0 15px #00ffff;
+}
+
+/* QR COUNTER */
+
+.qr-counter{
+
+    margin-top:35px;
+
+    padding:25px;
+
+    border-radius:25px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,0.18),
+            rgba(0,255,255,0.08)
+        );
+
+    border:1px solid rgba(0,255,255,0.25);
+
+    text-align:center;
+
+    box-shadow:
+        0 0 25px #00ffff22,
+        inset 0 0 20px rgba(255,255,255,0.03);
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.qr-counter::before{
+
+    content:'';
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,0.05),
+            transparent
+        );
+
+    transform:translateX(-100%);
+
+    animation:counterShine 5s linear infinite;
+}
+
+@keyframes counterShine{
+
+    to{
+        transform:translateX(100%);
+    }
+}
+
+.qr-title{
+
+    font-size:1rem;
+
+    letter-spacing:3px;
+
+    font-weight:800;
+
+    color:#e0ffff;
+
+    margin-bottom:18px;
+}
+
+.qr-badge{
+
+    max-width:100%;
+
+    height:auto;
+
+    filter:
+        drop-shadow(0 0 15px #00ffff66);
+}
+
+/* RIGHT CONTENT */
+
+.viewer{
+    width:66.666%;
+    position:relative;
+    background:#000;
+}
+
+iframe{
+    width:100%;
+    height:100%;
+    border:none;
+    opacity:0;
+    transform:scale(1.02);
+    transition:0.6s;
+}
+
+iframe.active{
+    opacity:1;
+    transform:scale(1);
+}
+
+/* DEFAULT CONTENT */
+
+.default{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    padding:40px;
+    pointer-events:none;
+}
+
+.default h1{
+    font-size:5rem;
+    font-weight:900;
+    margin-bottom:20px;
+
+    background:linear-gradient(90deg,#ffffff,#60a5fa,#00ffff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.default p{
+    color:#cbd5e1;
+    font-size:1.2rem;
+    max-width:700px;
+    line-height:1.8;
+}
+
+/* PARTICLES */
+
+.particle{
+    position:fixed;
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:#60a5fa;
+    opacity:0.4;
+    pointer-events:none;
+    animation:float linear infinite;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(100vh);
+    }
+    to{
+        transform:translateY(-10vh);
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+    .container{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        height:45%;
+        min-width:auto;
+        border-right:none;
+        border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    .viewer{
+        width:100%;
+        height:55%;
+    }
+
+    .default h1{
+        font-size:3rem;
+    }
+}
+
 </style>
 </head>
-
 <body>
 
-<div class="card">
-    <h1>QR READ</h1>
+<div class="bg"></div>
+<div class="grid"></div>
 
-    <p>
-        Thanks for scanning the QR code.<br>
-        Your visit has been counted.
-    </p>
+<div class="container">
 
-    <div class="label">TOTAL QR READS</div>
+    <!-- LEFT SIDE -->
 
-    <div id="counter">...</div>
+    <div class="sidebar">
 
-    <a class="btn" href="https://aabproducoes.github.io/Links/">
-        OPEN AAB PRODUÇÕES
-    </a>
+        <div class="logo">AAB</div>
+
+        <div class="subtitle">
+            Procedural Art • HTML Games • Blender • Interactive Backgrounds • Experimental Visual Experiences
+        </div>
+
+        <div class="links">
+
+            <!-- NORMAL LINKS -->
+
+            <button class="btn"
+                onclick="window.open('https://wa.me/54984181968','_blank')">
+                WhatsApp
+            </button>
+
+            <button class="btn"
+                onclick="window.location.href='mailto:AntonioAugustoB@protonmail.com'">
+                Email
+            </button>
+
+            <button class="btn"
+                onclick="window.open('https://www.instagram.com/aabpr0ducoes','_blank')">
+                Instagram
+            </button>
+
+            <!-- EMBED LINKS -->
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/blender-projects.html')">
+                Blender Projects
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/blender-animations.html')">
+                Blender Animations
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/animated-background.html')">
+                Animated Backgrounds
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/HTML_games/HTML-play.html')">
+                HTML Games
+            </button>
+
+            <button class="btn project-btn"
+                onclick="openPage(this,'https://aabproducoes.github.io/Links/music_player-visualizer.html')">
+                Music Visualizer
+            </button>
+
+        </div>
+
+        <!-- QR COUNTER -->
+
+        <div class="qr-counter">
+
+            <div class="qr-title">
+                QR / PAGE READS
+            </div>
+
+            <img
+                src="https://komarev.com/ghpvc/?username=aabproducoes&label=QR%20Reads&color=00ffff&style=for-the-badge"
+                alt="QR read counter"
+                class="qr-badge"
+            >
+
+        </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="viewer">
+
+        <div class="default" id="defaultText">
+
+            <h1>AAB PRODUÇÕES</h1>
+
+            <p>
+                Click a project on the left to open it directly inside the page.
+                Explore procedural art, interactive experiences, HTML games,
+                futuristic animations, and experimental visual systems.
+            </p>
+
+        </div>
+
+        <iframe id="frame"></iframe>
+
+    </div>
+
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
 
-    const counter = new Counter({
-        workspace: "aabproducoes"
-    });
+/* PARTICLES */
 
-    counter.up("qrread")
-        .then(result => {
-            document.getElementById("counter").textContent = result.value;
-        })
-        .catch(error => {
-            console.error(error);
-            document.getElementById("counter").textContent = "ERROR";
+for(let i=0;i<80;i++){
+
+    const p=document.createElement('div');
+
+    p.className='particle';
+
+    p.style.left=Math.random()*100+'vw';
+
+    p.style.top=Math.random()*100+'vh';
+
+    p.style.animationDuration=(5+Math.random()*10)+'s';
+
+    p.style.animationDelay=Math.random()*5+'s';
+
+    p.style.opacity=Math.random();
+
+    document.body.appendChild(p);
+}
+
+/* PAGE VIEWER */
+
+const frame=document.getElementById('frame');
+const defaultText=document.getElementById('defaultText');
+
+function openPage(button,url){
+
+    defaultText.style.display='none';
+
+    /* REMOVE ACTIVE */
+
+    document.querySelectorAll('.project-btn')
+        .forEach(btn=>{
+            btn.classList.remove('active');
         });
 
-});
+    /* ADD ACTIVE */
+
+    button.classList.add('active');
+
+    /* TRANSITION */
+
+    frame.classList.remove('active');
+
+    setTimeout(()=>{
+
+        frame.src=url;
+
+        frame.onload=()=>{
+
+            frame.classList.add('active');
+        };
+
+    },200);
+}
+
 </script>
 
 </body>
